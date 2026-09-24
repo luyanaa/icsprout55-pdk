@@ -13,26 +13,34 @@
 # limitations under the License.
 
 #=========================================================================================
-# BEOL 08 - Pad / IO top layers (PADM, ALPAD)
+# BEOL 08 - Pad / IO top layers (official RV/CB/ALPAD/RDL/COVER)
 #
-# Values measured from the released IO library GDS (provenance: gds).  PADM is
-# the pad-opening metal, ALPAD the aluminium pad (over PADM via the pad cut).
+# Values measured from the released IO library GDS (provenance: gds).  The
+# official pad stack: RV 120/1 (redistribution via), CB 121/1, ALPAD 122/1
+# (aluminium pad), RDL 123/1, COVER 124/1.
 #=========================================================================================
 
 if TABLES.include?('beol') || BEOL
-  PADM.width(rval('padm_width').um, euclidian).output('pad.padm.width',
-    "pad.padm.width: PADM min width #{rval('padm_width')} um [gds]")
-  PADM.space(rval('padm_space').um, euclidian).output('pad.padm.space',
-    "pad.padm.space: PADM min spacing #{rval('padm_space')} um [gds]")
-  PADM.with_area(rval('padm_area').um2).output('pad.padm.area',
-    "pad.padm.area: PADM min area #{rval('padm_area')} um^2 [gds]")
+  # official pad stack: 120/1 RV (redistribution via), 121/1 CB, 122/1 ALPAD
+  # (aluminium pad), 123/1 RDL, 124/1 COVER (was misaliased PADM/ALPAD on 120/121)
+  RV.width(rval('padm_width').um, euclidian).output('pad.rv.width',
+    "pad.rv.width: RV min width #{rval('padm_width')} um [gds]")
+  RV.space(rval('padm_space').um, euclidian).output('pad.rv.space',
+    "pad.rv.space: RV min spacing #{rval('padm_space')} um [gds]")
+  RV.with_area(rval('padm_area').um2).output('pad.rv.area',
+    "pad.rv.area: RV min area #{rval('padm_area')} um^2 [gds]")
 
   ALPAD.width(rval('alpad_width').um, euclidian).output('pad.alpad.width',
     "pad.alpad.width: ALPAD min width #{rval('alpad_width')} um [gds]")
   ALPAD.space(rval('alpad_space').um, euclidian).output('pad.alpad.space',
     "pad.alpad.space: ALPAD min spacing #{rval('alpad_space')} um [gds]")
 
-  # ALPAD pad opening must be enclosed by PADM (pad metal extends under aluminium)
-  PADM.enclosing(ALPAD, rval('padm_alpad_enc').um).output('pad.alpad.padm_enc',
-    "pad.alpad.padm_enc: PADM enclosure of ALPAD #{rval('padm_alpad_enc')} um [gds]")
+  RDL.width(rval('alpad_width').um, euclidian).output('pad.rdl.width',
+    "pad.rdl.width: RDL min width #{rval('alpad_width')} um [gds]")
+  COVER.width(rval('alpad_width').um, euclidian).output('pad.cover.width',
+    "pad.cover.width: COVER min width #{rval('alpad_width')} um [gds]")
+
+  # ALPAD pad metal must enclose the RV via
+  ALPAD.enclosing(RV, rval('padm_alpad_enc').um).output('pad.rv.alpad_enc',
+    "pad.rv.alpad_enc: ALPAD enclosure of RV #{rval('padm_alpad_enc')} um [gds]")
 end

@@ -28,8 +28,13 @@ if TABLES.include?('feol') || FEOL
     "cont.ct.space: CT min spacing #{rval('ct_space')} um [lef]")
 
   #--- CT enclosure by M1 / POLY / ACT (LEF ENCLOSURE ABOVE 0.04) ---------------------
-  M1.enclosing(CT, rval('ct_enc_m1').um).output('cont.ct.enc.m1',
-    "cont.ct.enc.m1: CT enclosure by M1 #{rval('ct_enc_m1')} um [lef]")
+  # DISABLED 2026-09-25 (user call): the LEF ENCLOSURE ABOVE 0.04 flags every
+  # released std cell (cells draw a uniform 0.025 um CT-to-M1 top enclosure); the
+  # official Calibre deck has no plain CT-to-M1 enclosure rule (only the seal-ring
+  # CT bar SRCK_14a_CT 0.375).  Value stays in ics55_rules.json as the LEF router
+  # constraint.  Re-enable by uncommenting.
+  # M1.enclosing(CT, rval('ct_enc_m1').um).output('cont.ct.enc.m1',
+  #   "cont.ct.enc.m1: CT enclosure by M1 #{rval('ct_enc_m1')} um [lef]")
   POLY.enclosing(CT, rval('ct_enc_poly').um).output('cont.ct.enc.poly',
     "cont.ct.enc.poly: CT enclosure by POLY #{rval('ct_enc_poly')} um [lef]")
   ACT.enclosing(CT, rval('ct_enc_act').um).output('cont.ct.enc.act',

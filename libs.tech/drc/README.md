@@ -132,6 +132,18 @@ point there); enable it on real analog/interconnect GDS.
 - Deep N-well isolation of the sensitive analog P-sub from the global digital
   P-sub; check the P-sub distance and enclosure.
 
+## Disabled checks (2026-09-25, user call)
+
+The following checks are commented out in the rule modules.  Their values and
+provenance stay in `ics55_rules.json`; re-enable by uncommenting.
+
+| Check | Module | Reason |
+|---|---|---|
+| `cont.ct.enc.m1` | `feol/05_cont.drc` | LEF `ENCLOSURE ABOVE 0.04` flags every released std cell (the cells draw a uniform 0.025 um CT-to-M1 top enclosure).  The official Calibre deck has NO plain CT-to-M1 enclosure rule (only the seal-ring CT bar, SRCK_14a_CT 0.375) — the check is the LEF router constraint, stricter than the foundry DRC. |
+| `adv.<layer>.eol` (all layers) | `advanced/10_eol_jog.drc` | Placeholder approximation (no official line-end rule ported; the official MET1_S_5 covers only the dense line-end configuration) — flags the foundry-drawn jog steps. |
+| `adv.m1.notch`, `adv.m2.notch` | `advanced/10_eol_jog.drc` | Placeholder jog/notch approximation — flags the foundry-drawn intra-polygon jog pairs. |
+| `adv.gate.act_overhang` | `advanced/10_eol_jog.drc` | The gate definition (poly over ACT) includes the 0.32 um power straps.  The official PO_EX_2 (0.14) applies to the channel-length gates only (the official gate selection is `LENGTH GATE_core_W < 0.12`); the straps' 0.065 um ACT extension (SDFFNRX2H7R) is NOT a design problem. |
+
 ## Known limitations
 
 - The advanced (derived) checks run on cleaned layers but the EOL and jog
@@ -142,6 +154,25 @@ point there); enable it on real analog/interconnect GDS.
   (`derived` provenance); they are not foundry rules.
 - CT enclosure by POLY/ACT uses measured floors (0.01) — the LEF only
   specifies the M1-side (ABOVE) enclosure.
+- CT enclosure by M1 (`cont.ct.enc.m1`, LEF 0.04 ABOVE) flags every released
+  std cell: the cells draw a uniform 0.025um CT-to-M1 top enclosure (interior
+  and boundary contacts alike).  The official Calibre deck has NO plain
+  CT-to-M1 enclosure rule (only the seal-ring CT bar, SRCK_14a_CT 0.375), so
+  the LEF-based check is stricter than the foundry DRC by design — keep as the
+  LEF router constraint, not a DRC waiver.
+- The width/space/sep checks lack the official `ABUT<90 SINGULAR REGION`
+  qualifier (Calibre INT/EXT): the port flags the 90-degree notch and
+  colocated-edge configurations the official rules waive.  Observed on
+  SDFFNRX2H7R: the well-tap cutouts create a 0.36um well sliver
+  (`well.nw.width` 0.47, official NW1_W_1 0.47 ABUT<90) and the poly straps
+  carry 0.065um ACT extensions (`adv.gate.act_overhang` 0.14, official
+  PO_EX_2 0.14 with EXT<0.002 ABUT==90 qualifier).  The ported checks are
+  stricter than the official in these configurations; values are the official
+  numbers.
+- `poly.poly_act.sep` uses a 0.001um floor (universal-DRC range) to exclude
+  the colocated gate-overhang edge pairs the official PO_S_11
+  (EXT AA PO < 0.05 ABUT<90) waives — the plain sep() flagged every gate
+  (76+ pairs per cell).  Fixed 2026-09-25.
 - Poly/diffusion gate overhang is implemented in the advanced module
   (adv.gate.poly_overhang / adv.gate.act_overhang, direction-specific via
   gate-edge zones) with placeholder / measured values (provenance: derived)

@@ -27,13 +27,21 @@ LVTN   = input(17, 1)
 LVTP   = input(18, 1)
 HVTN   = input(21, 1)
 HVTP   = input(22, 1)
-IOWELL = input(28, 1)
+TGOX   = input(28, 1)  # official 28/1 (3.3V IO gate oxide); was misaliased IOWELL
 POLY   = input(41, 1)
 PPO    = input(41, 4)
 NP     = input(52, 1)
 PP     = input(53, 1)
 ESD    = input(55, 1)
-IOACT  = input(71, 1)
+SAB    = input(71, 1)  # official 71/1 (silicide block); was misaliased IOACT
+DGOX   = input(27, 1)  # official 27/1 (2.5V IO gate oxide)
+CTbar  = input(72, 7)  # official 72/7 contact cut-bar
+CTopcblk = input(72, 5)  # official 72/5 contact OPC block
+DIODE  = input(191, 12)  # official 191/12 (was misaliased BOUNDARY)
+RV     = input(120, 1)  # official 120/1 redistribution via (was PADM)
+CB     = input(121, 1)  # official 121/1 (was ALPAD)
+RDL    = input(123, 1)  # official 123/1 redistribution layer
+COVER  = input(124, 1)  # official 124/1 passivation cover
 CT     = input(72, 1)
 M1     = input(81, 1)
 M2     = input(82, 1)
@@ -46,19 +54,20 @@ V3     = input(93, 1)
 V4     = input(94, 1)
 TM2    = input(103, 1)
 TV2    = input(113, 1)
-PADM   = input(120, 1)
-ALPAD  = input(121, 1)
+ALPAD  = input(122, 1)  # official 122/1 aluminium pad (was 121/1)
 MOM_MARKER = input(60, 1)
 DUMMY      = input(60, 2)
 NO_FILL    = input(60, 3)
 DM_EXCEL   = input(60, 4)
-BOUNDARY   = input(191, 12)
 
 # --- derived layers (FreePDK45 / iDRC convention) --------------------------------
 
 # n+/p+ active regions
 NACT = ACT.and(NP)
 PACT = ACT.and(PP)
+
+# IO active (official: ACT under the 3.3V gate oxide TGOX)
+IOACT  = ACT.and(TGOX)
 
 # gates (poly over active) and source/drain
 GATES  = POLY.and(ACT)
@@ -68,28 +77,47 @@ NSD    = NACT.not(NGATE)
 PSD    = PACT.not(PGATE)
 
 # all drawing layers for the off-grid check
-DRAWING = ACT + NW + LVTN + LVTP + HVTN + HVTP + IOWELL + POLY + PPO + NP + PP + ESD + IOACT + CT + M1 + M2 + M3 + M4 + M5 + V1 + V2 + V3 + V4 + TM2 + TV2 + PADM + ALPAD
+DRAWING = ACT + NW + LVTN + LVTP + HVTN + HVTP + TGOX + DGOX + POLY + PPO + NP + PP + ESD + SAB + IOACT + CT + CTbar + CTopcblk + M1 + M2 + M3 + M4 + M5 + V1 + V2 + V3 + V4 + TM2 + TV2 + RV + CB + ALPAD + RDL + COVER + DIODE
 
 #-----------------------------------------------------------------------------------------
 # Cell exclusion (real-GDS / analog-interconnect runs only)
 #
 # With -rd cell_exclusion=true the DRC checks run on the top-level interconnect
-# and analog shapes only: the interior of every std cell (drawn BOUNDARY 191/12
+# and analog shapes only: the interior of every std-cell instance (bounding box
 # shrunk by cell_excl_margin) is excluded from all checked layers.  The margin
 # band keeps the shapes at the cell frames (interconnect crossing cell edges).
+# The exclusion uses instance bboxes because official 191/12 is DIODE, not a
+# cell frame.
 # Std-cell verification runs leave this OFF (the per-cell flags are the point
 # there).
 #-----------------------------------------------------------------------------------------
 
-if CELL_EXCLUSION && !BOUNDARY.is_empty?
-  cell_interior = BOUNDARY.sized(-rval('cell_excl_margin').um)
+if CELL_EXCLUSION
+  # std-cell interiors from the instance bounding boxes (official 191/12 is
+  # DIODE, not a cell frame); recursive over the hierarchy with transforms
+  ly_ex = RBA::Layout.new
+  ly_ex.read($input)
+  tc = ly_ex.cell($top)
+  interior = RBA::Region.new
+  collect_bboxes = lambda do |cell, trans|
+    cell.each_inst do |i|
+      t = trans * i.trans
+      interior += t * ly_ex.cell(i.cell_index).bbox
+      collect_bboxes.call(ly_ex.cell(i.cell_index), t)
+    end
+  end
+  collect_bboxes.call(tc, RBA::Trans.new)
+  cell_interior = DRCLayer::new(self, interior).sized(-rval('cell_excl_margin').um)
   POLY   = POLY.not(cell_interior)
   ACT    = ACT.not(cell_interior)
   NW     = NW.not(cell_interior)
+  TGOX   = TGOX.not(cell_interior)
+  DGOX   = DGOX.not(cell_interior)
   PPO    = PPO.not(cell_interior)
   NP     = NP.not(cell_interior)
   PP     = PP.not(cell_interior)
   ESD    = ESD.not(cell_interior)
+  SAB    = SAB.not(cell_interior)
   IOACT  = IOACT.not(cell_interior)
   CT     = CT.not(cell_interior)
   M1     = M1.not(cell_interior)
@@ -103,7 +131,10 @@ if CELL_EXCLUSION && !BOUNDARY.is_empty?
   V4     = V4.not(cell_interior)
   TM2    = TM2.not(cell_interior)
   TV2    = TV2.not(cell_interior)
-  PADM   = PADM.not(cell_interior)
+  RV     = RV.not(cell_interior)
+  CB     = CB.not(cell_interior)
   ALPAD  = ALPAD.not(cell_interior)
+  RDL    = RDL.not(cell_interior)
+  COVER  = COVER.not(cell_interior)
   DRAWING = DRAWING.not(cell_interior)
 end

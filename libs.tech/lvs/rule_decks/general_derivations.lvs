@@ -21,4 +21,4 @@
 #=========================================================================================
 
 # p-substrate = active outside the n-well (NMOS bodies; std-cell design style)
-PSUB = ACT.not(NW).not(IOWELL)
+PSUB = ACT.not(NW).not(TGOX)

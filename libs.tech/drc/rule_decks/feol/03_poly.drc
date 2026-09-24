@@ -35,7 +35,11 @@ if TABLES.include?('feol') || FEOL
     "poly.poly.area: POLY min area #{rval('poly_area')} um^2 [gds]")
 
   #--- POLY to ACT separation (field poly) -------------------------------------------
-  POLY.not(ACT).sep(ACT, rval('poly_act_sep').um, euclidian).output('poly.poly_act.sep',
+  # 0.001 um floor: the official PO_S_11 (EXT AA PO < 0.05 ABUT<90) waives the
+  # colocated gate-overhang edges (poly edge touching the ACT at the gate end); the
+  # plain sep() flags every gate overhang as a 0-distance pair.  The classic sep()
+  # has no min/max range in KLayout 0.30.9, so use the universal-DRC expression.
+  POLY.not(ACT).drc((separation(ACT) < rval('poly_act_sep').um) & (separation(ACT) > 0.001.um)).output('poly.poly_act.sep',
     "poly.poly_act.sep: field POLY to ACT min separation #{rval('poly_act_sep')} um [gds]")
 
   #--- Gate length (POLY over ACT) ---------------------------------------------------

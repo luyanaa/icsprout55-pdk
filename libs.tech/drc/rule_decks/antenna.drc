@@ -19,11 +19,12 @@
 # Requires connectivity (KLayout computes it from the connect() statements).
 #
 # NOTE: no antenna ratio data is released for ICS55.  The ratio 300:1 below is
-# the FreePDK45 value and is NOT an ICS55 rule.  Checks are disabled by default;
-# enable with -rd antenna=true only to exercise the infrastructure.
+# the FreePDK45 value and is NOT an ICS55 rule.  The antenna is a global
+# full-chip netlist check and is skipped in -rd cell_exclusion=true mode (the
+# clipped layers are non-hierarchical and cannot feed the netlist extraction).
 #=========================================================================================
 
-if ANTENNA
+if ANTENNA && !CELL_EXCLUSION
   connect(GATES, POLY)
   connect(POLY, CT)
   connect(CT, M1)

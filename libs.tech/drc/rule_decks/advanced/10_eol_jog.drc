@@ -64,9 +64,13 @@ if TABLES.include?('advanced') || ADVANCED
     # EOL spacing: line ends (edges shorter than eol_len) keep eol_space to
     # any other edge.  KLayout 0.30.x has no native eol() parameter in space(),
     # so this is the edge-based form (line-end edges .sep to all edges).
-    eol_edges = layer.edges.with_length(0, rval("#{key}_eol_len").um)
-    eol_edges.sep(layer.edges, rval("#{key}_eol_space").um, euclidian).output("adv.#{key}.eol",
-      "adv.#{key}.eol: #{name} EOL spacing #{rval("#{key}_eol_space")} um / eol len #{rval("#{key}_eol_len")} um (cleaned, edge-based) [derived]")
+    # DISABLED 2026-09-25 (user call): the EOL family is a placeholder approximation
+    # (no official line-end rule ported; the official MET1_S_5 covers only the dense
+    # line-end config) and flags the foundry-clean jog steps.  Re-enable by
+    # uncommenting.
+    # eol_edges = layer.edges.with_length(0, rval("#{key}_eol_len").um)
+    # eol_edges.sep(layer.edges, rval("#{key}_eol_space").um, euclidian).output("adv.#{key}.eol",
+    #   "adv.#{key}.eol: #{name} EOL spacing #{rval("#{key}_eol_space")} um / eol len #{rval("#{key}_eol_len")} um (cleaned, edge-based) [derived]")
   end
 
   # Gate overhang: the gate is poly over active.  The overhangs are
@@ -85,8 +89,13 @@ if TABLES.include?('advanced') || ADVANCED
     "adv.gate.poly_overhang: poly extension beyond gate < #{rval('poly_gate_overhang')} um (channel direction, slivers <0.004um2 dropped) [derived]")
   ve = gate.edges.with_angle(90)
   overhang_zone_x = ve.extended_out(rval('act_gate_overhang').um) + ve.extended_in(rval('act_gate_overhang').um)
-  overhang_zone_x.not(active_clean).with_area(0.004, 1e6).output('adv.gate.act_overhang',
-    "adv.gate.act_overhang: active extension beyond gate ends < #{rval('act_gate_overhang')} um (L direction, slivers <0.004um2 dropped) [derived]")
+  # DISABLED 2026-09-25 (user call): the gate definition (poly over ACT) includes
+  # the 0.32um-wide power straps - the official PO_EX_2 (0.14) applies to the
+  # channel-length gates only (the official gate selection is LENGTH GATE_core_W
+  # < 0.12); the straps' 0.065um ACT extension is not a violation.  Re-enable by
+  # uncommenting.
+  # overhang_zone_x.not(active_clean).with_area(0.004, 1e6).output('adv.gate.act_overhang',
+  #   "adv.gate.act_overhang: active extension beyond gate ends < #{rval('act_gate_overhang')} um (L direction, slivers <0.004um2 dropped) [derived]")
 
   # Min corner / min adjacency (empirical 0.03 / 0.05, derived): short edges
   # are the corners below the minimum corner size; corners closer than min_adj
@@ -103,11 +112,13 @@ if TABLES.include?('advanced') || ADVANCED
   poly_clean.space(rval('poly_min_step').um).edges.and(poly_clean.corners(180..360).sized(rval('min_adj').um)).output('adv.poly.notch_adj',
     "adv.poly.notch_adj: POLY notch edge within #{rval('min_adj')} um of a concave corner (cleaned) [derived]")
 
-  # Jog / notch spacing approximation: intra-polygon space (notch) check
-  m1_clean.notch(rval('m1_jog_space').um).output('adv.m1.notch',
-    "adv.m1.notch: M1 intra-polygon space < #{rval('m1_jog_space')} um (approx jog/notch) [derived]")
-  m2_clean.notch(rval('m2_jog_space').um).output('adv.m2.notch',
-    "adv.m2.notch: M2 intra-polygon space < #{rval('m2_jog_space')} um (approx jog/notch) [derived]")
+  # DISABLED 2026-09-25 (user call): the jog/notch family is a placeholder
+  # approximation (no official notch/jog rule ported) and flags the foundry-drawn
+  # intra-polygon jog pairs.  Re-enable by uncommenting.
+  # m1_clean.notch(rval('m1_jog_space').um).output('adv.m1.notch',
+  #   "adv.m1.notch: M1 intra-polygon space < #{rval('m1_jog_space')} um (approx jog/notch) [derived]")
+  # m2_clean.notch(rval('m2_jog_space').um).output('adv.m2.notch',
+  #   "adv.m2.notch: M2 intra-polygon space < #{rval('m2_jog_space')} um (approx jog/notch) [derived]")
 
   # 45-degree bent width (FreePDK45 M1.g style)
   m1_clean.edges.with_angle(45, absolute).width(rval('m1_bent_width').um, euclidian).output('adv.m1.bent45',

@@ -23,11 +23,11 @@ if TABLES.include?('grid') || GRID
   grid = rval('manufacturing_grid').um
   [
     ['ACT', ACT], ['NW', NW], ['LVTN', LVTN], ['LVTP', LVTP],
-    ['HVTN', HVTN], ['HVTP', HVTP], ['IOWELL', IOWELL], ['POLY', POLY],
+    ['HVTN', HVTN], ['HVTP', HVTP], ['TGOX', TGOX], ['DGOX', DGOX], ['SAB', SAB], ['POLY', POLY],
     ['PPO', PPO], ['NP', NP], ['PP', PP], ['ESD', ESD], ['IOACT', IOACT],
     ['CT', CT], ['M1', M1], ['M2', M2], ['M3', M3], ['M4', M4], ['M5', M5],
     ['V1', V1], ['V2', V2], ['V3', V3], ['V4', V4], ['TM2', TM2],
-    ['TV2', TV2], ['PADM', PADM], ['ALPAD', ALPAD]
+    ['TV2', TV2], ['RV', RV], ['CB', CB], ['ALPAD', ALPAD], ['RDL', RDL], ['COVER', COVER], ['DIODE', DIODE]
   ].each do |name, layer|
     layer.ongrid(grid).output("grid.#{name.downcase}",
       "grid.#{name.downcase}: #{name} vertices on #{grid} um grid [lef]")

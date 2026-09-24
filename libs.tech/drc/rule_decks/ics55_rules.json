@@ -2,18 +2,18 @@
  "drc_rules": {
   "manufacturing_grid": 0.001,
   "act_width": 0.081,
-  "act_space": 0.101,
+  "act_space": 0.11,
   "act_area": 0.0555,
-  "nw_width": 0.361,
-  "nw_space": 0.4,
-  "nw_act_enc": 0.151,
+  "nw_width": 0.47,
+  "nw_space": 0.47,
+  "nw_act_enc": 0.15,
   "iowell_width": 0.4,
   "iowell_space": 0.4,
   "iowell_act_enc": 0.4,
   "iowell_ioact_enc": 0.4,
   "nw_iowell_sep": 0.4,
   "poly_width": 0.06,
-  "poly_space": 0.11,
+  "poly_space": 0.12,
   "poly_area": 0.0388,
   "poly_gate_width": 0.06,
   "poly_act_sep": 0.05,
@@ -22,7 +22,7 @@
   "pp_width": 0.181,
   "pp_space": 0.4,
   "esd_width": 0.4,
-  "esd_space": 0.4,
+  "esd_space": 0.47,
   "nw_esd_enc": 0.4,
   "ioact_width": 0.4,
   "ioact_space": 0.4,
@@ -154,7 +154,8 @@
   "wide_metal_width": 20.0,
   "em_via_width": 10.0,
   "mom_dummy_margin": 1.0,
-  "cell_excl_margin": 0.1
+  "cell_excl_margin": 0.1,
+  "well_width_smoothing": 0.03
  },
  "meta": {
   "manufacturing_grid": {
@@ -166,24 +167,28 @@
    "note": "measured H7C libraries, cell SDFFQX3H7R"
   },
   "act_space": {
-   "provenance": "gds",
-   "note": "measured H7C libraries, cell OA21X0P5H7R"
+   "provenance": "official",
+   "rule_id": "ACT_S_1",
+   "note": "space between two AAs >= 0.11um. Corrected from measured placeholder 0.11 (official: ACT_S_1: space between two AAs >= 0.11um. Was measured placeholder 0.101 (gds: measured H7C libraries, cell OA21X0P5H7R).)."
   },
   "act_area": {
    "provenance": "gds",
    "note": "measured H7C libraries"
   },
   "nw_width": {
-   "provenance": "gds",
-   "note": "measured H7C libraries; search-cap 0.4 on dense cells"
+   "provenance": "official",
+   "rule_id": "NW1_W_1",
+   "note": "NW1 width >= 0.47um. Corrected from measured placeholder 0.47 (official: NW1_W_1: NW1 width >= 0.47um. Was measured placeholder 0.361 (gds: measured H7C libraries; search-cap 0.4 on dense cells).)."
   },
   "nw_space": {
-   "provenance": "gds",
-   "note": "measured H7C libraries; value at 0.4 search cap on XNOR3X0P7H7R (>= 0.4)"
+   "provenance": "official",
+   "rule_id": "NW1_S_1",
+   "note": "space between NW1s >= 0.47um. Corrected from measured placeholder 0.47 (official: NW1_S_1: space between NW1s >= 0.47um. Was measured placeholder 0.4 (gds: measured H7C libraries; value at 0.4 search cap on XNOR3X0P7H7R (>= 0.4)).)."
   },
   "nw_act_enc": {
-   "provenance": "gds",
-   "note": "NW extends 0.151 um beyond ACT (measured)"
+   "provenance": "official",
+   "rule_id": "ACT_EN_1",
+   "note": "Enclosure of N+AA by NW >= 0.15um (ACT_EN_1; ACT_EN_2 = 0.15 too). Corrected from measured placeholder 0.151 - the 0.151 was 1nm tighter than the official minimum and flagged the cells' exactly-0.15 enclosures."
   },
   "iowell_width": {
    "provenance": "gds",
@@ -210,8 +215,9 @@
    "note": "gate L = 60 nm per released CDL; measured min 0.061"
   },
   "poly_space": {
-   "provenance": "gds",
-   "note": "measured min 0.112; gate pitch 0.25 minus L 0.06"
+   "provenance": "official",
+   "rule_id": "PO_S_1",
+   "note": "poly space >= 0.12um. Corrected from measured placeholder 0.12 (official: PO_S_1: poly space >= 0.12um. Was measured placeholder 0.11 (gds: measured min 0.112; gate pitch 0.25 minus L 0.06).)."
   },
   "poly_area": {
    "provenance": "gds",
@@ -246,8 +252,9 @@
    "note": "IO library; at 0.4 search cap (>= 0.4)"
   },
   "esd_space": {
-   "provenance": "gds",
-   "note": "IO library; at 0.4 search cap (>= 0.4)"
+   "provenance": "official",
+   "rule_id": "ESD_S_1",
+   "note": "space between two ESD1s >= 0.47um. Corrected from measured placeholder 0.47 (official: ESD_S_1: space between two ESD1s >= 0.47um. Was measured placeholder 0.4 (gds: IO library; at 0.4 search cap (>= 0.4)).)."
   },
   "nw_esd_enc": {
    "provenance": "gds",
@@ -275,7 +282,8 @@
   },
   "ct_enc_m1": {
    "provenance": "lef",
-   "note": "N551P6M.lef ENCLOSURE ABOVE 0.04 0 (M1 side; boundary CTs flag on standalone cells)"
+   "rule_id": null,
+   "note": "N551P6M.lef ENCLOSURE ABOVE 0.04 (M1 side). The released std cells' CT-to-M1 top enclosure measures 0.025 (interior and boundary CTs alike); the official Calibre DRC deck has no plain CT-to-M1 enclosure rule, so the LEF-based check flags the cells by design. Keep as LEF router constraint, not a DRC waiver."
   },
   "ct_enc_poly": {
    "provenance": "gds",
@@ -776,6 +784,10 @@
   "cell_excl_margin": {
    "provenance": "derived",
    "note": "placeholder 0.1 um cell-frame margin for the -rd cell_exclusion=true mode"
+  },
+  "well_width_smoothing": {
+   "provenance": "derived",
+   "note": "ABUT<90 analog for well.nw.width: the official NW1_W_1 waives the 90-degree notch widths; the released cells draw 25nm well-tap notch steps at the well bottom, so the width check runs on the layer smoothed by 0.03 um. Genuine narrow wells still flag."
   }
  }
 }

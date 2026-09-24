@@ -1,0 +1,5366 @@
+{
+ "summary": {
+  "total": 466,
+  "covered": 85,
+  "value_mismatch": 0,
+  "missing": 381
+ },
+ "rules": [
+  {
+   "official": "AADUM_R_1",
+   "layer": "AADUM",
+   "type": "R",
+   "num": "1",
+   "comment": "AADUM can not overlap with CT",
+   "expr": "AADUM AND CT ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_1",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "1",
+   "comment": "AADUM space if AADUM size is 3um*3um >= 2",
+   "expr": "EXT  AADUM_3_3 < 2 ABUT <90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_10",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between AADUM and INDALL >= 2",
+   "expr": "EXT AADUM INDALL < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_11",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between AADUM and Frame boundary >= 0.6",
+   "expr": "EXT AADUM CHIPBLK < 0.6 ABUT < 90 SINGULAR REGION ENC AADUM CHIPBLK < 0.6 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_12",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between AADUM and AADUMB >= 2",
+   "expr": "EXT AADUM AADUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_13",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between AADUM and DMYBLK >= 2",
+   "expr": "EXT AADUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_2",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "2",
+   "comment": "AADUM space if AADUM size is 1um*1um >= 0.6",
+   "expr": "EXT  AADUM_1_1 < 0.6 ABUT <90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_3",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "3",
+   "comment": "AADUM space if AADUM size is 0.467um*0.467um >= 0.28",
+   "expr": "EXT  AADUM_0p5_0p5 < 0.28 ABUT <90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_4",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between AADUM and AA, AADUM can not overlap with AA  >= 1.6",
+   "expr": "EXT  AADUM AA < 1.6 ABUT <90 SINGULAR REGION AADUM AND AA ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_5",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between AADUM and Poly, AADUM can not overlap with Poly >= 1.6",
+   "expr": "EXT  AADUM PO < 1.6 ABUT <90 SINGULAR REGION AADUM AND PO ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_6",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between AADUM and NW boundary >= 0.3",
+   "expr": "EXT AADUM NW < 0.3 ABUT < 90 SINGULAR REGION ENC AADUM NW < 0.3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_7",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between AADUM and FUSEALL >= 2",
+   "expr": "EXT AADUM FUSEALL < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_8",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between AADUM and NW1res >= 0.6",
+   "expr": "EXT AADUM NW1res < 0.6 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_S_9",
+   "layer": "AADUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between AADUM and LOGO >= 0.1",
+   "expr": "EXT AADUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "AADUM_W_1",
+   "layer": "AADUM",
+   "type": "W",
+   "num": "1",
+   "comment": "AADUM SIZE = 3x3, 1x1, 0.467x0.467",
+   "expr": "((AADUM NOT AADUM_3_3) NOT AADUM_1_1) NOT AADUM_0p5_0p5 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ACT_A_1",
+   "layer": "ACT",
+   "type": "A",
+   "num": "1",
+   "comment": "AA area >= 0.0384um2",
+   "expr": "X = AREA AA < 0.0384 (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.area",
+   "klayout_values": {
+    "act_area": 0.0555,
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_A_2",
+   "layer": "ACT",
+   "type": "A",
+   "num": "2",
+   "comment": "Enclosed area >= 0.08um2",
+   "expr": "(AREA ((HOLES AA INNER) NOT AA) < 0.08) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.area",
+   "klayout_values": {
+    "act_area": 0.0555,
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_D_1_max",
+   "layer": "ACT",
+   "type": "D",
+   "num": "1",
+   "comment": "<= 80%",
+   "expr": "(DENSITY AA_all > 0.80 WINDOW 100 STEP 50 BACKUP PRINT density_report_AA_D_1_max.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_D_1_min",
+   "layer": "ACT",
+   "type": "D",
+   "num": "1",
+   "comment": "<= 80%",
+   "expr": "(DENSITY AA_all < 0.20 WINDOW 100 STEP 50 BACKUP PRINT density_report_AA_D_1_min.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_D_2",
+   "layer": "ACT",
+   "type": "D",
+   "num": "2",
+   "comment": "AA density inside of dummy block area size up 2.5um, >= 10%",
+   "expr": "X1 = AADUMB SIZE BY 2.5 (DENSITY AA_all < 0.10 WINDOW 20 STEP 10 BACKUP INSIDE OF LAYER X1 PRINT density_report_AA_D_2.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_D_3",
+   "layer": "ACT",
+   "type": "D",
+   "num": "3",
+   "comment": "AA density gradienct <= 20%",
+   "expr": "(DENSITY AA_all >= 0 WINDOW 100 GRADIENT > 0.2 ABSOLUTE BACKUP INSIDE OF LAYER BULK PRINT density_report_AA_D_3.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_D_4_max",
+   "layer": "ACT",
+   "type": "D",
+   "num": "4",
+   "comment": "<= 75%",
+   "expr": "(DENSITY AA_all > 0.75 PRINT density_report_AA_D_4_max.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_D_4_min",
+   "layer": "ACT",
+   "type": "D",
+   "num": "4",
+   "comment": "<= 75%",
+   "expr": "(DENSITY AA_all < 0.25 PRINT density_report_AA_D_4_min.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_EN_1",
+   "layer": "ACT",
+   "type": "EN",
+   "num": "1",
+   "comment": "Enclosure of N+AA by NW (excluding NW interacting with NW1res) >= 0.15um",
+   "expr": "X = ENC NACT (NW NOT INTERACT NW1res) < 0.15 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ACT_EN_2",
+   "layer": "ACT",
+   "type": "EN",
+   "num": "2",
+   "comment": "Enclosure P+AA by NW >= 0.15um",
+   "expr": "X = ENC PACT NW < 0.15 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ACT_EN_2a",
+   "layer": "ACT",
+   "type": "EN",
+   "num": "2a",
+   "comment": "Enclosure P+AA by (NW INTERACT TG) >= 0.31um",
+   "expr": "X = ENC PACT (NW INTERACT TG) < 0.31 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ACT_L_1",
+   "layer": "ACT",
+   "type": "L",
+   "num": "1",
+   "comment": "Maximum AA length between two contacts, or between one contact and AA line end when AA width < 0.15um <= 25.00um",
+   "expr": "AA_1 = AA INTERACT CT AA_CHECK = AA_1 WITH WIDTH < 0.15 Z0 = SIZE CT BY 12.5 INSIDE OF AA_CHECK STEP 0.02 Z1 = Z0 INTERACT CT < 2 Z2 = (AA_CHECK INTERACT Z1) NOT (AA_CHECK INTERACT CT == 1) Z2 NOT INS",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ACT_L_2",
+   "layer": "ACT",
+   "type": "L",
+   "num": "2",
+   "comment": "Maximum AA length of Source Active (without CT, width <= 0.15um) which butted with tap <= 0.5um",
+   "expr": "AA_1 = ALL_SDi NOT INTERACT CT AA_2 = AA_1 WITH WIDTH < 0.15 AA_3 = AA_2 INTERACT ALL_TAPi AA_4 = LENGTH AA_3 > 0.5 ((ALL_SDi WITH EDGE AA_4) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ACT_R_1",
+   "layer": "ACT",
+   "type": "R",
+   "num": "1",
+   "comment": "AA must be fully covered by (NP OR PP), except NW resistor region",
+   "expr": "(AA NOT (SDN OR SDP)) NOT INTERACT NW1res ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_R_3",
+   "layer": "ACT",
+   "type": "R",
+   "num": "3",
+   "comment": "N+ AA is not allowed to be straddle on the boundary of NW1, except NW resistor/LDMOS region",
+   "expr": "X = COPY NACT (X CUT (NW NOT INTERACT (LDMOS OR NW1res))) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_1",
+   "layer": "ACT",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two AAs > = 0.11um",
+   "expr": "(EXT AA < 0.11 ABUT<90 SINGULAR REGION) NOT INSIDE (NODRC OR SRAMALL) ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_1_R",
+   "layer": "ACT",
+   "type": "S",
+   "num": "1",
+   "comment": "Recommended Space between two AAs > = 0.16um",
+   "expr": "(EXT AA < 0.16 ABUT<90 SINGULAR REGION) NOT INSIDE (NODRC OR SRAMALL) ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_1a",
+   "layer": "ACT",
+   "type": "S",
+   "num": "1a",
+   "comment": "Space between two AAs at least one AA inside by TG",
+   "expr": "AA_TG = AA INSIDE TG (EXT AA AA_TG < 0.16 ABUT<90 SINGULAR REGION) NOT INSIDE (NODRC OR SRAMALL) ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_2",
+   "layer": "ACT",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between AAs when one or both AA width greater than 0.2um parallel length >= 0.3,  >= 0.125",
+   "expr": "X = AA WITH WIDTH > 0.2 Y = EXT X AA < 0.125 OPPOSITE REGION (ENCLOSE RECTANGLE Y 0.3 0.08 ORTHOGONAL ONLY) NOT INSIDE (NODRC OR SRAMALL) ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_2a_R",
+   "layer": "ACT",
+   "type": "S",
+   "num": "2a",
+   "comment": "Recommended Space between AA and huge AA(area> 2000000um2) is 0.35um",
+   "expr": "AA_huge = AREA AA > 2000000 (EXT AA AA_huge < 0.35 ABUT<90 SINGULAR REGION) NOT INSIDE (NODRC OR SRAMALL) ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_3",
+   "layer": "ACT",
+   "type": "S",
+   "num": "3",
+   "comment": "Space to 45 degree bent AA >= 0.18um",
+   "expr": "X = ANGLE AA == 45 (EXT X AA < 0.18 ABUT<90 REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_4",
+   "layer": "ACT",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between U-shape (or O-shape) AA inner edges >= 0.18um",
+   "expr": "(CONVEX EDGE AA_OS == 0 WITH LENGTH < 0.18) NOT INSIDE EDGE NODRC (CONVEX EDGE AA_US == 0 WITH LENGTH < 0.18) NOT INSIDE EDGE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_5",
+   "layer": "ACT",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between NW and N+AA inside PW except NW resistor region >= 0.15um",
+   "expr": "X = EXT (NW NOT INTERACT NW1res) (NACT INSIDE PW) < 0.15 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_6",
+   "layer": "ACT",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between NW and N+AA inside TG >= 0.31um",
+   "expr": "X = EXT (NW NOT INTERACT NW1res) (NACT INSIDE TG) < 0.31 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_7",
+   "layer": "ACT",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between N+AA, which is not enclosed by DNW, and NW which encloses a DNW >= 0.32um",
+   "expr": "X = EXT NACT NW_DNW < 0.32 ABUT<90 SINGULAR REGION (X NOT DNW) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_S_8",
+   "layer": "ACT",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between NW and P+ pickup AA except LDMOS region >= 0.15um",
+   "expr": "X = EXT NW (((PACT NOT NW) NOT PSUB) NOT INSIDE LDMOS) < 0.15 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.space",
+   "klayout_values": {
+    "act_space": 0.101,
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_W_1",
+   "layer": "ACT",
+   "type": "W",
+   "num": "1",
+   "comment": "AA width >= 0.08um",
+   "expr": "(INT AA < 0.08 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_W_2",
+   "layer": "ACT",
+   "type": "W",
+   "num": "2",
+   "comment": "Width of 45 degree bent AA >= 0.18um",
+   "expr": "X = ANGLE AA == 45 (INT X < 0.18 ABUT<90 REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_W_3a",
+   "layer": "ACT",
+   "type": "W",
+   "num": "3a",
+   "comment": "Channel width for 0.9/1.2V NMOS/PMOS transistors >= 0.12um",
+   "expr": "Y = LENGTH GATE_core_W < 0.12 ((EXPAND EDGE Y INSIDE BY 0.001) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_W_3a_R",
+   "layer": "ACT",
+   "type": "W",
+   "num": "3a",
+   "comment": "Recommended Channel width for 0.9/1.2V NMOS/PMOS transistors >= 0.15um",
+   "expr": "Y = LENGTH GATE_core_W < 0.15 ((EXPAND EDGE Y INSIDE BY 0.001) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "ACT_W_3b",
+   "layer": "ACT",
+   "type": "W",
+   "num": "3b",
+   "comment": "Channel width for 1.8/2.5V/3.3V NMOS/PMOS transistors >= 0.21um",
+   "expr": "Y = LENGTH GATE_io1_W < 0.21 ((EXPAND EDGE Y INSIDE BY 0.001) NOT INSIDE SRAMALL) NOT INSIDE NODRC Z = LENGTH GATE_io2_W < 0.21 ((EXPAND EDGE Z INSIDE BY 0.001) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "active.act.width",
+   "klayout_values": {
+    "act_width": 0.081
+   }
+  },
+  {
+   "official": "CB_EN_1_EN_2",
+   "layer": "CB",
+   "type": "EN",
+   "num": "1",
+   "comment": "CB edge fully enclosure by T4M1 or T2M1 or T8M1, T4M2 or T2M2 or T8M2 directly underneath PA >= 1.5um",
+   "expr": "((ENC PA (OR T2M1 T4M1 T8M1 T4M2 T2M2 T8M2) < 1.50 ABUT<90 SINGULAR REGION OUTSIDE ALSO) NOT INDALL) NOT INSIDE NODRC ((ENC PA (OR T2M1 T4M1 T8M1 T4M2 T2M2 T8M2) < 1.50 - 0.002 ABUT<90 SINGULAR REGION",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "CB_S_1",
+   "layer": "CB",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two CBs >= 5.0um",
+   "expr": "((EXT PA < 5 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT PA < 5 - 0.002 ABUT<90 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "CB_W_1",
+   "layer": "CB",
+   "type": "W",
+   "num": "1",
+   "comment": "CB width  >= 3.0um",
+   "expr": "((INT PA < 3 - 0.001 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((INT PA < 3 - 0.001 ABUT<90 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "CHIPEDGE_EN_1",
+   "layer": "CHIPEDGE",
+   "type": "EN",
+   "num": "1",
+   "comment": "This rule checking layer are DNW, AA, NW, PSUB, NVT3, PVT3, NVT1, PVT1, DG, TG, PO, NP, PP, NPR, HRP, ESD1, SAB, CT, Mn(n = 1-8), Vn(n = 1-7), T4V1, T4V2, T4M1, T4M2, T2V1, T2V2, T2M1, T2M2, CB, RV, COVER, RDL, FUSE, AADUM, PODUM, MnDUM(n = 1-8), T4M1DUM, T4M2DUM, T2M1DUM, T2M2DUM. >= 0.37um",
+   "expr": "BD_EXTENT_OTHER_temp = EXTENT DRAWN DNWi ACTi NW1i PSUBi NVT3 PVT3 NVT1 PVT1 DGOX TGOX POLYi NPi PPi NPR HRPi ESD1 SABi CTi CTbar MET1o MET2o MET3o MET4o MET5o MET6o MET7o MET8o VIA1i VIA2i VIA3i VIA4",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "CHIPEDGE_EN_2",
+   "layer": "CHIPEDGE",
+   "type": "EN",
+   "num": "2",
+   "comment": "Enclosure of DNW by the chip edge (CHIPEDGE layer) if it need ICsprout to add seal ring. >= 6.0um",
+   "expr": "(ENC DNW CHIPEDGE < 6 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "CHIPEDGE_EN_3",
+   "layer": "CHIPEDGE",
+   "type": "EN",
+   "num": "3",
+   "comment": "Enclosure of seal ring outer ring outline edge by CHIPEDGE layer if seal ring has been added by designers. >= 1.5",
+   "expr": "(ENC MS_OUT CHIPEDGE < 1.5 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "COVER_L_1",
+   "layer": "COVER",
+   "type": "L",
+   "num": "1",
+   "comment": "COVER length (suggest to consult with package vendor) >= 65.0um",
+   "expr": "(NOT ENCLOSE RECTANGLE RDLPA2 40 65) NOT INSIDE (OR SRBLK SRINGBLK NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "COVER_S_1",
+   "layer": "COVER",
+   "type": "S",
+   "num": "1",
+   "comment": "Covers space (suggest to consult with package vendor) >= 5.0um",
+   "expr": "((EXT RDLPA2 < 5 - 0.002 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE (OR SRBLK SRINGBLK NODRC) ((EXT RDLPA2 < 5 - 0.002 ABUT<90 SINGULAR REGION) AND INDALL) NOT INSIDE (OR SRBLK SRINGBLK NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "COVER_S_2",
+   "layer": "COVER",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between metal pad and metal line  >= 2.5um",
+   "expr": "((EXT T8M2PAD T8M2o < 2.5 ABUT>0<90 REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T8M1PAD T8M1o < 2.5 ABUT>0<90 REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T4M2PAD T4M2o < 2.5 ABUT>0<90 REGION) NOT INDALL",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "COVER_W_1",
+   "layer": "COVER",
+   "type": "W",
+   "num": "1",
+   "comment": "COVER width (suggest to consult with package vendor) >= 40.0um",
+   "expr": "((INT RDLPA2 < 40 - 0.002 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE (OR SRBLK SRINGBLK NODRC) ((INT RDLPA2 < 40 - 0.002 ABUT<90 SINGULAR REGION) AND INDALL) NOT INSIDE (OR SRBLK SRINGBLK NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DEUPAD_R_2",
+   "layer": "DEUPAD",
+   "type": "R",
+   "num": "2",
+   "comment": "DEUPAD must fully enclose COVER",
+   "expr": "((MD INTERACT DEUPAD) NOT DEUPAD) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DEUPAD_R_3",
+   "layer": "DEUPAD",
+   "type": "R",
+   "num": "3",
+   "comment": "Two top metal layers (TM and TM-1) are needed between DEUPAD and device, where the metal design must be solid.",
+   "expr": "( padarea ENCLOSE (padarea NOT [lindex $metal_all end])) NOT INSIDE NODRC ( padarea ENCLOSE (padarea NOT [lindex $metal_all end-1])) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DEUPAD_R_5",
+   "layer": "DEUPAD",
+   "type": "R",
+   "num": "5",
+   "comment": "ALPADres, MOMLVS1, INDALL, Resistor of TM or TM-1 must be outside of DEUPAD area.",
+   "expr": "X1 = (ALPAR OR MOMLVS1) OR INDALL X2 = ([lindex $metal_all end]R AND [lindex $metal_all end]) OR ([lindex $metal_all end-1]R AND [lindex $metal_all end-1]) ((X1 OR X2) AND padarea) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DEUPAD_R_6",
+   "layer": "DEUPAD",
+   "type": "R",
+   "num": "6",
+   "comment": "For two top metal process: T4V1 patterns are not allowed under the DEUPAD opening area",
+   "expr": "(padarea AND [lindex $via_all end-1]) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DEUPAD_R_7",
+   "layer": "DEUPAD",
+   "type": "R",
+   "num": "7",
+   "comment": "two vias which space is within 0.51um are considerd to be same array",
+   "expr": "V_ARRAY_S_REG = EXT [lindex $via_all end] <= 0.51 SINGULAR REGION V_ARRAY = [lindex $via_all end] INTERACT V_ARRAY_S_REG padarea NOT INTERACT V_ARRAY ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_EN_1",
+   "layer": "DNW",
+   "type": "EN",
+   "num": "1",
+   "comment": "NW Enclosure of DNW >= 1.00um",
+   "expr": "(ENC DNW NW < 1.0 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC (DNW COINCIDENT EDGE NW) NOT INSIDE EDGE NODRC (DNW OUTSIDE EDGE NW) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_EN_2",
+   "layer": "DNW",
+   "type": "EN",
+   "num": "2",
+   "comment": "Enclosure of N+ AA >= 0.55um",
+   "expr": "(ENC (NACT NOT (NTAP OR PTAP)) DNW < 0.55 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_O_1",
+   "layer": "DNW",
+   "type": "O",
+   "num": "1",
+   "comment": "Overlap of NW and DNW. >= 0.40um",
+   "expr": "(INT NW DNW < 0.4 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_R_1",
+   "layer": "DNW",
+   "type": "R",
+   "num": "1",
+   "comment": "It is recommanded DNW be enclosed by NW",
+   "expr": "((DNW NOT INSIDE EDGE NW_DNW) NOT COIN EDGE NW_DNW) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_R_3",
+   "layer": "DNW",
+   "type": "R",
+   "num": "3",
+   "comment": "Floating TPW is not allowed. DRC flags TPW not TOUCH CT in P+ pickup AA",
+   "expr": "X = PW INSIDE DNW X NOT INTERACT (CT INTERACT PTAP) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_S_1",
+   "layer": "DNW",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two DNWs >= 3.50um",
+   "expr": "(EXT DNW < 3.5 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_S_2a",
+   "layer": "DNW",
+   "type": "S",
+   "num": "2a",
+   "comment": "Space between DNW and NW at different net >= 2.35um",
+   "expr": "(EXT DNW NW < 2.35 SINGULAR REGION MEASURE ALL NOT CONNECTED) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_S_3",
+   "layer": "DNW",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between TPW and (TPW OR PW1) >= 0.80um",
+   "expr": "X = PW INSIDE DNW Y = PW OR X ((EXT X Y < 0.80 ABUT<90 SINGULAR REGION) NOT INSIDE LDMOS) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_S_4",
+   "layer": "DNW",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between TPW and (TPW OR PW) when at least one TPW OR PW interact DG >= 1.20um",
+   "expr": "TPWDTG = (PW INSIDE DNW) AND (DG OR TG) PWDTG = PW AND (DG OR TG) TPW = PW INSIDE DNW ((EXT TPWDTG TPW < 1.20 ABUT<90 SINGULAR REGION ) NOT INSIDE LDMOS) NOT INSIDE NODRC ((EXT PWDTG TPW < 1.20 ABUT<9",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_S_5",
+   "layer": "DNW",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between DNW and N+AA >= 1.60um",
+   "expr": "(EXT DNW NSDi < 1.60 SINGULAR REGION ) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "DNW_W_1",
+   "layer": "DNW",
+   "type": "W",
+   "num": "1",
+   "comment": "DNW width >= 3.00um",
+   "expr": "(INT DNW < 3.0 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_10",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum ESD implant to ACT space >= 0.4",
+   "expr": "(ENC ESD1 ENMOS_DRAIN < 0.4 ABUT <90 SINGULAR REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_11",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "ESD implant can't overlap Poly",
+   "expr": "(ESD1 AND EGATE_POLY) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_12",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "<= 40um",
+   "expr": "(LENGTH (EGATE_W INSIDE EDGE ENMOS) < 30) NOT INSIDE EDGE NODRC (LENGTH (EGATE_W INSIDE EDGE ENMOS) > 40) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_13_R",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Channel width (W) of NMOS for ESD protection device (Channel width = Finger width x Finger No.) >= 150um",
+   "expr": "X = NET AREA RATIO ENGATE_D_EMPTY ESD3C_EMPTY \\[AREA(ESD3C_EMPTY)/0.001\\] < 150 ((X INTERACT ENGATE) NOT INTERACT EGATE_NOSAB) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_1_SEDP_1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum ACT extnsion of CT on SOURCE >= 0.15",
+   "expr": "(ENC ECT_S EMOS_S < 0.15 ABUT < 90 SINGULAR REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_2_ESDP_2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum CT to Poly space on SOURCE >= 0.15",
+   "expr": "(EXT ECT_S EGATE < 0.15 ABUT < 90 SINGULAR REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_3",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Channel length of 3.3V I/O NMOS for protection device. >= 0.5um",
+   "expr": "X = (EGATEHV AND ENGATE) COIN EDGE EGATE_L (LENGTH X < 0.5) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_4_ESDP_4",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum SAB overlap Poly on Drain >= 0.05",
+   "expr": "(INTERNAL ESAB EGATE < 0.05 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_5_ESDP_5",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum SAB to Poly on Drain space >= 1.29",
+   "expr": "(EXT ESAB_HO_RAW EGATE < 1.29 OPPOSITE REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_6_ESDP_6",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum SAB to CT on Drain space >= 0.21",
+   "expr": "(ENC ECT_D ESAB_HO_RAW  < 0.21 ABUT <90 SINGULAR REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_7_ESDP_7",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum SAB to ACT space >= 0.21",
+   "expr": "(ENC (ENMOS_DRAIN NOT COIN EDGE EGATE) (ESAB OR ESAB_HO_RAW)  < 0.21 ABUT <90  REGION) NOT INSIDE EDGE NODRC (ENC (EPMOS_DRAIN NOT COIN EDGE EGATE) (ESAB OR ESAB_HO_RAW)  < 0.21 ABUT <90  REGION) NOT ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_8_ESDP_8",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum SAB overlap ACT >= 1",
+   "expr": "(ENC ESAB_HO_RAW ENMOS_DRAIN < 1 ABUT <90 SINGULAR REGION) NOT INSIDE EDGE NODRC (ENC ESAB_HO_RAW EPMOS_DRAIN < 1 ABUT <90 SINGULAR REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDN_9",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Minimum ESD implant to Poly space >= 0.4",
+   "expr": "(EXT ESD1 EGATE < 0.4 OPPOSITE REGION) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDP_10_R",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Channel width (W) of PMOS for ESD protection device (Channel width = Finger width x Finger No.) >= 300um",
+   "expr": "X = NET AREA RATIO EPGATE_D_EMPTY ESD3C_EMPTY \\[AREA(ESD3C_EMPTY)/0.001\\] < 300 ((X INTERACT EPGATE) NOT INTERACT EGATE_NOSAB) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDP_3",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Channel length of 3.3V I/O PMOS for protection device. >= 0.4um, <=0.5",
+   "expr": "X = (EGATEHV AND EPGATE) COIN EDGE EGATE_L GOOD =  (LENGTH X >= 0.4 <= 0.5) NOT INSIDE EDGE NODRC ((EGATEHV AND EPGATE) NOT WITH EDGE GOOD) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESDP_9",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "<= 40um",
+   "expr": "(LENGTH (EGATE_W INSIDE EDGE EPMOS) < 30) NOT INSIDE EDGE NODRC (LENGTH (EGATE_W INSIDE EDGE EPMOS) > 40) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESD_A_1",
+   "layer": "ESD",
+   "type": "A",
+   "num": "1",
+   "comment": "ESD1 area >= 0.6um2",
+   "expr": "(AREA ESD1 < 0.6) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESD_A_2",
+   "layer": "ESD",
+   "type": "A",
+   "num": "2",
+   "comment": "ESD1 enclosed area >= 0.6um2",
+   "expr": "(AREA ((HOLES ESD1 INNER) NOT ESD1) < 0.6) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESD_S_1",
+   "layer": "ESD",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two ESD1s. Merge if space is less than this value. >= 0.47um",
+   "expr": "(EXT ESD1 < 0.47 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "ESD_W_1",
+   "layer": "ESD",
+   "type": "W",
+   "num": "1",
+   "comment": "ESD1 width >= 0.47um",
+   "expr": "(INT ESD1 < 0.47 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_R_2",
+   "layer": "LU",
+   "type": "R",
+   "num": "2",
+   "comment": "NW/PW pickups rings can be used as guard rings. DRC check the nearest guard-ring which surrounds AA injector or a group of AA injector",
+   "expr": "(((NACT_IO_PAD TOUCH PO) NOT PGUARDRING) NOT INSIDE (LATCHUP OR SRINGBLK)) NOT INSIDE NODRC (((PACT_IO_PAD TOUCH PO) NOT NGUARDRING) NOT INSIDE (LATCHUP OR SRINGBLK)) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_S_1a",
+   "layer": "LU",
+   "type": "S",
+   "num": "1a",
+   "comment": "Spacing between NMOS and PMOS. >= 2um",
+   "expr": "X = NMOS_IO_PAD ENCLOSE GATELV Y = PMOS_IO_PAD ENCLOSE GATELV M = NMOS ENCLOSE GATELV N = PMOS ENCLOSE GATELV ((EXT X N < 2 ABUT<90 SINGULAR REGION) NOT SRINGBLK) NOT INSIDE (OR LATCHUP NODRC) ((EXT M",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_S_1b",
+   "layer": "LU",
+   "type": "S",
+   "num": "1b",
+   "comment": "Spacing between 1.8V NMOS and 1.8V/Core PMOS and Spacing between 1.8V PMOS and 1.8V/Core NMOS. >= 2.3um",
+   "expr": "X = NMOS_IO_PAD ENCLOSE GATEMV Y = PMOS_IO_PAD ENCLOSE GATEMV M = NMOS ENCLOSE (GATELV OR GATEMV) N = PMOS ENCLOSE (GATELV OR GATEMV) ((EXT M Y < 2.3 ABUT<90 SINGULAR REGION) NOT SRINGBLK ) NOT INSIDE",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_S_1c",
+   "layer": "LU",
+   "type": "S",
+   "num": "1c",
+   "comment": "Spacing between 2.5V NMOS and 2.5V/Core PMOS and Spacing between 2.5V PMOS and 2.5V/Core NMOS. >= 3.2um",
+   "expr": "X = NMOS_IO_PAD ENCLOSE GATEHV Y = PMOS_IO_PAD ENCLOSE GATEHV M = NMOS ENCLOSE (GATELV OR GATEHV ) N = PMOS ENCLOSE (GATELV OR GATEHV) ((EXT M Y < 3.2 ABUT<90 SINGULAR REGION) NOT SRINGBLK) NOT INSIDE",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_S_1d",
+   "layer": "LU",
+   "type": "S",
+   "num": "1d",
+   "comment": "Spacing between 3.3V NMOS and 3.3V/Core PMOS and Spacing between 3.3V PMOS and 3.3V/Core NMOS >= 5.0um.",
+   "expr": "X = NMOS_IO_PAD ENCLOSE GATEHV Y = PMOS_IO_PAD ENCLOSE GATEHV M = NMOS ENCLOSE (GATELV OR GATEHV) N = PMOS ENCLOSE (GATELV OR GATEHV) ((EXT X N < 5 ABUT<90 SINGULAR REGION) NOT SRINGBLK) NOT INSIDE (O",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_S_2_NTAP",
+   "layer": "LU",
+   "type": "S",
+   "num": "2",
+   "comment": "For native device, DRC check the pickup AA inside the PSUB butted PW area, and PW is still treated as connection by substrate even one NW ring inserted. <= 35um",
+   "expr": "NW_MINUS_NTAP_0 = SIZE NTAP BY 5 INSIDE OF NW STEP 0.38 BEVEL 4 MAYBE_BAD_b = NW NOT NW_MINUS_NTAP_0 NW_FILTER = NW INTERACT MAYBE_BAD_b NW_MINUS_NTAP_1 = NW_MINUS_NTAP_0 AND NW_FILTER NW_MINUS_NTAP =",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_S_2_PTAP",
+   "layer": "LU",
+   "type": "S",
+   "num": "2",
+   "comment": "For native device, DRC check the pickup AA inside the PSUB butted PW area, and PW is still treated as connection by substrate even one NW ring inserted. <= 35um",
+   "expr": "PW_MINUS_PTAP_0 = SIZE PTAP BY 5 INSIDE OF PW STEP 0.38 BEVEL 4 MAYBE_BAD_b = PW NOT PW_MINUS_PTAP_0 PW_FILTER = PW INTERACT MAYBE_BAD_b PW_MINUS_PTAP_1 = PW_MINUS_PTAP_0 AND PW_FILTER PW_MINUS_PTAP =",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "LU_W_1",
+   "layer": "LU",
+   "type": "W",
+   "num": "1",
+   "comment": "Guard-ring definition please refers to LU.1. >= 0.12um",
+   "expr": "(INT ((DONUT NTAP) TOUCH ((HOLES NTAP INNER) ENCLOSE PACT_IO_PAD)) < 0.12 ABUT<90 SINGULAR REGION) NOT INSIDE (OR SRINGBLK LATCHUP NODRC) (INT ((DONUT PTAP) TOUCH ((HOLES PTAP INNER) ENCLOSE NACT_IO_P",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_A_1",
+   "layer": "MET1",
+   "type": "A",
+   "num": "1",
+   "comment": "M1 area >= 0.042um2",
+   "expr": "X = AREA M1 < 0.042 (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_A_2",
+   "layer": "MET1",
+   "type": "A",
+   "num": "2",
+   "comment": "Enclosed dielectric area by M1 >= 0.18um2",
+   "expr": "X = (HOLES M1 INNER EMPTY) NOT M1 (AREA X < 0.18) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_D_1_max",
+   "layer": "MET1",
+   "type": "D",
+   "num": "1",
+   "comment": "M1 density (including dummy) in 100umX100um window with step size 50um. INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking <= 80%",
+   "expr": "check_region_1 = (((DRC:1 NOT GRID) NOT SRINGBLK) NOT INDALL) NOT INSIDE NODRC DENSITY M1ALLi > 0.80 WINDOW 100 STEP 50 BACKUP INSIDE OF LAYER check_region_1 PRINT M1_D_1_max.log ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_D_1_min",
+   "layer": "MET1",
+   "type": "D",
+   "num": "1",
+   "comment": "M1 density (including dummy) in 100umX100um window with step size 50um. INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking >= 10%",
+   "expr": "check_region_1 = (((DRC:1 NOT GRID) NOT SRINGBLK) NOT INDALL) NOT INSIDE NODRC DENSITY M1ALLi < 0.10 WINDOW 100 STEP 50 BACKUP INSIDE OF LAYER check_region_1 PRINT M1_D_1_min.log ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_D_2",
+   "layer": "MET1",
+   "type": "D",
+   "num": "2",
+   "comment": "M1 average density inside the {SIZE dummy block BY 2.5um} area in 100umX100um window with step size 50um >= 10%",
+   "expr": "X = DENSITY M1ALLi < 0.1 WINDOW 100 STEP 50 backup PRINT density_report_M1_D_2.log Y = SIZE M1DUMB BY 2.5 Z = SIZE Y BY 12.5 UNDEROVER (X AND Z) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_D_3",
+   "layer": "MET1",
+   "type": "D",
+   "num": "3",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking <= 20%",
+   "expr": "X = DENSITY M1ALLi >= 0 WINDOW 100 GRADIENT > 0.2 ABSOLUTE BACKUP INSIDE OF LAYER density_checkarea PRINT density_report_M1_D_3.log (((X NOT GRID) NOT SRINGBLK) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_S_1",
+   "layer": "MET1",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two M1s, DRC don\\BFt flag 89 to 90 degree spaces in the INDALL region. >= 0.09um",
+   "expr": "X = EXT M1 < 0.09 ABUT<90 SINGULAR REGION ((X NOT INDALL) NOT INSIDE SRAMALL) NOT INSIDE NODRC Y = EXT M1 < 0.09 ABUT<89 SINGULAR REGION ((Y AND INDALL) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_S_1_R",
+   "layer": "MET1",
+   "type": "S",
+   "num": "1",
+   "comment": "Recomended pace between two M1s. >= 0.12um",
+   "expr": "X = EXT M1 < 0.12 ABUT<90 SINGULAR REGION (X NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_S_2",
+   "layer": "MET1",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between two M1 is 0.15 um when one or both M1 width >= 0.42um, and the parallel run length of two M1s is >= 0.42um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_S_3",
+   "layer": "MET1",
+   "type": "S",
+   "num": "3",
+   "comment": "Min Space between two M1 is 0.5 um when one or both M1 width >= 1.5um, and the parallel run length of two M1s is >= 1.5um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_S_4",
+   "layer": "MET1",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between metal lines with one or both are 45 degree,  >= 0.19um",
+   "expr": "X = ANGLE M1 == 45 (EXT X M1 < 0.19 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_S_5",
+   "layer": "MET1",
+   "type": "S",
+   "num": "5",
+   "comment": "Minimum Space at metal1 line-end(W<0.11um) in a dense-line-end configuration: if metal1 has parallel run length with opposite metal1 along 2 adjacent edge metal1 (any one edge < 0.11um distance from the conner of the two edge), the one of the space(sp1 or sp2) need to be at least 0.11 (except for small jog with edge length < 0.09um)",
+   "expr": "LINE_END = CONVEX EDGE M1 ANGLE1 == 90 ANGLE2 == 90 WITH LENGTH < 0.11 LINE_END_SP = EXT \\[LINE_END\\] M1 < 0.11 ABUT<90 OPPOSITE LINE_SIDE = LINE_END TOUCH INSIDE EDGE LINE_END_SP LINE_END_M1 = INT LI",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_W_1",
+   "layer": "MET1",
+   "type": "W",
+   "num": "1",
+   "comment": "M1 width <= 12.00um",
+   "expr": "(M1 WITH WIDTH > 12) NOT INSIDE NODRC (INT M1 < 0.09 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_W_2",
+   "layer": "MET1",
+   "type": "W",
+   "num": "2",
+   "comment": "Width of metal1 with 45 degree,  >= 0.19um",
+   "expr": "X = ANGLE M1 == 45 (INT X < 0.19 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MET1_W_3",
+   "layer": "MET1",
+   "type": "W",
+   "num": "3",
+   "comment": "Minimum M1 width adjoining a huge non-metal region \\[ area > 2000000 um2\\], non-metal region is defined as (NOT (Mx OR MxDUM)) >= 0.35um",
+   "expr": "NON_MAL_REG = AREA (DRC:1 NOT (OR M1 M1DUM)) > 2000000 CHECK_REGION = ENCLOSE RECTANGLE NON_MAL_REG 10 0.35 CHECK_MAL = M1 INTERACT CHECK_REGION (INT CHECK_MAL < 0.35 ABUT<90 SINGULAR REGION) NOT INSI",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "MOM_R_1",
+   "layer": "MOM",
+   "type": "R",
+   "num": "1",
+   "comment": "2) Vn/Vn-1 in MOMMKn (n = 2~8), whereVn-1 is the via underneath Mn, and Vn is the via above Mn. Vn can be inter-via or T4V1/T2V1 or T4V2/T2V2",
+   "expr": "(V${i} AND M${i}MOM) NOT INSIDE NODRC (V${i} AND M[expr ${i} +1]MOM) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "mom.m2.width",
+   "klayout_values": {
+    "m2_width": 0.1
+   }
+  },
+  {
+   "official": "MOM_R_2",
+   "layer": "MOM",
+   "type": "R",
+   "num": "2",
+   "comment": "MOMLVS1 and MOMMKn layers are must for MOM device. DRC checking is based on the label text by MOMLVS1 layer. Possible label texts and related MOMMKn follow the Table-1. DRC need flag the stacked MOM structure",
+   "expr": "M1MOM_${k} = M1MOM INTERACT (MOMLVS1 WITH TEXT \\\"momcap${k}\\\" MOMLVS1) M2MOM_${k} = M2MOM INTERACT (MOMLVS1 WITH TEXT \\\"momcap${k}\\\" MOMLVS1) M3MOM_${k} = M3MOM INTERACT (MOMLVS1 WITH TEXT \\\"momcap${k",
+   "status": "covered",
+   "klayout": "mom.m2.width",
+   "klayout_values": {
+    "m2_width": 0.1
+   }
+  },
+  {
+   "official": "MOM_S_1",
+   "layer": "MOM",
+   "type": "S",
+   "num": "1",
+   "comment": "The space between (Mn AND MOMMKn AND MOMLVS1) and Vn/Vn-1 (n = 1~8) outside of MOMLVS1, whereVn-1 is the via underneath Mn, and Vn is the via above Mn. Vn can be inter-via or T4V1 or T4V2. >= 0.11um",
+   "expr": "(EXT (V${i} OUTSIDE MOMLVS1) ((M${i} AND M${i}MOM) AND MOMLVS1) < 0.11 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC (EXT (V${i} OUTSIDE MOMLVS1) ((M[expr ${i} +1] AND M[expr ${i} +1]MOM) AND MOMLVS1) < 0",
+   "status": "covered",
+   "klayout": "mom.m2.space",
+   "klayout_values": {
+    "m2_space": 0.1,
+    "m2_width": 0.1
+   }
+  },
+  {
+   "official": "NW1_A_1",
+   "layer": "NW1",
+   "type": "A",
+   "num": "1",
+   "comment": "NW1 area >= 0.30um2",
+   "expr": "(AREA NW < 0.3) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "NW1_A_2",
+   "layer": "NW1",
+   "type": "A",
+   "num": "2",
+   "comment": "Enclosed area >= 0.3um2",
+   "expr": "(AREA ((HOLES NW INNER) NOT NW) < 0.3) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "NW1_R_1",
+   "layer": "NW1",
+   "type": "R",
+   "num": "1",
+   "comment": "Floating NW1 is not allowed.",
+   "expr": "( NW NOT INTERACT (NTAP ENCLOSE CT)) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "well.nw.width",
+   "klayout_values": {
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "NW1_S_1",
+   "layer": "NW1",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between NW1s >= 0. 47um",
+   "expr": "((EXT LVNW0 < 0.47 ABUT<90 SINGULAR REGION) NOT NWRES) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "well.nw.space",
+   "klayout_values": {
+    "nw_space": 0.4,
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "NW1_S_2",
+   "layer": "NW1",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between 0.9/1.2V NW1s at different nets >= 1.0um",
+   "expr": "((EXT LVNW0 < 1.0 ABUT<90 SINGULAR REGION NOT CONNECTED) NOT NWRES) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "well.nw.space",
+   "klayout_values": {
+    "nw_space": 0.4,
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "NW1_S_3",
+   "layer": "NW1",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between 0.9/1.2V NW1 and 1.8/2.5/3.3V NW1 at different nets. >= 1.20um",
+   "expr": "(EXT LVNW0 HVNW0 < 1.2  ABUT<90 SINGULAR REGION NOT CONNECTED) NOT INSIDE NODRC (EXT LVNW0 MVNW0 < 1.2  ABUT<90 SINGULAR REGION NOT CONNECTED) NOT INSIDE NODRC (EXT LVNW_RE MVNW < 1.2 ABUT<90 REGION) ",
+   "status": "covered",
+   "klayout": "well.nw.space",
+   "klayout_values": {
+    "nw_space": 0.4,
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "NW1_S_4",
+   "layer": "NW1",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between 1.8/2.5/3.3V NW1s at same nets. >= 0.47um",
+   "expr": "((EXT MVNW0 < 0.47 ABUT<90 SINGULAR REGION CONNECTED) NOT INSIDE NWRES) NOT INSIDE NODRC ((EXT HVNW0 < 0.47 ABUT<90 SINGULAR REGION CONNECTED) NOT INSIDE NWRES) NOT INSIDE NODRC (EXT MVNW0 HVNW0 < 0.4",
+   "status": "covered",
+   "klayout": "well.nw.space",
+   "klayout_values": {
+    "nw_space": 0.4,
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "NW1_S_5",
+   "layer": "NW1",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between 1.8/2.5/3.3V NW1s at different nets. >= 1.2 um",
+   "expr": "((EXT MVNW0 < 1.2 ABUT<90 SINGULAR REGION NOT CONNECTED) NOT NWRES) NOT INSIDE NODRC ((EXT HVNW0 < 1.2 ABUT<90 SINGULAR REGION NOT CONNECTED) NOT NWRES) NOT INSIDE NODRC (EXT MVNW0 HVNW0 < 1.2 ABUT<90",
+   "status": "covered",
+   "klayout": "well.nw.space",
+   "klayout_values": {
+    "nw_space": 0.4,
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "NW1_W_1",
+   "layer": "NW1",
+   "type": "W",
+   "num": "1",
+   "comment": "NW1 width >= 0. 47um",
+   "expr": "((INT NW < 0.47 ABUT<90 SINGULAR REGION) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "well.nw.width",
+   "klayout_values": {
+    "nw_width": 0.361
+   }
+  },
+  {
+   "official": "PODUM_R_1",
+   "layer": "PODUM",
+   "type": "R",
+   "num": "1",
+   "comment": "PODUM can not overlap with CT",
+   "expr": "PODUM AND CT ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_1",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "1",
+   "comment": "PODUM space if PODUM size is 2.4um*2.4um >= 2.6",
+   "expr": "EXT PODUM_2p4_2p4 < 2.6 ABUT <90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_10",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between PODUM and CHIPBLK >= 0.6",
+   "expr": "EXT PODUM CHIPBLK < 0.6 ABUT < 90 SINGULAR REGION ENC PODUM CHIPBLK < 0.3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_11",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between PODUM and PODUMB >= 2",
+   "expr": "EXT PODUM PODUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_12",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between PODUM and DMYBLK >= 2",
+   "expr": "EXT PODUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_2",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "2",
+   "comment": "PODUM space if PODUM size is 0.92um*0.92um >= 0.68",
+   "expr": "EXT PODUM_0p92_0p92 < 0.68 ABUT <90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_3",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "3",
+   "comment": "PODUM space if PODUM size is 0.381um*0.381um >= 0.36",
+   "expr": "EXT PODUM_0p381_0p381 < 0.36 ABUT <90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_4",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between PODUM and AA, PODUM can not overlap with AA  >= 0.8",
+   "expr": "EXT PODUM AA < 0.8 ABUT <90 SINGULAR REGION PODUM AND AA ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_5",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between PODUM and Poly, PODUM can not overlap with Poly >= 0.8",
+   "expr": "EXT  PODUM PO < 0.8 ABUT <90 SINGULAR REGION PODUM AND PO ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_6",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between PODUM and NW boundary >= 0.3",
+   "expr": "EXT PODUM NW < 0.3 ABUT < 90 SINGULAR REGION ENC PODUM NW < 0.3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_7",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between PODUM and NW1res >= 0.6",
+   "expr": "EXT PODUM NW1res < 0.6 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_8",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between PODUM and LOGO >= 0.1",
+   "expr": "EXT PODUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_S_9",
+   "layer": "PODUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between PODUM and INDALL >= 2",
+   "expr": "EXT PODUM INDALL < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PODUM_W_1",
+   "layer": "PODUM",
+   "type": "W",
+   "num": "1",
+   "comment": "PODUM SIZE = 2.4x2.4, 0.92x0.92, 0.381x0.381",
+   "expr": "((PODUM NOT PODUM_2p4_2p4) NOT PODUM_0p92_0p92) NOT PODUM_0p381_0p381 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PO_A_1",
+   "layer": "PO",
+   "type": "A",
+   "num": "1",
+   "comment": "PO area >= 0.04um2",
+   "expr": "((AREA PO < 0.04) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.area",
+   "klayout_values": {
+    "poly_area": 0.0388,
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_A_1_R",
+   "layer": "PO",
+   "type": "A",
+   "num": "1",
+   "comment": "PO area when PO is not GATE poly. >= 0.05um2",
+   "expr": "((AREA (PO NOT INTERACT GATE) < 0.05) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.area",
+   "klayout_values": {
+    "poly_area": 0.0388,
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_A_2",
+   "layer": "PO",
+   "type": "A",
+   "num": "2",
+   "comment": "PO enclosed area >= 0.09um2",
+   "expr": "(AREA ((HOLES PO INNER) NOT PO) < 0.09) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.area",
+   "klayout_values": {
+    "poly_area": 0.0388,
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_D_1_max",
+   "layer": "PO",
+   "type": "D",
+   "num": "1",
+   "comment": "Global PO density for fully chip (including dummy)  <= 40%",
+   "expr": "(DENSITY PO_all > 0.40 PRINT density_report_PO_D_1_max.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_D_1_min",
+   "layer": "PO",
+   "type": "D",
+   "num": "1",
+   "comment": "Global PO density for fully chip (including dummy) >= 14%",
+   "expr": "(DENSITY PO_all < 0.14 PRINT density_report_PO_D_1_min.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_D_2_max",
+   "layer": "PO",
+   "type": "D",
+   "num": "2",
+   "comment": "Local PO density (including dummy) in 100um*100um window with step size: 50um <= 65%",
+   "expr": "(DENSITY PO_all > 0.65 WINDOW 100 STEP 50 BACKUP PRINT density_report_PO_D_2_max.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_D_2_min",
+   "layer": "PO",
+   "type": "D",
+   "num": "2",
+   "comment": "Local PO density (including dummy) in 100um*100um window with step size: 50um >= 20%",
+   "expr": "(DENSITY PO_all < 0.2 WINDOW 100 STEP 50 BACKUP PRINT density_report_PO_D_2_min.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_D_3",
+   "layer": "PO",
+   "type": "D",
+   "num": "3",
+   "comment": "The poly density difference between any two neighboring checking windows  <= 20%",
+   "expr": "(DENSITY PO_all >= 0 WINDOW 100 GRADIENT > 0.2 ABSOLUTE BACKUP INSIDE OF LAYER BULK PRINT density_report_PO_D_3.log) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_EN_1_R",
+   "layer": "PO",
+   "type": "EN",
+   "num": "1",
+   "comment": "Recommended core pmos gate enclose by (NW NOT TG), >=1.0",
+   "expr": "CHECK_GATE = (GATE_core AND SDP) NOT TG CHECK_WELL = NW NOT TG ((ENC CHECK_GATE CHECK_WELL < 1.0 ABUT<90 REGION OPPOSITE) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PO_EN_2_R",
+   "layer": "PO",
+   "type": "EN",
+   "num": "2",
+   "comment": "Recommended IO nmos gate enclose by (TG NOT (NW OR PSUB)), >=2.0",
+   "expr": "CHECK_GATE = (GATE AND SDN) AND TG CHECK_WELL = TG NOT NW (ENC CHECK_GATE CHECK_WELL < 2.0 ABUT<90 REGION OPPOSITE) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PO_EN_3_R",
+   "layer": "PO",
+   "type": "EN",
+   "num": "3",
+   "comment": "Recommended IO pmos gate enclose by (TG AND NW), >=2.0",
+   "expr": "CHECK_GATE = (GATE AND SDP) AND TG CHECK_WELL = TG AND NW (ENC CHECK_GATE CHECK_WELL < 2.0 ABUT<90 REGION OPPOSITE) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PO_EX_1",
+   "layer": "PO",
+   "type": "EX",
+   "num": "1",
+   "comment": "Extension of AA outside of PO >= 0.11um",
+   "expr": "X = ENC PO (AA NOT COIN EDGE LDMOSSTI) < 0.11 ABUT<90 REGION OPPOSITE ((X NOT INSIDE SRAMALL) NOT INSIDE INDALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_EX_1_R",
+   "layer": "PO",
+   "type": "EX",
+   "num": "1",
+   "comment": "Recommended Extension of AA outside of PO(when channel width >1 um) >= 0.18um",
+   "expr": "X = LENGTH (GATE INSIDE EDGE AA)  >= 1.0 Y = PO WITH EDGE X Z = ENC Y (AA NOT TOUCH LDMOSSTI) < 0.18 ABUT<90 REGION OPPOSITE ((Z NOT INSIDE SRAMALL) NOT INSIDE INDALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_EX_2",
+   "layer": "PO",
+   "type": "EX",
+   "num": "2",
+   "comment": "Extension of GATE poly outside of AA >= 0.14um",
+   "expr": "Y = ENC AA PO < 0.14 ABUT<90 opposite REGION Z = EXT PO < 0.002 ABUT==90 REGION INTERSECTING ONLY (((Y NOT TOUCH Z) NOT INSIDE SRAMALL) NOT INSIDE LDMOS) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_EX_3_R",
+   "layer": "PO",
+   "type": "EX",
+   "num": "3",
+   "comment": "DRC only check the L-shape opposite side PO end-cap. >= 0.16um",
+   "expr": "A = ENC AA PO < 0.16 OPPOSITE REGION X = LENGTH GATE_W >= 0.15 Y = GATE WITH EDGE X B = EXT Y AA < 0.14 ABUT==90 PERP ONLY REGION ((A WITH EDGE (A TOUCH EDGE B)) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_L_1",
+   "layer": "PO",
+   "type": "L",
+   "num": "1",
+   "comment": "This rule is for voltage drop concern. DRC waive check ESDIOE covered region. <= 25.00um",
+   "expr": "PO_CHECK = ((WITH WIDTH PO < 0.13) NOT GATE) INTERACT CT Z0 = SIZE CT BY 12.5 INSIDE OF PO_CHECK STEP 0.02 ((PO_CHECK INTERACT Z0 > 1) NOT INSIDE ESDIOE) NOT INSIDE NODRC PO_CHECK1 = (PO INTERACT CT) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PO_L_2_R",
+   "layer": "PO",
+   "type": "L",
+   "num": "2",
+   "comment": "Recommanded maximum L shape length of L-shape AA which  space to PO (in the same MOS with width >= 0.15um) <= 0.1 is <=0.21",
+   "expr": "PO_CHECK = EXPAND EDGE (LENGTH GATE_W >= 0.15) INSIDE BY 0.001 POmergeAA = (PO OR AA) INTERACT PO_CHECK L_edge = CONVEX EDGE POmergeAA ANGLE1 == 90 ANGLE2 == 270 L_edge_ = EXPAND EDGE L_edge INSIDE BY",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PO_R_1",
+   "layer": "PO",
+   "type": "R",
+   "num": "1",
+   "comment": "DRC waive check the INDALL and SRAMALL covered region, and waive check (AA AND PO) width <= 0.01um pattern.",
+   "expr": "POEIAA1 = (PO AND AA) WITH WIDTH > 0.01 ((POEIAA1 CONVEX EDGE < 2) NOT INSIDE EDGE (INDALL OR SRAMALL)) NOT INSIDE EDGE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_R_2",
+   "layer": "PO",
+   "type": "R",
+   "num": "2",
+   "comment": "PO must be enclosed by NP and/or PP.",
+   "expr": "HRPR = PO INTERACT HPR HRP_END = SIZE (HRPR NOT HPR) BY 0.3 PO_MID = ( PO INTERACT (HPR OR HRP)) NOT HRP_END Y = ((((PO INTERACT CT) NOT PO_MID) NOT SDP) NOT SDN) NOT INTERACT MOMLVS1 (Y NOT INSIDE SR",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_1",
+   "layer": "PO",
+   "type": "S",
+   "num": "1",
+   "comment": "DRC waive check the INDALL covered region. >= 0.12um",
+   "expr": "X = EXT PO < 0.12 ABUT<90 SINGULAR REGION (X NOT INSIDE (SRAMALL OR INDALL)) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_11",
+   "layer": "PO",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between AA and PO on STI >= 0.05um",
+   "expr": "X = EXT AA PO < 0.05 ABUT<90 SINGULAR REGION ((X NOT INSIDE (AA OR AADUM)) NOT INSIDE (SRAMALL OR INDALL)) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_12",
+   "layer": "PO",
+   "type": "S",
+   "num": "12",
+   "comment": "Minimum space of PO within SAB >=0.25",
+   "expr": "PO_SAB = PO NOT OUTSIDE SAB (EXT PO_SAB < 0.25 ABUT < 90 OPPOSITE REGION ) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_13_R",
+   "layer": "PO",
+   "type": "S",
+   "num": "13",
+   "comment": "Strongly suggest the minimum space of GATE to neighboring poly for sensitive circuit with minimum  PO width = 0.06um, >=0.19",
+   "expr": "X = WITH WIDTH GATE == 0.06 (EXT X PO < 0.19 ABUT < 90 OPPOSITE REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_14",
+   "layer": "PO",
+   "type": "S",
+   "num": "14",
+   "comment": "Min space between L-shape AA to PO in the same MOS when channel width <0.15um is 0.1.",
+   "expr": "A = EXT AA_CP PO_CP < 0.1 OPPOSITE REGION CONNECTED (((A INTERACT AAcorner) INTERACT GATE_WIDTH_D15) NOT INSIDE EDGE SRAMALL) NOT INSIDE EDGE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_14a_R",
+   "layer": "PO",
+   "type": "S",
+   "num": "14a",
+   "comment": "Min space between L-shape AA to PO in the same MOS when channel width >= 0.15um is 0.1.",
+   "expr": "A = EXT AA_CP PO_CP < 0.1 OPPOSITE REGION CONNECTED (((A INTERACT AAcorner) INTERACT GATE_WIDTH_U15) NOT INSIDE EDGE SRAMALL) NOT INSIDE EDGE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_15",
+   "layer": "PO",
+   "type": "S",
+   "num": "15",
+   "comment": "Min space between L-shape PO to AA in the same MOSwhen channel width < 0.15um is 0.1.",
+   "expr": "A = EXT PO015 AAintPO015 < 0.1 OPPOSITE REGION CONNECTED (((A INTERACT POcorner) INTERACT GATE_WIDTH_D15) NOT INSIDE EDGE SRAMALL) NOT INSIDE EDGE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_16",
+   "layer": "PO",
+   "type": "S",
+   "num": "16",
+   "comment": "PO area >= 630um2 and within regions of density > 70% in window 30um x 30um, stepping 15um. Dummy poly isn\\BFt included in the density check. >= 1.00um",
+   "expr": "Density_region = DENSITY POLYi > 0.7 WINDOW 30 STEP 15 Large_PO = (AREA POLYi >= 630) INSIDE Density_region GATE_check = GATE WITH EDGE (LENGTH GATE_LE <= 0.08) GATE_LE = (GATE TOUCH EDGE (INT GATE_W ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_18_R",
+   "layer": "PO",
+   "type": "S",
+   "num": "18",
+   "comment": "Recommended core nmos gate space to (TG OR (NW OR PSUB), >=1.0",
+   "expr": "CHECK_GATE = GATE_core AND SDN CHECK_WELL = OR TG NW PSUB ((EXT CHECK_GATE CHECK_WELL < 1.0 ABUT<90 REGION OPPOSITE) NOT INTERACT SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_2",
+   "layer": "PO",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between two POs when one or both PO width is > 0.13um, and the run length of two POs is > 0.18um. >= 0.18um",
+   "expr": "PO_W = WITH WIDTH PO > 0.13 PO_S = EXT PO_W PO < 0.18 OPPOSITE REGION PARA ONLY PO_LS = LENGTH PO_S > 0.18 (PO_S WITH EDGE PO_LS) NOT INSIDE EDGE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_3",
+   "layer": "PO",
+   "type": "S",
+   "num": "3",
+   "comment": "DRC waive check the INDALL covered region. >= 0.13um",
+   "expr": "X = (AA AND PO) COIN EDGE PO Y = EXT X < 0.13 ABUT < 90 REGION (Y NOT INSIDE INDALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_4_R",
+   "layer": "PO",
+   "type": "S",
+   "num": "4",
+   "comment": "DRC waive check if no contacts between two POs, and waive check the INDALL covered region. >= 0.2um",
+   "expr": "X = EXT PO_EMPTY < 0.2 ABUT<90 SINGULAR REGION CONNECTED Y = X INTERACT CT (Y NOT INSIDE (INDALL OR SRAMALL) ) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_5",
+   "layer": "PO",
+   "type": "S",
+   "num": "5",
+   "comment": "DRC waive check if no contacts between two POs, and waive check the INDALL covered region. >= 0.24um",
+   "expr": "X = EXT (PO_EMPTY AND TG) < 0.24 ABUT<90 SINGULAR REGION CONNECTED Y = X INTERACT CT (Y NOT INSIDE (INDALL OR SRAMALL)) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_6",
+   "layer": "PO",
+   "type": "S",
+   "num": "6",
+   "comment": "Space to 45-degree PO, except EFUSEALL and FUSEALL region. >= 0.18um",
+   "expr": "PO_CHECK = PO NOT INSIDE (OR EFUSEALL AA AADUM) X = (ANGLE PO_CHECK == 45) NOT INSIDE EDGE EFUSEALL (((EXT X (PO NOT INSIDE EFUSEALL) < 0.18 ABUT<90 REGION) NOT INSIDE EFUSEALL) NOT INSIDE FUSEALL) NO",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_7",
+   "layer": "PO",
+   "type": "S",
+   "num": "7",
+   "comment": "GATE space when L-shape AA and L-shape PO enclosed area is < 0.012um2 >= 0.15um",
+   "expr": "X = AA_LS OR PO_LS Y = AREA (HOLES X INNER) < 0.012 Z = GATE INTERACT Y SINGULAR ONLY ((EXT Z < 0.15 ABUT<90 REGION) INTERACT Y) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_7a_R",
+   "layer": "PO",
+   "type": "S",
+   "num": "7a",
+   "comment": "Recommended GATE space when L-shape AA and L-shape PO enclosed area is < 0.0196um2 >= 0.2um",
+   "expr": "X = AA_LS OR PO_LS Y = AREA (HOLES X INNER) < 0.0196 Z = GATE INTERACT Y SINGULAR ONLY ((EXT Z < 0.2 ABUT<90 REGION) INTERACT Y) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_8_R",
+   "layer": "PO",
+   "type": "S",
+   "num": "8",
+   "comment": "Recommended space of GATE (channel length <= 0.08um) to neighboring poly for thr CDU control <= 1.0",
+   "expr": "X = LENGTH GATE_L <= 0.08 Y = (GATE INTERACT (EXPAND EDGE X OUTSIDE BY 0.001)) NOT INSIDE SRAMALL Z = Y INSIDE EDGE AA A = EXPAND EDGE Z OUTSIDE BY 1.0 (A NOT INTERACT PO > 1) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_S_9",
+   "layer": "PO",
+   "type": "S",
+   "num": "9",
+   "comment": "the 2 edges), then one of the space need to bigger than 0.14",
+   "expr": "LINE_END = CONVEX EDGE PO ANGLE1 == 90 ANGLE2 == 90 WITH LENGTH < 0.09 LINE_END_SP = EXT \\[LINE_END\\] PO < 0.14 ABUT<90 OPPOSITE LINE_SIDE = LINE_END TOUCH INSIDE EDGE LINE_END_SP LINE_END_PO = INT LI",
+   "status": "covered",
+   "klayout": "poly.poly.space",
+   "klayout_values": {
+    "poly_space": 0.11,
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_1",
+   "layer": "PO",
+   "type": "W",
+   "num": "1",
+   "comment": "PO width >=0.06 um",
+   "expr": "(INT PO <0.06 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_2a",
+   "layer": "PO",
+   "type": "W",
+   "num": "2a",
+   "comment": "Channel length for 0.9/1.2V NMOS/PMOS transistors >= 0.06um",
+   "expr": "X = PO INSIDE EDGE (AA NOT (DG OR TG)) (INT X < 0.06 ABUT<90 OPPOSITE REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_2b",
+   "layer": "PO",
+   "type": "W",
+   "num": "2b",
+   "comment": "Channel length for 1.8V NMOS/PMOS transistors >= 0.20um",
+   "expr": "X = PO INSIDE EDGE (AA AND DG ) Y = INT X < 0.20  ABUT<90 OPPOSITE REGION (Y NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_2c",
+   "layer": "PO",
+   "type": "W",
+   "num": "2c",
+   "comment": "Channel length for 2.5V NMOS/PMOS transistors >= 0.28um",
+   "expr": "X = PO INSIDE EDGE ((AA AND TG) NOT INTERACT UD) Y = INT X < 0.28  ABUT<90 OPPOSITE REGION (Y NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_2d",
+   "layer": "PO",
+   "type": "W",
+   "num": "2d",
+   "comment": "Min Channel length for 3.3V PMOS transistors is 0.38",
+   "expr": "X = (PO AND SDN) INSIDE EDGE (AA AND TG) Y = INT X < 0.38 ABUT<90 OPPOSITE REGION (Y NOT INSIDE SRAMALL) NOT INSIDE NODRC X1 = (PO AND SDP) INSIDE EDGE (AA AND TG) Y1 = INT X1 < 0.38 ABUT<90 OPPOSITE ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_2e",
+   "layer": "PO",
+   "type": "W",
+   "num": "2e",
+   "comment": "Channel length for 2.5V NMOS/PMOS transistors (under drive to 1.8V) >= 0.22um",
+   "expr": "X = PO INSIDE EDGE ((AA AND TG) AND UD) Y = INT X < 0.22 ABUT<90 OPPOSITE REGION (Y NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_2f",
+   "layer": "PO",
+   "type": "W",
+   "num": "2f",
+   "comment": ">= 0.40(PMOS)um",
+   "expr": "X = PO INSIDE EDGE ((NACT AND TG) AND OD) Y = PO INSIDE EDGE ((PACT AND TG) AND OD) Z1 = INT X < 0.50  ABUT<90 OPPOSITE REGION Z2 = INT Y < 0.40  ABUT<90 OPPOSITE REGION (Z1 NOT INSIDE SRAMALL) NOT IN",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PO_W_3",
+   "layer": "PO",
+   "type": "W",
+   "num": "3",
+   "comment": "Width of 45 degree PO >= 0.18um",
+   "expr": "PO_CHECK = PO NOT INSIDE (AA OR AADUM) X = ANGLE PO_CHECK == 45 (INT X < 0.18 ABUT<90 REGION) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "poly.poly.width",
+   "klayout_values": {
+    "poly_width": 0.06
+   }
+  },
+  {
+   "official": "PSUB_A_1",
+   "layer": "PSUB",
+   "type": "A",
+   "num": "1",
+   "comment": "PSUB area >= 0.60um2",
+   "expr": "(AREA PSUB < 0.6) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_A_2",
+   "layer": "PSUB",
+   "type": "A",
+   "num": "2",
+   "comment": "Enclosed area >= 0.60um2",
+   "expr": "(AREA ((HOLES PSUB INNER) NOT PSUB) < 0.60) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_EN_1",
+   "layer": "PSUB",
+   "type": "EN",
+   "num": "1",
+   "comment": "Native NMOS AA enclosure by PSUB = 0.285um",
+   "expr": "X = SIZE PBMOS BY 0.285 Y = PSUB INTERACT PBMOS (XOR X Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_EX_1",
+   "layer": "PSUB",
+   "type": "EX",
+   "num": "1",
+   "comment": "DRC doesn't flag INDALL covered regions. >= 0.32um",
+   "expr": "((ENC PBAA PBPO < 0.32 ABUT<90 REGION OPPOSITE) NOT INSIDE INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_R_1",
+   "layer": "PSUB",
+   "type": "R",
+   "num": "1",
+   "comment": "PSUB inside, overlapping with, or crossing over a DNW area is not allowed",
+   "expr": "(PSUB AND DNW) NOT INSIDE NODRC (PSUB COINCIDENT OUTSIDE EDGE DNW) NOT INSIDE EDGE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_R_2",
+   "layer": "PSUB",
+   "type": "R",
+   "num": "2",
+   "comment": "It is not allowed PSUB overlap PP ,DRC waive check INDALL covered region, and P+ pickup can be waived.",
+   "expr": "X = (SDP AND PSUB) NOT INSIDE INDALL Y = ((AA OR PO) INTERACT GATE) AND PSUB (X INTERACT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_R_3",
+   "layer": "PSUB",
+   "type": "R",
+   "num": "3",
+   "comment": "Only one AA pattern is allowed in o PSUB region, except for NMOS capacitors",
+   "expr": "(PSUB INTERACT (AA NOT INTERACT INDALL) > 1) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_S_1",
+   "layer": "PSUB",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two PSUBs >= 0.47um",
+   "expr": "(EXT PSUB < 0.47 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_S_2",
+   "layer": "PSUB",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between PSUB and native MOS AA >= 0.36um",
+   "expr": "(EXT PSUB MOS < 0.36 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC (EXT PSUB AA_LDMOS < 0.36 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_S_3",
+   "layer": "PSUB",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between PSUB and NW >= 1.15um",
+   "expr": "(EXT PSUB NW < 1.15 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_W_1",
+   "layer": "PSUB",
+   "type": "W",
+   "num": "1",
+   "comment": "PSUB width >= 0.47um",
+   "expr": "(INT PSUB < 0.47 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_W_2",
+   "layer": "PSUB",
+   "type": "W",
+   "num": "2",
+   "comment": "0.9/1.2/1.8/2.5/3.3V native NMOS channel width <= 100um",
+   "expr": "X = LENGTH GATE_W < 0.5 Y = LENGTH GATE_W > 100 ((EXPAND EDGE X INSIDE BY 0.005) AND PSUB) NOT INSIDE NODRC ((EXPAND EDGE Y INSIDE BY 0.005) AND PSUB) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_W_3a",
+   "layer": "PSUB",
+   "type": "W",
+   "num": "3a",
+   "comment": "1.2V native NMOS channel length <= 100um",
+   "expr": "X = (PBPO INSIDE EDGE PBAA) NOT INSIDE EDGE (OR DG TG) Y = LENGTH GATE_core_L > 100 (INT X < 0.20 ABUT<90 OPPOSITE REGION) NOT INSIDE NODRC ((EXPAND EDGE Y INSIDE BY 0.005) AND PSUB) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_W_3b",
+   "layer": "PSUB",
+   "type": "W",
+   "num": "3b",
+   "comment": "1.8V native NMOS channel length <= 20um",
+   "expr": "X = PBPO INSIDE EDGE (PBAA AND DG) Y = LENGTH GATE_io1_L > 20 (INT X < 0.80 ABUT<90 OPPOSITE REGION) NOT INSIDE NODRC ((EXPAND EDGE Y INSIDE BY 0.005) AND PSUB) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_W_3c",
+   "layer": "PSUB",
+   "type": "W",
+   "num": "3c",
+   "comment": "2.5V (or overdrive to 3.3V and underdrive to 1.8V) native NMOS channel length <= 20.0um",
+   "expr": "X = PBPO INSIDE EDGE (PBAA AND TG) Y = LENGTH GATE_io2_L > 20 (INT X < 1.0 ABUT<90 OPPOSITE REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "PSUB_W_3d",
+   "layer": "PSUB",
+   "type": "W",
+   "num": "3d",
+   "comment": "3.3V native NMOS channel length >= 1.0um",
+   "expr": "X = PBPO INSIDE EDGE (PBAA AND TG) (INT X < 1.0 ABUT<90 OPPOSITE REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SL_R_1",
+   "layer": "SL",
+   "type": "R",
+   "num": "1",
+   "comment": "The top-metal slot overlap CB is not allowed",
+   "expr": "${j}slot AND PA ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SL_S_1",
+   "layer": "SL",
+   "type": "S",
+   "num": "1",
+   "comment": "Space of metal lot >= 3um",
+   "expr": "(EXT ${j}slot <3 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SL_W_1_L_1",
+   "layer": "SL",
+   "type": "W",
+   "num": "1",
+   "comment": "Length of metal lot >= 4.5um",
+   "expr": "(NOT RECTANGLE ${j}slot >= 2 BY >= 4.5) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_10_RV",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "RV slot width = 3",
+   "expr": "INT  RDLVS  < 3 ABUT <90 SINGULAR REGION ANGLED < 1 X = SIZE RDLVS BY -1.5 RDLVS INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_11a",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "INT CTS_SL < 0.09 ABUT<90 SINGULAR REGION ANGLED < 1 X = SIZE CTS_SL BY -0.045 CTS_SL INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_11b",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "INT ${via}S_SL < 0.09 ABUT<90 SINGULAR REGION ANGLED < 1 ${via}X = SIZE ${via}S_SL BY -0.045 ${via}S_SL INTERACT ${via}X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_11c",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "INT ${top_via}S_SL < 0.2 ABUT<90 SINGULAR REGION ANGLED < 1 ${top_via}X = SIZE ${top_via}S_SL BY -0.1 ${top_via}S_SL INTERACT ${top_via}X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_11d_12e",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "TVn(n=1~2,T4Vn,T8Vn) bar width = 0.36",
+   "expr": "INT ${top_via}S_SL < 0.36 ABUT<90 SINGULAR REGION ANGLED < 1 ${top_via}X = SIZE ${top_via}S_SL BY -0.18 ${top_via}S_SL INTERACT ${top_via}X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_13a",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "NOT RECTANGLE CTS_SQ == 0.09  BY == 0.09 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_13b_13c",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "NOT RECTANGLE ${via}S_SQ  == 0.09 BY == 0.09 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_13d",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "NOT RECTANGLE ${top_via}S_SQ == 0.2 BY ==0.2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_13e_13f",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Fixed T4Vn(n=1~2) width and length (for square 4X option and T8V2) = 0.36",
+   "expr": "NOT RECTANGLE  ${top_via}S_SQ  == 0.36 BY == 0.36 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_14a_CT",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal enclosure of CT bar >= 0.375",
+   "expr": "ENC CTS_SL M1S < 0.375 ABUT < 90 SINGULAR REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_14b_14c",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "etal enclosure of via bar>= 0.375/0.5",
+   "expr": "ENC V1S_SL M1S < 0.375 ABUT < 90 SINGULAR REGION ANGLED < 1 ENC V1S_SL M2S < 0.375 ABUT < 90 SINGULAR REGION ANGLED < 1 ENC V2S_SL M2S < 0.5 ABUT < 90 SINGULAR REGION ANGLED < 1 ENC V2S_SL M3S < 0.5 A",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_14d_14e_14f",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "ENC [lindex $top_v_m_list 0]S_SL [lindex $top_v_m_list 1]S < 0.52 ABUT < 90 SINGULAR REGION ANGLED < 1 ENC [lindex $top_v_m_list 2]S_SL [lindex $top_v_m_list 3]S < 0.52 ABUT < 90 SINGULAR REGION ANGLE",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_15a_CT",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "ENC CTS_SQ M1S_OUTER < 0.405 ABUT < 90 SINGULAR REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_15b_15c",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "ENC V${j}S_SQ M${j}S_OUTER < 0.405 ABUT < 90 SINGULAR REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_15b_v1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "ENC V1S_SQ M1S_OUTER < 0.405 ABUT < 90 SINGULAR REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_15d_15e_15f",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "ENC [lindex $top_v_m_list 0]S [lindex $top_v_m_list 1]S < 0.48 ABUT < 90 SINGULAR REGION ANGLED < 1 ENC [lindex $top_v_m_list 0]S [lindex $top_v_m_list 1]S < 0.48 ABUT < 90 SINGULAR REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_16a",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "EXT CTS_SL CTS_SQ < 0.74 ABUT < 90 OPPOSITE REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_16b_16c",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "SPACE_074_${via}S_SL = ${via}S_SL INTERACT (EXT ${via}S_SL ${via}S_SQ < 0.74 ABUT < 90 OPPOSITE REGION ANGLED < 1) EXT SPACE_074_${via}S_SL ${via}S_SQ < 0.6 ABUT < 90 OPPOSITE REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_16d_16e_16f",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "NOTICE: It is a guidelines rule.",
+   "expr": "EXT ${t_v_list_layer}S_SL ${t_v_list_layer}S_SQ < 0.6 ABUT < 90 OPPOSITE REGION ANGLED < 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_M",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC M${j}S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (M${j}S_OUTER OR (HOLES M${j}S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_T2M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC T2M1S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (T2M1S_OUTER OR (HOLES T2M1S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_T2M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC T2M2S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (T2M2S_OUTER OR (HOLES T2M2S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_T4M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC T4M1S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (T4M1S_OUTER OR (HOLES T4M1S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_T4M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC T4M2S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (T4M2S_OUTER OR (HOLES T4M2S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_T8M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC T8M1S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (T8M1S_OUTER OR (HOLES T8M1S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_3_T8M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and window edge = 2",
+   "expr": "ENC T8M2S_OUTER DRC1_S < 2 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (T8M2S_OUTER OR (HOLES T8M2S_OUTER)) Y = SIZE X BY -1 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_M",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT M${j}S_INNER M${j}S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = (HOLES M${j}S_OUTER) NOT ((HOLES M${j}S_INNER) OR M${j}S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_T2M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT T2M1S_INNER T2M1S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = (HOLES T2M1S_OUTER) NOT ((HOLES T2M1S_INNER) OR T2M1S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_T2M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT T2M2S_INNER T2M2S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = (HOLES T2M2S_OUTER) NOT ((HOLES T2M2S_INNER) OR T2M2S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_T4M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT T4M1S_INNER T4M1S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = (HOLES T4M1S_OUTER) NOT ((HOLES T4M1S_INNER) OR T4M1S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_T4M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT T4M2S_INNER T4M2S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = (HOLES T4M2S_OUTER) NOT ((HOLES T4M2S_INNER) OR T4M2S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_T8M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT T8M1S_INNER T8M1S_OUTER < 2 ABUT < 90 SINGULAR REGION X = (HOLES T8M1S_OUTER) NOT ((HOLES T8M1S_INNER) OR T8M1S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_4_T8M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Space between outer ring metal and inner ring metal = 2",
+   "expr": "EXT T8M2S_INNER T8M2S_OUTER < 2 ABUT < 90 SINGULAR REGION X = (HOLES T8M2S_OUTER) NOT ((HOLES T8M2S_INNER) OR T8M2S_INNER) X INTERACT (SIZE X BY -1) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_M",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring metal  = 2",
+   "expr": "INT M${j}S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE M${j}S_OUTER BY -1 M${j}S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_T2M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring  = 2",
+   "expr": "INT  T2M1S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T2M1S_OUTER BY -1 T2M1S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_T2M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring  = 2",
+   "expr": "INT  T2M2S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T2M2S_OUTER BY -1 T2M2S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_T4M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring  = 2",
+   "expr": "INT  T4M1S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T4M1S_OUTER BY -1 T4M1S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_T4M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring  = 2",
+   "expr": "INT  T4M2S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T4M2S_OUTER BY -1 T4M2S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_T8M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring  = 2",
+   "expr": "INT  T8M1S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T8M1S_OUTER BY -1 T8M1S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_5_T8M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of outer ring  = 2",
+   "expr": "INT  T8M2S_OUTER < 2 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T8M2S_OUTER BY -1 T8M2S_OUTER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_M",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring metal  = 4",
+   "expr": "INT M${j}S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE M${j}S_INNER BY -2 M${j}S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_T2M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring  = 4",
+   "expr": "INT  T2M1S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T2M1S_INNER BY -2 T2M1S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_T2M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring  = 4",
+   "expr": "INT  T2M2S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T2M2S_INNER BY -2 T2M2S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_T4M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring  = 4",
+   "expr": "INT  T4M1S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T4M1S_INNER BY -2 T4M1S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_T4M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring  = 4",
+   "expr": "INT  T4M2S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T4M2S_INNER BY -2 T4M2S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_T8M1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring  = 4",
+   "expr": "INT  T8M1S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T8M1S_INNER BY -2 T8M1S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_6_T8M2",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Metal width of inner ring  = 4",
+   "expr": "INT  T8M2S_INNER < 4 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE T8M2S_INNER BY -2 T8M2S_INNER INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_7_RDL",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "RDL Clearance to window edge  = 4.5",
+   "expr": "ENC  RDLS_OUTER DRC1_S < 4.5 ABUT < 90 SINGULAR REGION X = DRC1_S NOT (RDLS_OUTER OR (HOLES RDLS_OUTER)) Y = SIZE X BY -2.25 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_8_RDL",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "RDL width in seal ring  = 5.5",
+   "expr": "INT RDLS < 5.5 ABUT < 90 SINGULAR REGION ANGLED < 1 X = SIZE RDLS BY -2.75 RDLS INTERACT X ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "SRCK_9_RV",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "RV clearance to Window edge = 6.5",
+   "expr": "ENC RDLVS DRC1_S < 6.5 ABUT <90 SINGULAR REGION X = DRC1_S NOT (RDLVS OR (HOLES RDLVS)) Y = SIZE X BY -3.25 Z = Y WITH EDGE (ANGLE Y == 45) X INTERACT (Y NOT Z) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_1",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T2MnDUMs if T2MnDUM size is 2um*2um  >= 0.80um",
+   "expr": "((EXT T2M1DUM_2_2 < 0.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_10",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between T2MnDUM and BMIM(MIM) >= 2um",
+   "expr": "EXT T2M1DUM BMIM < 2 ABUT < 90 SINGULAR REGION ENC T2M1DUM BMIM < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_11",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between T2MnDUM and LOGO >= 0.1um",
+   "expr": "EXT T2M1DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ENC T2M1DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_12",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between T2MnDUM and INDALL >= 3um",
+   "expr": "EXT T2M1DUM INDALL < 3 ABUT < 90 SINGULAR REGION ENC T2M1DUM INDALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_13",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between T2MnDUM and CHIPBLK(chip edge) >= 2.5um",
+   "expr": "EXT T2M1DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ENC T2M1DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_14",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "14",
+   "comment": "Space between T2MnDUM and T2MnDUMB >= 2um",
+   "expr": "EXT T2M1DUM T2M1DUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_15",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "15",
+   "comment": "Space between T2MnDUM and DMYBLK >= 2um",
+   "expr": "EXT T2M1DUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_2",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T2MnDUMs and T2Mn if T2MnDUM size is 2um*2um  >= 10um",
+   "expr": "((EXT T2M1DUM_2_2 T2M1 < 10 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_3",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between two T2MnDUMs if T2MnDUM size is 1um*1um  >= 0.40um",
+   "expr": "((EXT T2M1DUM_1_1 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_4",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between T2MnDUMs and T2Mn if T2MnDUM size is 1um*1um  >= 0.6um",
+   "expr": "((EXT T2M1DUM_1_1 T2M1 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_5",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between two T2MnDUMs if T2MnDUM size is 0.6um*1.2um  >= 0.40um",
+   "expr": "((EXT T2M1DUM_0p6_1p2 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_6",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between T2MnDUMs and T2Mn if T2MnDUM size is 0.6um*1.2um  >= 0.6um",
+   "expr": "((EXT T2M1DUM_0p6_1p2 T2M1 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_7",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between two (T2MnDUM or T2Mn) having run length >=1.5um with one or both T2MnDUM width >=1.5um is 0.60um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_8",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between T2MnDUM and 45 degree T2Mn >= 0.4um",
+   "expr": "X = ANGLE T2M1 == 45 (EXT X T2M1DUM < 0.4 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_S_9",
+   "layer": "T2M1DUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between T2MnDUM and FUSEALL(fuse) >= 3um",
+   "expr": "EXT T2M1DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ENC T2M1DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1DUM_W_1",
+   "layer": "T2M1DUM",
+   "type": "W",
+   "num": "1",
+   "comment": "T2MnDUM SIZE = 2x2, 1x1, 0.6x1.2",
+   "expr": "((T2M1DUM NOT T2M1DUM_2_2) NOT T2M1DUM_1_1) NOT T2M1DUM_0p6_1p2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_A_1",
+   "layer": "T2M1",
+   "type": "A",
+   "num": "1",
+   "comment": "T2M1 area >= 0.14",
+   "expr": "(AREA T2M1 < 0.14) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_A_2",
+   "layer": "T2M1",
+   "type": "A",
+   "num": "2",
+   "comment": "T2M1 enclosed area >= 0.26",
+   "expr": "X = (HOLES T2M1 INNER) NOT T2M1 (AREA X < 0.26) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_D_1_max",
+   "layer": "T2M1",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T2M1ALLi > 0.80 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T2M1_D_1_max.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_D_1_min",
+   "layer": "T2M1",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T2M1ALLi < 0.10 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T2M1_D_1_min.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_D_2",
+   "layer": "T2M1",
+   "type": "D",
+   "num": "2",
+   "comment": "T4M1 density inside (T2M1dumb sizing up 2.5um) in 100umX100um window with step size 50um >= 10%",
+   "expr": "CHECK_AREA = SIZE T2M1DUMB BY 2.5 X = DENSITY T2M1ALLi < 0.10 WINDOW 100 STEP 50 backup INSIDE OF LAYER CHECK_AREA PRINT density_report_T2M1_D_2.log X NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_D_3",
+   "layer": "T2M1",
+   "type": "D",
+   "num": "3",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T2M1ALLi >0 WINDOW 100 GRADIENT > 0.2  ABSOLUTE BACKUP INSIDE OF LAYER density_checkarea PRINT density_report_T2M1_D_3.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_S_1",
+   "layer": "T2M1",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T2M1s, DRC waive check 89 to 90 degree spaces in the INDALL region.>= 0.20",
+   "expr": "((EXT T2M1 < 0.20 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T2M1 < 0.20 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_S_2",
+   "layer": "T2M1",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between two T2M1s when one or both T2M1 width or length >= 0.39um, and the run length of two T2M1s is >= 1um. >= 0.24",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_S_3",
+   "layer": "T2M1",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between two T2M1s when one or both T2M1 width or length >= 1.5um, and the run length of two T2M1s is >= 1.5um >= 0.50",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_S_4",
+   "layer": "T2M1",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between two T2M1s when one or both T2M1 width or length >= 4.5um, and the run length of two T2M1s is >= 4.5um >= 1.50",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_S_5",
+   "layer": "T2M1",
+   "type": "S",
+   "num": "5",
+   "comment": "Min Space between T2M1 metal lines with one or both are 45 degree bent metal lines >= 0.39",
+   "expr": "X = ANGLE T2M1 == 45 (EXT X T2M1 < 0.39 ABUT<90 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_W_1",
+   "layer": "T2M1",
+   "type": "W",
+   "num": "1",
+   "comment": "Exclude top metal bond pad and INDALL and DEUPAD regions.",
+   "expr": "X = (T2M1 NOT DEUPAD) NOT PA ((X WITH WIDTH > 10) NOT INDALL) NOT INSIDE NODRC (INT T2M1 < 0.2 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_W_2",
+   "layer": "T2M1",
+   "type": "W",
+   "num": "2",
+   "comment": "45 dgree T2M1 width >= 0.39",
+   "expr": "X = ANGLE T2M1 == 45 INT X < 0.39 ABUT < 90 REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M1_W_3",
+   "layer": "T2M1",
+   "type": "W",
+   "num": "3",
+   "comment": "Minimum T2M1 width adjoining a huge non-metal region \\[ area > 2000000 um2\\], non-metal region is defined as (NOT (T2M1 OR T2M1DUM)) >= 0.35um",
+   "expr": "NON_MAL_REG = AREA (DRC:1 NOT (OR T2M1 T2M1DUM)) > 2000000 CHECK_REGION = ENCLOSE RECTANGLE NON_MAL_REG 10 0.35 CHECK_MAL = T2M1 INTERACT CHECK_REGION (INT CHECK_MAL < 0.35 ABUT<90 SINGULAR REGION) NO",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_1",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T2MnDUMs if T2MnDUM size is 2um*2um  >= 0.80um",
+   "expr": "((EXT T2M2DUM_2_2 < 0.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_10",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between T2MnDUM and BMIM(MIM) >= 2um",
+   "expr": "EXT T2M2DUM BMIM < 2 ABUT < 90 SINGULAR REGION ENC T2M2DUM BMIM < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_11",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between T2MnDUM and LOGO >= 0.1um",
+   "expr": "EXT T2M2DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ENC T2M2DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_12",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between T2MnDUM and INDALL >= 3um",
+   "expr": "EXT T2M2DUM INDALL < 3 ABUT < 90 SINGULAR REGION ENC T2M2DUM INDALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_13",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between T2MnDUM and CHIPBLK(chip edge) >= 2.5um",
+   "expr": "EXT T2M2DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ENC T2M2DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_14",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "14",
+   "comment": "Space between T2MnDUM and T2MnDUMB >= 2um",
+   "expr": "EXT T2M2DUM T2M2DUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_15",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "15",
+   "comment": "Space between T2MnDUM and DMYBLK >= 2um",
+   "expr": "EXT T2M2DUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_2",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T2MnDUMs and T2Mn if T2MnDUM size is 2um*2um  >= 10um",
+   "expr": "((EXT T2M2DUM_2_2 T2M2 < 10 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_3",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between two T2MnDUMs if T2MnDUM size is 1um*1um  >= 0.40um",
+   "expr": "((EXT T2M2DUM_1_1 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_4",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between T2MnDUMs and T2Mn if T2MnDUM size is 1um*1um  >= 0.6um",
+   "expr": "((EXT T2M2DUM_1_1 T2M2 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_5",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between two T2MnDUMs if T2MnDUM size is 0.6um*1.2um  >= 0.40um",
+   "expr": "((EXT T2M2DUM_0p6_1p2 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_6",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between T2MnDUMs and T2Mn if T2MnDUM size is 0.6um*1.2um  >= 0.6um",
+   "expr": "((EXT T2M2DUM_0p6_1p2 T2M2 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_7",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between two (T2MnDUM or T2Mn) having run length >=1.5um with one or both T2MnDUM width >=1.5um is 0.60um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_8",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between T2MnDUM and 45 degree T2Mn >= 0.4um",
+   "expr": "X = ANGLE T2M2 == 45 (EXT X T2M2DUM < 0.4 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_S_9",
+   "layer": "T2M2DUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between T2MnDUM and FUSEALL(fuse) >= 3um",
+   "expr": "EXT T2M2DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ENC T2M2DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2DUM_W_1",
+   "layer": "T2M2DUM",
+   "type": "W",
+   "num": "1",
+   "comment": "T2MnDUM SIZE = 2x2, 1x1, 0.6x1.2",
+   "expr": "((T2M2DUM NOT T2M2DUM_2_2) NOT T2M2DUM_1_1) NOT T2M2DUM_0p6_1p2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_A_1",
+   "layer": "T2M2",
+   "type": "A",
+   "num": "1",
+   "comment": "T2M2 area >= 0.14",
+   "expr": "(AREA T2M2 < 0.14) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_A_2",
+   "layer": "T2M2",
+   "type": "A",
+   "num": "2",
+   "comment": "T2M2 enclosed area >= 0.26",
+   "expr": "X = (HOLES T2M2 INNER) NOT T2M2 (AREA X < 0.26) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_D_1_max",
+   "layer": "T2M2",
+   "type": "D",
+   "num": "1",
+   "comment": "T2M2 density (including dummy) in 100umX100um window with step size 50um is >= 10% and <= 80%.",
+   "expr": "X = DENSITY T2M2ALLi > 0.80 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T2M2_D_1_max.log X NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_D_1_min",
+   "layer": "T2M2",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T2M2ALLi < 0.10 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T2M1_D_1_min.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_D_2",
+   "layer": "T2M2",
+   "type": "D",
+   "num": "2",
+   "comment": "T4M1 density inside (T2M2dumb sizing up 2.5um) in 100umX100um window with step size 50um >= 10%",
+   "expr": "CHECK_AREA = SIZE T2M2DUMB BY 2.5 X = DENSITY T2M2ALLi < 0.10 WINDOW 100 STEP 50 backup INSIDE OF LAYER CHECK_AREA PRINT density_report_T2M2_D_2.log X NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_D_3",
+   "layer": "T2M2",
+   "type": "D",
+   "num": "3",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T2M2ALLi >0 WINDOW 100 GRADIENT > 0.2  ABSOLUTE BACKUP INSIDE OF LAYER density_checkarea PRINT density_report_T2M2_D_3.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_S_1",
+   "layer": "T2M2",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T2M2s,DRC waive check 89 to 90 degree spaces in the INDALL region  >= 0.20",
+   "expr": "((EXT T2M2 < 0.20 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T2M2 < 0.20 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_S_2",
+   "layer": "T2M2",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between two T2M2s when one or both T2M2 width or length >= 0.39um, and the run length of two T2M2s is >= 1um. is 0.24",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_S_3",
+   "layer": "T2M2",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between two T2M2s when one or both T2M1 width or length >= 1.5um, and the run length of two T2M2s is >= 1.5um >= 0.50",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_S_4",
+   "layer": "T2M2",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between two T2M2s when one or both T2M2 width or length >= 4.5um, and the run length of two T2M2s is >= 4.5um >= 1.50",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_S_5",
+   "layer": "T2M2",
+   "type": "S",
+   "num": "5",
+   "comment": "Min Space between T2M2 metal lines with one or both are 45 degree bent metal lines >= 0.39",
+   "expr": "X = ANGLE T2M2 == 45 (EXT X T2M2 < 0.39 ABUT<90 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_W_1",
+   "layer": "T2M2",
+   "type": "W",
+   "num": "1",
+   "comment": "Min T2M2 width, DRC waive check 89 to 90 degree widths in the DEUPAD and INDALL region. >= 0.20",
+   "expr": "X = (T2M2 NOT DEUPAD) WITH WIDTH > 10 ((X NOT INTERACT PA) NOT INDALL) NOT INSIDE NODRC ((INT T2M2 < 0.2 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((INT T2M2 < 0.2 ABUT<89 SINGULAR REGION)",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_W_2",
+   "layer": "T2M2",
+   "type": "W",
+   "num": "2",
+   "comment": "45 dgree T2M2 width >= 0.39",
+   "expr": "X = ANGLE T2M2 == 45 INT X < 0.39 ABUT < 90 REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2M2_W_3",
+   "layer": "T2M2",
+   "type": "W",
+   "num": "3",
+   "comment": "Minimum T2M2 width adjoining a huge non-metal region \\[ area > 2000000 um2\\], non-metal region is defined as (NOT (T2M2 OR T2M2DUM)) >= 0.35um",
+   "expr": "NON_MAL_REG = AREA (DRC:1 NOT (OR T2M2 T2M2DUM)) > 2000000 CHECK_REGION = ENCLOSE RECTANGLE NON_MAL_REG 10 0.35 CHECK_MAL = T2M2 INTERACT CHECK_REGION (INT CHECK_MAL < 0.35 ABUT<90 SINGULAR REGION) NO",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_EN_2a_EN_2b",
+   "layer": "T2V1",
+   "type": "EN",
+   "num": "2a",
+   "comment": "$bottom_metal enclosure of T2V1 when $bottom_metal enclosure on one or both perpendicular directions< 0.05um ($bottom_metal is Metal layer directly underneath T2V1). >= 0.05",
+   "expr": "X = RECTANGLE ENC (T2V1 NOT TOUCH $bottom_metal) $bottom_metal ABUT < 90 OUTSIDE ALSO \\ A = ENC \\[X\\] $bottom_metal < 0.05 OPPOSITE D1 = INT A < 0.01 ABUT==90 INTERSECTING ONLY REGION D1 NOT INSIDE NO",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_EN_2a_R_EN_2b_R",
+   "layer": "T2V1",
+   "type": "EN",
+   "num": "2a",
+   "comment": "Recommended enclosure by Mn for at least 2 opposite sides >= 0.08",
+   "expr": "X = RECTANGLE ENC T2V1 $bottom_metal ABUT < 90 OUTSIDE ALSO \\ ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_EN_4a_EN_4b",
+   "layer": "T2V1",
+   "type": "EN",
+   "num": "4a",
+   "comment": "Enclosed by T2M1 when T2M1 enclosure on one or both perpendicular directions< 0.05um. >= 0.05",
+   "expr": "X = RECTANGLE ENC T2V1 T2M1 ABUT < 90 OUTSIDE ALSO \\ X NOT INSIDE NODRC Y = ENC \\[X\\] T2M1 < 0.05 OPPOSITE D2 = INT Y < 0.01 ABUT==90 INTERSECTING ONLY REGION D2 NOT INSIDE NODRC (T2V1 NOT T2M1) NOT I",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_R_1",
+   "layer": "T2V1",
+   "type": "R",
+   "num": "1",
+   "comment": "There should be at least two square T2V1s space <= 0.4um for Mn and T2M1 connection when either or both Mn (Mn is Metal layer directly underneath T2V1) and T2M1 width is > 0.6um.",
+   "expr": "T2V1_SQ_CHECK = RECTANGLE T2V1 ASPECT == 1 T2V1_SQ_REG = EXT T2V1_SQ_CHECK <=0.4 SINGULAR REGION T2V1_SQ_CHECK_V = T2V1_SQ_CHECK INTERACT T2V1_SQ_REG T2V1_SQ = T2V1_SQ_CHECK_V OR T2V1_SQ_REG X1_Mn = $",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_R_2",
+   "layer": "T2V1",
+   "type": "R",
+   "num": "2",
+   "comment": "There should be at least four square T2V1s in this Mn and T2M1 intersection area when either or both Mn (Mn is Metal layer directly underneath T2V1) and T2M1 width is > 1.4um.",
+   "expr": "T2V1_SQ_CHECK = RECTANGLE T2V1 ASPECT == 1 T2V1_SQ = RECTANGLE T2V1 ASPECT == 1 T2V1_SQ_REG = EXT T2V1_SQ_CHECK <=0.4 SINGULAR REGION T2V1_SQ_CHECK_V = T2V1_SQ_CHECK INTERACT T2V1_SQ_REG X1_Mn = $bott",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_R_3",
+   "layer": "T2V1",
+   "type": "R",
+   "num": "3",
+   "comment": "45-dgree T2V1 is not allowed",
+   "expr": "((T2V1 WITH EDGE (ANGLE T2V1 == 45)) NOT INSIDE SRINGBLK) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_R_4_R",
+   "layer": "T2V1",
+   "type": "R",
+   "num": "4",
+   "comment": "Recommended us redundant T2V1s as possible, DRC can help to flag single T2V1",
+   "expr": "($bottom_metal AND T2M1) INTERACT T2V1 == 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_S_1",
+   "layer": "T2V1",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T2V1s >= 0.2",
+   "expr": "(EXT T2V1 < 0.2 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_S_2",
+   "layer": "T2V1",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between T2V1s and 3-neighboring T2V1s space is <= 0.28um. >= 0.25",
+   "expr": "X = SIZE T2V1 BY 0.14 OVERUNDER Y = SIZE X BY 0.495 UNDEROVER Z = T2V1 INSIDE Y (EXT Z < 0.25 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_W_1",
+   "layer": "T2V1",
+   "type": "W",
+   "num": "1",
+   "comment": "Fixed T2V1 size (square shape) except guard ring and seal ring application is 0.2",
+   "expr": "((NOT RECTANGLE (T2V1 NOT GT2V1) == 0.2 BY == 0.2) NOT GRID) NOT INSIDE NODRC (NOT RECTANGLE (RECTANGLE (T2V1 AND GRID)) == 0.2 BY == 0.2 ) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V1_W_2",
+   "layer": "T2V1",
+   "type": "W",
+   "num": "2",
+   "comment": "Fixed T2V1bar width = 0.2",
+   "expr": "T2V1bar WITH WIDTH < 0.2 T2V1bar WITH WIDTH >0.2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_EN_2a_EN_2b",
+   "layer": "T2V2",
+   "type": "EN",
+   "num": "2a",
+   "comment": "Enclosed by T2M1 when T2M1 enclosure on one or both perpendicular directions< 0.05um (T2M1 is Metal layer directly underneath T2V2). >= 0.05",
+   "expr": "X = RECTANGLE ENC (T2V2 NOT TOUCH T2M1) T2M1 ABUT < 90 OUTSIDE ALSO \\ A = ENC \\[X\\] T2M1 < 0.05 OPPOSITE D1 = INT A < 0.01 ABUT==90 INTERSECTING ONLY REGION D1 NOT INSIDE NODRC B = T2V2 COIN EDGE T2M1",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_EN_2a_R_EN_2b_R",
+   "layer": "T2V2",
+   "type": "EN",
+   "num": "2a",
+   "comment": "Recommended enclosure by Mn for at least 2 opposite sides >= 0.08",
+   "expr": "X = RECTANGLE ENC T2V2 T2M1 ABUT < 90 OUTSIDE ALSO \\ ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_EN_4a_EN_4b",
+   "layer": "T2V2",
+   "type": "EN",
+   "num": "4a",
+   "comment": "Enclosed By T2M1 when T2M2 enclosure on one or both perpendicular directions< 0.05um. >= 0.05",
+   "expr": "X =  RECTANGLE ENC T2V2 T2M2 ABUT < 90 OUTSIDE ALSO \\ A = ENC X T2M2 < 0.05 OPPOSITE REGION A NOT INSIDE NODRC B = T2V2 COIN EDGE T2M2 D2 = INT B < 0.01 ABUT==90 REGION D2 NOT INSIDE NODRC Y = ENC T2V",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_R_1",
+   "layer": "T2V2",
+   "type": "R",
+   "num": "1",
+   "comment": "There should be at least two square T2V2s space <= 0.4um for T2M1 and T2M2 connection when either or both T2M1 (T2M1 is Metal layer directly underneath T2V2) and T2M2 width is > 0.6um.",
+   "expr": "T2V2_SQ_CHECK = RECTANGLE T2V2 ASPECT == 1 T2V2_SQ_REG = EXT T2V2_SQ_CHECK <=0.4 SINGULAR REGION T2V2_SQ_CHECK_V = T2V2_SQ_CHECK INTERACT T2V2_SQ_REG T2V2_SQ = T2V2_SQ_CHECK_V OR T2V2_SQ_REG X1_Mn = T",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_R_2",
+   "layer": "T2V2",
+   "type": "R",
+   "num": "2",
+   "comment": "There should be at least four square T2V2s in this T2M2 and T2M1 intersection area when either or both T2M1 (T2M1 is Metal layer directly underneath T2V2) and T2M2 width is > 1.4um.",
+   "expr": "T2V2_SQ_CHECK = RECTANGLE T2V2 ASPECT == 1 T2V2_SQ = RECTANGLE T2V2 ASPECT == 1 T2V2_SQ_REG = EXT T2V2_SQ_CHECK <=0.4 SINGULAR REGION T2V2_SQ_CHECK_V = T2V2_SQ_CHECK INTERACT T2V2_SQ_REG X1_Mn = T2M1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_R_3",
+   "layer": "T2V2",
+   "type": "R",
+   "num": "3",
+   "comment": "45-dgree T2V2 is not allowed",
+   "expr": "((T2V2 WITH EDGE (ANGLE T2V2 == 45)) NOT INSIDE SRINGBLK) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_R_4_R",
+   "layer": "T2V2",
+   "type": "R",
+   "num": "4",
+   "comment": "Recommended use redundant T2V2s as possible, DRC can help to flag single T2V2",
+   "expr": "(T2M1 AND T2M2) INTERACT T2V2 == 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_S_1",
+   "layer": "T2V2",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T2V2s >= 0.2",
+   "expr": "(EXT T2V2 < 0.2 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_S_2",
+   "layer": "T2V2",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T2V2 and neighboring T2V2s with space < 0.28um. >= 0.25",
+   "expr": "X = SIZE T2V2 BY 0.14 OVERUNDER Y = SIZE X BY 0.495 UNDEROVER Z = T2V2 INSIDE Y (EXT Z < 0.25 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_W_1",
+   "layer": "T2V2",
+   "type": "W",
+   "num": "1",
+   "comment": "Fixed T2V2 (square shape) size ,exclude SRINGBLK and GRBLK area  = 0.2",
+   "expr": "((NOT RECTANGLE (T2V2 NOT GT2V2) == 0.2 BY == 0.2) NOT GRID) NOT INSIDE (SRINGBLK OR NODRC) (NOT RECTANGLE (RECTANGLE (T2V2 AND GRID)) == 0.2 BY == 0.2) NOT INSIDE (SRINGBLK OR NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T2V2_W_2",
+   "layer": "T2V2",
+   "type": "W",
+   "num": "2",
+   "comment": "Fixed T2V2bar width = 0.2",
+   "expr": "T2V2bar WITH WIDTH < 0.2 T2V2bar WITH WIDTH >0.2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_1",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T4MnDUMs if T4MnDUM size is 2um*2um  >= 0.80um",
+   "expr": "((EXT T4M1DUM_2_2 < 0.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_10",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between T4MnDUM and BMIM(MIM) >= 2um",
+   "expr": "EXT T4M1DUM BMIM < 2 ABUT < 90 SINGULAR REGION ENC T4M1DUM BMIM < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_11",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between T4MnDUM and LOGO >= 0.1um",
+   "expr": "EXT T4M1DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ENC T4M1DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_12",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between T4MnDUM and INDALL >= 3um",
+   "expr": "EXT T4M1DUM INDALL < 3 ABUT < 90 SINGULAR REGION ENC T4M1DUM INDALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_13",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between T4MnDUM and CHIPBLK(chip edge) >= 2.5um",
+   "expr": "EXT T4M1DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ENC T4M1DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_14",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "14",
+   "comment": "Space between T4MnDUM and T4MnDUMB >= 2um",
+   "expr": "EXT T4M1DUM T4M1DUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_15",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "15",
+   "comment": "Space between T4MnDUM and DMYBLK >= 2um",
+   "expr": "EXT T4M1DUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_2",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T4MnDUMs and T4Mn if T4MnDUM size is 2um*2um  >= 10um",
+   "expr": "((EXT T4M1DUM_2_2 T4M1 < 10 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_3",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between two T4MnDUMs if T4MnDUM size is 1um*1um  >= 0.40um",
+   "expr": "((EXT T4M1DUM_1_1 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_4",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between T4MnDUMs and T4Mn if T4MnDUM size is 1um*1um  >= 0.6um",
+   "expr": "((EXT T4M1DUM_1_1 T4M1 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_5",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between two T4MnDUMs if T4MnDUM size is 0.6um*1.2um  >= 0.40um",
+   "expr": "((EXT T4M1DUM_0p6_1p2 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_6",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between T4MnDUMs and T4Mn if T4MnDUM size is 0.6um*1.2um  >= 0.6um",
+   "expr": "((EXT T4M1DUM_0p6_1p2 T4M1 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_7",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between two (T4MnDUM or T4Mn) having run length >=1.5um with one or both T4MnDUM width >=1.5um is 0.60um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_8",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between T4MnDUM and 45 degree T4Mn >= 0.4um",
+   "expr": "X = ANGLE T4M1 == 45 (EXT X T4M1DUM < 0.4 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_S_9",
+   "layer": "T4M1DUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between T4MnDUM and FUSEALL(fuse) >= 3um",
+   "expr": "EXT T4M1DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ENC T4M1DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1DUM_W_1",
+   "layer": "T4M1DUM",
+   "type": "W",
+   "num": "1",
+   "comment": "T4MnDUM SIZE = 2x2, 1x1, 0.6x1.2",
+   "expr": "((T4M1DUM NOT T4M1DUM_2_2) NOT T4M1DUM_1_1) NOT T4M1DUM_0p6_1p2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_A_1",
+   "layer": "T4M1",
+   "type": "A",
+   "num": "1",
+   "comment": "T4M1 area >= 0.40",
+   "expr": "(AREA T4M1 < 0.40) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_A_2",
+   "layer": "T4M1",
+   "type": "A",
+   "num": "2",
+   "comment": "Min Enclosed area by T4M1 is 0.6",
+   "expr": "X = (HOLES T4M1 INNER) NOT T4M1 (AREA X < 0.6) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_D_1_max",
+   "layer": "T4M1",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T4M1ALLi > 0.85 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T4M1_D_1_max.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_D_1_min",
+   "layer": "T4M1",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T4M1ALLi < 0.20 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T4M1_D_1_min.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_D_2",
+   "layer": "T4M1",
+   "type": "D",
+   "num": "2",
+   "comment": "T4M1 density inside (T4M1dumb sizing up 2.5um) in 100umX100um window with step size 50um >= 10%",
+   "expr": "CHECK_AREA = SIZE T4M1DUMB BY 2.5 X = DENSITY T4M1ALLi < 0.10 WINDOW 100 STEP 50 backup INSIDE OF LAYER CHECK_AREA PRINT density_report_T4M1_D_2.log X NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_D_3",
+   "layer": "T4M1",
+   "type": "D",
+   "num": "3",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T4M1ALLi >0 WINDOW 100 GRADIENT > 0.2  ABSOLUTE BACKUP INSIDE OF LAYER density_checkarea PRINT density_report_T4M1_D_3.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_S_1",
+   "layer": "T4M1",
+   "type": "S",
+   "num": "1",
+   "comment": "Min Space between two T4M1s is 0.40um,DRC waive check 89 to 90 degree spaces in the INDALL region.",
+   "expr": "((EXT T4M1 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T4M1 < 0.40 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_S_2",
+   "layer": "T4M1",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between two T4M1s when one or both T4M1 width or length >=2um, and the run length of two T4M1s is >= 2um. >= 0.5um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M1_W_1",
+   "layer": "T4M1",
+   "type": "W",
+   "num": "1",
+   "comment": "DRC doesn't check DEUPAD and INDALL region",
+   "expr": "(INT T4M1 < 0.40 ABUT<90 SINGULAR REGION) NOT INSIDE (OR INDALL DEUPAD NODRC) (T4M1 WITH WIDTH > 20) NOT INSIDE (OR INDALL DEUPAD NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_1",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T4MnDUMs if T4MnDUM size is 2um*2um  >= 0.80um",
+   "expr": "((EXT T4M2DUM_2_2 < 0.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_10",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between T4MnDUM and BMIM(MIM) >= 2um",
+   "expr": "EXT T4M2DUM BMIM < 2 ABUT < 90 SINGULAR REGION ENC T4M2DUM BMIM < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_11",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between T4MnDUM and LOGO >= 0.1um",
+   "expr": "EXT T4M2DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ENC T4M2DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_12",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between T4MnDUM and INDALL >= 3um",
+   "expr": "EXT T4M2DUM INDALL < 3 ABUT < 90 SINGULAR REGION ENC T4M2DUM INDALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_13",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between T4MnDUM and CHIPBLK(chip edge) >= 2.5um",
+   "expr": "EXT T4M2DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ENC T4M2DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_14",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "14",
+   "comment": "Space between T4MnDUM and T4MnDUMB >= 2um",
+   "expr": "EXT T4M2DUM T4M2DUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_15",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "15",
+   "comment": "Space between T4MnDUM and DMYBLK >= 2um",
+   "expr": "EXT T4M2DUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_2",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T4MnDUMs and T4Mn if T4MnDUM size is 2um*2um  >= 10um",
+   "expr": "((EXT T4M2DUM_2_2 T4M2 < 10 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_3",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "3",
+   "comment": "Space between two T4MnDUMs if T4MnDUM size is 1um*1um  >= 0.40um",
+   "expr": "((EXT T4M2DUM_1_1 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_4",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "4",
+   "comment": "Space between T4MnDUMs and T4Mn if T4MnDUM size is 1um*1um  >= 0.6um",
+   "expr": "((EXT T4M2DUM_1_1 T4M2 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_5",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "5",
+   "comment": "Space between two T4MnDUMs if T4MnDUM size is 0.6um*1.2um  >= 0.40um",
+   "expr": "((EXT T4M2DUM_0p6_1p2 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_6",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "6",
+   "comment": "Space between T4MnDUMs and T4Mn if T4MnDUM size is 0.6um*1.2um  >= 0.6um",
+   "expr": "((EXT T4M2DUM_0p6_1p2 T4M2 < 0.6 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_7",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between two (T4MnDUM or T4Mn) having run length >=1.5um with one or both T4MnDUM width >=1.5um is 0.60um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_8",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between T4MnDUM and 45 degree T4Mn >= 0.4um",
+   "expr": "X = ANGLE T4M2 == 45 (EXT X T4M2DUM < 0.4 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_S_9",
+   "layer": "T4M2DUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between T4MnDUM and FUSEALL(fuse) >= 3um",
+   "expr": "EXT T4M2DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ENC T4M2DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2DUM_W_1",
+   "layer": "T4M2DUM",
+   "type": "W",
+   "num": "1",
+   "comment": "T4MnDUM SIZE = 2x2, 1x1, 0.6x1.2",
+   "expr": "((T4M2DUM NOT T4M2DUM_2_2) NOT T4M2DUM_1_1) NOT T4M2DUM_0p6_1p2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4M2_A_1",
+   "layer": "T4M2",
+   "type": "A",
+   "num": "1",
+   "comment": "T4M2 area >= 0.40",
+   "expr": "(AREA T4M2 < 0.40) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.area",
+   "klayout_values": {
+    "tm2_area": 0.4,
+    "tm2_space": 0.4,
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_A_2",
+   "layer": "T4M2",
+   "type": "A",
+   "num": "2",
+   "comment": "Enclosed area by T4M2 >= 0.6",
+   "expr": "X = (HOLES T4M2 INNER) NOT T4M2 (AREA X < 0.6) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.area",
+   "klayout_values": {
+    "tm2_area": 0.4,
+    "tm2_space": 0.4,
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_D_1_max",
+   "layer": "T4M2",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T4M2ALLi > 0.85 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T4M2_D_1_max.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.width",
+   "klayout_values": {
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_D_1_min",
+   "layer": "T4M2",
+   "type": "D",
+   "num": "1",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T4M2ALLi < 0.20 WINDOW 100 STEP 50 backup INSIDE OF LAYER density_checkarea PRINT density_report_T4M2_D_1_min.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.width",
+   "klayout_values": {
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_D_2",
+   "layer": "T4M2",
+   "type": "D",
+   "num": "2",
+   "comment": "T4M2 density inside (T4M2dumb sizing up 2.5um) in 100umX100um window with step size 50um >= 10%",
+   "expr": "CHECK_AREA = SIZE T4M2DUMB BY 2.5 X = DENSITY T4M2ALLi < 0.10 WINDOW 100 STEP 50 backup INSIDE OF LAYER CHECK_AREA PRINT density_report_T4M2_D_2.log X NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.width",
+   "klayout_values": {
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_D_3",
+   "layer": "T4M2",
+   "type": "D",
+   "num": "3",
+   "comment": "INDALL/GRID/SRINGBLK covered areas are excluded for this rule checking.",
+   "expr": "X = DENSITY T4M2ALLi >0 WINDOW 100 GRADIENT > 0.2  ABSOLUTE BACKUP INSIDE OF LAYER density_checkarea PRINT density_report_T4M2_D_3.log Y = OR GRID SRINGBLK INDALL (X NOT Y) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.width",
+   "klayout_values": {
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_S_1",
+   "layer": "T4M2",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T4M2s DRC waive check 89 to 90 degree spaces in the INDALL region. >= 0.40,",
+   "expr": "((EXT T4M2 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T4M2 < 0.40 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "covered",
+   "klayout": "metal.tm2.space",
+   "klayout_values": {
+    "tm2_space": 0.4,
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_S_2",
+   "layer": "T4M2",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between two T4M2s when one or both T4M2 width or length >= 2um, and the run length of two T4M2s is >= 2um.  >= 0.5",
+   "expr": "",
+   "status": "covered",
+   "klayout": "metal.tm2.space",
+   "klayout_values": {
+    "tm2_space": 0.4,
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4M2_W_1",
+   "layer": "T4M2",
+   "type": "W",
+   "num": "1",
+   "comment": "T4M2 width <= 20",
+   "expr": "((INT T4M2 < 0.40 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((INT T4M2 < 0.40 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC X = (T4M2 NOT DEUPAD) WITH WIDTH > 20.00 ((X NOT INTERAC",
+   "status": "covered",
+   "klayout": "metal.tm2.width",
+   "klayout_values": {
+    "tm2_width": 0.4,
+    "wide_metal_width": 20.0
+   }
+  },
+  {
+   "official": "T4V1_EN_2_EN_3",
+   "layer": "T4V1",
+   "type": "EN",
+   "num": "2",
+   "comment": "Min $bottom_metal enclosure of T4V1, when $bottom_metal enclosure on one or both perpendicular directions< 0.05um ($bottom_metal is Metal layer directly underneath T4V1) >= 0.05",
+   "expr": "X = RECTANGLE ENC T4V1 $bottom_metal ABUT<90 OUTSIDE ALSO \\ (ENC X $bottom_metal < 0.01 ABUT<90 SINGULAR REGION OVERLAP OUTSIDE ALSO) NOT INSIDE NODRC Y = ENC \\[X\\] $bottom_metal < 0.05 OPPOSITE (INT ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_EN_5_EN_6",
+   "layer": "T4V1",
+   "type": "EN",
+   "num": "5",
+   "comment": "Min T4M1 fully enclosure of T4V1  >= 0.02",
+   "expr": "(ENC T4V1 T4M1 < 0.02 ABUT < 90 SINGULAR REGION OUTSIDE ALSO) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_R_1_R",
+   "layer": "T4V1",
+   "type": "R",
+   "num": "1",
+   "comment": "There should be at least two square T4V1s at the intersection of Mn and T4M1 when either Mn or T4M1 width,exclude GRBLK and SRINGBLK region >= 0.5um",
+   "expr": "T4V1_SQ = RECTANGLE T4V1 ASPECT == 1 X1_Mn = $bottom_metal ENCLOSE ($bottom_metal WITH WIDTH >= 0.5) X1_T4M1 = T4M1 ENCLOSE (T4M1 WITH WIDTH >= 0.5) T4M1Mn = $bottom_metal AND T4M1 X1 = X1_Mn OR X1_T4",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_R_3",
+   "layer": "T4V1",
+   "type": "R",
+   "num": "3",
+   "comment": "45-dgree T4V1 is not allowed",
+   "expr": "((T4V1 WITH EDGE (ANGLE T4V1 == 45)) NOT INSIDE SRINGBLK) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_R_4_R",
+   "layer": "T4V1",
+   "type": "R",
+   "num": "4",
+   "comment": "Recommended us redundant T4V1s as possible, DRC can help to flag single T4V1",
+   "expr": "($bottom_metal AND T4M1) INTERACT T4V1 == 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_S_1",
+   "layer": "T4V1",
+   "type": "S",
+   "num": "1",
+   "comment": "Min Space between two T4V1s >= 0.34",
+   "expr": "(EXT T4V1 < 0.34 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_S_2",
+   "layer": "T4V1",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between T4V1s within array greater or equal to 3x3 (Two via regions whose space is <= 0.56um are considered to be in the same array) >= 0.5",
+   "expr": "X = SIZE T4V1 BY 0.28 OVERUNDER Y = SIZE X BY 0.855 UNDEROVER Z = T4V1 INSIDE Y (EXT Z < 0.5 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_W_1",
+   "layer": "T4V1",
+   "type": "W",
+   "num": "1",
+   "comment": "Fixed T4V1 size (square shape),exclude GRDID and SRINGBLK region = 0.36",
+   "expr": "((NOT RECTANGLE (T4V1 NOT GT4V1) == 0.36 BY == 0.36) NOT GRID) NOT INSIDE (SRINGBLK OR NODRC) (NOT RECTANGLE (RECTANGLE (T4V1 AND GRID)) == 0.36 BY == 0.36 ) NOT INSIDE (SRINGBLK OR NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V1_W_2",
+   "layer": "T4V1",
+   "type": "W",
+   "num": "2",
+   "comment": "Fixed T4V1bar width  = 0.36",
+   "expr": "T4V1bar WITH WIDTH < 0.36 T4V1bar WITH WIDTH > 0.36 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_EN_2_EN_3",
+   "layer": "T4V2",
+   "type": "EN",
+   "num": "2",
+   "comment": "Min $bottom_metal enclosure of T4V2 when T4M1 enclosure on one or both perpendicular directions < 0.05um. >= 0.05",
+   "expr": "X = RECTANGLE ENC T4V2 $bottom_metal ABUT<90 OUTSIDE ALSO \\ (ENC X $bottom_metal < 0.01 ABUT<90 SINGULAR REGION OVERLAP OUTSIDE ALSO) NOT INSIDE NODRC Y = ENC \\[X\\] $bottom_metal < 0.05 OPPOSITE (INT ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_EN_5_EN_6",
+   "layer": "T4V2",
+   "type": "EN",
+   "num": "5",
+   "comment": "Min T4V2 fully enclosure by T4M2  >= 0.02",
+   "expr": "(ENC T4V2 T4M2 < 0.02 ABUT < 90 SINGULAR REGION OUTSIDE ALSO) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_R_1_R",
+   "layer": "T4V2",
+   "type": "R",
+   "num": "1",
+   "comment": "There should be at least two square T4V2s at the intersection of Mn/T4M1/T2M1 and T4M2 when either metal width >= 0.5um,exclude SRINGBLK and GRBLK region.",
+   "expr": "T4V2_SQ = RECTANGLE T4V2 ASPECT == 1 X1_${bottom_metal} = ${bottom_metal} ENCLOSE (${bottom_metal} WITH WIDTH >= 0.5) X1_T4M2 = T4M2 ENCLOSE (T4M2 WITH WIDTH >= 0.5) ${bottom_metal}T4M2 = ${bottom_met",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_R_3",
+   "layer": "T4V2",
+   "type": "R",
+   "num": "3",
+   "comment": "45-dgree T4V2 is not allowed",
+   "expr": "((T4V2 WITH EDGE (ANGLE T4V2 == 45)) NOT INSIDE SRINGBLK) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_R_4_R",
+   "layer": "T4V2",
+   "type": "R",
+   "num": "4",
+   "comment": "Recommended us redundant T4V2s as possible, DRC can help to flag single T4V2",
+   "expr": "($bottom_metal AND T4M2) INTERACT T4V2 == 1 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_S_1",
+   "layer": "T4V2",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T4V2s >= 0.34",
+   "expr": "(EXT T4V2 < 0.34 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_S_2",
+   "layer": "T4V2",
+   "type": "S",
+   "num": "2",
+   "comment": "NOTICE: It is a recommended rule.",
+   "expr": "X = SIZE T4V2 BY 0.28 OVERUNDER Y = SIZE X BY 0.855 UNDEROVER Z = T4V2 INSIDE Y (EXT Z < 0.5 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_W_1",
+   "layer": "T4V2",
+   "type": "W",
+   "num": "1",
+   "comment": "Fixed T4V2 size (square shape),exclude SRINGBLK and GRBLK region. = 0.36,",
+   "expr": "((NOT RECTANGLE (T4V2 NOT GT4V2) == 0.36 BY == 0.36) NOT GRID) NOT INSIDE (SRINGBLK OR NODRC) (NOT RECTANGLE (RECTANGLE (T4V2 AND GRID)) == 0.36 BY == 0.36 ) NOT INSIDE (SRINGBLK OR NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T4V2_W_2",
+   "layer": "T4V2",
+   "type": "W",
+   "num": "2",
+   "comment": "Fixed T4V2bar width  = 0.36,",
+   "expr": "T4V2bar WITH WIDTH < 0.36 T4V2bar WITH WIDTH > 0.36 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_1",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T8MnDUMs if T8MnDUM size is 2.8um*2.8um  >= 2.80um",
+   "expr": "((EXT T8M1DUM_2p8_2p8 < 2.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_10",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between T8MnDUM and BMIM(MIM) >= 2um",
+   "expr": "EXT T8M1DUM BMIM < 2 ABUT < 90 SINGULAR REGION ENC T8M1DUM BMIM < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_11",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between T8MnDUM and LOGO >= 0.1um",
+   "expr": "EXT T8M1DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ENC T8M1DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_12",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between T8MnDUM and INDALL >= 3um",
+   "expr": "EXT T8M1DUM INDALL < 3 ABUT < 90 SINGULAR REGION ENC T8M1DUM INDALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_13",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between T8MnDUM and CHIPBLK(chip edge) >= 2.5um",
+   "expr": "EXT T8M1DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ENC T8M1DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_14",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "14",
+   "comment": "Space between T8MnDUM and T8MnDUMB >= 2um",
+   "expr": "EXT T8M1DUM T8M1DUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_15",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "15",
+   "comment": "Space between T8MnDUM and DMYBLK >= 2um",
+   "expr": "EXT T8M1DUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_2",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T8MnDUMs and T8Mn if T8MnDUM size is 2.8um*2.8um  >= 2.8um",
+   "expr": "((EXT T8M1DUM_2p8_2p8 T8M1 < 2.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_7",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between two (T8MnDUM or T8Mn) having run length >=1.5um with one or both T8MnDUM width >=1.5um is 0.60um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_8",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between T8MnDUM and 45 degree T8Mn >= 0.4um",
+   "expr": "X = ANGLE T8M1 == 45 (EXT X T8M1DUM < 0.4 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_S_9",
+   "layer": "T8M1DUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between T8MnDUM and FUSEALL(fuse) >= 3um",
+   "expr": "EXT T8M1DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ENC T8M1DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1DUM_W_1",
+   "layer": "T8M1DUM",
+   "type": "W",
+   "num": "1",
+   "comment": "T8MnDUM SIZE = 2.8*2.8",
+   "expr": "T8M1DUM NOT T8M1DUM_2p8_2p8 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_A_1",
+   "layer": "T8M1",
+   "type": "A",
+   "num": "1",
+   "comment": "T8M1 Metal area >= 6.00",
+   "expr": "(AREA T8M1 < 6.00) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_A_2",
+   "layer": "T8M1",
+   "type": "A",
+   "num": "2",
+   "comment": "T8M1 enclosed area >= 6.0",
+   "expr": "X = (HOLES T8M1 INNER) NOT T8M1 (AREA X < 6.0) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_D_1_R",
+   "layer": "T8M1",
+   "type": "D",
+   "num": "1",
+   "comment": "NOTICE: It is a recommended rule.",
+   "expr": "(DENSITY T8M1ALLi < 0.2 PRINT density_report_T8M1_D_1_R.log) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_D_2",
+   "layer": "T8M1",
+   "type": "D",
+   "num": "2",
+   "comment": "T8M1 pattern density on the whole chip (including dummy patterns) <= 55%",
+   "expr": "(DENSITY T8M1ALLi > 0.55 PRINT density_report_T8M1_D_2.log) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_D_3",
+   "layer": "T8M1",
+   "type": "D",
+   "num": "3",
+   "comment": "(Exclude DEUPAD regions)",
+   "expr": "X = T8M1ALLi NOT DEUPAD (DENSITY X > 0.70 WINDOW 400 STEP 400 backup PRINT density_report_T8M1_D_3.log) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_EX_1",
+   "layer": "T8M1",
+   "type": "EX",
+   "num": "1",
+   "comment": "INDALL extention on T8M1, T8M1 CUT INDALL is not allowed  >= 15",
+   "expr": "(ENC (T8M1 INTERACT INDALL) INDALL < 15 ABUT < 90 OPPOSITE REGION) NOT INSIDE NODRC T8M1 CUT INDALL ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_R_2",
+   "layer": "T8M1",
+   "type": "R",
+   "num": "2",
+   "comment": "Both active and passive devices inside INDALL region are not allowed",
+   "expr": "Metal_res = ((((((((M1R OR M2R) OR M3R) OR M4R) OR M5R) OR M6R) OR M7R) OR M8R) OR T4M1R) OR T8M1R X = ((((((DIODE OR BJT) OR MOMLVS1) OR VARAJ) OR PORES) OR AARES) OR NW1res) OR Metal_res (AND X INDA",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_S_1",
+   "layer": "T8M1",
+   "type": "S",
+   "num": "1",
+   "comment": "Min Space between T8M1s is 1.5,DRC waive check 89 to 90 degree spaces in the INDALL region",
+   "expr": "((EXT T8M1 < 1.50 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T8M1 < 1.50 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_S_2",
+   "layer": "T8M1",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between two T8M1s when one or both T8M1 width or length >= 16um, and the run length of two T8M1s >2um.  >= 2.0",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_S_3",
+   "layer": "T8M1",
+   "type": "S",
+   "num": "3",
+   "comment": "Inductor T8M1 definition: (INDALL AND T8M1)",
+   "expr": "(EXT (T8M1 AND INDALL) (T8M1 NOT INDALL) < 30 OPPOSITE REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M1_W_1",
+   "layer": "T8M1",
+   "type": "W",
+   "num": "1",
+   "comment": "T8M1 width, except bond pad and INDALL and DEUPAD regions. <= 50",
+   "expr": "X = (T8M1 NOT DEUPAD) WITH WIDTH > 50 ((X NOT INTERACT PA) NOT INDALL) NOT INSIDE NODRC ((INT T8M1 < 1.50 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((INT T8M1 < 1.50 ABUT<89 SINGULAR REGIO",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_1",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between two T8MnDUMs if T8MnDUM size is 2.8um*2.8um  >= 2.80um",
+   "expr": "((EXT T8M2DUM_2p8_2p8 < 2.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_10",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "10",
+   "comment": "Space between T8MnDUM and BMIM(MIM) >= 2um",
+   "expr": "EXT T8M2DUM BMIM < 2 ABUT < 90 SINGULAR REGION ENC T8M2DUM BMIM < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_11",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "11",
+   "comment": "Space between T8MnDUM and LOGO >= 0.1um",
+   "expr": "EXT T8M2DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ENC T8M2DUM LOGO < 0.1 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_12",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "12",
+   "comment": "Space between T8MnDUM and INDALL >= 3um",
+   "expr": "EXT T8M2DUM INDALL < 3 ABUT < 90 SINGULAR REGION ENC T8M2DUM INDALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_13",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "13",
+   "comment": "Space between T8MnDUM and CHIPBLK(chip edge) >= 2.5um",
+   "expr": "EXT T8M2DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ENC T8M2DUM CHIPBLK < 2.5 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_14",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "14",
+   "comment": "Space between T8MnDUM and T8MnDUMB >= 2um",
+   "expr": "EXT T8M2DUM T8M2DUMB < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_15",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "15",
+   "comment": "Space between T8MnDUM and DMYBLK >= 2um",
+   "expr": "EXT T8M2DUM DMYBLK < 2 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_2",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T8MnDUMs and T8Mn if T8MnDUM size is 2.8um*2.8um  >= 2.8um",
+   "expr": "((EXT T8M2DUM_2p8_2p8 T8M2 < 2.80 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_7",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "7",
+   "comment": "Space between two (T8MnDUM or T8Mn) having run length >=1.5um with one or both T8MnDUM width >=1.5um is 0.60um",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_8",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "8",
+   "comment": "Space between T8MnDUM and 45 degree T8Mn >= 0.4um",
+   "expr": "X = ANGLE T8M2 == 45 (EXT X T8M2DUM < 0.4 REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_S_9",
+   "layer": "T8M2DUM",
+   "type": "S",
+   "num": "9",
+   "comment": "Space between T8MnDUM and FUSEALL(fuse) >= 3um",
+   "expr": "EXT T8M2DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ENC T8M2DUM FUSEALL < 3 ABUT < 90 SINGULAR REGION ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2DUM_W_1",
+   "layer": "T8M2DUM",
+   "type": "W",
+   "num": "1",
+   "comment": "T8MnDUM SIZE = 2.8*2.8",
+   "expr": "T8M2DUM NOT T8M2DUM_2p8_2p8 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_1",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "T8M2 width, except bond pad and INDALL and DEUPAD regions. <= 50",
+   "expr": "X = (T8M2 NOT DEUPAD) WITH WIDTH > 50 ((X NOT INTERACT PA) NOT INDALL) NOT INSIDE NODRC ((INT T8M2 < 1.50 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((INT T8M2 < 1.50 ABUT<89 SINGULAR REGIO",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_A_1",
+   "layer": "T8M2",
+   "type": "A",
+   "num": "1",
+   "comment": "T8M2 area >= 6.00",
+   "expr": "(AREA T8M2 < 6.00) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_A_2",
+   "layer": "T8M2",
+   "type": "A",
+   "num": "2",
+   "comment": "T8M2 enclosed  area >= 6.0",
+   "expr": "X = (HOLES T8M2 INNER) NOT T8M2 (AREA X < 6.0) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_D_1_R",
+   "layer": "T8M2",
+   "type": "D",
+   "num": "1",
+   "comment": "NOTICE: It is a recommended rule.",
+   "expr": "(DENSITY T8M2ALLi < 0.2 PRINT density_report_T8M2_D_1_R.log) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_D_2",
+   "layer": "T8M2",
+   "type": "D",
+   "num": "2",
+   "comment": "Max T8M2 pattern density on the whole chip (including dummy patterns) is 55%",
+   "expr": "(DENSITY T8M2ALLi > 0.55 PRINT density_report_T8M2_D_2.log) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_D_3",
+   "layer": "T8M2",
+   "type": "D",
+   "num": "3",
+   "comment": "(Exclude DEUPAD regions)",
+   "expr": "X = T8M2ALLi NOT DEUPAD (DENSITY X > 0.70 WINDOW 400 STEP 400 backup PRINT density_report_T8M2_D_3.log) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_EX_1",
+   "layer": "T8M2",
+   "type": "EX",
+   "num": "1",
+   "comment": "INDALL extension on T8M2, T8M2 CUT INDALL is not allowed >= 15",
+   "expr": "(ENC (T8M2 INTERACT INDALL) INDALL < 15 ABUT < 90 OPPOSITE REGION) NOT INSIDE NODRC T8M2 CUT INDALL ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_R_2",
+   "layer": "T8M2",
+   "type": "R",
+   "num": "2",
+   "comment": "Both active and passive devices inside INDALL region are not allowed",
+   "expr": "Metal_res = ((((((((M1R OR M2R) OR M3R) OR M4R) OR M5R) OR M6R) OR M7R) OR M8R) OR T4M1R) OR T8M2R X = ((((((DIODE OR BJT) OR MOMLVS1) OR VARAJ) OR PORES) OR AARES) OR NW1res) OR Metal_res (AND X INDA",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_S_1",
+   "layer": "T8M2",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T8M2s,DRC waive check 89 to 90 degree spaces in the INDALL region  >= 1.5",
+   "expr": "((EXT T8M2 < 1.50 ABUT<90 SINGULAR REGION) NOT INDALL) NOT INSIDE NODRC ((EXT T8M2 < 1.50 ABUT<89 SINGULAR REGION) AND INDALL) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_S_2",
+   "layer": "T8M2",
+   "type": "S",
+   "num": "2",
+   "comment": "Min Space between two T8M2s when one or both T8M2 width or length >= 16um, and the run length of two T8M2s >2um.  >= 2.0",
+   "expr": "",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8M2_S_3",
+   "layer": "T8M2",
+   "type": "S",
+   "num": "3",
+   "comment": "Inductor T8M2 definition: (INDALL AND T8M2)",
+   "expr": "(EXT (T8M2 AND INDALL) (T8M2 NOT INDALL) < 30 OPPOSITE REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_EN_2_EN_3",
+   "layer": "T8V1",
+   "type": "EN",
+   "num": "2",
+   "comment": "Enclosed by $bottom_metal when $bottom_metal enclosure on perpendicular directions < 0.05um >= 0.05",
+   "expr": "X = RECTANGLE ENC T8V1 $bottom_metal ABUT<90 OUTSIDE ALSO \\ (ENC X $bottom_metal < 0.01 ABUT<90 SINGULAR OVERLAP OUTSIDE ALSO REGION) NOT INSIDE NODRC Y = ENC \\[X\\] $bottom_metal < 0.05 OPPOSITE (INT ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_EN_5_EN_6",
+   "layer": "T8V1",
+   "type": "EN",
+   "num": "5",
+   "comment": "Enclosed by T8M1 >= 0.3",
+   "expr": "(ENC T8V1 T8M1 < 0.3 ABUT < 90 SINGULAR REGION OUTSIDE ALSO) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_R_1",
+   "layer": "T8V1",
+   "type": "R",
+   "num": "1",
+   "comment": "There should be at least two square T8V1s at the intersection of Mn/T8M1  when either metal width >= 0.5um,exclude SRINGBLK and GRBLK area",
+   "expr": "T8V1_SQ = RECTANGLE T8V1 ASPECT == 1 X1_${bottom_metal} = ${bottom_metal} ENCLOSE (${bottom_metal} WITH WIDTH >= 0.5) X1_T8M1 = T8M1 ENCLOSE (T8M1 WITH WIDTH >= 0.5) ${bottom_metal}T8M1 = ${bottom_met",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_S_1",
+   "layer": "T8V1",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T8V1s >= 0.34",
+   "expr": "(EXT T8V1 < 0.34 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_S_2",
+   "layer": "T8V1",
+   "type": "S",
+   "num": "2",
+   "comment": "Space between T8V1s when array equal to or greater than 4x4(with space <=0.56um. >= 0.5",
+   "expr": "X = SIZE T8V1 BY 0.28 OVERUNDER Y = SIZE X BY 1.22 UNDEROVER Z = T8V1 INSIDE Y (EXT Z < 0.5 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_W_1",
+   "layer": "T8V1",
+   "type": "W",
+   "num": "1",
+   "comment": "Fixed T8V1 size (square shape),exclude SRINGBLK and GRBLK area = 0.36",
+   "expr": "((NOT RECTANGLE (T8V1 NOT GT8V1) == 0.36 BY == 0.36) NOT GRID) NOT INSIDE (SRINGBLK OR NODRC) (NOT RECTANGLE (RECTANGLE (T8V1 AND GRID)) == 0.36 BY == 0.36) NOT INSIDE (SRINGBLK OR NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V1_W_2",
+   "layer": "T8V1",
+   "type": "W",
+   "num": "2",
+   "comment": "Fixed T8V1bar width = 0.36",
+   "expr": "T8V1bar WITH WIDTH < 0.36 T8V1bar WITH WIDTH > 0.36 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_EN_2_EN_3",
+   "layer": "T8V2",
+   "type": "EN",
+   "num": "2",
+   "comment": "Enclosed by T2M1 OR T4M1 when T2M1 OR T4M1 enclosure on perpendicular directions < 0.05um. >= 0.05",
+   "expr": "TM1 = T2M1 OR T4M1 X = RECTANGLE ENC T8V2 TM1 ABUT<90 OUTSIDE ALSO \\ (ENC X TM1 < 0.01 ABUT<90 SINGULAR OVERLAP OUTSIDE ALSO REGION) NOT INSIDE NODRC Y = ENC \\[X\\] TM1 < 0.05 OPPOSITE (INT Y < 0.01 AB",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_EN_5_6",
+   "layer": "T8V2",
+   "type": "EN",
+   "num": "5",
+   "comment": "T8V2 must be fully covered by T8M2 where is the metal layer directly above T8V2",
+   "expr": "(ENC T8V2 T8M2 < 0.3 ABUT < 90 SINGULAR REGION OUTSIDE ALSO) NOT INSIDE NODRC T8V2 NOT T8M2 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_R_1",
+   "layer": "T8V2",
+   "type": "R",
+   "num": "1",
+   "comment": "There should be at least two square T8V2s at the intersection of T8M2/(T2M1 or T4M1)  when either metal width >= 0.5um,exclude SRINGBLK and GRBLK area",
+   "expr": "T8V2_SQ = RECTANGLE T8V2 ASPECT == 1 TM1 = T2M1 OR T4M1 X1_TM1 = TM1 ENCLOSE (TM1 WITH WIDTH >= 0.5) X1_T8M2 = T8M2 ENCLOSE (T8M2 WITH WIDTH >= 0.5) TM1T8M2 = TM1 AND T8M2 X1 = X1_TM1 OR X1_T8M2 ((TM1",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_S_1",
+   "layer": "T8V2",
+   "type": "S",
+   "num": "1",
+   "comment": "Space between T8V2s >= 0.34",
+   "expr": "(EXT T8V2 < 0.34 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_S_2",
+   "layer": "T8V2",
+   "type": "S",
+   "num": "2",
+   "comment": "(Two via regions whose space is <=0.56um are considered to be in the same array.)",
+   "expr": "X = SIZE T8V2 BY 0.28 OVERUNDER Y = SIZE X BY 1.22 UNDEROVER Z = T8V2 INSIDE Y (EXT Z < 0.5 ABUT < 90 SINGULAR REGION) NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_W_1",
+   "layer": "T8V2",
+   "type": "W",
+   "num": "1",
+   "comment": "Fixed T8V2 size (square shape) is 0.36,exclude SRINGBLK and GRBLK area",
+   "expr": "((NOT RECTANGLE (T8V2 NOT GT8V2) == 0.36 BY == 0.36) NOT GRID) NOT INSIDE (SRINGBLK OR NODRC) (NOT RECTANGLE (RECTANGLE (T8V2 AND GRID)) == 0.36 BY == 0.36) NOT INSIDE (SRINGBLK OR NODRC) ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "T8V2_W_2",
+   "layer": "T8V2",
+   "type": "W",
+   "num": "2",
+   "comment": "Fixed T8V2bar width = 0.36",
+   "expr": "T8V2bar WITH WIDTH < 0.36 T8V2bar WITH WIDTH > 0.36 ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  },
+  {
+   "official": "V",
+   "layer": null,
+   "type": null,
+   "num": null,
+   "comment": "Single vias stacked by more than 4 layers are not allowed. <=4",
+   "expr": "X = V${j}N_M INTERACT (V[expr $j +1]N_M INTERACT (V[expr $j +2]N_M INTERACT (V[expr $j +3]N_M INTERACT V[expr $j +4]N_M))) X NOT INSIDE NODRC ",
+   "status": "missing",
+   "klayout": null,
+   "klayout_values": null
+  }
+ ]
+}

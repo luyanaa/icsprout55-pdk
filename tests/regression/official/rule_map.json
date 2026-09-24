@@ -1,0 +1,53 @@
+{
+ "schema": "ics55-pv-rule-map/1.0",
+ "note": "Explicit Calibre<->KLayout rule/device equivalence map. Entries absent from this map are NOT claimed equivalent. Populated as alignment phases land.",
+ "lvs": {
+  "core_mos_1p2": {
+   "official": {
+    "file": "pv/LVS/ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs",
+    "refs": "3309-3314 (LVS), 3362-3367 (RC)",
+    "model_names": [
+     "nm1p2_svt_lp",
+     "nm1p2_lvt_lp",
+     "nm1p2_hvt_lp",
+     "pm1p2_svt_lp",
+     "pm1p2_lvt_lp",
+     "pm1p2_hvt_lp"
+    ],
+    "flavor_layers": {
+     "svt": "base",
+     "hvt": "NVT3/PVT3",
+     "lvt": "NVT1/PVT1"
+    }
+   },
+   "klayout": {
+    "file": "libs.tech/lvs/rule_decks/mos_extraction.lvs",
+    "refs": "27-55",
+    "model_names": [
+     "NM1P2_SVT_LP",
+     "NM1P2_LVT_LP",
+     "NM1P2_HVT_LP",
+     "PM1P2_SVT_LP",
+     "PM1P2_LVT_LP",
+     "PM1P2_HVT_LP"
+    ]
+   },
+   "equivalence": "nominal for ordinary core cells",
+   "status": "partial",
+   "gaps": [
+    "well-aware gate exclusion of special masks (pending)",
+    "raw PSUB marker 261/12 unused (pending)",
+    "TGOX/SAB/DIODE alias collision - RESOLVED (2026-09-25)",
+    "IOACT now derived ACT&TGOX; IO LVS comparison still blocked (multi-finger combining)"
+   ]
+  }
+ },
+ "drc": {
+  "ported": {},
+  "deferred": {},
+  "layer_aliases_resolved": {
+   "date": "2026-09-25",
+   "note": "TGOX 28/1, SAB 71/1, DIODE 191/12, RV/CB/ALPAD/RDL/COVER 120-124, DGOX 27/1, CTbar 72/7, CTopcblk 72/5 aligned to the official LAYER MAP; IOACT derived from ACT&TGOX; cell exclusion moved to instance bboxes"
+  }
+ }
+}

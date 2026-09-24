@@ -1,0 +1,97 @@
+{
+  "schema": "ics55-pv-alignment-manifest/1.0",
+  "official_profile": {
+    "source": "pv/LVS/ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs",
+    "frozen": true,
+    "options": {
+      "HALF_NODE": "TRUE",
+      "IO": "TGOX_33",
+      "TOTALMETAL": 6,
+      "TOP_METAL_NUM": "SINGLE",
+      "TM1_TYPE": 4,
+      "TM2_TYPE": 4,
+      "RC_EXTRACT": "FALSE",
+      "RC_EXTRACT_FLOW": "CCI",
+      "BACK_ANNOTATION_FLOW": 2,
+      "ERC_CHECK": "TRUE",
+      "GATE_FLOATING_CHECK": "FALSE",
+      "NWELL_FLOATING_CHECK": "FALSE",
+      "NWELL_NOT_TO_POWER_CHECK": "TRUE",
+      "PWELL_NOT_TO_GROUND_CHECK": "TRUE",
+      "CASE_SENSITIVITY": "TRUE",
+      "SOFT_CHECK": "TRUE",
+      "WELL_PIN": "YES"
+    }
+  },
+  "oracle": {
+    "calibre_binary": "UNAVAILABLE",
+    "official_reports": "UNAVAILABLE",
+    "policy": "cross-tool equivalence stays BLOCKED until external Calibre reports with provenance hashes are registered",
+    "quickstart_doc": "docs/quick-start_on_ICsprout_calibrelvs.pdf (GUI-only; no CLI invocation)"
+  },
+  "core_lvs_matrix": [
+    {
+      "flavor": "H7H",
+      "lib": "IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CH",
+      "cells": ["INVX1H7H", "INVX3H7H", "INVX4H7H"],
+      "expected": {
+        "model_prefix": ["NM1P2_HVT_LP", "PM1P2_HVT_LP"],
+        "L_um": 0.06,
+        "w_um_n_p": {"INVX1H7H": [0.21, 0.27], "INVX3H7H": [0.45, 0.57], "INVX4H7H": [0.60, 0.76]},
+        "per_cell_devices": 2,
+        "terminals_nmos": ["Y", "A", "VSS", "VSS"],
+        "terminals_pmos": ["Y", "A", "VDD", "VDD"],
+        "m": 1
+      }
+    },
+    {
+      "flavor": "H7L",
+      "lib": "IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CL",
+      "cells": ["INVX1H7L", "INVX3H7L", "INVX4H7L"],
+      "expected": {
+        "model_prefix": ["NM1P2_LVT_LP", "PM1P2_LVT_LP"],
+        "L_um": 0.06,
+        "w_um_n_p": {"INVX1H7L": [0.21, 0.27], "INVX3H7L": [0.45, 0.57], "INVX4H7L": [0.60, 0.76]},
+        "per_cell_devices": 2,
+        "terminals_nmos": ["Y", "A", "VSS", "VSS"],
+        "terminals_pmos": ["Y", "A", "VDD", "VDD"],
+        "m": 1
+      }
+    },
+    {
+      "flavor": "H7R",
+      "lib": "IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CR",
+      "cells": ["INVX1H7R", "INVX3H7R", "INVX4H7R"],
+      "expected": {
+        "model_prefix": ["NM1P2_SVT_LP", "PM1P2_SVT_LP"],
+        "L_um": 0.06,
+        "w_um_n_p": {"INVX1H7R": [0.21, 0.27], "INVX3H7R": [0.45, 0.57], "INVX4H7R": [0.60, 0.76]},
+        "per_cell_devices": 2,
+        "terminals_nmos": ["Y", "A", "VSS", "VSS"],
+        "terminals_pmos": ["Y", "A", "VDD", "VDD"],
+        "m": 1
+      }
+    }
+  ],
+  "stress_sentinels_h7h": [
+    "NAND3BBX0P5H7H", "NAND3BBX0P7H7H", "OAI33X0P5H7H",
+    "INVX7H7H", "INVX16H7H", "TBUFX8H7H"
+  ],
+  "drc_rule_families": {
+    "ported_high_confidence": [],
+    "deferred_gap": [
+      "DNW", "ACT", "NW1", "PSUB", "NVT3/PVT3", "NVT1/PVT1", "ULLD", "DG", "TG",
+      "PO", "NP", "PP", "SAB", "CT", "MET1", "T2V/T2M", "T4V/T4M", "T8V/T8M",
+      "CB", "RV", "RDL", "COVER", "CHIPEDGE", "AAres", "NWresAA", "NWresSTI",
+      "POLYres", "EFU", "HRP", "DEUPAD", "SRCK", "SL", "AADUM", "PODUM",
+      "ESDN/ESDP/ESD", "LU", "MOM", "AR antenna"
+    ]
+  },
+  "provenance": {
+    "tool": "KLayout via nix-shell ~/Documents/librelane",
+    "klayout_version": "0.30.7",
+    "lvs_runner": "libs.tech/lvs/run_lvs.py",
+    "drc_runner": "libs.tech/drc/ics55_drc.drc",
+    "hashes_expected": "filled by run_alignment.py at execution time"
+  }
+}
