@@ -1,4 +1,4 @@
-# HVT pre-silicon BSIM4 fitting feasibility (H7T/H7H reference subset)
+# HVT pre-silicon BSIM4 fitting feasibility (H7CH / H7H reference subset)
 
 **Research question:** Can a single HVT BSIM4 card, calibrated in staged order (threshold/subthreshold → drive → C-V) from released INVX1H7H/INVX3H7H/INVX4H7H cell evidence with physical priors, reproduce held-out CDL–GDS-consistent HVT cells within pre-specified tolerances while remaining physically plausible for DC + transient/AC analog use pending silicon calibration?
 
