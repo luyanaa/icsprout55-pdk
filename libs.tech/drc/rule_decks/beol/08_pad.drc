@@ -1,0 +1,38 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 08 - Pad / IO top layers (PADM, ALPAD)
+#
+# Values measured from the released IO library GDS (provenance: gds).  PADM is
+# the pad-opening metal, ALPAD the aluminium pad (over PADM via the pad cut).
+#=========================================================================================
+
+if TABLES.include?('beol') || BEOL
+  PADM.width(rval('padm_width').um, euclidian).output('pad.padm.width',
+    "pad.padm.width: PADM min width #{rval('padm_width')} um [gds]")
+  PADM.space(rval('padm_space').um, euclidian).output('pad.padm.space',
+    "pad.padm.space: PADM min spacing #{rval('padm_space')} um [gds]")
+  PADM.with_area(rval('padm_area').um2).output('pad.padm.area',
+    "pad.padm.area: PADM min area #{rval('padm_area')} um^2 [gds]")
+
+  ALPAD.width(rval('alpad_width').um, euclidian).output('pad.alpad.width',
+    "pad.alpad.width: ALPAD min width #{rval('alpad_width')} um [gds]")
+  ALPAD.space(rval('alpad_space').um, euclidian).output('pad.alpad.space',
+    "pad.alpad.space: ALPAD min spacing #{rval('alpad_space')} um [gds]")
+
+  # ALPAD pad opening must be enclosed by PADM (pad metal extends under aluminium)
+  PADM.enclosing(ALPAD, rval('padm_alpad_enc').um).output('pad.alpad.padm_enc',
+    "pad.alpad.padm_enc: PADM enclosure of ALPAD #{rval('padm_alpad_enc')} um [gds]")
+end

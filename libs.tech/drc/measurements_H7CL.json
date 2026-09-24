@@ -1,0 +1,183 @@
+{
+  "cells": 785,
+  "layers": {
+    "ACT": {
+      "min_width_um": 0.081,
+      "min_width_cell": "SDFFNQX3H7L",
+      "min_space_um": 0.101,
+      "min_space_cell": "OA21X0P5H7L",
+      "min_area_um2": 0.0555,
+      "min_area_cell": "XOR3X0P7H7L",
+      "cells_with_layer": 773
+    },
+    "NW": {
+      "min_width_um": 0.361,
+      "min_width_cell": "SDFFNSX0P5H7L",
+      "min_space_um": 0.4,
+      "min_space_cell": "OR3X2H7L",
+      "min_area_um2": 0.6545,
+      "min_area_cell": "ANT2H7L",
+      "cells_with_layer": 773
+    },
+    "LVTN": {
+      "min_width_um": 0.4,
+      "min_width_cell": "OR3X2H7L",
+      "min_space_um": 0.361,
+      "min_space_cell": "SDFFSRX2H7L",
+      "min_area_um2": 0.3795,
+      "min_area_cell": "ANT2H7L",
+      "cells_with_layer": 773
+    },
+    "LVTP": {
+      "min_width_um": 0.181,
+      "min_width_cell": "AOI221X1P4H7L",
+      "min_space_um": 0.4,
+      "min_space_cell": "OR3X2H7L",
+      "min_area_um2": 0.473,
+      "min_area_cell": "ANT2H7L",
+      "cells_with_layer": 773
+    },
+    "POLY": {
+      "min_width_um": 0.061,
+      "min_width_cell": "OR3X2H7L",
+      "min_space_um": 0.112,
+      "min_space_cell": "SDFFNSX0P5H7L",
+      "min_area_um2": 0.0388,
+      "min_area_cell": "DFFSRX2H7L",
+      "cells_with_layer": 771
+    },
+    "NP": {
+      "min_width_um": 0.4,
+      "min_width_cell": "OR3X2H7L",
+      "min_space_um": 0.361,
+      "min_space_cell": "SDFFSRX2H7L",
+      "min_area_um2": 0.3795,
+      "min_area_cell": "ANT2H7L",
+      "cells_with_layer": 773
+    },
+    "PP": {
+      "min_width_um": 0.181,
+      "min_width_cell": "AOI221X1P4H7L",
+      "min_space_um": 0.4,
+      "min_space_cell": "OR3X2H7L",
+      "min_area_um2": 0.473,
+      "min_area_cell": "ANT2H7L",
+      "cells_with_layer": 773
+    },
+    "CT": {
+      "min_width_um": 0.091,
+      "min_width_cell": "OR3X2H7L",
+      "min_space_um": 0.111,
+      "min_space_cell": "BUFX7H7L",
+      "min_area_um2": 0.0081,
+      "min_area_cell": "OR3X2H7L",
+      "cells_with_layer": 773
+    },
+    "M1": {
+      "min_width_um": 0.091,
+      "min_width_cell": "OR3X2H7L",
+      "min_space_um": 0.091,
+      "min_space_cell": "OR3X2H7L",
+      "min_area_um2": 0.00444,
+      "min_area_cell": "DFFTRQX0P5H7L",
+      "cells_with_layer": 773
+    }
+  },
+  "seps": {
+    "POLY:ACT": {
+      "min_sep_um": 0.051,
+      "min_sep_cell": "OR3X2H7L"
+    },
+    "POLY:NP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "OAO211X0P5H7L"
+    },
+    "POLY:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "BUFX7H7L"
+    },
+    "POLY:NW": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "BUFX7H7L"
+    },
+    "ACT:NP": {
+      "min_sep_um": 0.151,
+      "min_sep_cell": "MSDFFQX0P5H7L"
+    },
+    "ACT:PP": {
+      "min_sep_um": 0.141,
+      "min_sep_cell": "MUX4X3H7L"
+    },
+    "ACT:NW": {
+      "min_sep_um": 0.151,
+      "min_sep_cell": "MSDFFQX0P5H7L"
+    },
+    "NP:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "OR3X2H7L"
+    },
+    "CT:POLY": {
+      "min_sep_um": 0.051,
+      "min_sep_cell": "OR3X2H7L"
+    },
+    "CT:ACT": {
+      "min_sep_um": 0.062,
+      "min_sep_cell": "SDFFSX1H7L"
+    },
+    "CT:M1": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "NAND2X3H7L"
+    },
+    "CT:NP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "DFFNRX4H7L"
+    },
+    "CT:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "SDFFNRX1H7L"
+    }
+  },
+  "encs": {
+    "NW:ACT": {
+      "min_enc_um": 0.151,
+      "min_enc_cell": "MSDFFQX0P5H7L"
+    },
+    "NW:PP": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "OR3X2H7L"
+    },
+    "NP:ACT": {
+      "min_enc_um": 0.126,
+      "min_enc_cell": "SDFFNX2H7L"
+    },
+    "PP:ACT": {
+      "min_enc_um": 0.126,
+      "min_enc_cell": "MSDFFQX3H7L"
+    },
+    "NP:CT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "SDFFNRX1H7L"
+    },
+    "PP:CT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "DFFNRX4H7L"
+    },
+    "POLY:CT": {
+      "min_enc_um": 0.011,
+      "min_enc_cell": "OR3X2H7L"
+    },
+    "ACT:CT": {
+      "min_enc_um": 0.016,
+      "min_enc_cell": "OR3X2H7L"
+    },
+    "M1:CT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "OR3X2H7L"
+    }
+  },
+  "gates": {
+    "min_gate_width_um": 0.061,
+    "min_gate_width_cell": "OR3X2H7L"
+  },
+  "gds": "/Users/yanlu/Documents/icsprout55-pdk/IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CL/gds/ics55_LLSC_H7CL.gds"
+}

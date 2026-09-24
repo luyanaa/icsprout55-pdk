@@ -1,0 +1,157 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS: combine multi-finger MOS devices
+#
+# The released std cells draw multi-finger transistors (e.g. W=300n = 2x150n
+# fingers) where some fingers' outer source/drain island is floating (a
+# diffusion island without any contact).  The released CDL lists one device
+# per gate signal and counts the finger widths, so several extracted devices
+# must be combined into one.
+#
+# The combining is guided by the reference (schematic) netlist: within a
+# (device class, gate net, connected diffusion component) group, if the sum of
+# the extracted widths matches a single schematic device of the same class and
+# gate net, the devices are fingers of that transistor and are combined
+# (merged S/D nets, summed width, one device left).
+#=========================================================================================
+
+MOS_CLASSES = %w[NM1P2_SVT_LP NM1P2_LVT_LP NM1P2_HVT_LP PM1P2_SVT_LP PM1P2_LVT_LP PM1P2_HVT_LP NM3P3_LP PM3P3_LP]
+
+def tnet(d, name)
+  d.net_for_terminal(d.device_class.terminal_id(name))
+rescue
+  nil
+end
+
+# --- geometry: connected diffusion component per device ----------------------
+
+ly2 = RBA::Layout.new
+ly2.read($input)
+ctop = ly2.cell($top || ly2.top_cell.name)
+act_r = RBA::Region.new(ctop.shapes(ly2.find_layer(RBA::LayerInfo.new(2, 1))))
+
+def act_poly_index(device, act_r, dbu)
+  pt = RBA::Point.new((device.trans.disp.x / dbu).round, (device.trans.disp.y / dbu).round)
+  i = 0
+  act_r.each do |p|
+    return i if p.bbox.contains?(pt)
+    i += 1
+  end
+  nil
+end
+
+# schematic helper: does the reference circuit have a device of this class +
+# gate net with (approximately) the given width?
+def schematic_device_matches?(schematic, circuit_name, cls, gate_net_name, width)
+  sc = schematic.circuit_by_name(circuit_name) rescue nil
+  return false unless sc
+
+  width = width.round(6)
+  hit = false
+  sc.each_device do |d|
+    next unless d.device_class.name == cls
+    g = d.net_for_terminal(d.device_class.terminal_id('G')) rescue nil
+    next unless g && g.name == gate_net_name
+    w = d.parameter('W') rescue nil
+    if w && (w - width).abs < 1e-6
+      hit = true
+    end
+  end
+  hit
+end
+
+# For gate nets without a layout label (internal nodes like inverter outputs),
+# the name-based lookup cannot work.  Fall back on the width: combine when the
+# reference has a device of this class with the summed width AND does not list
+# separate devices at the individual finger widths (the OAI32 B1 pattern - two
+# distinct CDL devices 190n/380n - must NOT be combined even if some other
+# device happens to have the summed width).
+def schematic_width_matches?(schematic, circuit_name, cls, total_w, finger_ws)
+  sc = schematic.circuit_by_name(circuit_name) rescue nil
+  return false unless sc
+
+  total_w = total_w.round(6)
+  has_total = false
+  has_fingers = false
+  sc.each_device do |d|
+    next unless d.device_class.name == cls
+    w = d.parameter('W') rescue nil
+    next unless w
+    has_total = true if (w - total_w).abs < 1e-6
+    finger_ws.each do |fw|
+      has_fingers = true if (w - fw).abs < 1e-6
+    end
+  end
+  has_total && !has_fingers
+end
+
+netlist.each_circuit do |c|
+  devices = c.each_device.to_a
+  groups = Hash.new { |h, k| h[k] = [] }
+  devices.each do |d|
+    next unless MOS_CLASSES.include?(d.device_class.name)
+    g = tnet(d, 'G')
+    next unless g
+    groups[[d.device_class.name, g.cluster_id, act_poly_index(d, act_r, ly2.dbu)]] << d
+  end
+  groups.each_value do |grp|
+    next if grp.size < 2
+
+    # the schematic must have a single device with the summed width
+    total_w = grp.inject(0.0) { |s, d| s + (d.parameter('W') || 0.0) }
+    g0 = tnet(grp.first, 'G')
+    next unless g0
+    if g0.name.empty?
+      # internal (unnamed) gate node: width-based discrimination only
+      next unless schematic_width_matches?(schematic, c.name, grp.first.device_class.name, total_w,
+                                            grp.map { |d| d.parameter('W') || 0.0 })
+      puts "combined #{grp.size} fingers on internal gate -> W=#{total_w} (CDL-guided)"
+    else
+      next unless schematic_device_matches?(schematic, c.name, grp.first.device_class.name, g0.name, total_w)
+      puts "combined #{grp.size} fingers on gate #{g0.name} -> W=#{total_w} (CDL-guided)"
+    end
+
+    # combine: the common (shared) S/D net stays; the outer (once-used) nets
+    # merge into one terminal; keep one device with summed W.
+    # "common" = a net present in EVERY device of the group: multi-gate chains
+    # (e.g. AND2X8H7R's B/A devices) split the outer terminal across fingers
+    # ({S:4,D:5},{S:4,D:5},{S:7,D:4}) - the net appearing in all devices is
+    # the real common terminal, the rest are the split series-node parts.
+    keeper = grp.first
+    freq = Hash.new(0)
+    grp.each do |d|
+      [tnet(d, 'S'), tnet(d, 'D')].compact.each { |n| freq[n.cluster_id] += 1 }
+    end
+    common = freq.select { |_id, cnt| cnt >= grp.size }.keys
+    keeper_s = tnet(keeper, 'S')
+    keeper_d = tnet(keeper, 'D')
+    # the keeper terminal that is NOT the common net = merge target
+    target = nil
+    [keeper_s, keeper_d].compact.each do |n|
+      target = n unless common.include?(n.cluster_id)
+    end
+    target = keeper_s if target.nil? && keeper_s
+    grp.drop(1).each do |d|
+      [tnet(d, 'S'), tnet(d, 'D')].compact.each do |n|
+        next if n == target
+        next if common.include?(n.cluster_id)
+        c.join_nets(target, n)
+      end
+      c.remove_device(d)
+    end
+    keeper.set_parameter('W', total_w)
+  end
+end

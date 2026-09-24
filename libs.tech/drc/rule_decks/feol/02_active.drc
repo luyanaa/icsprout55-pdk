@@ -1,0 +1,46 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 02 - Active (ACT, IOACT)
+#
+# Port of iDRC minimum-width / minimum-spacing / minimum-area checks.
+# Values: measured from released std-cell/IO GDS (provenance: gds).
+#=========================================================================================
+
+if TABLES.include?('feol') || FEOL
+  #--- ACT: minimum width ------------------------------------------------------------
+  ACT.width(rval('act_width').um, euclidian).output('active.act.width',
+    "active.act.width: ACT min width #{rval('act_width')} um [gds]")
+
+  #--- ACT: minimum spacing ----------------------------------------------------------
+  ACT.space(rval('act_space').um, euclidian).output('active.act.space',
+    "active.act.space: ACT min spacing #{rval('act_space')} um [gds]")
+
+  #--- ACT: minimum area -------------------------------------------------------------
+  ACT.with_area(rval('act_area').um2).output('active.act.area',
+    "active.act.area: ACT min area #{rval('act_area')} um^2 [gds]")
+
+  #--- ACT must be covered by NP or PP (no un-implanted active) ----------------------
+  ACT.not(NP.or(PP)).output('active.act.implant',
+    "active.act.implant: ACT must be inside NP or PP [gds]")
+
+  #--- IOACT: minimum width / spacing / area -----------------------------------------
+  IOACT.width(rval('ioact_width').um, euclidian).output('active.ioact.width',
+    "active.ioact.width: IOACT min width #{rval('ioact_width')} um [gds]")
+  IOACT.space(rval('ioact_space').um, euclidian).output('active.ioact.space',
+    "active.ioact.space: IOACT min spacing #{rval('ioact_space')} um [gds]")
+  IOACT.with_area(rval('ioact_area').um2).output('active.ioact.area',
+    "active.ioact.area: IOACT min area #{rval('ioact_area')} um^2 [gds]")
+end

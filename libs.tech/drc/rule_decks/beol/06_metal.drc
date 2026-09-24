@@ -1,0 +1,73 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 06 - Metals (M1..M5, T4M2, RDL)
+#
+# Port of iDRC minimum-width / minimum-spacing / minimum-area / min-enclosed-area
+# (MinHole) checks.  All values are exact tech-LEF values (N551P6M.lef).
+#=========================================================================================
+
+if TABLES.include?('beol') || BEOL
+  [
+    ['M1', M1, 'm1'], ['M2', M2, 'm2'], ['M3', M3, 'm3'],
+    ['M4', M4, 'm4'], ['M5', M5, 'm5']
+  ].each do |name, layer, key|
+    layer.width(rval("#{key}_width").um, euclidian).output("metal.#{key}.width",
+      "metal.#{key}.width: #{name} min width #{rval("#{key}_width")} um [lef]")
+    layer.space(rval("#{key}_space").um, euclidian).output("metal.#{key}.space",
+      "metal.#{key}.space: #{name} min spacing #{rval("#{key}_space")} um [lef]")
+    layer.with_area(rval("#{key}_area").um2).output("metal.#{key}.area",
+      "metal.#{key}.area: #{name} min area #{rval("#{key}_area")} um^2 [lef]")
+    # MaxWidth (LEF MAXWIDTH 10): wide-metal slotting rule is not defined by the
+    # foundry; the LEF MAXWIDTH is a P&R constraint, not a DRC rule - not checked.
+    # MinHole: MINENCLOSEDAREA from LEF (0.18) - hole must be larger than this.
+    layer.holes.with_area(rval("#{key}_min_hole").um2).output("metal.#{key}.min_hole",
+      "metal.#{key}.min_hole: #{name} min enclosed area #{rval("#{key}_min_hole")} um^2 [lef]")
+  end
+
+  #--- Wide metal (CMP slots) -------------------------------------------------------
+  # Metal regions wider than wide_metal_width (20 um placeholder) must contain
+  # slots (holes); the bounding-box min dimension is used as the width probe.
+  # Manual polygon iteration; not a foundry rule (derived).
+  # convert a DRC polygon (micron coordinates) to an integer-DBU polygon for
+  # building a region; the released libraries use a 1nm DBU
+  scale_db = (1.0 / rval('manufacturing_grid')).round
+  to_db_poly = lambda do |p|
+    poly = RBA::Polygon.new
+    poly.assign_hull(p.each_point_hull.map { |pt| RBA::Point.new((pt.x * scale_db).round, (pt.y * scale_db).round) })
+    poly
+  end
+  [
+    ['M1', M1], ['M2', M2], ['M3', M3], ['M4', M4], ['M5', M5]
+  ].each do |name, layer|
+    viol = RBA::Region.new
+    layer.each do |p|
+      b = p.bbox
+      next unless [b.width, b.height].min > rval('wide_metal_width')
+      viol.insert(to_db_poly.call(p)) if p.holes.zero?
+    end
+    next if viol.size.zero?
+    DRCLayer::new(self, viol).output("metal.#{name.downcase}.wide_slot",
+      "metal.#{name.downcase}.wide_slot: #{name} wider than #{rval('wide_metal_width')} um without slots (CMP) [derived]")
+  end
+
+  #--- T4M2 (thick top metal, LEF WIDTH 0.4 SPACING 0.4 AREA 0.4) --------------------
+  TM2.width(rval('tm2_width').um, euclidian).output('metal.tm2.width',
+    "metal.tm2.width: T4M2 min width #{rval('tm2_width')} um [lef]")
+  TM2.space(rval('tm2_space').um, euclidian).output('metal.tm2.space',
+    "metal.tm2.space: T4M2 min spacing #{rval('tm2_space')} um [lef]")
+  TM2.with_area(rval('tm2_area').um2).output('metal.tm2.area',
+    "metal.tm2.area: T4M2 min area #{rval('tm2_area')} um^2 [lef]")
+end

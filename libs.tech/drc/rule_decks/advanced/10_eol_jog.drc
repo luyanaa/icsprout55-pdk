@@ -1,0 +1,115 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Advanced 10 - MinStep / EOL spacing / gate overhang / jog / 45-degree bends
+#
+# The checks run on *cleaned* layers: grid snapping and binarization introduce
+# 1nm jogs and small steps, so the input is snapped to the 1nm grid, smoothed
+# (jogs removed) and cleaned before the derived checks.  The cleaning does not
+# affect the FEOL/BEOL width/space checks (they use the raw input layers).
+#
+#   MinStep       : no edge shorter than min_step (0.03 um placeholder) on the
+#                   cleaned layers (drawn steps are >=5nm; sub-30nm steps are
+#                   removed by the smoothing, so foundry-clean cells pass).
+#   EOL spacing   : line ends (edges <= eol_len) keep eol_space to any other
+#                   edge (KLayout space(min, eol(min, width))).
+#   Gate overhang : poly must extend >= poly_gate_overhang beyond the gate
+#                   (gate.extension(poly_clean, ...)); active must extend
+#                   >= act_gate_overhang beyond the gate ends.
+#   Jog spacing   : intra-polygon notch check (approximation).
+#   45-degree bent: width at 45-degree bends (FreePDK45 M1.g/M1.i idiom).
+#
+# Rule values: provenance `derived` in ics55_rules.json - the released
+# libraries bound them from above (measured drawn minima: poly gate overhang
+# 0.110 um, active gate overhang 0.140 um, drawn steps >= 5nm) but they are
+# NOT foundry rule values.  Disable with -rd no_advanced=true.
+#=========================================================================================
+
+if TABLES.include?('advanced') || ADVANCED
+
+  # cleaned input: snap to the 1nm manufacturing grid, remove jog artifacts,
+  # clean (removes the small steps introduced by grid snapping/binarization)
+  clean_layer = lambda do |l|
+    l.snapped(rval('manufacturing_grid').um).smoothed(90).clean
+  end
+
+  poly_clean   = clean_layer.call(POLY)
+  active_clean = clean_layer.call(ACT)
+  m1_clean     = clean_layer.call(M1)
+  m2_clean     = clean_layer.call(M2)
+  m3_clean     = clean_layer.call(M3)
+  m4_clean     = clean_layer.call(M4)
+  m5_clean     = clean_layer.call(M5)
+
+  [
+    ['POLY', poly_clean, 'poly'], ['M1', m1_clean, 'm1'], ['M2', m2_clean, 'm2'],
+    ['M3', m3_clean, 'm3'], ['M4', m4_clean, 'm4'], ['M5', m5_clean, 'm5'],
+    ['ACT', active_clean, 'act']
+  ].each do |name, layer, key|
+    # MinStep: no edge shorter than min_step on the cleaned layer
+    layer.edges.with_length(0, rval("#{key}_min_step").um).output("adv.#{key}.min_step",
+      "adv.#{key}.min_step: #{name} edge shorter than #{rval("#{key}_min_step")} um (MinStep, cleaned) [derived]")
+    # EOL spacing: line ends (edges shorter than eol_len) keep eol_space to
+    # any other edge.  KLayout 0.30.x has no native eol() parameter in space(),
+    # so this is the edge-based form (line-end edges .sep to all edges).
+    eol_edges = layer.edges.with_length(0, rval("#{key}_eol_len").um)
+    eol_edges.sep(layer.edges, rval("#{key}_eol_space").um, euclidian).output("adv.#{key}.eol",
+      "adv.#{key}.eol: #{name} EOL spacing #{rval("#{key}_eol_space")} um / eol len #{rval("#{key}_eol_len")} um (cleaned, edge-based) [derived]")
+  end
+
+  # Gate overhang: the gate is poly over active.  The overhangs are
+  # direction-specific (the poly extends beyond the gate in the channel
+  # direction, the active beyond the gate ends in the L direction), so the
+  # overhang zones are built from the gate's edges (extended_out/in = the
+  # 0.060/0.140 um bands along the gate's horizontal/vertical edges) and
+  # checked for coverage by the poly/active.  (A region enclosure check would
+  # flag the gate's L-direction, where the poly legitimately ends at the gate.)
+  gate = poly_clean.and(active_clean)
+  he = gate.edges.with_angle(0)
+  overhang_zone_y = he.extended_out(rval('poly_gate_overhang').um) + he.extended_in(rval('poly_gate_overhang').um)
+  # the area filter drops the sub-resolution slivers created by the ACT/poly
+  # step geometry (the foundry draws width-transition steps at the gates)
+  overhang_zone_y.not(poly_clean).with_area(0.004, 1e6).output('adv.gate.poly_overhang',
+    "adv.gate.poly_overhang: poly extension beyond gate < #{rval('poly_gate_overhang')} um (channel direction, slivers <0.004um2 dropped) [derived]")
+  ve = gate.edges.with_angle(90)
+  overhang_zone_x = ve.extended_out(rval('act_gate_overhang').um) + ve.extended_in(rval('act_gate_overhang').um)
+  overhang_zone_x.not(active_clean).with_area(0.004, 1e6).output('adv.gate.act_overhang',
+    "adv.gate.act_overhang: active extension beyond gate ends < #{rval('act_gate_overhang')} um (L direction, slivers <0.004um2 dropped) [derived]")
+
+  # Min corner / min adjacency (empirical 0.03 / 0.05, derived): short edges
+  # are the corners below the minimum corner size; corners closer than min_adj
+  # to each other (or notch edges to concave corners) are the invalid
+  # corner/step adjacencies.  Runs on the cleaned poly.
+  poly_short = poly_clean.edges.with_length(0, rval('min_corner').um)
+  poly_short.output('adv.poly.min_corner',
+    "adv.poly.min_corner: POLY edge shorter than #{rval('min_corner')} um (min corner, cleaned) [derived]")
+  poly_corners = poly_clean.corners
+  poly_corners.space(rval('min_adj').um).output('adv.poly.corner_adj',
+    "adv.poly.corner_adj: POLY corners closer than #{rval('min_adj')} um (min adjacency, cleaned) [derived]")
+  poly_short.and(poly_corners.sized(rval('min_adj').um)).output('adv.poly.short_adj',
+    "adv.poly.short_adj: POLY short edge within #{rval('min_adj')} um of a corner (cleaned) [derived]")
+  poly_clean.space(rval('poly_min_step').um).edges.and(poly_clean.corners(180..360).sized(rval('min_adj').um)).output('adv.poly.notch_adj',
+    "adv.poly.notch_adj: POLY notch edge within #{rval('min_adj')} um of a concave corner (cleaned) [derived]")
+
+  # Jog / notch spacing approximation: intra-polygon space (notch) check
+  m1_clean.notch(rval('m1_jog_space').um).output('adv.m1.notch',
+    "adv.m1.notch: M1 intra-polygon space < #{rval('m1_jog_space')} um (approx jog/notch) [derived]")
+  m2_clean.notch(rval('m2_jog_space').um).output('adv.m2.notch',
+    "adv.m2.notch: M2 intra-polygon space < #{rval('m2_jog_space')} um (approx jog/notch) [derived]")
+
+  # 45-degree bent width (FreePDK45 M1.g style)
+  m1_clean.edges.with_angle(45, absolute).width(rval('m1_bent_width').um, euclidian).output('adv.m1.bent45',
+    "adv.m1.bent45: M1 45-degree bent min width #{rval('m1_bent_width')} um [derived]")
+end

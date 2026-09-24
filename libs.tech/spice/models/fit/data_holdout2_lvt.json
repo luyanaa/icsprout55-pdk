@@ -1,0 +1,1480 @@
+{
+ "INVX20H7L": {
+  "inputs": [
+   "A"
+  ],
+  "caps": {
+   "Y": 0.773447,
+   "A": 0.0109647
+  },
+  "states": [
+   [
+    "(A * !Y)",
+    1.99103
+   ],
+   [
+    "(!A * Y)",
+    10.8563
+   ],
+   [
+    "",
+    6.42368
+   ]
+  ],
+  "cell_leak": 6.42367,
+  "wn": 3e-06,
+  "wp": 3.8e-06,
+  "mos": 2,
+  "pins": [
+   "A",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MXXI0_MMN0 Y A VSS VSS nm1p2_lvt_lp W=3e-06 L=6e-08 m=1",
+   "MXXI0_MMP0 Y A VDD VDD pm1p2_lvt_lp W=3.8e-06 L=6e-08 m=1"
+  ]
+ },
+ "BUFX8H7L": {
+  "inputs": [
+   "A"
+  ],
+  "caps": {
+   "Y": 0.325346,
+   "A": 0.00196833
+  },
+  "states": [
+   [
+    "(A * Y)",
+    4.92375
+   ],
+   [
+    "(!A * !Y)",
+    2.63213
+   ],
+   [
+    "",
+    3.77794
+   ]
+  ],
+  "cell_leak": 3.77794,
+  "wn": 1.6999999999999998e-06,
+  "wp": 2.14e-06,
+  "mos": 4,
+  "pins": [
+   "A",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MXXI0_MMN0 net4 A VSS VSS nm1p2_lvt_lp W=5e-07 L=6e-08 m=1",
+   "MXXI0_MMP0 net4 A VDD VDD pm1p2_lvt_lp W=6.2e-07 L=6e-08 m=1",
+   "MXXI1_MMN0 Y net4 VSS VSS nm1p2_lvt_lp W=1.2e-06 L=6e-08 m=1",
+   "MXXI1_MMP0 Y net4 VDD VDD pm1p2_lvt_lp W=1.52e-06 L=6e-08 m=1"
+  ]
+ },
+ "NAND2X4H7L": {
+  "inputs": [
+   "A",
+   "B"
+  ],
+  "caps": {
+   "Y": 0.159646,
+   "A": 0.00303063,
+   "B": 0.00299322
+  },
+  "states": [
+   [
+    "(A * B * !Y)",
+    1.07138
+   ],
+   [
+    "(A * !B * Y)",
+    2.88613
+   ],
+   [
+    "(!A * B * Y)",
+    1.94205
+   ],
+   [
+    "(!A * !B * Y)",
+    0.103054
+   ],
+   [
+    "",
+    1.50065
+   ]
+  ],
+  "cell_leak": 1.50065,
+  "wn": 1.2000000000000002e-06,
+  "wp": 1.52e-06,
+  "mos": 4,
+  "pins": [
+   "A",
+   "B",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN0 Y B net6 VSS nm1p2_lvt_lp W=600n L=60n m=1",
+   "MMN1 net6 A VSS VSS nm1p2_lvt_lp W=600n L=60n m=1",
+   "MMP1 Y B VDD VDD pm1p2_lvt_lp W=760n L=60n m=1",
+   "MMP0 Y A VDD VDD pm1p2_lvt_lp W=760n L=60n m=1"
+  ]
+ },
+ "NOR2X4H7L": {
+  "inputs": [
+   "A",
+   "B"
+  ],
+  "caps": {
+   "Y": 0.0903719,
+   "A": 0.00290122,
+   "B": 0.00308079
+  },
+  "states": [
+   [
+    "(A * B * !Y)",
+    0.0468446
+   ],
+   [
+    "(A * !B * !Y)",
+    0.382758
+   ],
+   [
+    "(!A * B * !Y)",
+    0.538553
+   ],
+   [
+    "(!A * !B * Y)",
+    5.7484
+   ],
+   [
+    "",
+    1.67914
+   ]
+  ],
+  "cell_leak": 1.67914,
+  "wn": 1.2000000000000002e-06,
+  "wp": 1.52e-06,
+  "mos": 4,
+  "pins": [
+   "A",
+   "B",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MNM0 Y B VSS VSS nm1p2_lvt_lp W=600n L=60n m=1",
+   "MMN0 Y A VSS VSS nm1p2_lvt_lp W=600n L=60n m=1",
+   "MPM0 Y B net015 VDD pm1p2_lvt_lp W=760n L=60n m=1",
+   "MMP1 net015 A VDD VDD pm1p2_lvt_lp W=760n L=60n m=1"
+  ]
+ },
+ "AND2X4H7L": {
+  "inputs": [
+   "A",
+   "B"
+  ],
+  "caps": {
+   "Y": 0.171463,
+   "A": 0.00134467,
+   "B": 0.00135673
+  },
+  "states": [
+   [
+    "(A * B * Y)",
+    2.7508
+   ],
+   [
+    "(A * !B * !Y)",
+    1.89724
+   ],
+   [
+    "(!A * B * !Y)",
+    1.42518
+   ],
+   [
+    "(!A * !B * !Y)",
+    0.505278
+   ],
+   [
+    "",
+    1.64463
+   ]
+  ],
+  "cell_leak": 1.64463,
+  "wn": 1.2e-06,
+  "wp": 1.38e-06,
+  "mos": 6,
+  "pins": [
+   "A",
+   "B",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN0 net26 B net6 VSS nm1p2_lvt_lp W=300n L=60n m=1",
+   "MMN1 net6 A VSS VSS nm1p2_lvt_lp W=300n L=60n m=1",
+   "MMP1 net26 B VDD VDD pm1p2_lvt_lp W=310n L=60n m=1",
+   "MMP0 net26 A VDD VDD pm1p2_lvt_lp W=310n L=60n m=1",
+   "MXXI2_MMN0 Y net26 VSS VSS nm1p2_lvt_lp W=6e-07 L=6e-08 m=1",
+   "MXXI2_MMP0 Y net26 VDD VDD pm1p2_lvt_lp W=7.6e-07 L=6e-08 m=1"
+  ]
+ },
+ "OR2X4H7L": {
+  "inputs": [
+   "A",
+   "B"
+  ],
+  "caps": {
+   "Y": 0.170118,
+   "A": 0.000918426,
+   "B": 0.00106113
+  },
+  "states": [
+   [
+    "(A * B * Y)",
+    2.54301
+   ],
+   [
+    "(A * !B * Y)",
+    2.64693
+   ],
+   [
+    "(!A * B * Y)",
+    2.69599
+   ],
+   [
+    "(!A * !B * !Y)",
+    2.29185
+   ],
+   [
+    "",
+    2.54445
+   ]
+  ],
+  "cell_leak": 2.54445,
+  "wn": 1.1e-06,
+  "wp": 1.38e-06,
+  "mos": 6,
+  "pins": [
+   "A",
+   "B",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN2 net21 B VSS VSS nm1p2_lvt_lp W=250n L=60n m=1",
+   "MMN0 net21 A VSS VSS nm1p2_lvt_lp W=250n L=60n m=1",
+   "MMP2 net21 B net016 VDD pm1p2_lvt_lp W=310n L=60n m=1",
+   "MMP1 net016 A VDD VDD pm1p2_lvt_lp W=310n L=60n m=1",
+   "MXXI4_MMN0 Y net21 VSS VSS nm1p2_lvt_lp W=6e-07 L=6e-08 m=1",
+   "MXXI4_MMP0 Y net21 VDD VDD pm1p2_lvt_lp W=7.6e-07 L=6e-08 m=1"
+  ]
+ },
+ "XOR2X3H7L": {
+  "inputs": [
+   "A",
+   "B"
+  ],
+  "caps": {
+   "Y": 0.126594,
+   "A": 0.00184552,
+   "B": 0.00104269
+  },
+  "states": [
+   [
+    "(A * B * !Y)",
+    2.03176
+   ],
+   [
+    "(A * !B * Y)",
+    3.64524
+   ],
+   [
+    "(!A * B * Y)",
+    2.77557
+   ],
+   [
+    "(!A * !B * !Y)",
+    2.72141
+   ],
+   [
+    "",
+    2.7935
+   ]
+  ],
+  "cell_leak": 2.7935,
+  "wn": 1.4000000000000001e-06,
+  "wp": 1.78e-06,
+  "mos": 12,
+  "pins": [
+   "A",
+   "B",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MXI0_MMN0 BN AN net19 VSS nm1p2_lvt_lp W=1.5e-07 L=6e-08 m=1",
+   "MXI0_MMP0 BN A net19 VDD pm1p2_lvt_lp W=1.9e-07 L=6e-08 m=1",
+   "MXI1_MMN0 BN B VSS VSS nm1p2_lvt_lp W=2.1e-07 L=6e-08 m=1",
+   "MXI1_MMP0 BN B VDD VDD pm1p2_lvt_lp W=2.7e-07 L=6e-08 m=1",
+   "MXI4_MMN0 AN A VSS VSS nm1p2_lvt_lp W=1.7e-07 L=6e-08 m=1",
+   "MXI4_MMP0 AN A VDD VDD pm1p2_lvt_lp W=2.1e-07 L=6e-08 m=1",
+   "MXI2_MMN0 Y net19 VSS VSS nm1p2_lvt_lp W=4.5e-07 L=6e-08 m=1",
+   "MXI2_MMP0 Y net19 VDD VDD pm1p2_lvt_lp W=5.7e-07 L=6e-08 m=1",
+   "MXI3_MMN0 net19 A net18 VSS nm1p2_lvt_lp W=2.1e-07 L=6e-08 m=1",
+   "MXI3_MMN1 net18 BN VSS VSS nm1p2_lvt_lp W=2.1e-07 L=6e-08 m=1",
+   "MXI3_MMP1 net024 BN VDD VDD pm1p2_lvt_lp W=2.7e-07 L=6e-08 m=1",
+   "MXI3_MMP0 net19 AN net024 VDD pm1p2_lvt_lp W=2.7e-07 L=6e-08 m=1"
+  ]
+ },
+ "XNOR2X3H7L": {
+  "inputs": [
+   "A",
+   "B"
+  ],
+  "caps": {
+   "Y": 0.126695,
+   "A": 0.00184591,
+   "B": 0.00101175
+  },
+  "states": [
+   [
+    "(A * B * Y)",
+    2.15413
+   ],
+   [
+    "(A * !B * !Y)",
+    2.06837
+   ],
+   [
+    "(!A * B * !Y)",
+    2.60263
+   ],
+   [
+    "(!A * !B * Y)",
+    4.21189
+   ],
+   [
+    "",
+    2.75926
+   ]
+  ],
+  "cell_leak": 2.75926,
+  "wn": 1.3600000000000001e-06,
+  "wp": 1.7100000000000001e-06,
+  "mos": 12,
+  "pins": [
+   "A",
+   "B",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MXXI4_MMN0 BN A net19 VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MXXI4_MMP0 BN AN net19 VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MXXI0_MMN0 AN A VSS VSS nm1p2_lvt_lp W=160n L=60n m=1",
+   "MXXI0_MMP0 AN A VDD VDD pm1p2_lvt_lp W=200n L=60n m=1",
+   "MXXI7_MMN0 BN B VSS VSS nm1p2_lvt_lp W=200n L=60n m=1",
+   "MXXI7_MMP0 BN B VDD VDD pm1p2_lvt_lp W=250n L=60n m=1",
+   "MXXI9_MMN0 Y net19 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MXXI9_MMP0 Y net19 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MXXI10_MMN0 net19 AN net18 VSS nm1p2_lvt_lp W=200n L=60n m=1",
+   "MXXI10_MMN1 net18 BN VSS VSS nm1p2_lvt_lp W=200n L=60n m=1",
+   "MXXI10_MMP1 net024 BN VDD VDD pm1p2_lvt_lp W=250n L=60n m=1",
+   "MXXI10_MMP0 net19 A net024 VDD pm1p2_lvt_lp W=250n L=60n m=1"
+  ]
+ },
+ "NAND3X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C"
+  ],
+  "caps": {
+   "Y": 0.0805706,
+   "A": 0.00181455,
+   "B": 0.00182824,
+   "C": 0.0018542
+  },
+  "states": [
+   [
+    "(A * B * C * !Y)",
+    0.963483
+   ],
+   [
+    "(A * B * !C * Y)",
+    1.73434
+   ],
+   [
+    "(A * !B * C * Y)",
+    1.18868
+   ],
+   [
+    "(A * !B * !C * Y)",
+    0.079624
+   ],
+   [
+    "(!A * B * C * Y)",
+    1.10292
+   ],
+   [
+    "(!A * B * !C * Y)",
+    0.0716756
+   ],
+   [
+    "(!A * !B * C * Y)",
+    0.0695367
+   ],
+   [
+    "(!A * !B * !C * Y)",
+    0.0389663
+   ],
+   [
+    "",
+    0.656152
+   ]
+  ],
+  "cell_leak": 0.656153,
+  "wn": 1.3500000000000002e-06,
+  "wp": 1.7100000000000001e-06,
+  "mos": 6,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN3 net10 B net7 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN4 net7 A VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN0 Y C net10 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMP2 Y C VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP1 Y B VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP0 Y A VDD VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "NOR3X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C"
+  ],
+  "caps": {
+   "Y": 0.0426077,
+   "A": 0.00179266,
+   "B": 0.00179265,
+   "C": 0.00191912
+  },
+  "states": [
+   [
+    "(A * B * C * !Y)",
+    0.0339343
+   ],
+   [
+    "(A * B * !C * !Y)",
+    0.0318675
+   ],
+   [
+    "(A * !B * C * !Y)",
+    0.0323543
+   ],
+   [
+    "(A * !B * !C * !Y)",
+    0.215685
+   ],
+   [
+    "(!A * B * C * !Y)",
+    0.0340412
+   ],
+   [
+    "(!A * B * !C * !Y)",
+    0.231922
+   ],
+   [
+    "(!A * !B * C * !Y)",
+    0.325066
+   ],
+   [
+    "(!A * !B * !C * Y)",
+    5.14901
+   ],
+   [
+    "",
+    0.756735
+   ]
+  ],
+  "cell_leak": 0.756735,
+  "wn": 1.3500000000000002e-06,
+  "wp": 1.7100000000000001e-06,
+  "mos": 6,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN3 Y A VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN2 Y C VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN0 Y B VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMP3 Y C net025 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP1 net019 A VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP2 net025 B net019 VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "AND3X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C"
+  ],
+  "caps": {
+   "Y": 0.12622,
+   "A": 0.000811758,
+   "B": 0.000722926,
+   "C": 0.000848832
+  },
+  "states": [
+   [
+    "(A * B * C * Y)",
+    2.11835
+   ],
+   [
+    "(A * B * !C * !Y)",
+    1.04571
+   ],
+   [
+    "(A * !B * C * !Y)",
+    0.809697
+   ],
+   [
+    "(A * !B * !C * !Y)",
+    0.349947
+   ],
+   [
+    "(!A * B * C * !Y)",
+    0.773685
+   ],
+   [
+    "(!A * B * !C * !Y)",
+    0.347309
+   ],
+   [
+    "(!A * !B * C * !Y)",
+    0.346587
+   ],
+   [
+    "(!A * !B * !C * !Y)",
+    0.335401
+   ],
+   [
+    "",
+    0.765836
+   ]
+  ],
+  "cell_leak": 0.765836,
+  "wn": 9.000000000000001e-07,
+  "wp": 1.14e-06,
+  "mos": 8,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN3 net10 B net7 VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MMN4 net7 A VSS VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MMN0 net36 C net10 VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MMP2 net36 C VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MMP1 net36 B VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MMP0 net36 A VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MXI1_MMN0 Y net36 VSS VSS nm1p2_lvt_lp W=4.5e-07 L=6e-08 m=1",
+   "MXI1_MMP0 Y net36 VDD VDD pm1p2_lvt_lp W=5.7e-07 L=6e-08 m=1"
+  ]
+ },
+ "OR3X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C"
+  ],
+  "caps": {
+   "Y": 0.127031,
+   "A": 0.000927461,
+   "B": 0.000892359,
+   "C": 0.000936356
+  },
+  "states": [
+   [
+    "(A * B * C * Y)",
+    1.7324
+   ],
+   [
+    "(A * B * !C * Y)",
+    1.73157
+   ],
+   [
+    "(A * !B * C * Y)",
+    1.7318
+   ],
+   [
+    "(A * !B * !C * Y)",
+    1.82127
+   ],
+   [
+    "(!A * B * C * Y)",
+    1.73261
+   ],
+   [
+    "(!A * B * !C * Y)",
+    1.82916
+   ],
+   [
+    "(!A * !B * C * Y)",
+    1.87449
+   ],
+   [
+    "(!A * !B * !C * !Y)",
+    2.79506
+   ],
+   [
+    "",
+    1.90605
+   ]
+  ],
+  "cell_leak": 1.90605,
+  "wn": 1.08e-06,
+  "wp": 1.3800000000000001e-06,
+  "mos": 8,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MNM0 net27 B VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MNM1 net27 C VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MMN3 net27 A VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MMP3 net27 C net22 VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MPM0 net22 B net020 VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MPM1 net020 A VDD VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MXXI4_MMN0 Y net27 VSS VSS nm1p2_lvt_lp W=4.5e-07 L=6e-08 m=1",
+   "MXXI4_MMP0 Y net27 VDD VDD pm1p2_lvt_lp W=5.7e-07 L=6e-08 m=1"
+  ]
+ },
+ "AOI21X3H7L": {
+  "inputs": [
+   "A0",
+   "A1",
+   "B0"
+  ],
+  "caps": {
+   "Y": 0.0628983,
+   "A0": 0.00175509,
+   "A1": 0.00182659,
+   "B0": 0.00187008
+  },
+  "states": [
+   [
+    "(A0 * A1 * B0 * !Y)",
+    0.0520755
+   ],
+   [
+    "(A0 * A1 * !B0 * !Y)",
+    0.439817
+   ],
+   [
+    "(A0 * !A1 * B0 * !Y)",
+    0.332144
+   ],
+   [
+    "(A0 * !A1 * !B0 * Y)",
+    3.44175
+   ],
+   [
+    "(!A0 * A1 * B0 * !Y)",
+    0.332144
+   ],
+   [
+    "(!A0 * A1 * !B0 * Y)",
+    2.89609
+   ],
+   [
+    "(!A0 * !A1 * B0 * !Y)",
+    0.325074
+   ],
+   [
+    "(!A0 * !A1 * !B0 * Y)",
+    1.78703
+   ],
+   [
+    "",
+    1.20076
+   ]
+  ],
+  "cell_leak": 1.20076,
+  "wn": 1.3500000000000002e-06,
+  "wp": 1.7100000000000001e-06,
+  "mos": 6,
+  "pins": [
+   "A0",
+   "A1",
+   "B0",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMP1 net31 A1 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP2 Y B0 net31 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP0 net31 A0 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMN0 Y B0 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN1 Y A1 net33 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN4 net33 A0 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1"
+  ]
+ },
+ "OAI21X3H7L": {
+  "inputs": [
+   "A0",
+   "A1",
+   "B0"
+  ],
+  "caps": {
+   "Y": 0.0628834,
+   "A0": 0.00177196,
+   "A1": 0.00184874,
+   "B0": 0.00183419
+  },
+  "states": [
+   [
+    "(A0 * A1 * B0 * !Y)",
+    0.353247
+   ],
+   [
+    "(A0 * A1 * !B0 * Y)",
+    1.73445
+   ],
+   [
+    "(A0 * !A1 * B0 * !Y)",
+    0.551129
+   ],
+   [
+    "(A0 * !A1 * !B0 * Y)",
+    1.72734
+   ],
+   [
+    "(!A0 * A1 * B0 * !Y)",
+    0.644276
+   ],
+   [
+    "(!A0 * A1 * !B0 * Y)",
+    1.72735
+   ],
+   [
+    "(!A0 * !A1 * B0 * Y)",
+    2.23986
+   ],
+   [
+    "(!A0 * !A1 * !B0 * Y)",
+    0.128171
+   ],
+   [
+    "",
+    1.13823
+   ]
+  ],
+  "cell_leak": 1.13823,
+  "wn": 1.3500000000000002e-06,
+  "wp": 1.7100000000000001e-06,
+  "mos": 6,
+  "pins": [
+   "A0",
+   "A1",
+   "B0",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MNM1 net8 A1 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MNM0 net8 A0 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN5 Y B0 net8 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMP3 net033 A0 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MPM1 Y B0 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MPM0 Y A1 net033 VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "AOI22X3H7L": {
+  "inputs": [
+   "A0",
+   "A1",
+   "B0",
+   "B1"
+  ],
+  "caps": {
+   "Y": 0.0628133,
+   "A0": 0.00195225,
+   "A1": 0.00177033,
+   "B0": 0.00177952,
+   "B1": 0.00192321
+  },
+  "states": [
+   [
+    "(A0 * A1 * B0 * B1 * !Y)",
+    0.0641399
+   ],
+   [
+    "(A0 * A1 * B0 * !B1 * !Y)",
+    0.653262
+   ],
+   [
+    "(A0 * A1 * !B0 * B1 * !Y)",
+    0.653262
+   ],
+   [
+    "(A0 * A1 * !B0 * !B1 * !Y)",
+    0.646199
+   ],
+   [
+    "(A0 * !A1 * B0 * B1 * !Y)",
+    0.449646
+   ],
+   [
+    "(A0 * !A1 * B0 * !B1 * Y)",
+    2.90501
+   ],
+   [
+    "(A0 * !A1 * !B0 * B1 * Y)",
+    3.45068
+   ],
+   [
+    "(A0 * !A1 * !B0 * !B1 * Y)",
+    1.79595
+   ],
+   [
+    "(!A0 * A1 * B0 * B1 * !Y)",
+    0.449646
+   ],
+   [
+    "(!A0 * A1 * B0 * !B1 * Y)",
+    2.35933
+   ],
+   [
+    "(!A0 * A1 * !B0 * B1 * Y)",
+    2.90501
+   ],
+   [
+    "(!A0 * A1 * !B0 * !B1 * Y)",
+    1.25025
+   ],
+   [
+    "(!A0 * !A1 * B0 * B1 * !Y)",
+    0.459905
+   ],
+   [
+    "(!A0 * !A1 * B0 * !B1 * Y)",
+    1.25025
+   ],
+   [
+    "(!A0 * !A1 * !B0 * B1 * Y)",
+    1.79595
+   ],
+   [
+    "(!A0 * !A1 * !B0 * !B1 * Y)",
+    0.141162
+   ],
+   [
+    "",
+    1.32685
+   ]
+  ],
+  "cell_leak": 1.32685,
+  "wn": 1.8000000000000001e-06,
+  "wp": 2.28e-06,
+  "mos": 8,
+  "pins": [
+   "A0",
+   "A1",
+   "B0",
+   "B1",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN5 net14 B1 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN4 net13 A0 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN1 Y A1 net13 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN0 Y B0 net14 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMP3 Y B1 net8 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP2 Y B0 net8 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP1 net8 A1 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP0 net8 A0 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "OAI22X3H7L": {
+  "inputs": [
+   "A0",
+   "A1",
+   "B0",
+   "B1"
+  ],
+  "caps": {
+   "Y": 0.0612111,
+   "A0": 0.00177549,
+   "A1": 0.00185582,
+   "B0": 0.00177538,
+   "B1": 0.00190103
+  },
+  "states": [
+   [
+    "(A0 * A1 * B0 * B1 * !Y)",
+    0.0641472
+   ],
+   [
+    "(A0 * A1 * B0 * !B1 * !Y)",
+    0.26203
+   ],
+   [
+    "(A0 * A1 * !B0 * B1 * !Y)",
+    0.355177
+   ],
+   [
+    "(A0 * A1 * !B0 * !B1 * Y)",
+    3.45068
+   ],
+   [
+    "(A0 * !A1 * B0 * B1 * !Y)",
+    0.26203
+   ],
+   [
+    "(A0 * !A1 * B0 * !B1 * !Y)",
+    0.459912
+   ],
+   [
+    "(A0 * !A1 * !B0 * B1 * !Y)",
+    0.553059
+   ],
+   [
+    "(A0 * !A1 * !B0 * !B1 * Y)",
+    3.44345
+   ],
+   [
+    "(!A0 * A1 * B0 * B1 * !Y)",
+    0.355177
+   ],
+   [
+    "(!A0 * A1 * B0 * !B1 * !Y)",
+    0.553059
+   ],
+   [
+    "(!A0 * A1 * !B0 * B1 * !Y)",
+    0.646206
+   ],
+   [
+    "(!A0 * A1 * !B0 * !B1 * Y)",
+    3.44346
+   ],
+   [
+    "(!A0 * !A1 * B0 * B1 * Y)",
+    2.35934
+   ],
+   [
+    "(!A0 * !A1 * B0 * !B1 * Y)",
+    2.24232
+   ],
+   [
+    "(!A0 * !A1 * !B0 * B1 * Y)",
+    2.24232
+   ],
+   [
+    "(!A0 * !A1 * !B0 * !B1 * Y)",
+    0.141169
+   ],
+   [
+    "",
+    1.3021
+   ]
+  ],
+  "cell_leak": 1.3021,
+  "wn": 1.8000000000000001e-06,
+  "wp": 2.28e-06,
+  "mos": 8,
+  "pins": [
+   "A0",
+   "A1",
+   "B0",
+   "B1",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MNM3 net8 A0 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MNM4 net8 A1 VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MNM5 Y B1 net8 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN5 Y B0 net8 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MPM4 Y B1 net049 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MPM5 net049 B0 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MPM2 net046 A0 VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MPM3 Y A1 net046 VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "AND4X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C",
+   "D"
+  ],
+  "caps": {
+   "Y": 0.12632,
+   "A": 0.000817721,
+   "B": 0.000751997,
+   "C": 0.00072562,
+   "D": 0.00085407
+  },
+  "states": [
+   [
+    "(A * B * C * D * Y)",
+    2.25236
+   ],
+   [
+    "(A * B * C * !D * !Y)",
+    1.04866
+   ],
+   [
+    "(A * B * !C * D * !Y)",
+    0.812673
+   ],
+   [
+    "(A * B * !C * !D * !Y)",
+    0.352939
+   ],
+   [
+    "(A * !B * C * D * !Y)",
+    0.776663
+   ],
+   [
+    "(A * !B * C * !D * !Y)",
+    0.350301
+   ],
+   [
+    "(A * !B * !C * D * !Y)",
+    0.349578
+   ],
+   [
+    "(A * !B * !C * !D * !Y)",
+    0.338393
+   ],
+   [
+    "(!A * B * C * D * !Y)",
+    0.756579
+   ],
+   [
+    "(!A * B * C * !D * !Y)",
+    0.347667
+   ],
+   [
+    "(!A * B * !C * D * !Y)",
+    0.346961
+   ],
+   [
+    "(!A * B * !C * !D * !Y)",
+    0.336755
+   ],
+   [
+    "(!A * !B * C * D * !Y)",
+    0.346486
+   ],
+   [
+    "(!A * !B * C * !D * !Y)",
+    0.335647
+   ],
+   [
+    "(!A * !B * !C * D * !Y)",
+    0.335384
+   ],
+   [
+    "(!A * !B * !C * !D * !Y)",
+    0.332118
+   ],
+   [
+    "",
+    0.588698
+   ]
+  ],
+  "cell_leak": 0.588698,
+  "wn": 1.0500000000000001e-06,
+  "wp": 1.33e-06,
+  "mos": 10,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MNM4 net35 D net45 VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MNM5 net45 C net42 VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MNM6 net42 B net39 VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MNM7 net39 A VSS VSS nm1p2_lvt_lp W=150n L=60n m=1",
+   "MPM4 net35 A VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MPM5 net35 B VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MPM6 net35 C VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MPM7 net35 D VDD VDD pm1p2_lvt_lp W=190n L=60n m=1",
+   "MXXI2_MMN0 Y net35 VSS VSS nm1p2_lvt_lp W=4.5e-07 L=6e-08 m=1",
+   "MXXI2_MMP0 Y net35 VDD VDD pm1p2_lvt_lp W=5.7e-07 L=6e-08 m=1"
+  ]
+ },
+ "NOR4X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C",
+   "D"
+  ],
+  "caps": {
+   "Y": 0.0317577,
+   "A": 0.00182871,
+   "B": 0.00180205,
+   "C": 0.00178228,
+   "D": 0.00188816
+  },
+  "states": [
+   [
+    "(A * B * C * D * !Y)",
+    0.0407402
+   ],
+   [
+    "(A * B * C * !D * !Y)",
+    0.0339597
+   ],
+   [
+    "(A * B * !C * D * !Y)",
+    0.0340901
+   ],
+   [
+    "(A * B * !C * !D * !Y)",
+    0.0318701
+   ],
+   [
+    "(A * !B * C * D * !Y)",
+    0.0348157
+   ],
+   [
+    "(A * !B * C * !D * !Y)",
+    0.0321345
+   ],
+   [
+    "(A * !B * !C * D * !Y)",
+    0.0326111
+   ],
+   [
+    "(A * !B * !C * !D * !Y)",
+    0.208451
+   ],
+   [
+    "(!A * B * C * D * !Y)",
+    0.0358689
+   ],
+   [
+    "(!A * B * C * !D * !Y)",
+    0.0338021
+   ],
+   [
+    "(!A * B * !C * D * !Y)",
+    0.0342887
+   ],
+   [
+    "(!A * B * !C * !D * !Y)",
+    0.217618
+   ],
+   [
+    "(!A * !B * C * D * !Y)",
+    0.0359753
+   ],
+   [
+    "(!A * !B * C * !D * !Y)",
+    0.233854
+   ],
+   [
+    "(!A * !B * !C * D * !Y)",
+    0.326997
+   ],
+   [
+    "(!A * !B * !C * !D * Y)",
+    6.86498
+   ],
+   [
+    "",
+    0.514503
+   ]
+  ],
+  "cell_leak": 0.514503,
+  "wn": 1.8000000000000001e-06,
+  "wp": 2.28e-06,
+  "mos": 8,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN4 Y A VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN3 Y B VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN2 Y D VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN0 Y C VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMP4 Y D net27 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP3 net27 C net029 VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP1 net023 A VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP2 net029 B net023 VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "NAND4X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C",
+   "D"
+  ],
+  "caps": {
+   "Y": 0.0614011,
+   "A": 0.00182924,
+   "B": 0.00180543,
+   "C": 0.00184526,
+   "D": 0.00189107
+  },
+  "states": [
+   [
+    "(A * B * C * D * !Y)",
+    1.28462
+   ],
+   [
+    "(A * B * C * !D * Y)",
+    1.74327
+   ],
+   [
+    "(A * B * !C * D * Y)",
+    1.19765
+   ],
+   [
+    "(A * B * !C * !D * Y)",
+    0.0886311
+   ],
+   [
+    "(A * !B * C * D * Y)",
+    1.1119
+   ],
+   [
+    "(A * !B * C * !D * Y)",
+    0.0806827
+   ],
+   [
+    "(A * !B * !C * D * Y)",
+    0.0785438
+   ],
+   [
+    "(A * !B * !C * !D * Y)",
+    0.0479735
+   ],
+   [
+    "(!A * B * C * D * Y)",
+    1.06297
+   ],
+   [
+    "(!A * B * C * !D * Y)",
+    0.0727498
+   ],
+   [
+    "(!A * B * !C * D * Y)",
+    0.070661
+   ],
+   [
+    "(!A * B * !C * !D * Y)",
+    0.0430802
+   ],
+   [
+    "(!A * !B * C * D * Y)",
+    0.0692312
+   ],
+   [
+    "(!A * !B * C * !D * Y)",
+    0.0396952
+   ],
+   [
+    "(!A * !B * !C * D * Y)",
+    0.0388674
+   ],
+   [
+    "(!A * !B * !C * !D * Y)",
+    0.0298996
+   ],
+   [
+    "",
+    0.441276
+   ]
+  ],
+  "cell_leak": 0.441277,
+  "wn": 1.8000000000000001e-06,
+  "wp": 2.28e-06,
+  "mos": 8,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MMN4 net7 B net25 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN5 net25 A VSS VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN3 net10 C net7 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMN0 Y D net10 VSS nm1p2_lvt_lp W=450n L=60n m=1",
+   "MMP3 Y A VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP2 Y D VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP1 Y C VDD VDD pm1p2_lvt_lp W=570n L=60n m=1",
+   "MMP0 Y B VDD VDD pm1p2_lvt_lp W=570n L=60n m=1"
+  ]
+ },
+ "OR4X3H7L": {
+  "inputs": [
+   "A",
+   "B",
+   "C",
+   "D"
+  ],
+  "caps": {
+   "Y": 0.127324,
+   "A": 0.00100143,
+   "B": 0.000891827,
+   "C": 0.00090836,
+   "D": 0.000900679
+  },
+  "states": [
+   [
+    "(A * B * C * D * Y)",
+    1.73554
+   ],
+   [
+    "(A * B * C * !D * Y)",
+    1.73242
+   ],
+   [
+    "(A * B * !C * D * Y)",
+    1.73248
+   ],
+   [
+    "(A * B * !C * !D * Y)",
+    1.73158
+   ],
+   [
+    "(A * !B * C * D * Y)",
+    1.73283
+   ],
+   [
+    "(A * !B * C * !D * Y)",
+    1.7317
+   ],
+   [
+    "(A * !B * !C * D * Y)",
+    1.73193
+   ],
+   [
+    "(A * !B * !C * !D * Y)",
+    1.81776
+   ],
+   [
+    "(!A * B * C * D * Y)",
+    1.73333
+   ],
+   [
+    "(!A * B * C * !D * Y)",
+    1.7325
+   ],
+   [
+    "(!A * B * !C * D * Y)",
+    1.73273
+   ],
+   [
+    "(!A * B * !C * !D * Y)",
+    1.8222
+   ],
+   [
+    "(!A * !B * C * D * Y)",
+    1.73354
+   ],
+   [
+    "(!A * !B * C * !D * Y)",
+    1.83009
+   ],
+   [
+    "(!A * !B * !C * D * Y)",
+    1.87542
+   ],
+   [
+    "(!A * !B * !C * !D * !Y)",
+    3.6196
+   ],
+   [
+    "",
+    1.8766
+   ]
+  ],
+  "cell_leak": 1.8766,
+  "wn": 1.29e-06,
+  "wp": 1.65e-06,
+  "mos": 10,
+  "pins": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "VDD",
+   "VSS",
+   "Y"
+  ],
+  "netlist": [
+   "MNM0 net22 B VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MNM1 net22 C VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MNM2 net22 D VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MMNM0 net22 A VSS VSS nm1p2_lvt_lp W=210n L=60n m=1",
+   "MMPM3 net22 D net21 VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MMPM2 net21 C net17 VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MMPM1 net17 B net13 VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MMPM0 net13 A VDD VDD pm1p2_lvt_lp W=270n L=60n m=1",
+   "MXXI4_MMN0 Y net22 VSS VSS nm1p2_lvt_lp W=4.5e-07 L=6e-08 m=1",
+   "MXXI4_MMP0 Y net22 VDD VDD pm1p2_lvt_lp W=5.7e-07 L=6e-08 m=1"
+  ]
+ }
+}

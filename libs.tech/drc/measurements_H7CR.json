@@ -1,0 +1,165 @@
+{
+  "cells": 785,
+  "layers": {
+    "ACT": {
+      "min_width_um": 0.081,
+      "min_width_cell": "SDFFQX3H7R",
+      "min_space_um": 0.101,
+      "min_space_cell": "OA21X0P5H7R",
+      "min_area_um2": 0.0555,
+      "min_area_cell": "XNOR3X0P7H7R",
+      "cells_with_layer": 773
+    },
+    "NW": {
+      "min_width_um": 0.361,
+      "min_width_cell": "OAI211X6H7R",
+      "min_space_um": 0.4,
+      "min_space_cell": "XNOR3X0P7H7R",
+      "min_area_um2": 0.6545,
+      "min_area_cell": "ANT2H7R",
+      "cells_with_layer": 773
+    },
+    "POLY": {
+      "min_width_um": 0.061,
+      "min_width_cell": "XNOR3X0P7H7R",
+      "min_space_um": 0.112,
+      "min_space_cell": "SDFFTRQX3H7R",
+      "min_area_um2": 0.0388,
+      "min_area_cell": "DFFSRX2H7R",
+      "cells_with_layer": 771
+    },
+    "NP": {
+      "min_width_um": 0.4,
+      "min_width_cell": "XNOR3X0P7H7R",
+      "min_space_um": 0.361,
+      "min_space_cell": "SDFFSRX0P5H7R",
+      "min_area_um2": 0.3795,
+      "min_area_cell": "ANT2H7R",
+      "cells_with_layer": 773
+    },
+    "PP": {
+      "min_width_um": 0.181,
+      "min_width_cell": "AOI221X1P4H7R",
+      "min_space_um": 0.4,
+      "min_space_cell": "XNOR3X0P7H7R",
+      "min_area_um2": 0.473,
+      "min_area_cell": "ANT2H7R",
+      "cells_with_layer": 773
+    },
+    "CT": {
+      "min_width_um": 0.091,
+      "min_width_cell": "XNOR3X0P7H7R",
+      "min_space_um": 0.111,
+      "min_space_cell": "OAI211X6H7R",
+      "min_area_um2": 0.0081,
+      "min_area_cell": "XNOR3X0P7H7R",
+      "cells_with_layer": 773
+    },
+    "M1": {
+      "min_width_um": 0.091,
+      "min_width_cell": "XNOR3X0P7H7R",
+      "min_space_um": 0.091,
+      "min_space_cell": "XNOR3X0P7H7R",
+      "min_area_um2": 0.00444,
+      "min_area_cell": "DFFTRQX0P5H7R",
+      "cells_with_layer": 773
+    }
+  },
+  "seps": {
+    "POLY:ACT": {
+      "min_sep_um": 0.051,
+      "min_sep_cell": "XNOR3X0P7H7R"
+    },
+    "POLY:NP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "LATHX3H7R"
+    },
+    "POLY:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "ADDFX2H7R"
+    },
+    "POLY:NW": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "ADDFX2H7R"
+    },
+    "ACT:NP": {
+      "min_sep_um": 0.151,
+      "min_sep_cell": "ADDFX2H7R"
+    },
+    "ACT:PP": {
+      "min_sep_um": 0.141,
+      "min_sep_cell": "MUX4X3H7R"
+    },
+    "ACT:NW": {
+      "min_sep_um": 0.151,
+      "min_sep_cell": "OAI211X6H7R"
+    },
+    "NP:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "XNOR3X0P7H7R"
+    },
+    "CT:POLY": {
+      "min_sep_um": 0.051,
+      "min_sep_cell": "XNOR3X0P7H7R"
+    },
+    "CT:ACT": {
+      "min_sep_um": 0.062,
+      "min_sep_cell": "SDFFSX1H7R"
+    },
+    "CT:M1": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "OAI2BB2X1H7R"
+    },
+    "CT:NP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "SDFFTRQX3H7R"
+    },
+    "CT:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "DFFRX0P5H7R"
+    }
+  },
+  "encs": {
+    "NW:ACT": {
+      "min_enc_um": 0.151,
+      "min_enc_cell": "ADDFX2H7R"
+    },
+    "NW:PP": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "XNOR3X0P7H7R"
+    },
+    "NP:ACT": {
+      "min_enc_um": 0.126,
+      "min_enc_cell": "SDFFNX2H7R"
+    },
+    "PP:ACT": {
+      "min_enc_um": 0.126,
+      "min_enc_cell": "SDFFQX1H7R"
+    },
+    "NP:CT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "DFFRX0P5H7R"
+    },
+    "PP:CT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "SDFFTRQX3H7R"
+    },
+    "POLY:CT": {
+      "min_enc_um": 0.011,
+      "min_enc_cell": "XNOR3X0P7H7R"
+    },
+    "ACT:CT": {
+      "min_enc_um": 0.016,
+      "min_enc_cell": "XNOR3X0P7H7R"
+    },
+    "M1:CT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "XNOR3X0P7H7R"
+    }
+  },
+  "gates": {
+    "min_gate_width_um": 0.061,
+    "min_gate_width_cell": "XNOR3X0P7H7R"
+  },
+  "gds": "/Users/yanlu/Documents/icsprout55-pdk/IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CR/gds/ics55_LLSC_H7CR.gds"
+}

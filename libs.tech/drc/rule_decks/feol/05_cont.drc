@@ -1,0 +1,41 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 05 - Contact (CT)
+#
+# Port of iDRC cut-layer checks.  CT values are exact tech-LEF values
+# (WIDTH 0.09, SPACING 0.11, ENCLOSURE ABOVE 0.04); separation/enclosure to
+# POLY/ACT are measured (provenance: gds).
+#=========================================================================================
+
+if TABLES.include?('feol') || FEOL
+  #--- CT: minimum width / spacing (LEF) ----------------------------------------------
+  CT.width(rval('ct_width').um, euclidian).output('cont.ct.width',
+    "cont.ct.width: CT min width #{rval('ct_width')} um [lef]")
+  CT.space(rval('ct_space').um, euclidian).output('cont.ct.space',
+    "cont.ct.space: CT min spacing #{rval('ct_space')} um [lef]")
+
+  #--- CT enclosure by M1 / POLY / ACT (LEF ENCLOSURE ABOVE 0.04) ---------------------
+  M1.enclosing(CT, rval('ct_enc_m1').um).output('cont.ct.enc.m1',
+    "cont.ct.enc.m1: CT enclosure by M1 #{rval('ct_enc_m1')} um [lef]")
+  POLY.enclosing(CT, rval('ct_enc_poly').um).output('cont.ct.enc.poly',
+    "cont.ct.enc.poly: CT enclosure by POLY #{rval('ct_enc_poly')} um [lef]")
+  ACT.enclosing(CT, rval('ct_enc_act').um).output('cont.ct.enc.act',
+    "cont.ct.enc.act: CT enclosure by ACT #{rval('ct_enc_act')} um [lef]")
+
+  #--- CT must be inside POLY, ACT or M1 (foundry "contact on poly/active/metal") -----
+  CT.not(POLY.or(ACT).or(M1)).output('cont.ct.inside',
+    "cont.ct.inside: CT must be inside POLY, ACT or M1 [derived]")
+end

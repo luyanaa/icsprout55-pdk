@@ -1,0 +1,58 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 04 - Implants (NP, PP, LVTN, LVTP, HVTN, HVTP, ESD)
+#
+# Port of iDRC minimum-width / minimum-spacing checks.  Vt-adjust implants are
+# marker layers; their width/spacing rules are measured from the released
+# LVT/HVT std-cell libraries.
+#=========================================================================================
+
+if TABLES.include?('feol') || FEOL
+  #--- NP: minimum width / spacing -----------------------------------------------------
+  NP.width(rval('np_width').um, euclidian).output('implant.np.width',
+    "implant.np.width: NP min width #{rval('np_width')} um [gds]")
+  NP.space(rval('np_space').um, euclidian).output('implant.np.space',
+    "implant.np.space: NP min spacing #{rval('np_space')} um [gds]")
+
+  #--- PP: minimum width / spacing -----------------------------------------------------
+  PP.width(rval('pp_width').um, euclidian).output('implant.pp.width',
+    "implant.pp.width: PP min width #{rval('pp_width')} um [gds]")
+  PP.space(rval('pp_space').um, euclidian).output('implant.pp.space',
+    "implant.pp.space: PP min spacing #{rval('pp_space')} um [gds]")
+
+  #--- NP and PP overlap ----------------------------------------------------------------
+  # NOTE: not checked.  The implant masks of adjacent rows overlap in field by
+  # design (masks are drawn generous across cell boundaries); STI blocks the
+  # implants outside ACT, so NP/PP mask overlap is not a violation.
+
+  #--- LVTN / LVTP / HVTN / HVTP: markers inside their implant ------------------------
+  LVTN.not(NP).output('implant.lvtn.inside',
+    "implant.lvtn.inside: LVTN must be inside NP [gds]")
+  LVTP.not(PP).output('implant.lvtp.inside',
+    "implant.lvtp.inside: LVTP must be inside PP [gds]")
+  HVTN.not(NP).output('implant.hvtn.inside',
+    "implant.hvtn.inside: HVTN must be inside NP [gds]")
+  HVTP.not(PP).output('implant.hvtp.inside',
+    "implant.hvtp.inside: HVTP must be inside PP [gds]")
+
+  #--- ESD (55/1): width / spacing / NW enclosure -------------------------------------
+  ESD.width(rval('esd_width').um, euclidian).output('implant.esd.width',
+    "implant.esd.width: ESD min width #{rval('esd_width')} um [gds]")
+  ESD.space(rval('esd_space').um, euclidian).output('implant.esd.space',
+    "implant.esd.space: ESD min spacing #{rval('esd_space')} um [gds]")
+  NW.enclosing(ESD, rval('nw_esd_enc').um).output('implant.esd.nw_enc',
+    "implant.esd.nw_enc: NW enclosure of ESD #{rval('nw_esd_enc')} um [gds]")
+end

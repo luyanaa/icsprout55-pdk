@@ -1,0 +1,295 @@
+{
+  "cells": 24,
+  "layers": {
+    "ACT": {
+      "min_width_um": 0.341,
+      "min_width_cell": "P65_1233_PBMUX",
+      "min_space_um": 0.111,
+      "min_space_cell": "P65_1233_PBMUX",
+      "min_area_um2": 0.421225,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "NW": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 28.7955,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 13
+    },
+    "LVTN": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 1.68,
+      "min_area_cell": "P65_1233_PWE",
+      "cells_with_layer": 4
+    },
+    "LVTP": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 2.88,
+      "min_area_cell": "P65_1233_PWE",
+      "cells_with_layer": 10
+    },
+    "IOWELL": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 28.7716,
+      "min_area_cell": "P65_1233_PWE",
+      "cells_with_layer": 14
+    },
+    "POLY": {
+      "min_width_um": 0.061,
+      "min_width_cell": "P65_1233_PBMUX",
+      "min_space_um": 0.161,
+      "min_space_cell": "P65_1233_PBMUX",
+      "min_area_um2": 0.1795,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 10
+    },
+    "PPO": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS1A",
+      "min_space_um": 0.321,
+      "min_space_cell": "P65_1233_VSS1A",
+      "min_area_um2": 1.4,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 10
+    },
+    "NP": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 7.5108,
+      "min_area_cell": "P65_1233_PWE",
+      "cells_with_layer": 13
+    },
+    "PP": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.336,
+      "min_space_cell": "P65_1233_PAR_5",
+      "min_area_um2": 3.3744,
+      "min_area_cell": "P65_1233_PWE",
+      "cells_with_layer": 14
+    },
+    "ESD": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS1A",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS1A",
+      "min_area_um2": 42.2451,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 10
+    },
+    "IOACT": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 2.0,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "CT": {
+      "min_width_um": 0.091,
+      "min_width_cell": "P65_1233_CORNER",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_CORNER",
+      "min_area_um2": 0.0081,
+      "min_area_cell": "P65_1233_CORNER",
+      "cells_with_layer": 14
+    },
+    "M1": {
+      "min_width_um": 0.091,
+      "min_width_cell": "P65_1233_PBMUX",
+      "min_space_um": 0.091,
+      "min_space_cell": "P65_1233_PBMUX",
+      "min_area_um2": 0.1056,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "M2": {
+      "min_width_um": 0.101,
+      "min_width_cell": "P65_1233_PBMUX",
+      "min_space_um": 0.161,
+      "min_space_cell": "P65_1233_PBMUX",
+      "min_area_um2": 0.147,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "M3": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 0.72,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "M4": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 0.72,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "M5": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 0.72,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "V1": {
+      "min_width_um": 0.091,
+      "min_width_cell": "P65_1233_CORNER",
+      "min_space_um": 0.231,
+      "min_space_cell": "P65_1233_CUT",
+      "min_area_um2": 0.0081,
+      "min_area_cell": "P65_1233_CORNER",
+      "cells_with_layer": 14
+    },
+    "V2": {
+      "min_width_um": 0.091,
+      "min_width_cell": "P65_1233_PBMUX",
+      "min_space_um": 0.211,
+      "min_space_cell": "P65_1233_PBMUX",
+      "min_area_um2": 0.0081,
+      "min_area_cell": "P65_1233_PBMUX",
+      "cells_with_layer": 14
+    },
+    "V3": {
+      "min_width_um": null,
+      "min_width_cell": null,
+      "min_space_um": null,
+      "min_space_cell": null,
+      "min_area_um2": null,
+      "min_area_cell": null,
+      "cells_with_layer": 14
+    },
+    "V4": {
+      "min_width_um": null,
+      "min_width_cell": null,
+      "min_space_um": null,
+      "min_space_cell": null,
+      "min_area_um2": null,
+      "min_area_cell": null,
+      "cells_with_layer": 14
+    },
+    "TM2": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 108.55,
+      "min_area_cell": "P65_1233_VSS3",
+      "cells_with_layer": 14
+    },
+    "TV2": {
+      "min_width_um": 0.28,
+      "min_width_cell": "P65_1233_CORNER",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 0.1296,
+      "min_area_cell": "P65_1233_VSS3",
+      "cells_with_layer": 14
+    },
+    "PADM": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 180.7,
+      "min_area_cell": "P65_1233_VSS3",
+      "cells_with_layer": 14
+    },
+    "ALPAD": {
+      "min_width_um": 0.4,
+      "min_width_cell": "P65_1233_VSS3",
+      "min_space_um": 0.4,
+      "min_space_cell": "P65_1233_VSS3",
+      "min_area_um2": 3025.0,
+      "min_area_cell": "P65_1233_VSS3",
+      "cells_with_layer": 12
+    }
+  },
+  "seps": {
+    "POLY:ACT": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "P65_1233_PWE"
+    },
+    "POLY:NP": {
+      "min_sep_um": 0.051,
+      "min_sep_cell": "P65_1233_PBMUX"
+    },
+    "POLY:PP": {
+      "min_sep_um": 0.061,
+      "min_sep_cell": "P65_1233_PBMUX"
+    },
+    "ACT:NP": {
+      "min_sep_um": 0.241,
+      "min_sep_cell": "P65_1233_PBMUX"
+    },
+    "ACT:PP": {
+      "min_sep_um": 0.141,
+      "min_sep_cell": "P65_1233_PWE"
+    },
+    "NP:PP": {
+      "min_sep_um": 0.001,
+      "min_sep_cell": "P65_1233_PBMUX"
+    },
+    "IOACT:PP": {
+      "min_sep_um": 0.261,
+      "min_sep_cell": "P65_1233_PBMUX"
+    },
+    "IOACT:NW": {
+      "min_sep_um": 0.096,
+      "min_sep_cell": "P65_1233_PBMUX"
+    },
+    "IOWELL:ACT": {
+      "min_sep_um": 0.161,
+      "min_sep_cell": "P65_1233_PBMUX"
+    }
+  },
+  "encs": {
+    "NP:ACT": {
+      "min_enc_um": 0.141,
+      "min_enc_cell": "P65_1233_PWE"
+    },
+    "PP:ACT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "P65_1233_VSS3"
+    },
+    "M5:TV2": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "P65_1233_VSS3"
+    },
+    "TM2:TV2": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "P65_1233_VSS3"
+    },
+    "IOWELL:IOACT": {
+      "min_enc_um": 0.001,
+      "min_enc_cell": "P65_1233_VDD3"
+    }
+  },
+  "gates": {
+    "min_gate_width_um": 0.061,
+    "min_gate_width_cell": "P65_1233_PBMUX"
+  },
+  "gds": "/Users/yanlu/Documents/icsprout55-pdk/IP/IO/ICsprout_55LLULP1233_IO_251013/gds/ICSIOA_N55_3P3_1P6M1TM.gds"
+}

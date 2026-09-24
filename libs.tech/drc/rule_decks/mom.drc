@@ -1,0 +1,45 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# MOM capacitor checks
+#
+# MOM caps are not extracted (see the LVS README); the DRC checks assume the
+# analog layout marks the MOM regions with the MOM_MARKER layer (60/1) and the
+# dummy fill with DUMMY (60/2) - these layers are not present in the released
+# std-cell GDS, so the checks are vacuous there and activate only when the
+# markers are drawn.
+#
+#   m2_in_mom  = M2 inside the MOM marker: min width / spacing (LEF values)
+#   dummy      : no dummy fill inside the MOM marker enlarged by
+#                mom_dummy_margin (1 um placeholder)
+#
+# Disable with -rd no_mom=true.
+#=========================================================================================
+
+if MOM
+  m2_in_mom = M2.and(MOM_MARKER)
+  m2_in_mom.width(rval('m2_width').um, euclidian).output('mom.m2.width',
+    "mom.m2.width: M2 min width inside MOM #{rval('m2_width')} um [lef]")
+  m2_in_mom.space(rval('m2_space').um, euclidian).output('mom.m2.space',
+    "mom.m2.space: M2 min spacing inside MOM #{rval('m2_space')} um [lef]")
+
+  DUMMY.and(MOM_MARKER.sized(rval('mom_dummy_margin').um)).output('mom.dummy',
+    "mom.dummy: dummy fill inside MOM exclusion (marker + #{rval('mom_dummy_margin')} um) [derived]")
+
+  # DFM exclusion zone: NO_FILL / DM_EXCEL must cover the sensitive regions
+  # (MOM, inductor, paired resistor / differential MOS markers when drawn)
+  MOM_MARKER.sized(rval('mom_dummy_margin').um).not(NO_FILL + DM_EXCEL).output('mom.no_fill',
+    "mom.no_fill: MOM exclusion zone (marker + #{rval('mom_dummy_margin')} um) not covered by NO_FILL/DM_EXCEL [derived]")
+end

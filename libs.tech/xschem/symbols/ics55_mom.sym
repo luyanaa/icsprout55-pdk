@@ -1,0 +1,25 @@
+v {xschem version=3.4.7 file_version=1.2
+* ICsprout55 MOM capacitor - mom_2t / mom_3t
+* terminals (CDL order): PLUS MINUS [B]
+}
+G {}
+K {type=capacitor
+format="@spiceprefix@name @pinlist mom_@model"
+template="name=C1
+model=2t
+spiceprefix=X
+"}
+V {}
+S {}
+F {}
+E {}
+L 4 0 2.5 0 30 {}
+L 4 0 -30 0 -5 {}
+L 4 -10 -5 10 -5 {}
+B 5 -2.5 -32.5 2.5 -27.5 {name=PLUS dir=inout pinnumber=1}
+B 5 -2.5 27.5 2.5 32.5 {name=MINUS dir=inout pinnumber=2}
+A 4 -0 23.75 21.25 61.92751306414704 56.14497387170592 {}
+T {PLUS} 5 -27.5 0 0 0.15 0.15 {layer=7}
+T {MINUS} 5 18.75 0 0 0.15 0.15 {layer=7}
+T {@name} 15 -28.75 0 0 0.2 0.2 {}
+T {@model} 15 -11.25 0 0 0.2 0.2 {}

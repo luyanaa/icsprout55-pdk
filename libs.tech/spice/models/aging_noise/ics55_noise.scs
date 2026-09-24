@@ -1,0 +1,4 @@
+* ics55_noise.scs - noise template - TBD: no foundry data
+* Flicker noise parameters belong in the MOS model cards (KF, AF, NLEV)
+* once released. Thermal noise is included in standard device models.
+* TBD

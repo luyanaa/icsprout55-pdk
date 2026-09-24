@@ -1,0 +1,33 @@
+v {xschem version=3.4.7 file_version=1.2
+* ICsprout55 3.3V thick-oxide IO MOS - nm3p3_lp / pm3p3_lp
+* terminals (CDL order): D G S B ; drawn L = 0.4-0.65u (typ 0.5u)
+}
+G {}
+K {type=nmos
+format="@name @pinlist @model W=@W L=@L m=@mult"
+template="name=M1
+W=5u
+L=0.5u
+mult=1
+model=nm3p3_lp
+"}
+V {}
+S {}
+F {}
+E {}
+L 4 -20 0 -20 -30 {}
+L 4 -20 30 -20 0 {}
+L 4 -20 -30 20 -30 {}
+L 4 -20 30 20 30 {}
+L 4 20 -30 20 -15 {}
+L 4 20 15 20 30 {}
+L 4 20 -15 30 -15 {}
+L 4 20 15 30 15 {}
+B 5 17.5 -35 22.5 -30 {name=D dir=inout pinnumber=1}
+B 5 -25 -5 -20 5 {name=G dir=in pinnumber=2}
+B 5 17.5 30 22.5 35 {name=S dir=inout pinnumber=3}
+B 5 20 -2.5 25 2.5 {name=B dir=in pinnumber=4}
+T {@name} -15 -40 0 0 0.2 0.2 {}
+T {@model} 30 -20 0 0 0.2 0.2 {}
+T {@mult x @W / @L} 30 10 0 0 0.2 0.2 {}
+T {3.3V} 0 -25 0 1 0.3 0.3 {layer=13}

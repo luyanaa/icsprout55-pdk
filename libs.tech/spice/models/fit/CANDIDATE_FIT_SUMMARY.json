@@ -1,0 +1,79 @@
+{
+  "status": "rc_aware_drive_promoted_provisional",
+  "source_cards": {
+    "bulk65": "~/Downloads/65nm_bulk.pm",
+    "lp45": "~/Downloads/45nm_LP.pm",
+    "hp45": "~/Downloads/45nm_HP.pm"
+  },
+  "initial_values": "INITIAL_VALUES.json",
+  "initialization": {
+    "target_node_nm": 55,
+    "interpolation": "geometric for positive parameters, linear for signed parameters",
+    "source_fraction_45_to_65": 0.5,
+    "paper_role": "parameter priors and extraction order; not ICS55 measurements"
+  },
+  "experiments": [
+    {
+      "name": "all_added_leakage_parameters",
+      "command": "fit_expanded.py svt lvt hvt --dataset train37 --params nf_n,nf_p,eta_n,eta_p,dsub_n,dsub_p,tox_n,tox_p,u0_n,u0_p,pclm_n,pclm_p,drout_n,drout_p --freeze-legacy --trials 120 --seed 1211",
+      "legacy_controls": "shipped VTH0/VOFF/DIBL held exactly",
+      "fit_parameters": ["nfactor", "eta0", "dsub", "toxe", "u0", "pclm", "drout"],
+      "gmin_policy": "subtract for SVT/LVT; retain raw Xyce current for HVT because subtraction produced negative currents"
+    },
+    {
+      "name": "drive_parameters",
+      "command": "fit_drive.py svt lvt hvt --dataset fit --trials 36 --seed 911 --leakage-weight 1.0",
+      "timing_data": "INVX1/3/4 at one Liberty slew/load point per flavor",
+      "fit_parameters": ["u0", "vsat", "rdsw"],
+      "leakage_guard": "data_train37"
+    },
+    {
+      "name": "rc_aware_drive_parameters",
+      "command": "fit_drive.py svt lvt hvt --dataset fit --trials 36 --seed 2911 --leakage-weight 4.0 --rc",
+      "timing_data": "INVX1/3/4 at one Liberty slew/load point per flavor",
+      "fit_parameters": ["u0", "vsat", "rdsw"],
+      "leakage_guard": "data_train37",
+      "rc_source": "manual labeled GDS M1 signal polygons with MET1 RC from the released ECOS technology LEF",
+      "rc_boundary": "device-owned layers excluded; VDD/VSS excluded from signal RC; unlabeled internal interconnect fails closed"
+    }
+  ],
+  "all_added_leakage_fit_values": {
+    "svt": {"nf_n": 1.0, "nf_p": 1.0, "eta_n": 1.0, "eta_p": 1.0, "dsub_n": 1.0, "dsub_p": 1.0, "tox_n": 1.0, "tox_p": 1.0, "u0_n": 1.0, "u0_p": 1.0, "pclm_n": 1.0, "pclm_p": 1.0, "drout_n": 1.0, "drout_p": 1.0},
+    "lvt": {"nf_n": 1.0, "nf_p": 1.0, "eta_n": 1.0, "eta_p": 1.0, "dsub_n": 1.0, "dsub_p": 1.0, "tox_n": 1.0, "tox_p": 1.0, "u0_n": 1.0, "u0_p": 1.0, "pclm_n": 1.0, "pclm_p": 1.0, "drout_n": 1.0, "drout_p": 1.0},
+    "hvt": {"nf_n": 1.0973882826, "nf_p": 1.0378559472, "eta_n": 0.9608943649, "eta_p": 0.5725251973, "dsub_n": 1.2473395370, "dsub_p": 0.9437112991, "tox_n": 1.0098185194, "tox_p": 1.0080273613, "u0_n": 0.9294074308, "u0_p": 1.0181829461, "pclm_n": 1.4465808494, "pclm_p": 0.7993516755, "drout_n": 0.6909766783, "drout_p": 0.8594708805}
+  },
+  "all_added_leakage_audit": {
+    "svt": {"train37_baseline": 0.1363079072, "train37_candidate": 0.1363079072, "holdout2_baseline": 0.1621231566, "holdout2_candidate": 0.1621231566},
+    "lvt": {"train37_baseline": 0.1659094388, "train37_candidate": 0.1659094388, "holdout2_baseline": 0.2241257453, "holdout2_candidate": 0.2241257453},
+    "hvt": {"train37_baseline": 0.1252083845, "train37_candidate": 0.1190087641, "holdout2_baseline": 0.1256650174, "holdout2_candidate": 0.1177670457}
+  },
+  "drive_fit_values": {
+    "svt": {"u0_n": 1.8491726743, "u0_p": 0.7242221584, "vsat_n": 1.2551659442, "vsat_p": 1.0100339486, "rdsw_n": 0.8432308938, "rdsw_p": 0.9447643766},
+    "lvt": {"u0_n": 1.4713264816, "u0_p": 0.7859667084, "vsat_n": 1.1501816691, "vsat_p": 0.7581884597, "rdsw_n": 1.0387636390, "rdsw_p": 1.1660266944},
+    "hvt": {"u0_n": 1.9593111648, "u0_p": 1.3234813804, "vsat_n": 1.2603428863, "vsat_p": 0.8161047011, "rdsw_n": 0.7465109799, "rdsw_p": 0.6653290257}
+  },
+  "drive_candidate_audit": {
+    "svt": {"train37_timing": 0.1171675489, "holdout2_timing": 0.1995192443, "train37_leakage": 0.1438403593, "holdout2_leakage": 0.1526864881},
+    "lvt": {"train37_timing": 0.1471354660, "holdout2_timing": 0.7017553672, "train37_leakage": 0.1807902853, "holdout2_leakage": 0.2191884155},
+    "hvt": {"train37_timing": 0.1885322598, "holdout2_timing": 0.1522538436, "train37_leakage": 0.1254221038, "holdout2_leakage": 0.1258122095}
+  },
+  "rc_aware_drive_fit_values": {
+    "svt": {"u0_n": 1.8529552694, "u0_p": 0.8921759223, "vsat_n": 1.1708571868, "vsat_p": 1.1200337418, "rdsw_n": 0.6160616504, "rdsw_p": 1.1610636548},
+    "lvt": {"u0_n": 1.5750832286, "u0_p": 0.9160639942, "vsat_n": 1.1307956396, "vsat_p": 0.7643052251, "rdsw_n": 0.5218519320, "rdsw_p": 1.8438758670},
+    "hvt": {"u0_n": 1.9829763448, "u0_p": 1.8928168432, "vsat_n": 1.2218275676, "vsat_p": 0.8494630893, "rdsw_n": 0.5834499691, "rdsw_p": 1.2872579951}
+  },
+  "rc_aware_drive_audit": {
+    "svt": {"fit_timing": 0.1209331751, "holdout_timing": 0.1270249680, "holdout2_timing": 0.2023147223, "train37_leakage": 0.1358255593, "holdout2_leakage": 0.1563983287},
+    "lvt": {"fit_timing": 0.1332193508, "holdout_timing": 0.2128654152, "holdout2_timing": 0.6632484452, "train37_leakage": 0.1678598016, "holdout2_leakage": 0.2193949212},
+    "hvt": {"fit_timing": 0.1849175456, "holdout_timing": 0.1909630067, "holdout2_timing": 0.1490315726, "train37_leakage": 0.1254445540, "holdout2_leakage": 0.1258140192}
+  },
+  "rc_aware_baseline_audit": {
+    "svt": {"holdout_timing": 0.1985825361, "holdout2_timing": 0.2459479041, "train37_leakage": 0.1363079072, "holdout2_leakage": 0.1621231566},
+    "lvt": {"holdout_timing": 0.2914803662, "holdout2_timing": 0.9233515120, "train37_leakage": 0.1659094388, "holdout2_leakage": 0.2241257453},
+    "hvt": {"holdout_timing": 0.3335883243, "holdout2_timing": 0.2438840170, "train37_leakage": 0.1252083845, "holdout2_leakage": 0.1256650174}
+  },
+  "promotion_decision": {
+    "promoted": true,
+    "reason": "The RC-aware drive candidate reduced timing RMS on both independent holdout sets for all three flavors while train37 leakage RMS changed by at most 0.002. Promote the u0/vsat/rdsw overrides as provisional model content; keep the manual RC boundary and all non-TT, C-V, noise, mismatch, aging, and signoff claims explicitly unvalidated."
+  }
+}

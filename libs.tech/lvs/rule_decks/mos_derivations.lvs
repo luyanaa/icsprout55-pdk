@@ -1,0 +1,40 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS MOS derivations
+#
+# Exclusions keep the RF/ESD/pad-specific poly out of the regular MOS extraction
+# (IHP-style); the ICS55 release contains only the layers below, so the
+# exclusion set is minimal but kept as a hook for the IO library.
+#=========================================================================================
+
+# Poly used for resistors (PPO-marked) must not extract as a gate
+POLY_RES = POLY.and(PPO)
+POLY_CON = POLY.not(POLY_RES)
+
+# ESD-diode anode poly is inside the ESD region - exclude from regular gates
+ESD_GATE = POLY.and(ESD)
+
+# Regular gates (excluding resistor / ESD poly)
+NGATE_SVT = NGATE.not(LVTN).not(HVTN).not(POLY_RES).not(ESD_GATE)
+NGATE_LVT = NGATE.and(LVTN).not(POLY_RES).not(ESD_GATE)
+NGATE_HVT = NGATE.and(HVTN).not(POLY_RES).not(ESD_GATE)
+PGATE_SVT = PGATE.not(LVTP).not(HVTP).not(POLY_RES).not(ESD_GATE)
+PGATE_LVT = PGATE.and(LVTP).not(POLY_RES).not(ESD_GATE)
+PGATE_HVT = PGATE.and(HVTP).not(POLY_RES).not(ESD_GATE)
+
+# IO gates (3.3V devices are SVT-only per the released CDL)
+NIOGATE_REG = NIOGATE.not(POLY_RES)
+PIOGATE_REG = PIOGATE.not(POLY_RES)

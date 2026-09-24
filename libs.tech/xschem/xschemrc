@@ -1,0 +1,6 @@
+# ICsprout55 xschem configuration
+# Adds the ICsprout55 symbol library to the xschem search path.
+# Usage:  xschem --rcfile /path/to/libs.tech/xschem/xschemrc &
+#         (or copy/append into your ~/.xschem/xschemrc)
+
+set XSCHEM_LIBRARY_PATH /Users/yanlu/Documents/icsprout55-pdk/libs.tech/xschem/symbols

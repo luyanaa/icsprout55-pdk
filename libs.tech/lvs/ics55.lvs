@@ -1,0 +1,265 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 (ICS55) KLayout LVS runset - provisional
+#
+# Port of the iLVS device-recognition table (libs.tech/lvs/README.md) to the
+# KLayout LVS engine, following the FreePDK45 well/implant device split
+# (nact/pact, ngate/pgate, psd/nsd) and the IHP SG13G2 runset structure.
+#
+# Devices:
+#   core MOS 1.2V : nm1p2_{svt,lvt,hvt}_lp / pm1p2_{svt,lvt,hvt}_lp
+#                   (POLY x ACT in NP/PP; LVT/HVT via 17/18/21/22 markers)
+#   IO MOS 3.3V   : nm3p3_lp / pm3p3_lp (POLY x IOACT in NP/PP)
+#   poly resistor : re_ppo_sab_2t (POLY with PPO marker 41/4, CT straps)
+#   ESD diode     : dio_3p3_pp_nw_lp (ESD 55/1 in NW, P+ anode)
+#   MOM cap       : not extracted yet (interdigitated M2..M5) - see README
+#
+# Bulk connectivity (std-cell convention, CDL bulk = VDD/VSS):
+#   - p-substrate (layout extent minus NW) is globally tied to VSS;
+#   - n-well is globally tied to VDD.
+#   Both can be disabled with -rd no_well_ties=true for analog blocks with
+#   isolated wells (bulk nets then float and must be resolved manually).
+#
+# Usage:
+#   klayout -b -r ics55.lvs -rd input=<layout.gds> [-rd top=<topcell>] \
+#       -rd schematic=<cell.cdl> [-rd target_netlist=<extracted.cir>] \
+#       [-rd report=<out.lvsdb>] [-rd combine_devices=true] [-z]
+#
+# Reference netlist lookup: if -rd schematic is omitted, the deck looks for
+# <topcell>.cdl / .spice / .cir next to the input layout (IHP convention).
+#=========================================================================================
+
+require 'etc'
+
+#-----------------------------------------------------------------------------------------
+# File setup
+#-----------------------------------------------------------------------------------------
+
+if $input
+  if $top
+    src = source($input, $top)
+  else
+    src = source($input)
+  end
+end
+
+if $report
+  report_lvs($report)
+else
+  report_lvs("ics55_lvs.lvsdb")
+end
+
+#-----------------------------------------------------------------------------------------
+# Switches
+#-----------------------------------------------------------------------------------------
+
+def bool_check?(obj)
+  obj.to_s.downcase == 'true'
+end
+
+SPICE_WITH_NET_NAMES = !bool_check?($no_net_names)
+SPICE_WITH_COMMENTS = bool_check?($spice_comments)
+NET_ONLY = bool_check?($net_only)
+COMBINE_DEVICES = bool_check?($combine_devices)
+PURGE = bool_check?($purge)
+SIMPLIFY = !bool_check?($no_simplify)
+WELL_TIES = !bool_check?($no_well_ties)
+TOP_LVL_PINS = bool_check?($top_lvl_pins)
+
+case $run_mode
+when 'flat'
+  flat
+else
+  deep
+end
+
+threads($threads || Etc.nprocessors)
+
+require 'tmpdir'
+
+#-----------------------------------------------------------------------------------------
+# Schematic (reference) netlist
+#-----------------------------------------------------------------------------------------
+
+# The released CDL dumps repeat some leaf subckts (e.g. TG appears twice);
+# KLayout's SPICE reader treats redefinition as an error, so keep the first
+# definition of each circuit.  Leaf subckts also use symbolic W=nw/L=nl
+# parameters which the reader cannot parse; they are replaced with a numeric
+# dummy (real values come from the instantiating cell, so flattening is
+# unaffected).
+def dedup_spice(path)
+  seen = {}
+  out = []
+  current = nil
+  params = nil
+  skipping = false
+  flush_params = lambda do
+    if params && params.any?
+      out << ".PARAM #{params.sort.uniq.map { |p| "#{p}=1u" }.join(' ')}\n"
+    end
+  end
+  File.foreach(path) do |line|
+    if line =~ /^\s*\.SUBCKT\s+(\S+)/
+      flush_params.call
+      current = $1
+      params = []
+      skipping = seen[current] ? true : false
+      next if skipping
+      seen[current] = true
+      out << line
+    elsif line =~ /^\s*\.ENDS/
+      flush_params.call
+      current = nil
+      params = nil
+      skipping = false
+      out << line
+    else
+      next if skipping
+      if line =~ /^\s*[XMMQCRDL]/
+        # collect symbolic (non-numeric) parameter VALUES used in this subckt
+        line.scan(/(\w+)=(\S+)/) do |_k, v|
+          params << v unless v =~ /\A[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?([munpf]|meg)?\z/
+        end
+        # KLayout's SPICE reader does not accept the CDL "X ... / SUB" call
+        # syntax; drop the slash.  Symbolic W=nw etc. stay as-is - the .PARAM
+        # declarations above make them resolvable and instance parameters
+        # override them during flattening.
+        line = line.sub(%r{\s+/\s+(\S+)}, ' \1')
+      end
+      out << line
+    end
+  end
+  flush_params.call
+  tmp = File.join(Dir.tmpdir, "ics55_schematic_#{File.basename(path)}")
+  File.write(tmp, out.join)
+  tmp
+end
+
+unless NET_ONLY
+  if $schematic
+    schematic(dedup_spice($schematic))
+  else
+    exts = %w[cdl spice sp cir]
+    candidates = exts.map { |ext| "#{src.cell_name}.#{ext}" }
+    netlists = candidates.select { |f| File.exist?(f) }
+    if netlists.empty?
+      error("Netlist not found, tried: #{candidates}")
+    else
+      schematic(dedup_spice(netlists[0]))
+    end
+  end
+end
+
+if $target_netlist
+  target_netlist($target_netlist)
+else
+  target_netlist("#{src.cell_name}_extracted.cir", write_spice(SPICE_WITH_NET_NAMES, SPICE_WITH_COMMENTS),
+                 "Extracted by KLayout with the ICsprout55 LVS runset")
+end
+
+#-----------------------------------------------------------------------------------------
+# Layers + derivations + connectivity + extraction
+#
+# The macro preprocessor does not expand "include" directives reliably in batch
+# mode, so the rule modules are concatenated and evaluated in ONE scope (keeps
+# the LVS context as self and the deck locals in scope).
+#-----------------------------------------------------------------------------------------
+
+SCRIPT_DIR = File.expand_path(File.dirname(__FILE__))
+
+LVS_MODULE_FILES = [
+  'rule_decks/layers_definitions.lvs',
+  'rule_decks/general_derivations.lvs',
+  'rule_decks/mos_derivations.lvs',
+  'rule_decks/res_diode_derivations.lvs',
+  'rule_decks/devices_connections.lvs',
+  'rule_decks/mos_extraction.lvs',
+  'rule_decks/res_diode_extraction.lvs',
+  'rule_decks/combine_fingers.lvs'
+]
+
+lvs_assembled = LVS_MODULE_FILES.map { |f| File.read(File.join(SCRIPT_DIR, f)) }.join("\n")
+eval(lvs_assembled, binding, 'ics55_assembled_lvs')
+
+#-----------------------------------------------------------------------------------------
+# Netlist comparison
+#-----------------------------------------------------------------------------------------
+
+# The std-cell CDL is hierarchical (shared leaf subckts like INV), while the
+# library GDS is flat; flatten the schematic so flat-vs-flat comparison works.
+schematic.flatten unless NET_ONLY
+
+# The released std cells have no in-cell well/substrate taps, so the extracted
+# bulk nets (global VSS for p-sub, VDD/VNW for n-well) are separate from the
+# power rails.  The CDL declares bulk=VDD/VSS; merge the bulk nets into the
+# rails per circuit (std-cell well-tie convention; disable with -rd
+# no_well_ties=true for analog blocks with isolated wells).
+if WELL_TIES
+  netlist.each_circuit do |c|
+    by_name = Hash.new { |h, k| h[k] = [] }
+    c.each_net { |n| by_name[n.name] << n unless n.name.empty? }
+    # join duplicate-named nets (bulk global + rail)
+    by_name.each_value do |nets|
+      next if nets.size < 2
+      first = nets.shift
+      nets.each { |n| c.join_nets(first, n) }
+    end
+    # n-well carries the foundry label VNW; the CDL bulk is VDD
+    vdd = by_name["VDD"]&.first
+    vnw = by_name["VNW"]&.first
+    c.join_nets(vdd, vnw) if vdd && vnw
+  end
+end
+
+# multi-finger combine pass (rule_decks/combine_fingers.lvs)
+align
+
+netlist.simplify if SIMPLIFY
+netlist.combine_devices if COMBINE_DEVICES
+netlist.purge if PURGE
+schematic.simplify if SIMPLIFY
+schematic.combine_devices if COMBINE_DEVICES
+schematic.purge if PURGE
+
+max_res(1e9)
+min_caps(1e-18)
+max_depth(0)
+
+# Device parameter comparison: L and all non-geometric parameters are
+# compared exactly; W uses a 5% relative tolerance (tight MOS width check).
+# The released 7-track library is manually drawn and some cells deviate more
+# than 5% from the CDL widths (INVX16H7* +27%, OAI33X0P5H7* +33%,
+# INVX7H7* +14%, TBUFX8H7* 5-10%, NAND3BBX0P7H7* -14%) - those are listed
+# in the README as known foundry-data deviations.  Topology matching is
+# exact.
+%w[NM1P2_SVT_LP NM1P2_LVT_LP NM1P2_HVT_LP PM1P2_SVT_LP PM1P2_LVT_LP PM1P2_HVT_LP NM3P3_LP PM3P3_LP].each do |cls|
+  begin
+    dc = netlist.device_class_by_name(cls)
+    next unless dc
+    eq = RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_L, 0.0, 0.0)
+    eq += RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_W, 0.0, 0.05)
+    dc.equal_parameters = eq
+    sc = schematic.device_class_by_name(cls)
+    sc.equal_parameters = eq if sc
+  rescue StandardError
+  end
+end
+
+if compare
+  puts "CONGRATULATIONS! Netlists match."
+else
+  puts "ERROR: netlists do not match."
+end

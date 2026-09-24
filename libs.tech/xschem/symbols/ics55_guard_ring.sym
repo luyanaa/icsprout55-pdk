@@ -1,0 +1,22 @@
+v {xschem version=3.4.7 file_version=1.2
+* ICsprout55 guard ring - layout-only construct (no netlist)
+* p+ ring for NMOS (tie VSS) / n+ ring in NWELL for PMOS (tie VDD)
+* PCell: libs.tech/klayout/pcells/ics55_guard_ring.py
+}
+G {}
+K {type=guard_ring
+format="* @name: guard ring @type - layout only, no netlist"
+template="name=GR1
+type=pring
+"}
+V {}
+S {}
+F {}
+E {}
+L 4 -20 -20 20 -20 {}
+L 4 20 -20 20 20 {}
+L 4 20 20 -20 20 {}
+L 4 -20 20 -20 -20 {}
+B 5 -22.5 -2.5 -17.5 2.5 {name=TIE dir=inout pinnumber=1}
+T {@name} -15 -30 0 0 0.2 0.2 {}
+T {@type} -15 25 0 0 0.2 0.2 {layer=13}

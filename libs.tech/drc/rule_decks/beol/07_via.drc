@@ -1,0 +1,98 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 07 - Vias (V1..V4, T4V2, RV)
+#
+# Port of iDRC cut-layer checks (min width, min spacing, via enclosure by the
+# upper/lower metal).  All values are exact tech-LEF values (N551P6M.lef,
+# LAYER VIAx + VIARULE METx_METy enclosure/array spacing).
+#=========================================================================================
+
+if TABLES.include?('beol') || BEOL
+  [
+    ['V1', V1, 'v1', M1, M2], ['V2', V2, 'v2', M2, M3],
+    ['V3', V3, 'v3', M3, M4], ['V4', V4, 'v4', M4, M5]
+  ].each do |name, via, key, lower, upper|
+    via.width(rval("#{key}_width").um, euclidian).output("via.#{key}.width",
+      "via.#{key}.width: #{name} min width #{rval("#{key}_width")} um [lef]")
+    via.space(rval("#{key}_space").um, euclidian).output("via.#{key}.space",
+      "via.#{key}.space: #{name} min spacing #{rval("#{key}_space")} um [lef]")
+    # VIARULE METx_METy: lower enclosure 0.04 / upper enclosure 0.04 (0.005 cut enc)
+    lower.enclosing(via, rval("#{key}_enc_lower").um).output("via.#{key}.enc.lower",
+      "via.#{key}.enc.lower: #{name} enclosure by #{name == 'V1' ? 'M1' : name.sub('V', 'M')} #{rval("#{key}_enc_lower")} um [lef]")
+    upper.enclosing(via, rval("#{key}_enc_upper").um).output("via.#{key}.enc.upper",
+      "via.#{key}.enc.upper: #{name} enclosure by #{name.sub('V', 'M')} #{rval("#{key}_enc_upper")} um [lef]")
+    # VIARULE array spacing (SPACING 0.13 BY 0.13)
+    via.space(rval("#{key}_array_space").um, euclidian).output("via.#{key}.array_space",
+      "via.#{key}.array_space: #{name} array spacing #{rval("#{key}_array_space")} um [lef]")
+  end
+
+  #--- T4V2 (LEF WIDTH 0.36 SPACING 0.34; M5/T4M2 enclosure 0.02; array 1.0) ---------
+  TV2.width(rval('tv2_width').um, euclidian).output('via.tv2.width',
+    "via.tv2.width: T4V2 min width #{rval('tv2_width')} um [lef]")
+  TV2.space(rval('tv2_space').um, euclidian).output('via.tv2.space',
+    "via.tv2.space: T4V2 min spacing #{rval('tv2_space')} um [lef]")
+  M5.enclosing(TV2, rval('tv2_enc_m5').um).output('via.tv2.enc.m5',
+    "via.tv2.enc.m5: T4V2 enclosure by M5 #{rval('tv2_enc_m5')} um [lef]")
+  TM2.enclosing(TV2, rval('tv2_enc_tm2').um).output('via.tv2.enc.tm2',
+    "via.tv2.enc.tm2: T4V2 enclosure by T4M2 #{rval('tv2_enc_tm2')} um [lef]")
+  TV2.space(rval('tv2_array_space').um, euclidian).output('via.tv2.array_space',
+    "via.tv2.array_space: T4V2 array spacing #{rval('tv2_array_space')} um [lef]")
+
+  #--- EM via ports -----------------------------------------------------------------
+  # Metal wider than em_via_width (10 um placeholder) requires via arrays
+  # (2x2/3x3); isolated vias on the wide metal are flagged.  The wide-metal
+  # probe uses the via's enclosing metal via the metal bbox filter; EM limits
+  # themselves are post-layout simulation, not DRC (derived).
+  # convert a DRC polygon (micron coordinates) to an integer-DBU polygon for
+  # building a region; the released libraries use a 1nm DBU
+  scale_db = (1.0 / rval('manufacturing_grid')).round
+  to_db_poly = lambda do |p|
+    poly = RBA::Polygon.new
+    poly.assign_hull(p.each_point_hull.map { |pt| RBA::Point.new((pt.x * scale_db).round, (pt.y * scale_db).round) })
+    poly
+  end
+  # a via layer sits between two metal layers; either side may be the wide
+  # metal that requires the 2x2/3x3 array
+  [
+    ['v1', V1, [M1, M2]], ['v2', V2, [M2, M3]],
+    ['v3', V3, [M3, M4]], ['v4', V4, [M4, M5]]
+  ].each do |key, via, metals|
+    wide = RBA::Region.new
+    metals.each do |metal|
+      metal.each do |p|
+        b = p.bbox
+        wide.insert(to_db_poly.call(p)) if [b.width, b.height].min > rval('em_via_width')
+      end
+    end
+    next if wide.size.zero?
+    wl = DRCLayer::new(self, wide)
+    vias_on_wide = via.and(wl)
+    # isolated vias: vias with no neighbor within the array pitch
+    neighbors = via.sized(rval("#{key}_array_space").um).not(via)
+    singles = vias_on_wide.not(vias_on_wide.and(neighbors))
+    singles.output("via.#{key}.em_port",
+      "via.#{key}.em_port: isolated via on metal wider than #{rval('em_via_width')} um (needs 2x2/3x3 array) [derived]")
+  end
+
+  #--- RV (LEF WIDTH 3 SPACING 3 ENCLOSURE 1.5; array 6) ------------------------------
+  RV = input(122, 1)
+  RV.width(rval('rv_width').um, euclidian).output('via.rv.width',
+    "via.rv.width: RV min width #{rval('rv_width')} um [lef]")
+  RV.space(rval('rv_space').um, euclidian).output('via.rv.space',
+    "via.rv.space: RV min spacing #{rval('rv_space')} um [lef]")
+  RV.space(rval('rv_array_space').um, euclidian).output('via.rv.array_space',
+    "via.rv.array_space: RV array spacing #{rval('rv_array_space')} um [lef]")
+end

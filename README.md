@@ -5,6 +5,7 @@
 ## Todo
 
 - RAMs, DRC/LVS Rules, SPICE Models, PDN, RC, etc
+- Recover remaining proprietary ITF/captable interpolation and IDB ingestion semantics from static ICS55 clues (future research)
 - User Guide, Tutorials, Datasheets, etc
 
 ## Usage

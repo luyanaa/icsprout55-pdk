@@ -1,0 +1,89 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS connectivity
+#
+# IMPORTANT: the raw ACT/PACT/NACT regions are NOT connected - they span gate +
+# source + drain in one polygon, so connecting them to CT would short the
+# transistor terminals.  Only the gate-excluded source/drain regions (NSD/PSD)
+# and the poly (POLY_CON) enter the conductive stack.
+#
+# Conductor stack: NSD/PSD/POLY -> CT -> M1 -> V1 -> M2 ... M5 -> TV2 -> TM2.
+# Implants (NP/PP/ESD/LVTN/...) are masks and carry no connectivity.
+# Pins: M1..M5 labels (81/6..85/6) and TM2 labels (103/6) name the nets.
+# Bulk: PSUB globally tied to VSS, NW to VDD (std-cell convention) unless
+# -rd no_well_ties=true.
+#=========================================================================================
+
+# --- source/drain and poly to contacts ---------------------------------------------
+
+connect(NSD, CT)
+connect(PSD, CT)
+connect(NIOSD, CT)
+connect(PIOSD, CT)
+connect(POLY_CON, CT)
+
+# --- gate terminal layers into the poly net ----------------------------------------
+
+connect(NGATE, POLY_CON)
+connect(PGATE, POLY_CON)
+connect(NIOGATE, POLY_CON)
+connect(PIOGATE, POLY_CON)
+connect(NGATE_SVT, NGATE)
+connect(NGATE_LVT, NGATE)
+connect(NGATE_HVT, NGATE)
+connect(PGATE_SVT, PGATE)
+connect(PGATE_LVT, PGATE)
+connect(PGATE_HVT, PGATE)
+connect(NIOGATE_REG, NIOGATE)
+connect(PIOGATE_REG, PIOGATE)
+
+# --- resistor body (PPO-marked poly; kept off the gate poly net) -------------------
+
+connect(RES_POLY, CT)
+
+# --- diode anode (ESD region; gate-free by construction) ---------------------------
+
+connect(DIO_ANODE, CT)
+
+# --- metal stack -------------------------------------------------------------------
+
+connect(CT, M1)
+connect(M1, V1)
+connect(V1, M2)
+connect(M2, V2)
+connect(V2, M3)
+connect(M3, V3)
+connect(V3, M4)
+connect(M4, V4)
+connect(V4, M5)
+connect(M5, TV2)
+connect(TV2, TM2)
+
+# --- pin labels -------------------------------------------------------------------
+
+connect(M1, M1LBL)
+connect(M2, M2LBL)
+connect(M3, M3LBL)
+connect(M4, M4LBL)
+connect(M5, M5LBL)
+connect(TM2, TM2LBL)
+
+# --- bulk ties (std-cell convention: CDL bulk terminals are VDD/VSS) ---------------
+
+if WELL_TIES
+  connect_global(PSUB, "VSS")
+  connect_global(NW, "VDD")
+end

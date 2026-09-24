@@ -1,0 +1,28 @@
+v {xschem version=3.4.7 file_version=1.2
+* ICsprout55 junction diode - dio_1p2_* / dio_3p3_pp_nw_lp (ESD)
+* terminals (CDL order): A K  ; instance params AREA/PJ
+}
+G {}
+K {type=diode
+format="@name @pinlist dio_@model AREA=@AREA PJ=@PJ"
+template="name=D1
+model=3p3_pp_nw_lp
+AREA=20p
+PJ=24u
+spiceprefix=D
+"}
+V {}
+S {}
+F {}
+E {}
+L 4 0 20 0 30 {}
+L 4 0 -30 0 -20 {}
+L 4 -10 -20 10 -20 {}
+L 4 10 -20 0 -10 {}
+L 4 -10 -20 0 -10 {}
+B 5 -2.5 -32.5 2.5 -27.5 {name=A dir=inout pinnumber=1}
+B 5 -2.5 27.5 2.5 32.5 {name=K dir=inout pinnumber=2}
+T {A} 5 -27.5 0 0 0.15 0.15 {layer=7}
+T {K} 5 18.75 0 0 0.15 0.15 {layer=7}
+T {@name} 15 -28.75 0 0 0.2 0.2 {}
+T {@model} 15 -11.25 0 0 0.2 0.2 {}

@@ -1,0 +1,75 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS layer definitions
+#
+# Layer numbers per libs.tech/klayout/tech/ics55.map.
+#=========================================================================================
+
+# --- input layers ------------------------------------------------------------------
+
+ACT    = input(2, 1)
+NW     = input(9, 1)
+LVTN   = input(17, 1)
+LVTP   = input(18, 1)
+HVTN   = input(21, 1)
+HVTP   = input(22, 1)
+IOWELL = input(28, 1)
+POLY   = input(41, 1)
+PPO    = input(41, 4)
+NP     = input(52, 1)
+PP     = input(53, 1)
+ESD    = input(55, 1)
+IOACT  = input(71, 1)
+CT     = input(72, 1)
+M1     = input(81, 1)
+M1LBL  = input(81, 6)
+M2     = input(82, 1)
+M2LBL  = input(82, 6)
+M3     = input(83, 1)
+M3LBL  = input(83, 6)
+M4     = input(84, 1)
+M4LBL  = input(84, 6)
+M5     = input(85, 1)
+M5LBL  = input(85, 6)
+V1     = input(91, 1)
+V2     = input(92, 1)
+V3     = input(93, 1)
+V4     = input(94, 1)
+TM2    = input(103, 1)
+TM2LBL = input(103, 6)
+TV2    = input(113, 1)
+PADM   = input(120, 1)
+ALPAD  = input(121, 1)
+
+# --- derived layers (FreePDK45 convention) -----------------------------------------
+
+# n+/p+ active
+NACT = ACT.and(NP)
+PACT = ACT.and(PP)
+
+# IO active (3.3V)
+NIOACT = IOACT.and(NP)
+PIOACT = IOACT.and(PP)
+
+# gates, source/drain
+NGATE = POLY.and(NACT)
+PGATE = POLY.and(PACT)
+NIOGATE = POLY.and(NIOACT)
+PIOGATE = POLY.and(PIOACT)
+NSD = NACT.not(NGATE)
+PSD = PACT.not(PGATE)
+NIOSD = NIOACT.not(NIOGATE)
+PIOSD = PIOACT.not(PIOGATE)

@@ -1,0 +1,11 @@
+connect(NSD, CT)
+connect(PSD, CT)
+connect(POLY_CON, CT)
+connect(NGATE, POLY_CON)
+connect(PGATE, POLY_CON)
+connect(CT, M1)
+connect(M1, M1LBL)
+if WELL_TIES
+  connect_global(PSUB, "VSS")
+  connect_global(NW, "VDD")
+end

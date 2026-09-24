@@ -1,0 +1,8126 @@
+{
+  "technology_target": {
+    "node_nm": 55,
+    "vdd_v": 1.2,
+    "temperature_c": 25,
+    "interpolation": "geometric for positive parameters, linear otherwise",
+    "fraction_from_45nm_to_65nm": 0.5
+  },
+  "source_cards": {
+    "bulk65": "/Users/yanlu/Downloads/65nm_bulk.pm",
+    "lp45": "/Users/yanlu/Downloads/45nm_LP.pm",
+    "hp45": "/Users/yanlu/Downloads/45nm_HP.pm"
+  },
+  "all_nonzero_common_parameters": {
+    "nmos": {
+      "a0": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "a2": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "acde": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "agidl": {
+        "initial_55nm": 0.00019999999999999985,
+        "source_envelope": {
+          "min": 0.0002,
+          "max": 0.0002,
+          "source": [
+            0.0002,
+            0.0002,
+            0.0002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ags": {
+        "initial_55nm": 5e-21,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 1e-20,
+          "source": [
+            1e-20,
+            0.0,
+            0.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "aigbacc": {
+        "initial_55nm": 0.011999999999999999,
+        "source_envelope": {
+          "min": 0.012,
+          "max": 0.012,
+          "source": [
+            0.012,
+            0.012,
+            0.012
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "aigbinv": {
+        "initial_55nm": 0.013999999999999993,
+        "source_envelope": {
+          "min": 0.014,
+          "max": 0.014,
+          "source": [
+            0.014,
+            0.014,
+            0.014
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "aigc": {
+        "initial_55nm": 0.01351044040732944,
+        "source_envelope": {
+          "min": 0.012,
+          "max": 0.02,
+          "source": [
+            0.012,
+            0.015211,
+            0.02
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "aigsd": {
+        "initial_55nm": 0.01351044040732944,
+        "source_envelope": {
+          "min": 0.012,
+          "max": 0.02,
+          "source": [
+            0.012,
+            0.015211,
+            0.02
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "alpha0": {
+        "initial_55nm": 0.07399999999999998,
+        "source_envelope": {
+          "min": 0.074,
+          "max": 0.074,
+          "source": [
+            0.074,
+            0.074,
+            0.074
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "alpha1": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "at": {
+        "initial_55nm": 32999.99999999998,
+        "source_envelope": {
+          "min": 33000.0,
+          "max": 33000.0,
+          "source": [
+            33000.0,
+            33000.0,
+            33000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "beta0": {
+        "initial_55nm": 30.000000000000004,
+        "source_envelope": {
+          "min": 30.0,
+          "max": 30.0,
+          "source": [
+            30.0,
+            30.0,
+            30.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bgidl": {
+        "initial_55nm": 2100000000.0000029,
+        "source_envelope": {
+          "min": 2100000000.0,
+          "max": 2100000000.0,
+          "source": [
+            2100000000.0,
+            2100000000.0,
+            2100000000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigbacc": {
+        "initial_55nm": 0.002800000000000001,
+        "source_envelope": {
+          "min": 0.0028,
+          "max": 0.0028,
+          "source": [
+            0.0028,
+            0.0028,
+            0.0028
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigbinv": {
+        "initial_55nm": 0.004000000000000002,
+        "source_envelope": {
+          "min": 0.004,
+          "max": 0.004,
+          "source": [
+            0.004,
+            0.004,
+            0.004
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigc": {
+        "initial_55nm": 0.0027714544917786413,
+        "source_envelope": {
+          "min": 0.0025,
+          "max": 0.0028,
+          "source": [
+            0.0028,
+            0.0027432,
+            0.0025
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigsd": {
+        "initial_55nm": 0.0027714544917786413,
+        "source_envelope": {
+          "min": 0.0025,
+          "max": 0.0028,
+          "source": [
+            0.0028,
+            0.0027432,
+            0.0025
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "binunit": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bvd": {
+        "initial_55nm": 10.000000000000002,
+        "source_envelope": {
+          "min": 10.0,
+          "max": 10.0,
+          "source": [
+            10.0,
+            10.0,
+            10.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bvs": {
+        "initial_55nm": 10.000000000000002,
+        "source_envelope": {
+          "min": 10.0,
+          "max": 10.0,
+          "source": [
+            10.0,
+            10.0,
+            10.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "capmod": {
+        "initial_55nm": 2.0,
+        "source_envelope": {
+          "min": 2.0,
+          "max": 2.0,
+          "source": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cgbo": {
+        "initial_55nm": 2.5600000000000014e-11,
+        "source_envelope": {
+          "min": 2.56e-11,
+          "max": 2.56e-11,
+          "source": [
+            2.56e-11,
+            2.56e-11,
+            2.56e-11
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgdl": {
+        "initial_55nm": 2.6529999999999975e-10,
+        "source_envelope": {
+          "min": 2.653e-10,
+          "max": 2.653e-10,
+          "source": [
+            2.653e-10,
+            2.653e-10,
+            2.653e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgdo": {
+        "initial_55nm": 1.2845232578665124e-10,
+        "source_envelope": {
+          "min": 1.1e-10,
+          "max": 1.5e-10,
+          "source": [
+            1.5e-10,
+            1.1e-10,
+            1.1e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgidl": {
+        "initial_55nm": 0.00019999999999999985,
+        "source_envelope": {
+          "min": 0.0002,
+          "max": 0.0002,
+          "source": [
+            0.0002,
+            0.0002,
+            0.0002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cgsl": {
+        "initial_55nm": 2.6529999999999975e-10,
+        "source_envelope": {
+          "min": 2.653e-10,
+          "max": 2.653e-10,
+          "source": [
+            2.653e-10,
+            2.653e-10,
+            2.653e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgso": {
+        "initial_55nm": 1.2845232578665124e-10,
+        "source_envelope": {
+          "min": 1.1e-10,
+          "max": 1.5e-10,
+          "source": [
+            1.5e-10,
+            1.1e-10,
+            1.1e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cigbacc": {
+        "initial_55nm": 0.0020000000000000005,
+        "source_envelope": {
+          "min": 0.002,
+          "max": 0.002,
+          "source": [
+            0.002,
+            0.002,
+            0.002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cigbinv": {
+        "initial_55nm": 0.004000000000000002,
+        "source_envelope": {
+          "min": 0.004,
+          "max": 0.004,
+          "source": [
+            0.004,
+            0.004,
+            0.004
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cigc": {
+        "initial_55nm": 0.0020000000000000005,
+        "source_envelope": {
+          "min": 0.002,
+          "max": 0.002,
+          "source": [
+            0.002,
+            0.002,
+            0.002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cigsd": {
+        "initial_55nm": 0.0020000000000000005,
+        "source_envelope": {
+          "min": 0.002,
+          "max": 0.002,
+          "source": [
+            0.002,
+            0.002,
+            0.002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjd": {
+        "initial_55nm": 0.0005000000000000001,
+        "source_envelope": {
+          "min": 0.0005,
+          "max": 0.0005,
+          "source": [
+            0.0005,
+            0.0005,
+            0.0005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjs": {
+        "initial_55nm": 0.0005000000000000001,
+        "source_envelope": {
+          "min": 0.0005,
+          "max": 0.0005,
+          "source": [
+            0.0005,
+            0.0005,
+            0.0005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjswd": {
+        "initial_55nm": 4.999999999999994e-10,
+        "source_envelope": {
+          "min": 5e-10,
+          "max": 5e-10,
+          "source": [
+            5e-10,
+            5e-10,
+            5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjswgd": {
+        "initial_55nm": 4.999999999999994e-10,
+        "source_envelope": {
+          "min": 5e-10,
+          "max": 5e-10,
+          "source": [
+            5e-10,
+            5e-10,
+            5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjswgs": {
+        "initial_55nm": 3.0000000000000026e-10,
+        "source_envelope": {
+          "min": 3e-10,
+          "max": 3e-10,
+          "source": [
+            3e-10,
+            3e-10,
+            3e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjsws": {
+        "initial_55nm": 4.999999999999994e-10,
+        "source_envelope": {
+          "min": 5e-10,
+          "max": 5e-10,
+          "source": [
+            5e-10,
+            5e-10,
+            5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ckappad": {
+        "initial_55nm": 0.029999999999999995,
+        "source_envelope": {
+          "min": 0.03,
+          "max": 0.03,
+          "source": [
+            0.03,
+            0.03,
+            0.03
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "ckappas": {
+        "initial_55nm": 0.029999999999999995,
+        "source_envelope": {
+          "min": 0.03,
+          "max": 0.03,
+          "source": [
+            0.03,
+            0.03,
+            0.03
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "delta": {
+        "initial_55nm": 0.010000000000000005,
+        "source_envelope": {
+          "min": 0.01,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "diomod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "drout": {
+        "initial_55nm": 0.5,
+        "source_envelope": {
+          "min": 0.5,
+          "max": 0.5,
+          "source": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dsub": {
+        "initial_55nm": 0.10000000000000002,
+        "source_envelope": {
+          "min": 0.1,
+          "max": 0.1,
+          "source": [
+            0.1,
+            0.1,
+            0.1
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dtox": {
+        "initial_55nm": 4.415880433163927e-10,
+        "source_envelope": {
+          "min": 2.5e-10,
+          "max": 6.5e-10,
+          "source": [
+            6.5e-10,
+            3e-10,
+            2.5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "dvt0": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dvt1": {
+        "initial_55nm": 2.0,
+        "source_envelope": {
+          "min": 2.0,
+          "max": 2.0,
+          "source": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dvt2": {
+        "initial_55nm": -0.016,
+        "source_envelope": {
+          "min": -0.032,
+          "max": 0.0,
+          "source": [
+            -0.032,
+            0.0,
+            0.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "dvtp0": {
+        "initial_55nm": 3.1622776601683744e-10,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-09,
+          "source": [
+            1e-09,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "dvtp1": {
+        "initial_55nm": 0.10000000000000002,
+        "source_envelope": {
+          "min": 0.1,
+          "max": 0.1,
+          "source": [
+            0.1,
+            0.1,
+            0.1
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "egidl": {
+        "initial_55nm": 0.8,
+        "source_envelope": {
+          "min": 0.8,
+          "max": 0.8,
+          "source": [
+            0.8,
+            0.8,
+            0.8
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "eigbinv": {
+        "initial_55nm": 1.1,
+        "source_envelope": {
+          "min": 1.1,
+          "max": 1.1,
+          "source": [
+            1.1,
+            1.1,
+            1.1
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "epsrox": {
+        "initial_55nm": 3.8999999999999995,
+        "source_envelope": {
+          "min": 3.9,
+          "max": 3.9,
+          "source": [
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "eta0": {
+        "initial_55nm": 0.008514693182963202,
+        "source_envelope": {
+          "min": 0.0055,
+          "max": 0.0125,
+          "source": [
+            0.0058,
+            0.0125,
+            0.0055
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "fnoimod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "fprout": {
+        "initial_55nm": 0.2,
+        "source_envelope": {
+          "min": 0.2,
+          "max": 0.2,
+          "source": [
+            0.2,
+            0.2,
+            0.2
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "gbmin": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-10,
+          "source": [
+            1e-10,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "geomod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "igbmod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "igcmod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthdfwd": {
+        "initial_55nm": 0.010000000000000005,
+        "source_envelope": {
+          "min": 0.01,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthdrev": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthsfwd": {
+        "initial_55nm": 0.010000000000000005,
+        "source_envelope": {
+          "min": 0.01,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthsrev": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jsd": {
+        "initial_55nm": 0.00010000000000000009,
+        "source_envelope": {
+          "min": 0.0001,
+          "max": 0.0001,
+          "source": [
+            0.0001,
+            0.0001,
+            0.0001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jss": {
+        "initial_55nm": 0.00010000000000000009,
+        "source_envelope": {
+          "min": 0.0001,
+          "max": 0.0001,
+          "source": [
+            0.0001,
+            0.0001,
+            0.0001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jswd": {
+        "initial_55nm": 9.999999999999985e-12,
+        "source_envelope": {
+          "min": 1e-11,
+          "max": 1e-11,
+          "source": [
+            1e-11,
+            1e-11,
+            1e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jswgd": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-10,
+          "source": [
+            1e-10,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jswgs": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-10,
+          "source": [
+            1e-10,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jsws": {
+        "initial_55nm": 9.999999999999985e-12,
+        "source_envelope": {
+          "min": 1e-11,
+          "max": 1e-11,
+          "source": [
+            1e-11,
+            1e-11,
+            1e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "k1": {
+        "initial_55nm": 0.4,
+        "source_envelope": {
+          "min": 0.4,
+          "max": 0.4,
+          "source": [
+            0.4,
+            0.4,
+            0.4
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "k2": {
+        "initial_55nm": 0.005,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.0,
+            0.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "keta": {
+        "initial_55nm": 0.04000000000000001,
+        "source_envelope": {
+          "min": 0.04,
+          "max": 0.04,
+          "source": [
+            0.04,
+            0.04,
+            0.04
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "kt1": {
+        "initial_55nm": -0.11,
+        "source_envelope": {
+          "min": -0.11,
+          "max": -0.11,
+          "source": [
+            -0.11,
+            -0.11,
+            -0.11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "kt2": {
+        "initial_55nm": 0.022,
+        "source_envelope": {
+          "min": 0.022,
+          "max": 0.022,
+          "source": [
+            0.022,
+            0.022,
+            0.022
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "lint": {
+        "initial_55nm": 2.625e-09,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 5.25e-09,
+          "source": [
+            5.25e-09,
+            0.0,
+            3.75e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "lln": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "lwn": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "minv": {
+        "initial_55nm": 0.05000000000000001,
+        "source_envelope": {
+          "min": 0.05,
+          "max": 0.05,
+          "source": [
+            0.05,
+            0.05,
+            0.05
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjd": {
+        "initial_55nm": 0.5,
+        "source_envelope": {
+          "min": 0.5,
+          "max": 0.5,
+          "source": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjs": {
+        "initial_55nm": 0.5,
+        "source_envelope": {
+          "min": 0.5,
+          "max": 0.5,
+          "source": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjswd": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjswgd": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjswgs": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjsws": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "moin": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "ndep": {
+        "initial_55nm": 2.868727941091663e+18,
+        "source_envelope": {
+          "min": 2.54e+18,
+          "max": 3.24e+18,
+          "source": [
+            2.54e+18,
+            3.24e+18,
+            3.24e+18
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nfactor": {
+        "initial_55nm": 1.7435595774162693,
+        "source_envelope": {
+          "min": 1.6,
+          "max": 2.22,
+          "source": [
+            1.9,
+            1.6,
+            2.22
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "ngate": {
+        "initial_55nm": 4.4721359549995863e+21,
+        "source_envelope": {
+          "min": 2e+20,
+          "max": 1e+23,
+          "source": [
+            2e+20,
+            1e+23,
+            1e+23
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ngcon": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nigbacc": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nigbinv": {
+        "initial_55nm": 3.0000000000000004,
+        "source_envelope": {
+          "min": 3.0,
+          "max": 3.0,
+          "source": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nigc": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "njd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "njs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "noff": {
+        "initial_55nm": 0.9,
+        "source_envelope": {
+          "min": 0.9,
+          "max": 0.9,
+          "source": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "nsd": {
+        "initial_55nm": 2.0000000000000052e+20,
+        "source_envelope": {
+          "min": 2e+20,
+          "max": 2e+20,
+          "source": [
+            2e+20,
+            2e+20,
+            2e+20
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ntox": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "paramchk": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbswd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbswgd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbswgs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbsws": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pclm": {
+        "initial_55nm": 0.028284271247461905,
+        "source_envelope": {
+          "min": 0.02,
+          "max": 0.04,
+          "source": [
+            0.04,
+            0.02,
+            0.02
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdiblc1": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdiblc2": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdiblcb": {
+        "initial_55nm": -0.005,
+        "source_envelope": {
+          "min": -0.005,
+          "max": -0.005,
+          "source": [
+            -0.005,
+            -0.005,
+            -0.005
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdits": {
+        "initial_55nm": 0.07999999999999999,
+        "source_envelope": {
+          "min": 0.08,
+          "max": 0.08,
+          "source": [
+            0.08,
+            0.08,
+            0.08
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pditsd": {
+        "initial_55nm": 0.23,
+        "source_envelope": {
+          "min": 0.23,
+          "max": 0.23,
+          "source": [
+            0.23,
+            0.23,
+            0.23
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pditsl": {
+        "initial_55nm": 2300000.0000000005,
+        "source_envelope": {
+          "min": 2300000.0,
+          "max": 2300000.0,
+          "source": [
+            2300000.0,
+            2300000.0,
+            2300000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "permod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pigcd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "poxedge": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "prwb": {
+        "initial_55nm": 3.4e-11,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 6.8e-11,
+          "source": [
+            6.8e-11,
+            0.0,
+            0.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pscbe1": {
+        "initial_55nm": 814000000.0000008,
+        "source_envelope": {
+          "min": 814000000.0,
+          "max": 814000000.0,
+          "source": [
+            814000000.0,
+            814000000.0,
+            814000000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pscbe2": {
+        "initial_55nm": 9.999999999999994e-08,
+        "source_envelope": {
+          "min": 1e-07,
+          "max": 1e-07,
+          "source": [
+            1e-07,
+            1e-07,
+            1e-07
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pvag": {
+        "initial_55nm": 9.999999999999992e-21,
+        "source_envelope": {
+          "min": 1e-20,
+          "max": 1e-20,
+          "source": [
+            1e-20,
+            1e-20,
+            1e-20
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbdb": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbodymod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbpb": {
+        "initial_55nm": 4.999999999999999,
+        "source_envelope": {
+          "min": 5.0,
+          "max": 5.0,
+          "source": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbpd": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbps": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbsb": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rdsw": {
+        "initial_55nm": 186.1451046898628,
+        "source_envelope": {
+          "min": 155.0,
+          "max": 210.0,
+          "source": [
+            165.0,
+            210.0,
+            155.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "rdw": {
+        "initial_55nm": 82.4621125123532,
+        "source_envelope": {
+          "min": 80.0,
+          "max": 85.0,
+          "source": [
+            85.0,
+            80.0,
+            80.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "rgatemod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rsh": {
+        "initial_55nm": 4.999999999999999,
+        "source_envelope": {
+          "min": 5.0,
+          "max": 5.0,
+          "source": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rshg": {
+        "initial_55nm": 0.4,
+        "source_envelope": {
+          "min": 0.4,
+          "max": 0.4,
+          "source": [
+            0.4,
+            0.4,
+            0.4
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rsw": {
+        "initial_55nm": 82.4621125123532,
+        "source_envelope": {
+          "min": 80.0,
+          "max": 85.0,
+          "source": [
+            85.0,
+            80.0,
+            80.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "tcj": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tcjsw": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tcjswg": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tnom": {
+        "initial_55nm": 27.0,
+        "source_envelope": {
+          "min": 27.0,
+          "max": 27.0,
+          "source": [
+            27.0,
+            27.0,
+            27.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "toxe": {
+        "initial_55nm": 1.8248287590894686e-09,
+        "source_envelope": {
+          "min": 1.25e-09,
+          "max": 1.85e-09,
+          "source": [
+            1.85e-09,
+            1.8e-09,
+            1.25e-09
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "toxm": {
+        "initial_55nm": 1.8248287590894686e-09,
+        "source_envelope": {
+          "min": 1.25e-09,
+          "max": 1.85e-09,
+          "source": [
+            1.85e-09,
+            1.8e-09,
+            1.25e-09
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "toxp": {
+        "initial_55nm": 1.3416407864998745e-09,
+        "source_envelope": {
+          "min": 1e-09,
+          "max": 1.5e-09,
+          "source": [
+            1.2e-09,
+            1.5e-09,
+            1e-09
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "toxref": {
+        "initial_55nm": 1.8248287590894686e-09,
+        "source_envelope": {
+          "min": 1.25e-09,
+          "max": 1.85e-09,
+          "source": [
+            1.85e-09,
+            1.8e-09,
+            1.25e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tpb": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tpbsw": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tpbswg": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "u0": {
+        "initial_55nm": 0.04904997451579359,
+        "source_envelope": {
+          "min": 0.049,
+          "max": 0.054,
+          "source": [
+            0.0491,
+            0.049,
+            0.054
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "ua": {
+        "initial_55nm": 5.999999999999995e-10,
+        "source_envelope": {
+          "min": 6e-10,
+          "max": 6e-10,
+          "source": [
+            6e-10,
+            6e-10,
+            6e-10
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "ua1": {
+        "initial_55nm": 4.3100000000000035e-09,
+        "source_envelope": {
+          "min": 4.31e-09,
+          "max": 4.31e-09,
+          "source": [
+            4.31e-09,
+            4.31e-09,
+            4.31e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ub": {
+        "initial_55nm": 1.1999999999999979e-18,
+        "source_envelope": {
+          "min": 1.2e-18,
+          "max": 1.2e-18,
+          "source": [
+            1.2e-18,
+            1.2e-18,
+            1.2e-18
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "ub1": {
+        "initial_55nm": 7.61000000000001e-18,
+        "source_envelope": {
+          "min": 7.61e-18,
+          "max": 7.61e-18,
+          "source": [
+            7.61e-18,
+            7.61e-18,
+            7.61e-18
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "uc1": {
+        "initial_55nm": -5.6e-11,
+        "source_envelope": {
+          "min": -5.6e-11,
+          "max": -5.6e-11,
+          "source": [
+            -5.6e-11,
+            -5.6e-11,
+            -5.6e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ute": {
+        "initial_55nm": -1.5,
+        "source_envelope": {
+          "min": -1.5,
+          "max": -1.5,
+          "source": [
+            -1.5,
+            -1.5,
+            -1.5
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "version": {
+        "initial_55nm": 4.0,
+        "source_envelope": {
+          "min": 4.0,
+          "max": 4.0,
+          "source": [
+            4.0,
+            4.0,
+            4.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "vfb": {
+        "initial_55nm": -0.55,
+        "source_envelope": {
+          "min": -0.55,
+          "max": -0.55,
+          "source": [
+            -0.55,
+            -0.55,
+            -0.55
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "voff": {
+        "initial_55nm": -0.13,
+        "source_envelope": {
+          "min": -0.13,
+          "max": -0.13,
+          "source": [
+            -0.13,
+            -0.13,
+            -0.13
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "voffcv": {
+        "initial_55nm": 0.02,
+        "source_envelope": {
+          "min": 0.02,
+          "max": 0.02,
+          "source": [
+            0.02,
+            0.02,
+            0.02
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "vsat": {
+        "initial_55nm": 127138.50714870001,
+        "source_envelope": {
+          "min": 124340.0,
+          "max": 170000.0,
+          "source": [
+            124340.0,
+            130000.0,
+            170000.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "vth0": {
+        "initial_55nm": 0.5131900525146604,
+        "source_envelope": {
+          "min": 0.423,
+          "max": 0.62261,
+          "source": [
+            0.423,
+            0.62261,
+            0.46893
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "w0": {
+        "initial_55nm": 2.499999999999999e-06,
+        "source_envelope": {
+          "min": 2.5e-06,
+          "max": 2.5e-06,
+          "source": [
+            2.5e-06,
+            2.5e-06,
+            2.5e-06
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wint": {
+        "initial_55nm": 5e-09,
+        "source_envelope": {
+          "min": 5e-09,
+          "max": 5e-09,
+          "source": [
+            5e-09,
+            5e-09,
+            5e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wln": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wr": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wwn": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xj": {
+        "initial_55nm": 1.6565023392678933e-08,
+        "source_envelope": {
+          "min": 1.4e-08,
+          "max": 1.96e-08,
+          "source": [
+            1.96e-08,
+            1.4e-08,
+            1.4e-08
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xjbvd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xjbvs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xrcrg1": {
+        "initial_55nm": 12.0,
+        "source_envelope": {
+          "min": 12.0,
+          "max": 12.0,
+          "source": [
+            12.0,
+            12.0,
+            12.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xrcrg2": {
+        "initial_55nm": 4.999999999999999,
+        "source_envelope": {
+          "min": 5.0,
+          "max": 5.0,
+          "source": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xtid": {
+        "initial_55nm": 3.0000000000000004,
+        "source_envelope": {
+          "min": 3.0,
+          "max": 3.0,
+          "source": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xtis": {
+        "initial_55nm": 3.0000000000000004,
+        "source_envelope": {
+          "min": 3.0,
+          "max": 3.0,
+          "source": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      }
+    },
+    "pmos": {
+      "a0": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "a2": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "acde": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "agidl": {
+        "initial_55nm": 0.00019999999999999985,
+        "source_envelope": {
+          "min": 0.0002,
+          "max": 0.0002,
+          "source": [
+            0.0002,
+            0.0002,
+            0.0002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ags": {
+        "initial_55nm": 9.999999999999992e-21,
+        "source_envelope": {
+          "min": 1e-20,
+          "max": 1e-20,
+          "source": [
+            1e-20,
+            1e-20,
+            1e-20
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "aigbacc": {
+        "initial_55nm": 0.011999999999999999,
+        "source_envelope": {
+          "min": 0.012,
+          "max": 0.012,
+          "source": [
+            0.012,
+            0.012,
+            0.012
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "aigbinv": {
+        "initial_55nm": 0.013999999999999993,
+        "source_envelope": {
+          "min": 0.014,
+          "max": 0.014,
+          "source": [
+            0.014,
+            0.014,
+            0.014
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "aigc": {
+        "initial_55nm": 0.08181075723888637,
+        "source_envelope": {
+          "min": 0.0097,
+          "max": 0.69,
+          "source": [
+            0.69,
+            0.0097,
+            0.010687
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "aigsd": {
+        "initial_55nm": 0.009186402995732335,
+        "source_envelope": {
+          "min": 0.0087,
+          "max": 0.010687,
+          "source": [
+            0.0087,
+            0.0097,
+            0.010687
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "alpha0": {
+        "initial_55nm": 0.07399999999999998,
+        "source_envelope": {
+          "min": 0.074,
+          "max": 0.074,
+          "source": [
+            0.074,
+            0.074,
+            0.074
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "alpha1": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "at": {
+        "initial_55nm": 32999.99999999998,
+        "source_envelope": {
+          "min": 33000.0,
+          "max": 33000.0,
+          "source": [
+            33000.0,
+            33000.0,
+            33000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "b0": {
+        "initial_55nm": -5e-21,
+        "source_envelope": {
+          "min": -1e-20,
+          "max": 0.0,
+          "source": [
+            -1e-20,
+            0.0,
+            0.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "beta0": {
+        "initial_55nm": 30.000000000000004,
+        "source_envelope": {
+          "min": 30.0,
+          "max": 30.0,
+          "source": [
+            30.0,
+            30.0,
+            30.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bgidl": {
+        "initial_55nm": 2100000000.0000029,
+        "source_envelope": {
+          "min": 2100000000.0,
+          "max": 2100000000.0,
+          "source": [
+            2100000000.0,
+            2100000000.0,
+            2100000000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigbacc": {
+        "initial_55nm": 0.002800000000000001,
+        "source_envelope": {
+          "min": 0.0028,
+          "max": 0.0028,
+          "source": [
+            0.0028,
+            0.0028,
+            0.0028
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigbinv": {
+        "initial_55nm": 0.004000000000000002,
+        "source_envelope": {
+          "min": 0.004,
+          "max": 0.004,
+          "source": [
+            0.004,
+            0.004,
+            0.004
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigc": {
+        "initial_55nm": 0.001224744871391589,
+        "source_envelope": {
+          "min": 0.0012,
+          "max": 0.0012607,
+          "source": [
+            0.0012,
+            0.00125,
+            0.0012607
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bigsd": {
+        "initial_55nm": 0.001224744871391589,
+        "source_envelope": {
+          "min": 0.0012,
+          "max": 0.0012607,
+          "source": [
+            0.0012,
+            0.00125,
+            0.0012607
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "binunit": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bvd": {
+        "initial_55nm": 10.000000000000002,
+        "source_envelope": {
+          "min": 10.0,
+          "max": 10.0,
+          "source": [
+            10.0,
+            10.0,
+            10.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "bvs": {
+        "initial_55nm": 10.000000000000002,
+        "source_envelope": {
+          "min": 10.0,
+          "max": 10.0,
+          "source": [
+            10.0,
+            10.0,
+            10.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "capmod": {
+        "initial_55nm": 2.0,
+        "source_envelope": {
+          "min": 2.0,
+          "max": 2.0,
+          "source": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cgbo": {
+        "initial_55nm": 2.5600000000000014e-11,
+        "source_envelope": {
+          "min": 2.56e-11,
+          "max": 2.56e-11,
+          "source": [
+            2.56e-11,
+            2.56e-11,
+            2.56e-11
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgdl": {
+        "initial_55nm": 2.6529999999999975e-10,
+        "source_envelope": {
+          "min": 2.653e-10,
+          "max": 2.653e-10,
+          "source": [
+            2.653e-10,
+            2.653e-10,
+            2.653e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgdo": {
+        "initial_55nm": 1.2845232578665124e-10,
+        "source_envelope": {
+          "min": 1.1e-10,
+          "max": 1.5e-10,
+          "source": [
+            1.5e-10,
+            1.1e-10,
+            1.1e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgidl": {
+        "initial_55nm": 0.00019999999999999985,
+        "source_envelope": {
+          "min": 0.0002,
+          "max": 0.0002,
+          "source": [
+            0.0002,
+            0.0002,
+            0.0002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cgsl": {
+        "initial_55nm": 2.6529999999999975e-10,
+        "source_envelope": {
+          "min": 2.653e-10,
+          "max": 2.653e-10,
+          "source": [
+            2.653e-10,
+            2.653e-10,
+            2.653e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cgso": {
+        "initial_55nm": 1.2845232578665124e-10,
+        "source_envelope": {
+          "min": 1.1e-10,
+          "max": 1.5e-10,
+          "source": [
+            1.5e-10,
+            1.1e-10,
+            1.1e-10
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "cigbacc": {
+        "initial_55nm": 0.0020000000000000005,
+        "source_envelope": {
+          "min": 0.002,
+          "max": 0.002,
+          "source": [
+            0.002,
+            0.002,
+            0.002
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cigbinv": {
+        "initial_55nm": 0.004000000000000002,
+        "source_envelope": {
+          "min": 0.004,
+          "max": 0.004,
+          "source": [
+            0.004,
+            0.004,
+            0.004
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cigc": {
+        "initial_55nm": 0.0008000000000000003,
+        "source_envelope": {
+          "min": 0.0008,
+          "max": 0.0008,
+          "source": [
+            0.0008,
+            0.0008,
+            0.0008
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cigsd": {
+        "initial_55nm": 0.0008000000000000003,
+        "source_envelope": {
+          "min": 0.0008,
+          "max": 0.0008,
+          "source": [
+            0.0008,
+            0.0008,
+            0.0008
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjd": {
+        "initial_55nm": 0.0005000000000000001,
+        "source_envelope": {
+          "min": 0.0005,
+          "max": 0.0005,
+          "source": [
+            0.0005,
+            0.0005,
+            0.0005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjs": {
+        "initial_55nm": 0.0005000000000000001,
+        "source_envelope": {
+          "min": 0.0005,
+          "max": 0.0005,
+          "source": [
+            0.0005,
+            0.0005,
+            0.0005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjswd": {
+        "initial_55nm": 4.999999999999994e-10,
+        "source_envelope": {
+          "min": 5e-10,
+          "max": 5e-10,
+          "source": [
+            5e-10,
+            5e-10,
+            5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjswgd": {
+        "initial_55nm": 4.999999999999994e-10,
+        "source_envelope": {
+          "min": 5e-10,
+          "max": 5e-10,
+          "source": [
+            5e-10,
+            5e-10,
+            5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjswgs": {
+        "initial_55nm": 3.0000000000000026e-10,
+        "source_envelope": {
+          "min": 3e-10,
+          "max": 3e-10,
+          "source": [
+            3e-10,
+            3e-10,
+            3e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "cjsws": {
+        "initial_55nm": 4.999999999999994e-10,
+        "source_envelope": {
+          "min": 5e-10,
+          "max": 5e-10,
+          "source": [
+            5e-10,
+            5e-10,
+            5e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ckappad": {
+        "initial_55nm": 0.029999999999999995,
+        "source_envelope": {
+          "min": 0.03,
+          "max": 0.03,
+          "source": [
+            0.03,
+            0.03,
+            0.03
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "ckappas": {
+        "initial_55nm": 0.029999999999999995,
+        "source_envelope": {
+          "min": 0.03,
+          "max": 0.03,
+          "source": [
+            0.03,
+            0.03,
+            0.03
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "delta": {
+        "initial_55nm": 0.010000000000000005,
+        "source_envelope": {
+          "min": 0.01,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "diomod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "drout": {
+        "initial_55nm": 0.56,
+        "source_envelope": {
+          "min": 0.56,
+          "max": 0.56,
+          "source": [
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dsub": {
+        "initial_55nm": 0.10000000000000002,
+        "source_envelope": {
+          "min": 0.1,
+          "max": 0.1,
+          "source": [
+            0.1,
+            0.1,
+            0.1
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dtox": {
+        "initial_55nm": 4.898979485566362e-10,
+        "source_envelope": {
+          "min": 3e-10,
+          "max": 7.5e-10,
+          "source": [
+            7.5e-10,
+            3.2e-10,
+            3e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "dvt0": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dvt1": {
+        "initial_55nm": 2.0,
+        "source_envelope": {
+          "min": 2.0,
+          "max": 2.0,
+          "source": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "dvt2": {
+        "initial_55nm": -0.032,
+        "source_envelope": {
+          "min": -0.032,
+          "max": -0.032,
+          "source": [
+            -0.032,
+            -0.032,
+            -0.032
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "dvtp0": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-11,
+          "max": 1e-09,
+          "source": [
+            1e-09,
+            1e-11,
+            1e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "dvtp1": {
+        "initial_55nm": 0.05000000000000001,
+        "source_envelope": {
+          "min": 0.05,
+          "max": 0.05,
+          "source": [
+            0.05,
+            0.05,
+            0.05
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "egidl": {
+        "initial_55nm": 0.8,
+        "source_envelope": {
+          "min": 0.8,
+          "max": 0.8,
+          "source": [
+            0.8,
+            0.8,
+            0.8
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "eigbinv": {
+        "initial_55nm": 1.1,
+        "source_envelope": {
+          "min": 1.1,
+          "max": 1.1,
+          "source": [
+            1.1,
+            1.1,
+            1.1
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "epsrox": {
+        "initial_55nm": 3.8999999999999995,
+        "source_envelope": {
+          "min": 3.9,
+          "max": 3.9,
+          "source": [
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "eta0": {
+        "initial_55nm": 0.008514693182963202,
+        "source_envelope": {
+          "min": 0.0055,
+          "max": 0.0125,
+          "source": [
+            0.0058,
+            0.0125,
+            0.0055
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "fnoimod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "fprout": {
+        "initial_55nm": 0.2,
+        "source_envelope": {
+          "min": 0.2,
+          "max": 0.2,
+          "source": [
+            0.2,
+            0.2,
+            0.2
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "gbmin": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-10,
+          "source": [
+            1e-10,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "geomod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "igbmod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "igcmod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthdfwd": {
+        "initial_55nm": 0.010000000000000005,
+        "source_envelope": {
+          "min": 0.01,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthdrev": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthsfwd": {
+        "initial_55nm": 0.010000000000000005,
+        "source_envelope": {
+          "min": 0.01,
+          "max": 0.01,
+          "source": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ijthsrev": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jsd": {
+        "initial_55nm": 0.00010000000000000009,
+        "source_envelope": {
+          "min": 0.0001,
+          "max": 0.0001,
+          "source": [
+            0.0001,
+            0.0001,
+            0.0001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jss": {
+        "initial_55nm": 0.00010000000000000009,
+        "source_envelope": {
+          "min": 0.0001,
+          "max": 0.0001,
+          "source": [
+            0.0001,
+            0.0001,
+            0.0001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jswd": {
+        "initial_55nm": 9.999999999999985e-12,
+        "source_envelope": {
+          "min": 1e-11,
+          "max": 1e-11,
+          "source": [
+            1e-11,
+            1e-11,
+            1e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jswgd": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-10,
+          "source": [
+            1e-10,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jswgs": {
+        "initial_55nm": 9.999999999999996e-11,
+        "source_envelope": {
+          "min": 1e-10,
+          "max": 1e-10,
+          "source": [
+            1e-10,
+            1e-10,
+            1e-10
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "jsws": {
+        "initial_55nm": 9.999999999999985e-12,
+        "source_envelope": {
+          "min": 1e-11,
+          "max": 1e-11,
+          "source": [
+            1e-11,
+            1e-11,
+            1e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "k1": {
+        "initial_55nm": 0.4,
+        "source_envelope": {
+          "min": 0.4,
+          "max": 0.4,
+          "source": [
+            0.4,
+            0.4,
+            0.4
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "k2": {
+        "initial_55nm": -0.01,
+        "source_envelope": {
+          "min": -0.01,
+          "max": -0.01,
+          "source": [
+            -0.01,
+            -0.01,
+            -0.01
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "keta": {
+        "initial_55nm": -0.047,
+        "source_envelope": {
+          "min": -0.047,
+          "max": -0.047,
+          "source": [
+            -0.047,
+            -0.047,
+            -0.047
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "kt1": {
+        "initial_55nm": -0.11,
+        "source_envelope": {
+          "min": -0.11,
+          "max": -0.11,
+          "source": [
+            -0.11,
+            -0.11,
+            -0.11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "kt2": {
+        "initial_55nm": 0.022,
+        "source_envelope": {
+          "min": 0.022,
+          "max": 0.022,
+          "source": [
+            0.022,
+            0.022,
+            0.022
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "lint": {
+        "initial_55nm": 2.625e-09,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 5.25e-09,
+          "source": [
+            5.25e-09,
+            0.0,
+            3.75e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "lln": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "lwn": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "minv": {
+        "initial_55nm": 0.05000000000000001,
+        "source_envelope": {
+          "min": 0.05,
+          "max": 0.05,
+          "source": [
+            0.05,
+            0.05,
+            0.05
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjd": {
+        "initial_55nm": 0.5,
+        "source_envelope": {
+          "min": 0.5,
+          "max": 0.5,
+          "source": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjs": {
+        "initial_55nm": 0.5,
+        "source_envelope": {
+          "min": 0.5,
+          "max": 0.5,
+          "source": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjswd": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjswgd": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjswgs": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "mjsws": {
+        "initial_55nm": 0.33,
+        "source_envelope": {
+          "min": 0.33,
+          "max": 0.33,
+          "source": [
+            0.33,
+            0.33,
+            0.33
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "moin": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "ndep": {
+        "initial_55nm": 2.1360711598633564e+18,
+        "source_envelope": {
+          "min": 1.87e+18,
+          "max": 2.44e+18,
+          "source": [
+            1.87e+18,
+            2.44e+18,
+            2.44e+18
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nfactor": {
+        "initial_55nm": 1.849324200890693,
+        "source_envelope": {
+          "min": 1.8,
+          "max": 2.1,
+          "source": [
+            1.9,
+            1.8,
+            2.1
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "ngate": {
+        "initial_55nm": 4.4721359549995863e+21,
+        "source_envelope": {
+          "min": 2e+20,
+          "max": 1e+23,
+          "source": [
+            2e+20,
+            1e+23,
+            1e+23
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ngcon": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nigbacc": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nigbinv": {
+        "initial_55nm": 3.0000000000000004,
+        "source_envelope": {
+          "min": 3.0,
+          "max": 3.0,
+          "source": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "nigc": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "njd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "njs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "noff": {
+        "initial_55nm": 0.9,
+        "source_envelope": {
+          "min": 0.9,
+          "max": 0.9,
+          "source": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "nsd": {
+        "initial_55nm": 2.0000000000000052e+20,
+        "source_envelope": {
+          "min": 2e+20,
+          "max": 2e+20,
+          "source": [
+            2e+20,
+            2e+20,
+            2e+20
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ntox": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "paramchk": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbswd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbswgd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbswgs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pbsws": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pclm": {
+        "initial_55nm": 0.12000000000000001,
+        "source_envelope": {
+          "min": 0.12,
+          "max": 0.12,
+          "source": [
+            0.12,
+            0.12,
+            0.12
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdiblc1": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdiblc2": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdiblcb": {
+        "initial_55nm": 3.400000000000006e-08,
+        "source_envelope": {
+          "min": 3.4e-08,
+          "max": 3.4e-08,
+          "source": [
+            3.4e-08,
+            3.4e-08,
+            3.4e-08
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "pdits": {
+        "initial_55nm": 0.07999999999999999,
+        "source_envelope": {
+          "min": 0.08,
+          "max": 0.08,
+          "source": [
+            0.08,
+            0.08,
+            0.08
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pditsd": {
+        "initial_55nm": 0.23,
+        "source_envelope": {
+          "min": 0.23,
+          "max": 0.23,
+          "source": [
+            0.23,
+            0.23,
+            0.23
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pditsl": {
+        "initial_55nm": 2300000.0000000005,
+        "source_envelope": {
+          "min": 2300000.0,
+          "max": 2300000.0,
+          "source": [
+            2300000.0,
+            2300000.0,
+            2300000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "permod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pigcd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "poxedge": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "prwb": {
+        "initial_55nm": 3.4e-11,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 6.8e-11,
+          "source": [
+            6.8e-11,
+            0.0,
+            0.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "prwg": {
+        "initial_55nm": 1.61e-08,
+        "source_envelope": {
+          "min": 0.0,
+          "max": 3.22e-08,
+          "source": [
+            3.22e-08,
+            0.0,
+            0.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pscbe1": {
+        "initial_55nm": 814000000.0000008,
+        "source_envelope": {
+          "min": 814000000.0,
+          "max": 814000000.0,
+          "source": [
+            814000000.0,
+            814000000.0,
+            814000000.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pscbe2": {
+        "initial_55nm": 9.580000000000004e-07,
+        "source_envelope": {
+          "min": 9.58e-07,
+          "max": 9.58e-07,
+          "source": [
+            9.58e-07,
+            9.58e-07,
+            9.58e-07
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "pvag": {
+        "initial_55nm": 9.999999999999992e-21,
+        "source_envelope": {
+          "min": 1e-20,
+          "max": 1e-20,
+          "source": [
+            1e-20,
+            1e-20,
+            1e-20
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbdb": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbodymod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbpb": {
+        "initial_55nm": 4.999999999999999,
+        "source_envelope": {
+          "min": 5.0,
+          "max": 5.0,
+          "source": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbpd": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbps": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rbsb": {
+        "initial_55nm": 15.0,
+        "source_envelope": {
+          "min": 15.0,
+          "max": 15.0,
+          "source": [
+            15.0,
+            15.0,
+            15.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rdsw": {
+        "initial_55nm": 203.10096011589886,
+        "source_envelope": {
+          "min": 155.0,
+          "max": 250.0,
+          "source": [
+            165.0,
+            250.0,
+            155.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "rdw": {
+        "initial_55nm": 79.84359711335655,
+        "source_envelope": {
+          "min": 75.0,
+          "max": 85.0,
+          "source": [
+            85.0,
+            75.0,
+            75.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "rgatemod": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rsh": {
+        "initial_55nm": 4.999999999999999,
+        "source_envelope": {
+          "min": 5.0,
+          "max": 5.0,
+          "source": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rshg": {
+        "initial_55nm": 0.4,
+        "source_envelope": {
+          "min": 0.4,
+          "max": 0.4,
+          "source": [
+            0.4,
+            0.4,
+            0.4
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "rsw": {
+        "initial_55nm": 79.84359711335655,
+        "source_envelope": {
+          "min": 75.0,
+          "max": 85.0,
+          "source": [
+            85.0,
+            75.0,
+            75.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "tcj": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tcjsw": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tcjswg": {
+        "initial_55nm": 0.0010000000000000002,
+        "source_envelope": {
+          "min": 0.001,
+          "max": 0.001,
+          "source": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tnom": {
+        "initial_55nm": 27.0,
+        "source_envelope": {
+          "min": 27.0,
+          "max": 27.0,
+          "source": [
+            27.0,
+            27.0,
+            27.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "toxe": {
+        "initial_55nm": 1.8838789770046205e-09,
+        "source_envelope": {
+          "min": 1.3e-09,
+          "max": 1.95e-09,
+          "source": [
+            1.95e-09,
+            1.82e-09,
+            1.3e-09
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "toxm": {
+        "initial_55nm": 1.8838789770046205e-09,
+        "source_envelope": {
+          "min": 1.3e-09,
+          "max": 1.95e-09,
+          "source": [
+            1.95e-09,
+            1.82e-09,
+            1.3e-09
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "toxp": {
+        "initial_55nm": 1.3416407864998745e-09,
+        "source_envelope": {
+          "min": 1e-09,
+          "max": 1.5e-09,
+          "source": [
+            1.2e-09,
+            1.5e-09,
+            1e-09
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "toxref": {
+        "initial_55nm": 1.8838789770046205e-09,
+        "source_envelope": {
+          "min": 1.3e-09,
+          "max": 1.95e-09,
+          "source": [
+            1.95e-09,
+            1.82e-09,
+            1.3e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tpb": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tpbsw": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "tpbswg": {
+        "initial_55nm": 0.005000000000000002,
+        "source_envelope": {
+          "min": 0.005,
+          "max": 0.005,
+          "source": [
+            0.005,
+            0.005,
+            0.005
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "u0": {
+        "initial_55nm": 0.01097907099895069,
+        "source_envelope": {
+          "min": 0.00574,
+          "max": 0.021,
+          "source": [
+            0.00574,
+            0.021,
+            0.02
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "ua": {
+        "initial_55nm": 1.999999999999998e-09,
+        "source_envelope": {
+          "min": 2e-09,
+          "max": 2e-09,
+          "source": [
+            2e-09,
+            2e-09,
+            2e-09
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "ua1": {
+        "initial_55nm": 4.3100000000000035e-09,
+        "source_envelope": {
+          "min": 4.31e-09,
+          "max": 4.31e-09,
+          "source": [
+            4.31e-09,
+            4.31e-09,
+            4.31e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ub": {
+        "initial_55nm": 4.999999999999997e-19,
+        "source_envelope": {
+          "min": 5e-19,
+          "max": 5e-19,
+          "source": [
+            5e-19,
+            5e-19,
+            5e-19
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "ub1": {
+        "initial_55nm": 7.61000000000001e-18,
+        "source_envelope": {
+          "min": 7.61e-18,
+          "max": 7.61e-18,
+          "source": [
+            7.61e-18,
+            7.61e-18,
+            7.61e-18
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "uc1": {
+        "initial_55nm": -5.6e-11,
+        "source_envelope": {
+          "min": -5.6e-11,
+          "max": -5.6e-11,
+          "source": [
+            -5.6e-11,
+            -5.6e-11,
+            -5.6e-11
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "ute": {
+        "initial_55nm": -1.5,
+        "source_envelope": {
+          "min": -1.5,
+          "max": -1.5,
+          "source": [
+            -1.5,
+            -1.5,
+            -1.5
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "version": {
+        "initial_55nm": 4.0,
+        "source_envelope": {
+          "min": 4.0,
+          "max": 4.0,
+          "source": [
+            4.0,
+            4.0,
+            4.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "vfb": {
+        "initial_55nm": 0.55,
+        "source_envelope": {
+          "min": 0.55,
+          "max": 0.55,
+          "source": [
+            0.55,
+            0.55,
+            0.55
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "voff": {
+        "initial_55nm": -0.126,
+        "source_envelope": {
+          "min": -0.126,
+          "max": -0.126,
+          "source": [
+            -0.126,
+            -0.126,
+            -0.126
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "voffcv": {
+        "initial_55nm": 0.02,
+        "source_envelope": {
+          "min": 0.02,
+          "max": 0.02,
+          "source": [
+            0.02,
+            0.02,
+            0.02
+          ]
+        },
+        "group": "cv",
+        "status": "fit-candidate"
+      },
+      "vsat": {
+        "initial_55nm": 79372.53933193767,
+        "source_envelope": {
+          "min": 70000.0,
+          "max": 150000.0,
+          "source": [
+            70000.0,
+            90000.0,
+            150000.0
+          ]
+        },
+        "group": "drive",
+        "status": "fit-candidate"
+      },
+      "vth0": {
+        "initial_55nm": -0.476,
+        "source_envelope": {
+          "min": -0.587,
+          "max": -0.365,
+          "source": [
+            -0.365,
+            -0.587,
+            -0.49158
+          ]
+        },
+        "group": "leakage",
+        "status": "fit-candidate"
+      },
+      "w0": {
+        "initial_55nm": 2.499999999999999e-06,
+        "source_envelope": {
+          "min": 2.5e-06,
+          "max": 2.5e-06,
+          "source": [
+            2.5e-06,
+            2.5e-06,
+            2.5e-06
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wint": {
+        "initial_55nm": 5e-09,
+        "source_envelope": {
+          "min": 5e-09,
+          "max": 5e-09,
+          "source": [
+            5e-09,
+            5e-09,
+            5e-09
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wln": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wr": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "wwn": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xj": {
+        "initial_55nm": 1.6565023392678933e-08,
+        "source_envelope": {
+          "min": 1.4e-08,
+          "max": 1.96e-08,
+          "source": [
+            1.96e-08,
+            1.4e-08,
+            1.4e-08
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xjbvd": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xjbvs": {
+        "initial_55nm": 1.0,
+        "source_envelope": {
+          "min": 1.0,
+          "max": 1.0,
+          "source": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xrcrg1": {
+        "initial_55nm": 12.0,
+        "source_envelope": {
+          "min": 12.0,
+          "max": 12.0,
+          "source": [
+            12.0,
+            12.0,
+            12.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xrcrg2": {
+        "initial_55nm": 4.999999999999999,
+        "source_envelope": {
+          "min": 5.0,
+          "max": 5.0,
+          "source": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xtid": {
+        "initial_55nm": 3.0000000000000004,
+        "source_envelope": {
+          "min": 3.0,
+          "max": 3.0,
+          "source": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      },
+      "xtis": {
+        "initial_55nm": 3.0000000000000004,
+        "source_envelope": {
+          "min": 3.0,
+          "max": 3.0,
+          "source": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "group": null,
+        "status": "frozen-no-current-observable"
+      }
+    }
+  },
+  "fit_groups": {
+    "leakage": [
+      "vth0",
+      "voff",
+      "nfactor",
+      "eta0",
+      "dvt0",
+      "dvt1",
+      "dsub",
+      "pdiblc1",
+      "pdiblc2",
+      "pdiblcb",
+      "pclm",
+      "drout"
+    ],
+    "drive": [
+      "u0",
+      "ua",
+      "ub",
+      "uc",
+      "vsat",
+      "rdsw",
+      "rsw",
+      "rdw",
+      "a0",
+      "ags",
+      "keta"
+    ],
+    "cv": [
+      "toxe",
+      "toxp",
+      "toxm",
+      "cgso",
+      "cgdo",
+      "cgbo",
+      "cgdl",
+      "cgsl",
+      "ckappas",
+      "ckappad",
+      "moin",
+      "noff",
+      "voffcv"
+    ]
+  },
+  "flavors": {
+    "svt": {
+      "devices": {
+        "nmos": {
+          "initial": {
+            "vth0": 0.8672682171145999,
+            "voff": -0.02591443142064616,
+            "nfactor": 1.7435595774162693,
+            "eta0": 0.008514693182963202,
+            "dvt0": 1.0,
+            "dvt1": 2.0,
+            "dsub": 0.10000000000000002,
+            "pdiblc1": 0.0005042141247441679,
+            "pdiblc2": 0.0005042141247441679,
+            "pdiblcb": -0.0025210706237208396,
+            "pclm": 0.028284271247461905,
+            "drout": 0.5,
+            "u0": 0.04904997451579359,
+            "ua": 5.999999999999995e-10,
+            "ub": 1.1999999999999979e-18,
+            "uc": 0.0,
+            "vsat": 127138.50714870001,
+            "rdsw": 186.1451046898628,
+            "rsw": 82.4621125123532,
+            "rdw": 82.4621125123532,
+            "a0": 1.0,
+            "ags": 5e-21,
+            "keta": 0.04000000000000001,
+            "toxe": 1.8248287590894686e-09,
+            "toxp": 1.3416407864998745e-09,
+            "toxm": 1.8248287590894686e-09,
+            "cgso": 1.2845232578665124e-10,
+            "cgdo": 1.2845232578665124e-10,
+            "cgbo": 2.5600000000000014e-11,
+            "cgdl": 2.6529999999999975e-10,
+            "cgsl": 2.6529999999999975e-10,
+            "ckappas": 0.029999999999999995,
+            "ckappad": 0.029999999999999995,
+            "moin": 15.0,
+            "noff": 0.9,
+            "voffcv": 0.02
+          },
+          "source_envelope": {
+            "vth0": {
+              "min": 0.423,
+              "max": 0.62261,
+              "source": [
+                0.423,
+                0.62261,
+                0.46893
+              ]
+            },
+            "voff": {
+              "min": -0.13,
+              "max": -0.13,
+              "source": [
+                -0.13,
+                -0.13,
+                -0.13
+              ]
+            },
+            "nfactor": {
+              "min": 1.6,
+              "max": 2.22,
+              "source": [
+                1.9,
+                1.6,
+                2.22
+              ]
+            },
+            "eta0": {
+              "min": 0.0055,
+              "max": 0.0125,
+              "source": [
+                0.0058,
+                0.0125,
+                0.0055
+              ]
+            },
+            "dvt0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "dvt1": {
+              "min": 2.0,
+              "max": 2.0,
+              "source": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            },
+            "dsub": {
+              "min": 0.1,
+              "max": 0.1,
+              "source": [
+                0.1,
+                0.1,
+                0.1
+              ]
+            },
+            "pdiblc1": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblc2": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblcb": {
+              "min": -0.005,
+              "max": -0.005,
+              "source": [
+                -0.005,
+                -0.005,
+                -0.005
+              ]
+            },
+            "pclm": {
+              "min": 0.02,
+              "max": 0.04,
+              "source": [
+                0.04,
+                0.02,
+                0.02
+              ]
+            },
+            "drout": {
+              "min": 0.5,
+              "max": 0.5,
+              "source": [
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            "u0": {
+              "min": 0.049,
+              "max": 0.054,
+              "source": [
+                0.0491,
+                0.049,
+                0.054
+              ]
+            },
+            "ua": {
+              "min": 6e-10,
+              "max": 6e-10,
+              "source": [
+                6e-10,
+                6e-10,
+                6e-10
+              ]
+            },
+            "ub": {
+              "min": 1.2e-18,
+              "max": 1.2e-18,
+              "source": [
+                1.2e-18,
+                1.2e-18,
+                1.2e-18
+              ]
+            },
+            "uc": {
+              "min": 0.0,
+              "max": 0.0,
+              "source": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "vsat": {
+              "min": 124340.0,
+              "max": 170000.0,
+              "source": [
+                124340.0,
+                130000.0,
+                170000.0
+              ]
+            },
+            "rdsw": {
+              "min": 155.0,
+              "max": 210.0,
+              "source": [
+                165.0,
+                210.0,
+                155.0
+              ]
+            },
+            "rsw": {
+              "min": 80.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                80.0,
+                80.0
+              ]
+            },
+            "rdw": {
+              "min": 80.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                80.0,
+                80.0
+              ]
+            },
+            "a0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "ags": {
+              "min": 0.0,
+              "max": 1e-20,
+              "source": [
+                1e-20,
+                0.0,
+                0.0
+              ]
+            },
+            "keta": {
+              "min": 0.04,
+              "max": 0.04,
+              "source": [
+                0.04,
+                0.04,
+                0.04
+              ]
+            },
+            "toxe": {
+              "min": 1.25e-09,
+              "max": 1.85e-09,
+              "source": [
+                1.85e-09,
+                1.8e-09,
+                1.25e-09
+              ]
+            },
+            "toxp": {
+              "min": 1e-09,
+              "max": 1.5e-09,
+              "source": [
+                1.2e-09,
+                1.5e-09,
+                1e-09
+              ]
+            },
+            "toxm": {
+              "min": 1.25e-09,
+              "max": 1.85e-09,
+              "source": [
+                1.85e-09,
+                1.8e-09,
+                1.25e-09
+              ]
+            },
+            "cgso": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgdo": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgbo": {
+              "min": 2.56e-11,
+              "max": 2.56e-11,
+              "source": [
+                2.56e-11,
+                2.56e-11,
+                2.56e-11
+              ]
+            },
+            "cgdl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "cgsl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "ckappas": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "ckappad": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "moin": {
+              "min": 15.0,
+              "max": 15.0,
+              "source": [
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            "noff": {
+              "min": 0.9,
+              "max": 0.9,
+              "source": [
+                0.9,
+                0.9,
+                0.9
+              ]
+            },
+            "voffcv": {
+              "min": 0.02,
+              "max": 0.02,
+              "source": [
+                0.02,
+                0.02,
+                0.02
+              ]
+            }
+          },
+          "bounds": {
+            "vth0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "nfactor": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "eta0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dsub": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc2": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblcb": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pclm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "drout": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "u0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ua": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ub": {
+              "kind": "freeze",
+              "lower": 1.1999999999999979e-18,
+              "upper": 1.1999999999999979e-18
+            },
+            "uc": {
+              "kind": "freeze",
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "vsat": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "a0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ags": {
+              "kind": "freeze",
+              "lower": 5e-21,
+              "upper": 5e-21
+            },
+            "keta": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxe": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxp": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgso": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgdo": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgbo": {
+              "kind": "freeze",
+              "lower": 2.5600000000000014e-11,
+              "upper": 2.5600000000000014e-11
+            },
+            "cgdl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgsl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappas": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappad": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "moin": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "noff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voffcv": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            }
+          },
+          "conventions": {
+            "vth0": "signed NMOS voltage"
+          }
+        },
+        "pmos": {
+          "initial": {
+            "vth0": 0.4850767111658831,
+            "voff": -0.14729805262505377,
+            "nfactor": 1.849324200890693,
+            "eta0": 0.008514693182963202,
+            "dvt0": 1.0,
+            "dvt1": 2.0,
+            "dsub": 0.10000000000000002,
+            "pdiblc1": 0.0006930103657582995,
+            "pdiblc2": 0.0006930103657582995,
+            "pdiblcb": 2.356235243578218e-08,
+            "pclm": 0.12000000000000001,
+            "drout": 0.56,
+            "u0": 0.01097907099895069,
+            "ua": 1.999999999999998e-09,
+            "ub": 4.999999999999997e-19,
+            "uc": 0.0,
+            "vsat": 79372.53933193767,
+            "rdsw": 203.10096011589886,
+            "rsw": 79.84359711335655,
+            "rdw": 79.84359711335655,
+            "a0": 1.0,
+            "ags": 9.999999999999992e-21,
+            "keta": -0.047,
+            "toxe": 1.8838789770046205e-09,
+            "toxp": 1.3416407864998745e-09,
+            "toxm": 1.8838789770046205e-09,
+            "cgso": 1.2845232578665124e-10,
+            "cgdo": 1.2845232578665124e-10,
+            "cgbo": 2.5600000000000014e-11,
+            "cgdl": 2.6529999999999975e-10,
+            "cgsl": 2.6529999999999975e-10,
+            "ckappas": 0.029999999999999995,
+            "ckappad": 0.029999999999999995,
+            "moin": 15.0,
+            "noff": 0.9,
+            "voffcv": 0.02
+          },
+          "source_envelope": {
+            "vth0": {
+              "min": -0.587,
+              "max": -0.365,
+              "source": [
+                -0.365,
+                -0.587,
+                -0.49158
+              ]
+            },
+            "voff": {
+              "min": -0.126,
+              "max": -0.126,
+              "source": [
+                -0.126,
+                -0.126,
+                -0.126
+              ]
+            },
+            "nfactor": {
+              "min": 1.8,
+              "max": 2.1,
+              "source": [
+                1.9,
+                1.8,
+                2.1
+              ]
+            },
+            "eta0": {
+              "min": 0.0055,
+              "max": 0.0125,
+              "source": [
+                0.0058,
+                0.0125,
+                0.0055
+              ]
+            },
+            "dvt0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "dvt1": {
+              "min": 2.0,
+              "max": 2.0,
+              "source": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            },
+            "dsub": {
+              "min": 0.1,
+              "max": 0.1,
+              "source": [
+                0.1,
+                0.1,
+                0.1
+              ]
+            },
+            "pdiblc1": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblc2": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblcb": {
+              "min": 3.4e-08,
+              "max": 3.4e-08,
+              "source": [
+                3.4e-08,
+                3.4e-08,
+                3.4e-08
+              ]
+            },
+            "pclm": {
+              "min": 0.12,
+              "max": 0.12,
+              "source": [
+                0.12,
+                0.12,
+                0.12
+              ]
+            },
+            "drout": {
+              "min": 0.56,
+              "max": 0.56,
+              "source": [
+                0.56,
+                0.56,
+                0.56
+              ]
+            },
+            "u0": {
+              "min": 0.00574,
+              "max": 0.021,
+              "source": [
+                0.00574,
+                0.021,
+                0.02
+              ]
+            },
+            "ua": {
+              "min": 2e-09,
+              "max": 2e-09,
+              "source": [
+                2e-09,
+                2e-09,
+                2e-09
+              ]
+            },
+            "ub": {
+              "min": 5e-19,
+              "max": 5e-19,
+              "source": [
+                5e-19,
+                5e-19,
+                5e-19
+              ]
+            },
+            "uc": {
+              "min": 0.0,
+              "max": 0.0,
+              "source": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "vsat": {
+              "min": 70000.0,
+              "max": 150000.0,
+              "source": [
+                70000.0,
+                90000.0,
+                150000.0
+              ]
+            },
+            "rdsw": {
+              "min": 155.0,
+              "max": 250.0,
+              "source": [
+                165.0,
+                250.0,
+                155.0
+              ]
+            },
+            "rsw": {
+              "min": 75.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                75.0,
+                75.0
+              ]
+            },
+            "rdw": {
+              "min": 75.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                75.0,
+                75.0
+              ]
+            },
+            "a0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "ags": {
+              "min": 1e-20,
+              "max": 1e-20,
+              "source": [
+                1e-20,
+                1e-20,
+                1e-20
+              ]
+            },
+            "keta": {
+              "min": -0.047,
+              "max": -0.047,
+              "source": [
+                -0.047,
+                -0.047,
+                -0.047
+              ]
+            },
+            "toxe": {
+              "min": 1.3e-09,
+              "max": 1.95e-09,
+              "source": [
+                1.95e-09,
+                1.82e-09,
+                1.3e-09
+              ]
+            },
+            "toxp": {
+              "min": 1e-09,
+              "max": 1.5e-09,
+              "source": [
+                1.2e-09,
+                1.5e-09,
+                1e-09
+              ]
+            },
+            "toxm": {
+              "min": 1.3e-09,
+              "max": 1.95e-09,
+              "source": [
+                1.95e-09,
+                1.82e-09,
+                1.3e-09
+              ]
+            },
+            "cgso": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgdo": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgbo": {
+              "min": 2.56e-11,
+              "max": 2.56e-11,
+              "source": [
+                2.56e-11,
+                2.56e-11,
+                2.56e-11
+              ]
+            },
+            "cgdl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "cgsl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "ckappas": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "ckappad": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "moin": {
+              "min": 15.0,
+              "max": 15.0,
+              "source": [
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            "noff": {
+              "min": 0.9,
+              "max": 0.9,
+              "source": [
+                0.9,
+                0.9,
+                0.9
+              ]
+            },
+            "voffcv": {
+              "min": 0.02,
+              "max": 0.02,
+              "source": [
+                0.02,
+                0.02,
+                0.02
+              ]
+            }
+          },
+          "bounds": {
+            "vth0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "nfactor": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "eta0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dsub": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc2": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblcb": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pclm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "drout": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "u0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ua": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ub": {
+              "kind": "freeze",
+              "lower": 4.999999999999997e-19,
+              "upper": 4.999999999999997e-19
+            },
+            "uc": {
+              "kind": "freeze",
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "vsat": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "a0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ags": {
+              "kind": "freeze",
+              "lower": 9.999999999999992e-21,
+              "upper": 9.999999999999992e-21
+            },
+            "keta": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxe": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxp": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgso": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgdo": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgbo": {
+              "kind": "freeze",
+              "lower": 2.5600000000000014e-11,
+              "upper": 2.5600000000000014e-11
+            },
+            "cgdl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgsl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappas": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappad": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "moin": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "noff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voffcv": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            }
+          },
+          "conventions": {
+            "vth0": "positive magnitude for PMOS, signed value for NMOS"
+          }
+        }
+      },
+      "drive_delay_model_over_target": 1.93
+    },
+    "lvt": {
+      "devices": {
+        "nmos": {
+          "initial": {
+            "vth0": 0.6610267587163352,
+            "voff": -0.07229331509568096,
+            "nfactor": 1.7435595774162693,
+            "eta0": 0.008514693182963202,
+            "dvt0": 1.0,
+            "dvt1": 2.0,
+            "dsub": 0.10000000000000002,
+            "pdiblc1": 5.132181431260993e-05,
+            "pdiblc2": 5.132181431260993e-05,
+            "pdiblcb": -0.00025660907156304963,
+            "pclm": 0.028284271247461905,
+            "drout": 0.5,
+            "u0": 0.04904997451579359,
+            "ua": 5.999999999999995e-10,
+            "ub": 1.1999999999999979e-18,
+            "uc": 0.0,
+            "vsat": 127138.50714870001,
+            "rdsw": 186.1451046898628,
+            "rsw": 82.4621125123532,
+            "rdw": 82.4621125123532,
+            "a0": 1.0,
+            "ags": 5e-21,
+            "keta": 0.04000000000000001,
+            "toxe": 1.8248287590894686e-09,
+            "toxp": 1.3416407864998745e-09,
+            "toxm": 1.8248287590894686e-09,
+            "cgso": 1.2845232578665124e-10,
+            "cgdo": 1.2845232578665124e-10,
+            "cgbo": 2.5600000000000014e-11,
+            "cgdl": 2.6529999999999975e-10,
+            "cgsl": 2.6529999999999975e-10,
+            "ckappas": 0.029999999999999995,
+            "ckappad": 0.029999999999999995,
+            "moin": 15.0,
+            "noff": 0.9,
+            "voffcv": 0.02
+          },
+          "source_envelope": {
+            "vth0": {
+              "min": 0.423,
+              "max": 0.62261,
+              "source": [
+                0.423,
+                0.62261,
+                0.46893
+              ]
+            },
+            "voff": {
+              "min": -0.13,
+              "max": -0.13,
+              "source": [
+                -0.13,
+                -0.13,
+                -0.13
+              ]
+            },
+            "nfactor": {
+              "min": 1.6,
+              "max": 2.22,
+              "source": [
+                1.9,
+                1.6,
+                2.22
+              ]
+            },
+            "eta0": {
+              "min": 0.0055,
+              "max": 0.0125,
+              "source": [
+                0.0058,
+                0.0125,
+                0.0055
+              ]
+            },
+            "dvt0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "dvt1": {
+              "min": 2.0,
+              "max": 2.0,
+              "source": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            },
+            "dsub": {
+              "min": 0.1,
+              "max": 0.1,
+              "source": [
+                0.1,
+                0.1,
+                0.1
+              ]
+            },
+            "pdiblc1": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblc2": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblcb": {
+              "min": -0.005,
+              "max": -0.005,
+              "source": [
+                -0.005,
+                -0.005,
+                -0.005
+              ]
+            },
+            "pclm": {
+              "min": 0.02,
+              "max": 0.04,
+              "source": [
+                0.04,
+                0.02,
+                0.02
+              ]
+            },
+            "drout": {
+              "min": 0.5,
+              "max": 0.5,
+              "source": [
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            "u0": {
+              "min": 0.049,
+              "max": 0.054,
+              "source": [
+                0.0491,
+                0.049,
+                0.054
+              ]
+            },
+            "ua": {
+              "min": 6e-10,
+              "max": 6e-10,
+              "source": [
+                6e-10,
+                6e-10,
+                6e-10
+              ]
+            },
+            "ub": {
+              "min": 1.2e-18,
+              "max": 1.2e-18,
+              "source": [
+                1.2e-18,
+                1.2e-18,
+                1.2e-18
+              ]
+            },
+            "uc": {
+              "min": 0.0,
+              "max": 0.0,
+              "source": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "vsat": {
+              "min": 124340.0,
+              "max": 170000.0,
+              "source": [
+                124340.0,
+                130000.0,
+                170000.0
+              ]
+            },
+            "rdsw": {
+              "min": 155.0,
+              "max": 210.0,
+              "source": [
+                165.0,
+                210.0,
+                155.0
+              ]
+            },
+            "rsw": {
+              "min": 80.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                80.0,
+                80.0
+              ]
+            },
+            "rdw": {
+              "min": 80.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                80.0,
+                80.0
+              ]
+            },
+            "a0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "ags": {
+              "min": 0.0,
+              "max": 1e-20,
+              "source": [
+                1e-20,
+                0.0,
+                0.0
+              ]
+            },
+            "keta": {
+              "min": 0.04,
+              "max": 0.04,
+              "source": [
+                0.04,
+                0.04,
+                0.04
+              ]
+            },
+            "toxe": {
+              "min": 1.25e-09,
+              "max": 1.85e-09,
+              "source": [
+                1.85e-09,
+                1.8e-09,
+                1.25e-09
+              ]
+            },
+            "toxp": {
+              "min": 1e-09,
+              "max": 1.5e-09,
+              "source": [
+                1.2e-09,
+                1.5e-09,
+                1e-09
+              ]
+            },
+            "toxm": {
+              "min": 1.25e-09,
+              "max": 1.85e-09,
+              "source": [
+                1.85e-09,
+                1.8e-09,
+                1.25e-09
+              ]
+            },
+            "cgso": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgdo": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgbo": {
+              "min": 2.56e-11,
+              "max": 2.56e-11,
+              "source": [
+                2.56e-11,
+                2.56e-11,
+                2.56e-11
+              ]
+            },
+            "cgdl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "cgsl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "ckappas": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "ckappad": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "moin": {
+              "min": 15.0,
+              "max": 15.0,
+              "source": [
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            "noff": {
+              "min": 0.9,
+              "max": 0.9,
+              "source": [
+                0.9,
+                0.9,
+                0.9
+              ]
+            },
+            "voffcv": {
+              "min": 0.02,
+              "max": 0.02,
+              "source": [
+                0.02,
+                0.02,
+                0.02
+              ]
+            }
+          },
+          "bounds": {
+            "vth0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "nfactor": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "eta0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dsub": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc2": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblcb": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pclm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "drout": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "u0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ua": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ub": {
+              "kind": "freeze",
+              "lower": 1.1999999999999979e-18,
+              "upper": 1.1999999999999979e-18
+            },
+            "uc": {
+              "kind": "freeze",
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "vsat": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "a0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ags": {
+              "kind": "freeze",
+              "lower": 5e-21,
+              "upper": 5e-21
+            },
+            "keta": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxe": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxp": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgso": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgdo": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgbo": {
+              "kind": "freeze",
+              "lower": 2.5600000000000014e-11,
+              "upper": 2.5600000000000014e-11
+            },
+            "cgdl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgsl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappas": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappad": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "moin": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "noff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voffcv": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            }
+          },
+          "conventions": {
+            "vth0": "signed NMOS voltage"
+          }
+        },
+        "pmos": {
+          "initial": {
+            "vth0": 0.287626263276859,
+            "voff": -0.03215607445716635,
+            "nfactor": 1.849324200890693,
+            "eta0": 0.008514693182963202,
+            "dvt0": 1.0,
+            "dvt1": 2.0,
+            "dsub": 0.10000000000000002,
+            "pdiblc1": 0.000899909157660711,
+            "pdiblc2": 0.000899909157660711,
+            "pdiblcb": 3.0596911360464176e-08,
+            "pclm": 0.12000000000000001,
+            "drout": 0.56,
+            "u0": 0.01097907099895069,
+            "ua": 1.999999999999998e-09,
+            "ub": 4.999999999999997e-19,
+            "uc": 0.0,
+            "vsat": 79372.53933193767,
+            "rdsw": 203.10096011589886,
+            "rsw": 79.84359711335655,
+            "rdw": 79.84359711335655,
+            "a0": 1.0,
+            "ags": 9.999999999999992e-21,
+            "keta": -0.047,
+            "toxe": 1.8838789770046205e-09,
+            "toxp": 1.3416407864998745e-09,
+            "toxm": 1.8838789770046205e-09,
+            "cgso": 1.2845232578665124e-10,
+            "cgdo": 1.2845232578665124e-10,
+            "cgbo": 2.5600000000000014e-11,
+            "cgdl": 2.6529999999999975e-10,
+            "cgsl": 2.6529999999999975e-10,
+            "ckappas": 0.029999999999999995,
+            "ckappad": 0.029999999999999995,
+            "moin": 15.0,
+            "noff": 0.9,
+            "voffcv": 0.02
+          },
+          "source_envelope": {
+            "vth0": {
+              "min": -0.587,
+              "max": -0.365,
+              "source": [
+                -0.365,
+                -0.587,
+                -0.49158
+              ]
+            },
+            "voff": {
+              "min": -0.126,
+              "max": -0.126,
+              "source": [
+                -0.126,
+                -0.126,
+                -0.126
+              ]
+            },
+            "nfactor": {
+              "min": 1.8,
+              "max": 2.1,
+              "source": [
+                1.9,
+                1.8,
+                2.1
+              ]
+            },
+            "eta0": {
+              "min": 0.0055,
+              "max": 0.0125,
+              "source": [
+                0.0058,
+                0.0125,
+                0.0055
+              ]
+            },
+            "dvt0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "dvt1": {
+              "min": 2.0,
+              "max": 2.0,
+              "source": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            },
+            "dsub": {
+              "min": 0.1,
+              "max": 0.1,
+              "source": [
+                0.1,
+                0.1,
+                0.1
+              ]
+            },
+            "pdiblc1": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblc2": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblcb": {
+              "min": 3.4e-08,
+              "max": 3.4e-08,
+              "source": [
+                3.4e-08,
+                3.4e-08,
+                3.4e-08
+              ]
+            },
+            "pclm": {
+              "min": 0.12,
+              "max": 0.12,
+              "source": [
+                0.12,
+                0.12,
+                0.12
+              ]
+            },
+            "drout": {
+              "min": 0.56,
+              "max": 0.56,
+              "source": [
+                0.56,
+                0.56,
+                0.56
+              ]
+            },
+            "u0": {
+              "min": 0.00574,
+              "max": 0.021,
+              "source": [
+                0.00574,
+                0.021,
+                0.02
+              ]
+            },
+            "ua": {
+              "min": 2e-09,
+              "max": 2e-09,
+              "source": [
+                2e-09,
+                2e-09,
+                2e-09
+              ]
+            },
+            "ub": {
+              "min": 5e-19,
+              "max": 5e-19,
+              "source": [
+                5e-19,
+                5e-19,
+                5e-19
+              ]
+            },
+            "uc": {
+              "min": 0.0,
+              "max": 0.0,
+              "source": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "vsat": {
+              "min": 70000.0,
+              "max": 150000.0,
+              "source": [
+                70000.0,
+                90000.0,
+                150000.0
+              ]
+            },
+            "rdsw": {
+              "min": 155.0,
+              "max": 250.0,
+              "source": [
+                165.0,
+                250.0,
+                155.0
+              ]
+            },
+            "rsw": {
+              "min": 75.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                75.0,
+                75.0
+              ]
+            },
+            "rdw": {
+              "min": 75.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                75.0,
+                75.0
+              ]
+            },
+            "a0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "ags": {
+              "min": 1e-20,
+              "max": 1e-20,
+              "source": [
+                1e-20,
+                1e-20,
+                1e-20
+              ]
+            },
+            "keta": {
+              "min": -0.047,
+              "max": -0.047,
+              "source": [
+                -0.047,
+                -0.047,
+                -0.047
+              ]
+            },
+            "toxe": {
+              "min": 1.3e-09,
+              "max": 1.95e-09,
+              "source": [
+                1.95e-09,
+                1.82e-09,
+                1.3e-09
+              ]
+            },
+            "toxp": {
+              "min": 1e-09,
+              "max": 1.5e-09,
+              "source": [
+                1.2e-09,
+                1.5e-09,
+                1e-09
+              ]
+            },
+            "toxm": {
+              "min": 1.3e-09,
+              "max": 1.95e-09,
+              "source": [
+                1.95e-09,
+                1.82e-09,
+                1.3e-09
+              ]
+            },
+            "cgso": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgdo": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgbo": {
+              "min": 2.56e-11,
+              "max": 2.56e-11,
+              "source": [
+                2.56e-11,
+                2.56e-11,
+                2.56e-11
+              ]
+            },
+            "cgdl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "cgsl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "ckappas": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "ckappad": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "moin": {
+              "min": 15.0,
+              "max": 15.0,
+              "source": [
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            "noff": {
+              "min": 0.9,
+              "max": 0.9,
+              "source": [
+                0.9,
+                0.9,
+                0.9
+              ]
+            },
+            "voffcv": {
+              "min": 0.02,
+              "max": 0.02,
+              "source": [
+                0.02,
+                0.02,
+                0.02
+              ]
+            }
+          },
+          "bounds": {
+            "vth0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "nfactor": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "eta0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dsub": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc2": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblcb": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pclm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "drout": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "u0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ua": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ub": {
+              "kind": "freeze",
+              "lower": 4.999999999999997e-19,
+              "upper": 4.999999999999997e-19
+            },
+            "uc": {
+              "kind": "freeze",
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "vsat": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "a0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ags": {
+              "kind": "freeze",
+              "lower": 9.999999999999992e-21,
+              "upper": 9.999999999999992e-21
+            },
+            "keta": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxe": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxp": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgso": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgdo": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgbo": {
+              "kind": "freeze",
+              "lower": 2.5600000000000014e-11,
+              "upper": 2.5600000000000014e-11
+            },
+            "cgdl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgsl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappas": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappad": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "moin": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "noff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voffcv": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            }
+          },
+          "conventions": {
+            "vth0": "positive magnitude for PMOS, signed value for NMOS"
+          }
+        }
+      },
+      "drive_delay_model_over_target": 1.31
+    },
+    "hvt": {
+      "devices": {
+        "nmos": {
+          "initial": {
+            "vth0": 1.036003807256853,
+            "voff": -0.09479355272359145,
+            "nfactor": 1.7435595774162693,
+            "eta0": 0.008514693182963202,
+            "dvt0": 1.0,
+            "dvt1": 2.0,
+            "dsub": 0.10000000000000002,
+            "pdiblc1": 0.00012129977378774245,
+            "pdiblc2": 0.00012129977378774245,
+            "pdiblcb": -0.0006064988689387122,
+            "pclm": 0.028284271247461905,
+            "drout": 0.5,
+            "u0": 0.04904997451579359,
+            "ua": 5.999999999999995e-10,
+            "ub": 1.1999999999999979e-18,
+            "uc": 0.0,
+            "vsat": 127138.50714870001,
+            "rdsw": 186.1451046898628,
+            "rsw": 82.4621125123532,
+            "rdw": 82.4621125123532,
+            "a0": 1.0,
+            "ags": 5e-21,
+            "keta": 0.04000000000000001,
+            "toxe": 1.8248287590894686e-09,
+            "toxp": 1.3416407864998745e-09,
+            "toxm": 1.8248287590894686e-09,
+            "cgso": 1.2845232578665124e-10,
+            "cgdo": 1.2845232578665124e-10,
+            "cgbo": 2.5600000000000014e-11,
+            "cgdl": 2.6529999999999975e-10,
+            "cgsl": 2.6529999999999975e-10,
+            "ckappas": 0.029999999999999995,
+            "ckappad": 0.029999999999999995,
+            "moin": 15.0,
+            "noff": 0.9,
+            "voffcv": 0.02
+          },
+          "source_envelope": {
+            "vth0": {
+              "min": 0.423,
+              "max": 0.62261,
+              "source": [
+                0.423,
+                0.62261,
+                0.46893
+              ]
+            },
+            "voff": {
+              "min": -0.13,
+              "max": -0.13,
+              "source": [
+                -0.13,
+                -0.13,
+                -0.13
+              ]
+            },
+            "nfactor": {
+              "min": 1.6,
+              "max": 2.22,
+              "source": [
+                1.9,
+                1.6,
+                2.22
+              ]
+            },
+            "eta0": {
+              "min": 0.0055,
+              "max": 0.0125,
+              "source": [
+                0.0058,
+                0.0125,
+                0.0055
+              ]
+            },
+            "dvt0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "dvt1": {
+              "min": 2.0,
+              "max": 2.0,
+              "source": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            },
+            "dsub": {
+              "min": 0.1,
+              "max": 0.1,
+              "source": [
+                0.1,
+                0.1,
+                0.1
+              ]
+            },
+            "pdiblc1": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblc2": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblcb": {
+              "min": -0.005,
+              "max": -0.005,
+              "source": [
+                -0.005,
+                -0.005,
+                -0.005
+              ]
+            },
+            "pclm": {
+              "min": 0.02,
+              "max": 0.04,
+              "source": [
+                0.04,
+                0.02,
+                0.02
+              ]
+            },
+            "drout": {
+              "min": 0.5,
+              "max": 0.5,
+              "source": [
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            "u0": {
+              "min": 0.049,
+              "max": 0.054,
+              "source": [
+                0.0491,
+                0.049,
+                0.054
+              ]
+            },
+            "ua": {
+              "min": 6e-10,
+              "max": 6e-10,
+              "source": [
+                6e-10,
+                6e-10,
+                6e-10
+              ]
+            },
+            "ub": {
+              "min": 1.2e-18,
+              "max": 1.2e-18,
+              "source": [
+                1.2e-18,
+                1.2e-18,
+                1.2e-18
+              ]
+            },
+            "uc": {
+              "min": 0.0,
+              "max": 0.0,
+              "source": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "vsat": {
+              "min": 124340.0,
+              "max": 170000.0,
+              "source": [
+                124340.0,
+                130000.0,
+                170000.0
+              ]
+            },
+            "rdsw": {
+              "min": 155.0,
+              "max": 210.0,
+              "source": [
+                165.0,
+                210.0,
+                155.0
+              ]
+            },
+            "rsw": {
+              "min": 80.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                80.0,
+                80.0
+              ]
+            },
+            "rdw": {
+              "min": 80.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                80.0,
+                80.0
+              ]
+            },
+            "a0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "ags": {
+              "min": 0.0,
+              "max": 1e-20,
+              "source": [
+                1e-20,
+                0.0,
+                0.0
+              ]
+            },
+            "keta": {
+              "min": 0.04,
+              "max": 0.04,
+              "source": [
+                0.04,
+                0.04,
+                0.04
+              ]
+            },
+            "toxe": {
+              "min": 1.25e-09,
+              "max": 1.85e-09,
+              "source": [
+                1.85e-09,
+                1.8e-09,
+                1.25e-09
+              ]
+            },
+            "toxp": {
+              "min": 1e-09,
+              "max": 1.5e-09,
+              "source": [
+                1.2e-09,
+                1.5e-09,
+                1e-09
+              ]
+            },
+            "toxm": {
+              "min": 1.25e-09,
+              "max": 1.85e-09,
+              "source": [
+                1.85e-09,
+                1.8e-09,
+                1.25e-09
+              ]
+            },
+            "cgso": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgdo": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgbo": {
+              "min": 2.56e-11,
+              "max": 2.56e-11,
+              "source": [
+                2.56e-11,
+                2.56e-11,
+                2.56e-11
+              ]
+            },
+            "cgdl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "cgsl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "ckappas": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "ckappad": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "moin": {
+              "min": 15.0,
+              "max": 15.0,
+              "source": [
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            "noff": {
+              "min": 0.9,
+              "max": 0.9,
+              "source": [
+                0.9,
+                0.9,
+                0.9
+              ]
+            },
+            "voffcv": {
+              "min": 0.02,
+              "max": 0.02,
+              "source": [
+                0.02,
+                0.02,
+                0.02
+              ]
+            }
+          },
+          "bounds": {
+            "vth0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "nfactor": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "eta0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dsub": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc2": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblcb": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pclm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "drout": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "u0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ua": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ub": {
+              "kind": "freeze",
+              "lower": 1.1999999999999979e-18,
+              "upper": 1.1999999999999979e-18
+            },
+            "uc": {
+              "kind": "freeze",
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "vsat": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "a0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ags": {
+              "kind": "freeze",
+              "lower": 5e-21,
+              "upper": 5e-21
+            },
+            "keta": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxe": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxp": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgso": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgdo": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgbo": {
+              "kind": "freeze",
+              "lower": 2.5600000000000014e-11,
+              "upper": 2.5600000000000014e-11
+            },
+            "cgdl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgsl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappas": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappad": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "moin": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "noff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voffcv": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            }
+          },
+          "conventions": {
+            "vth0": "signed NMOS voltage"
+          }
+        },
+        "pmos": {
+          "initial": {
+            "vth0": 0.8125160685021503,
+            "voff": -0.0107292080353084,
+            "nfactor": 1.849324200890693,
+            "eta0": 0.008514693182963202,
+            "dvt0": 1.0,
+            "dvt1": 2.0,
+            "dsub": 0.10000000000000002,
+            "pdiblc1": 0.0007406799150933316,
+            "pdiblc2": 0.0007406799150933316,
+            "pdiblcb": 2.5183117113173272e-08,
+            "pclm": 0.12000000000000001,
+            "drout": 0.56,
+            "u0": 0.01097907099895069,
+            "ua": 1.999999999999998e-09,
+            "ub": 4.999999999999997e-19,
+            "uc": 0.0,
+            "vsat": 79372.53933193767,
+            "rdsw": 203.10096011589886,
+            "rsw": 79.84359711335655,
+            "rdw": 79.84359711335655,
+            "a0": 1.0,
+            "ags": 9.999999999999992e-21,
+            "keta": -0.047,
+            "toxe": 1.8838789770046205e-09,
+            "toxp": 1.3416407864998745e-09,
+            "toxm": 1.8838789770046205e-09,
+            "cgso": 1.2845232578665124e-10,
+            "cgdo": 1.2845232578665124e-10,
+            "cgbo": 2.5600000000000014e-11,
+            "cgdl": 2.6529999999999975e-10,
+            "cgsl": 2.6529999999999975e-10,
+            "ckappas": 0.029999999999999995,
+            "ckappad": 0.029999999999999995,
+            "moin": 15.0,
+            "noff": 0.9,
+            "voffcv": 0.02
+          },
+          "source_envelope": {
+            "vth0": {
+              "min": -0.587,
+              "max": -0.365,
+              "source": [
+                -0.365,
+                -0.587,
+                -0.49158
+              ]
+            },
+            "voff": {
+              "min": -0.126,
+              "max": -0.126,
+              "source": [
+                -0.126,
+                -0.126,
+                -0.126
+              ]
+            },
+            "nfactor": {
+              "min": 1.8,
+              "max": 2.1,
+              "source": [
+                1.9,
+                1.8,
+                2.1
+              ]
+            },
+            "eta0": {
+              "min": 0.0055,
+              "max": 0.0125,
+              "source": [
+                0.0058,
+                0.0125,
+                0.0055
+              ]
+            },
+            "dvt0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "dvt1": {
+              "min": 2.0,
+              "max": 2.0,
+              "source": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            },
+            "dsub": {
+              "min": 0.1,
+              "max": 0.1,
+              "source": [
+                0.1,
+                0.1,
+                0.1
+              ]
+            },
+            "pdiblc1": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblc2": {
+              "min": 0.001,
+              "max": 0.001,
+              "source": [
+                0.001,
+                0.001,
+                0.001
+              ]
+            },
+            "pdiblcb": {
+              "min": 3.4e-08,
+              "max": 3.4e-08,
+              "source": [
+                3.4e-08,
+                3.4e-08,
+                3.4e-08
+              ]
+            },
+            "pclm": {
+              "min": 0.12,
+              "max": 0.12,
+              "source": [
+                0.12,
+                0.12,
+                0.12
+              ]
+            },
+            "drout": {
+              "min": 0.56,
+              "max": 0.56,
+              "source": [
+                0.56,
+                0.56,
+                0.56
+              ]
+            },
+            "u0": {
+              "min": 0.00574,
+              "max": 0.021,
+              "source": [
+                0.00574,
+                0.021,
+                0.02
+              ]
+            },
+            "ua": {
+              "min": 2e-09,
+              "max": 2e-09,
+              "source": [
+                2e-09,
+                2e-09,
+                2e-09
+              ]
+            },
+            "ub": {
+              "min": 5e-19,
+              "max": 5e-19,
+              "source": [
+                5e-19,
+                5e-19,
+                5e-19
+              ]
+            },
+            "uc": {
+              "min": 0.0,
+              "max": 0.0,
+              "source": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "vsat": {
+              "min": 70000.0,
+              "max": 150000.0,
+              "source": [
+                70000.0,
+                90000.0,
+                150000.0
+              ]
+            },
+            "rdsw": {
+              "min": 155.0,
+              "max": 250.0,
+              "source": [
+                165.0,
+                250.0,
+                155.0
+              ]
+            },
+            "rsw": {
+              "min": 75.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                75.0,
+                75.0
+              ]
+            },
+            "rdw": {
+              "min": 75.0,
+              "max": 85.0,
+              "source": [
+                85.0,
+                75.0,
+                75.0
+              ]
+            },
+            "a0": {
+              "min": 1.0,
+              "max": 1.0,
+              "source": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "ags": {
+              "min": 1e-20,
+              "max": 1e-20,
+              "source": [
+                1e-20,
+                1e-20,
+                1e-20
+              ]
+            },
+            "keta": {
+              "min": -0.047,
+              "max": -0.047,
+              "source": [
+                -0.047,
+                -0.047,
+                -0.047
+              ]
+            },
+            "toxe": {
+              "min": 1.3e-09,
+              "max": 1.95e-09,
+              "source": [
+                1.95e-09,
+                1.82e-09,
+                1.3e-09
+              ]
+            },
+            "toxp": {
+              "min": 1e-09,
+              "max": 1.5e-09,
+              "source": [
+                1.2e-09,
+                1.5e-09,
+                1e-09
+              ]
+            },
+            "toxm": {
+              "min": 1.3e-09,
+              "max": 1.95e-09,
+              "source": [
+                1.95e-09,
+                1.82e-09,
+                1.3e-09
+              ]
+            },
+            "cgso": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgdo": {
+              "min": 1.1e-10,
+              "max": 1.5e-10,
+              "source": [
+                1.5e-10,
+                1.1e-10,
+                1.1e-10
+              ]
+            },
+            "cgbo": {
+              "min": 2.56e-11,
+              "max": 2.56e-11,
+              "source": [
+                2.56e-11,
+                2.56e-11,
+                2.56e-11
+              ]
+            },
+            "cgdl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "cgsl": {
+              "min": 2.653e-10,
+              "max": 2.653e-10,
+              "source": [
+                2.653e-10,
+                2.653e-10,
+                2.653e-10
+              ]
+            },
+            "ckappas": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "ckappad": {
+              "min": 0.03,
+              "max": 0.03,
+              "source": [
+                0.03,
+                0.03,
+                0.03
+              ]
+            },
+            "moin": {
+              "min": 15.0,
+              "max": 15.0,
+              "source": [
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            "noff": {
+              "min": 0.9,
+              "max": 0.9,
+              "source": [
+                0.9,
+                0.9,
+                0.9
+              ]
+            },
+            "voffcv": {
+              "min": 0.02,
+              "max": 0.02,
+              "source": [
+                0.02,
+                0.02,
+                0.02
+              ]
+            }
+          },
+          "bounds": {
+            "vth0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "nfactor": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "eta0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dvt1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "dsub": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc1": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblc2": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pdiblcb": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "pclm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "drout": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "u0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ua": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ub": {
+              "kind": "freeze",
+              "lower": 4.999999999999997e-19,
+              "upper": 4.999999999999997e-19
+            },
+            "uc": {
+              "kind": "freeze",
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "vsat": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rsw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "rdw": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "a0": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ags": {
+              "kind": "freeze",
+              "lower": 9.999999999999992e-21,
+              "upper": 9.999999999999992e-21
+            },
+            "keta": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxe": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxp": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "toxm": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgso": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgdo": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgbo": {
+              "kind": "freeze",
+              "lower": 2.5600000000000014e-11,
+              "upper": 2.5600000000000014e-11
+            },
+            "cgdl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "cgsl": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappas": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "ckappad": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "moin": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "noff": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            },
+            "voffcv": {
+              "kind": "scale",
+              "lower": 0.5,
+              "upper": 2.0
+            }
+          },
+          "conventions": {
+            "vth0": "positive magnitude for PMOS, signed value for NMOS"
+          }
+        }
+      },
+      "drive_delay_model_over_target": 3.79
+    }
+  },
+  "paper_sources": [
+    {
+      "citation": "Cao and Zhao, Predictive Technology Model for Nano-CMOS Design Exploration",
+      "doi": "10.1109/nanonet.2006.346227",
+      "url": "https://doi.org/10.1109/nanonet.2006.346227",
+      "use": "PTM scaling and a small set of primary technology parameters."
+    },
+    {
+      "citation": "Zhao and Cao, New Generation of Predictive Technology Model for Sub-45 nm Early Design Exploration",
+      "doi": "10.1109/ted.2006.884077",
+      "url": "https://doi.org/10.1109/ted.2006.884077",
+      "use": "45 nm PTM process class and correlated parameter trends."
+    },
+    {
+      "citation": "Assenmacher, BSIM4 Modeling and Parameter Extraction",
+      "url": "https://ewh.ieee.org/r5/denver/sscs/References/2003_03_Assenmacher.pdf",
+      "use": "Extraction order: VTH0/K1/K2/DVTP0, NFACTOR/VOFF/MINV, TOXP/NGATE, and U0/UA/UB/UC."
+    },
+    {
+      "citation": "Li et al., An ultra-compact virtual source FET model for deeply-scaled devices",
+      "url": "http://dspace.mit.edu/bitstream/handle/1721.1/92430/Li-Yu-final-ASPDAC2013.pdf;sequence=1",
+      "use": "Separate C-V, subthreshold, and full-region objectives rather than one unconstrained fit."
+    },
+    {
+      "citation": "University of Minnesota PTM project",
+      "url": "https://mec.umn.edu/ptm",
+      "use": "Authoritative index for the 45 nm HP/LP and 65 nm bulk source cards."
+    }
+  ],
+  "limitations": [
+    "PTM cards are priors, not ICS55 measurements.",
+    "Leakage identifies threshold/subthreshold combinations better than mobility or C-V parameters.",
+    "Parameters without direct I-V, C-V, gate-current, noise, mismatch, or aging data remain frozen.",
+    "The current drive ratios are Liberty-versus-shipped-model evidence, not transistor measurements."
+  ]
+}

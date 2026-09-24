@@ -1,0 +1,35 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Geometry 09 - Manufacturing grid (off-grid check)
+#
+# MANUFACTURINGGRID 0.001 from the tech LEF.  Vertices of all drawing layers
+# must lie on the 1 nm grid.  FreePDK45-style check (ongrid).
+#=========================================================================================
+
+if TABLES.include?('grid') || GRID
+  grid = rval('manufacturing_grid').um
+  [
+    ['ACT', ACT], ['NW', NW], ['LVTN', LVTN], ['LVTP', LVTP],
+    ['HVTN', HVTN], ['HVTP', HVTP], ['IOWELL', IOWELL], ['POLY', POLY],
+    ['PPO', PPO], ['NP', NP], ['PP', PP], ['ESD', ESD], ['IOACT', IOACT],
+    ['CT', CT], ['M1', M1], ['M2', M2], ['M3', M3], ['M4', M4], ['M5', M5],
+    ['V1', V1], ['V2', V2], ['V3', V3], ['V4', V4], ['TM2', TM2],
+    ['TV2', TV2], ['PADM', PADM], ['ALPAD', ALPAD]
+  ].each do |name, layer|
+    layer.ongrid(grid).output("grid.#{name.downcase}",
+      "grid.#{name.downcase}: #{name} vertices on #{grid} um grid [lef]")
+  end
+end

@@ -1,0 +1,54 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 01 - Wells (NW, IOWELL)
+#
+# Port of iDRC minimum-width / minimum-spacing / enclosure checks.
+# Values: measured from released std-cell/IO GDS (provenance: gds) - see
+# rule_decks/ics55_rules.json.  NW is a masterslice layer in the tech LEF, so
+# no LEF values exist for it.
+#=========================================================================================
+
+if TABLES.include?('feol') || FEOL
+  #--- NW: minimum width -----------------------------------------------------------
+  NW.width(rval('nw_width').um, euclidian).output('well.nw.width',
+    "well.nw.width: NW min width #{rval('nw_width')} um [gds]")
+
+  #--- NW: minimum spacing (same-potential wells) -----------------------------------
+  NW.space(rval('nw_space').um, euclidian).output('well.nw.space',
+    "well.nw.space: NW min spacing #{rval('nw_space')} um [gds]")
+
+  #--- NW: minimum enclosure of ACT (well-to-active overlap) ------------------------
+  NW.enclosing(ACT, rval('nw_act_enc').um).output('well.nw.act_enc',
+    "well.nw.act_enc: NW enclosure of ACT #{rval('nw_act_enc')} um [gds]")
+
+  #--- NW vs NP: NP is the NMOS implant in p-substrate - no spacing rule ------------
+  # (gates and diffusions cross implant/well boundaries by design; PP reaches the
+  #  well edge, so well-to-implant spacing/enclosure is not a rule)
+
+  #--- IOWELL (IO library, 3.3V well) ----------------------------------------------
+  IOWELL.width(rval('iowell_width').um, euclidian).output('well.iowell.width',
+    "well.iowell.width: IOWELL min width #{rval('iowell_width')} um [gds]")
+  IOWELL.space(rval('iowell_space').um, euclidian).output('well.iowell.space',
+    "well.iowell.space: IOWELL min spacing #{rval('iowell_space')} um [gds]")
+  IOWELL.enclosing(ACT, rval('iowell_act_enc').um).output('well.iowell.act_enc',
+    "well.iowell.act_enc: IOWELL enclosure of ACT #{rval('iowell_act_enc')} um [gds]")
+  IOWELL.enclosing(IOACT, rval('iowell_ioact_enc').um).output('well.iowell.ioact_enc',
+    "well.iowell.ioact_enc: IOWELL enclosure of IOACT #{rval('iowell_ioact_enc')} um [gds]")
+
+  #--- NW vs IOWELL separation (core/IO well boundary) ------------------------------
+  NW.sep(IOWELL, rval('nw_iowell_sep').um, euclidian).output('well.nw_iowell.sep',
+    "well.nw_iowell.sep: NW to IOWELL min separation #{rval('nw_iowell_sep')} um [gds]")
+end

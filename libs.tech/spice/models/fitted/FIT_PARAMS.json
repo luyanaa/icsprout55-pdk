@@ -1,0 +1,153 @@
+{
+  "tool": "Optuna TPE + XyceNF 7.10",
+  "base_model": "~/Downloads/45nm_LP.pm",
+  "dataset": "data_train37_*",
+  "conditions": {
+    "vdd": 1.2,
+    "temp_c": 25
+  },
+  "objective": "RMS of per-cell log10(simulated/measured leakage), state-averaged",
+  "flavors": {
+    "svt": {
+      "dataset": "train37",
+      "params": {
+        "vth0n": 0.8672682171145999,
+        "vth0p": 0.4850767111658831,
+        "dibl_n": 0.5042141247441679,
+        "dibl_p": 0.6930103657582994,
+        "voff_n": 0.1993417801588166,
+        "voff_p": 1.169032163690903
+      },
+      "rms": 0.13630790716800212,
+      "verification": [
+        0.13630790716800212,
+        0.13630790716800212,
+        0.13630790716800212
+      ],
+      "drive": {
+        "rc_enabled": true,
+        "rc_source": "manual labeled GDS M1 signal RC; device-owned layers excluded",
+        "values": {
+          "u0_n": 1.8529552694322644,
+          "u0_p": 0.892175922302962,
+          "vsat_n": 1.170857186828653,
+          "vsat_p": 1.12003374197002,
+          "rdsw_n": 0.616061650359954,
+          "rdsw_p": 1.1610636547537287
+        },
+        "overrides_n": {
+          "u0": 0.09079480820218096,
+          "vsat": 152211.4342877249,
+          "rdsw": 129.37294657559033
+        },
+        "overrides_p": {
+          "u0": 0.018735694368362206,
+          "vsat": 100803.0367773018,
+          "rdsw": 290.2659136884322
+        },
+        "dataset": "fit",
+        "cells": ["INVX1", "INVX3", "INVX4"],
+        "leakage_dataset": "train37",
+        "leakage_weight": 4.0,
+        "trials": 36,
+        "seed": 2911,
+        "timing_rms": 0.1209331751024462,
+        "leakage_rms": 0.13582555933151996
+      }
+    },
+    "lvt": {
+      "dataset": "train37",
+      "params": {
+        "vth0n": 0.6610267587163352,
+        "vth0p": 0.287626263276859,
+        "dibl_n": 0.051321814312609924,
+        "dibl_p": 0.899909157660711,
+        "voff_n": 0.5561024238129304,
+        "voff_p": 0.2552069401362409
+      },
+      "rms": 0.1659094388389248,
+      "verification": [
+        0.1659094388389248,
+        0.1659094388389248,
+        0.1659094388389248
+      ],
+      "drive": {
+        "rc_enabled": true,
+        "rc_source": "manual labeled GDS M1 signal RC; device-owned layers excluded",
+        "values": {
+          "u0_n": 1.5750832286415566,
+          "u0_p": 0.9160639941621208,
+          "vsat_n": 1.1307956396012724,
+          "vsat_p": 0.7643052250925171,
+          "rdsw_n": 0.5218519320043339,
+          "rdsw_p": 1.8438758670388815
+        },
+        "overrides_n": {
+          "u0": 0.07717907820343628,
+          "vsat": 147003.4331481654,
+          "rdsw": 109.58890572091012
+        },
+        "overrides_p": {
+          "u0": 0.01923734387740454,
+          "vsat": 68787.47025832653,
+          "rdsw": 460.9689667597204
+        },
+        "dataset": "fit",
+        "cells": ["INVX1", "INVX3", "INVX4"],
+        "leakage_dataset": "train37",
+        "leakage_weight": 4.0,
+        "trials": 36,
+        "seed": 2911,
+        "timing_rms": 0.13321935078914085,
+        "leakage_rms": 0.16785980163370964
+      }
+    },
+    "hvt": {
+      "dataset": "train37",
+      "params": {
+        "vth0n": 1.036003807256853,
+        "vth0p": 0.8125160685021503,
+        "dibl_n": 0.12129977378774245,
+        "dibl_p": 0.7406799150933315,
+        "voff_n": 0.7291811747968573,
+        "voff_p": 0.08515244472466985
+      },
+      "rms": 0.12019199389862202,
+      "verification": [
+        0.12019199389862202,
+        0.12019199389862202,
+        0.12019199389862202
+      ],
+      "drive": {
+        "rc_enabled": true,
+        "rc_source": "manual labeled GDS M1 signal RC; device-owned layers excluded",
+        "values": {
+          "u0_n": 1.9829763448083,
+          "u0_p": 1.8928168432071157,
+          "vsat_n": 1.2218275675907868,
+          "vsat_p": 0.8494630892832037,
+          "rdsw_n": 0.5834499690766376,
+          "rdsw_p": 1.287257995076239
+        },
+        "overrides_n": {
+          "u0": 0.0971658408956067,
+          "vsat": 158837.58378680228,
+          "rdsw": 122.52449350609389
+        },
+        "overrides_p": {
+          "u0": 0.03974915370734943,
+          "vsat": 76451.67803548834,
+          "rdsw": 321.81449876905975
+        },
+        "dataset": "fit",
+        "cells": ["INVX1", "INVX3", "INVX4"],
+        "leakage_dataset": "train37",
+        "leakage_weight": 4.0,
+        "trials": 36,
+        "seed": 2911,
+        "timing_rms": 0.18491754562468535,
+        "leakage_rms": 0.1254445540206239
+      }
+    }
+  }
+}

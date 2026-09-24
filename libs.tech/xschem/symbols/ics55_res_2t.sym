@@ -1,0 +1,35 @@
+v {xschem version=3.4.7 file_version=1.2
+* ICsprout55 resistor 2-terminal - re_*_2t (e.g. re_ppo_sab_2t, re_m1_2t)
+* terminals (CDL order): POS NEG
+}
+G {}
+K {type=poly_resistor
+format="@spiceprefix@name @pinlist re_@model W=@W L=@L M=@M"
+template="name=R1
+W=2u
+L=10u
+M=1
+model=ppo_sab_2t
+spiceprefix=X
+"}
+V {}
+S {}
+F {}
+E {}
+L 4 0 20 0 30 {}
+L 4 0 20 7.5 17.5 {}
+L 4 -7.5 12.5 7.5 17.5 {}
+L 4 -7.5 12.5 7.5 7.5 {}
+L 4 -7.5 2.5 7.5 7.5 {}
+L 4 -7.5 2.5 7.5 -2.5 {}
+L 4 -7.5 -7.5 7.5 -2.5 {}
+L 4 -7.5 -7.5 7.5 -12.5 {}
+L 4 -7.5 -17.5 7.5 -12.5 {}
+L 4 -7.5 -17.5 0 -20 {}
+L 4 0 -30 0 -20 {}
+B 5 -2.5 27.5 2.5 32.5 {name=POS dir=inout pinnumber=1}
+B 5 -2.5 -32.5 2.5 -27.5 {name=NEG dir=inout pinnumber=2}
+T {@name} 15 -27.5 0 0 0.2 0.2 {}
+T {@M * @L / @W} 15 13.75 0 0 0.2 0.2 {layer=13}
+T {@model} 15 -13.75 0 0 0.2 0.2 {}
+T {R=expr_eng(850 * @L / @W / @M )} 15 0 0 0 0.2 0.2 {layer=13}

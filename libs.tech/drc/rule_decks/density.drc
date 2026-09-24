@@ -1,0 +1,55 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Density checks (window-based, for placed-chip layouts)
+#
+#   POLY : 12-55%  on 10um x 10um tiles
+#   ACT  : 20-65% on 20um x 20um tiles
+#   M1   : 20-70% on 20um x 20um tiles
+#   M2..M5 : empirical bounds (measured IO-cell density ranges) on 20um tiles
+#
+# The tile analysis is only meaningful on layouts at least as large as the
+# tile size (a std cell is smaller than one tile, so its density would be
+# diluted by the empty tile area).  The checks are therefore skipped when the
+# source layout's bounding box is smaller than the tile - i.e. no per-cell
+# density checks.  Disable with -rd no_density=true.
+#
+# Rule values: provenance in ics55_rules.json - POLY/ACT/M1 are user-specified
+# (foundry-style) values, M2-M5 are empirical (measured IO library cell
+# densities).  Not foundry rule data.
+#=========================================================================================
+
+if DENSITY
+  # layout bounding box (microns), taken as the union of the checked layers;
+  # density checks only run on placed-chip-size layouts, not on single cells
+  layer_bboxes = [POLY, ACT, M1, M2, M3, M4, M5].map { |l| l.bbox }
+  layout_bbox = layer_bboxes.reduce do |a, b|
+    RBA::Box.new([a.left, b.left].min, [a.bottom, b.bottom].min,
+                 [a.right, b.right].max, [a.top, b.top].max)
+  end
+  lbw = layout_bbox.width.to_f
+  lbh = layout_bbox.height.to_f
+
+  [
+    ['POLY', POLY, 'poly'], ['ACT', ACT, 'act'], ['M1', M1, 'm1'],
+    ['M2', M2, 'm2'], ['M3', M3, 'm3'], ['M4', M4, 'm4'], ['M5', M5, 'm5']
+  ].each do |name, layer, key|
+    tile = rval("#{key}_density_tile").um
+    next if lbw < tile || lbh < tile
+    layer.without_density(rval("#{key}_density_min"), rval("#{key}_density_max"),
+                          tile_size(tile, tile)).output("dens.#{key}",
+      "dens.#{key}: #{name} density outside #{rval("#{key}_density_min") * 100}% .. #{rval("#{key}_density_max") * 100}% on #{rval("#{key}_density_tile")}um tiles [derived]")
+  end
+end

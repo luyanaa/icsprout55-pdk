@@ -1,0 +1,7 @@
+* ics55_aging.scs - aging (BTI/HCI) template - TBD: no foundry data
+* Suggested hookup once foundry aging models are released:
+*   .include "ics55_aging.scs"
+*   .param stress_years = 10
+* dVth shift is applied as a post-processing correction or via
+* foundry-provided reliability model cards.
+* TBD

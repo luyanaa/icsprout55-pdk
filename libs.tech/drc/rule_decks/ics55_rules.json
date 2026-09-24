@@ -1,0 +1,781 @@
+{
+ "drc_rules": {
+  "manufacturing_grid": 0.001,
+  "act_width": 0.081,
+  "act_space": 0.101,
+  "act_area": 0.0555,
+  "nw_width": 0.361,
+  "nw_space": 0.4,
+  "nw_act_enc": 0.151,
+  "iowell_width": 0.4,
+  "iowell_space": 0.4,
+  "iowell_act_enc": 0.4,
+  "iowell_ioact_enc": 0.4,
+  "nw_iowell_sep": 0.4,
+  "poly_width": 0.06,
+  "poly_space": 0.11,
+  "poly_area": 0.0388,
+  "poly_gate_width": 0.06,
+  "poly_act_sep": 0.05,
+  "np_width": 0.4,
+  "np_space": 0.361,
+  "pp_width": 0.181,
+  "pp_space": 0.4,
+  "esd_width": 0.4,
+  "esd_space": 0.4,
+  "nw_esd_enc": 0.4,
+  "ioact_width": 0.4,
+  "ioact_space": 0.4,
+  "ioact_area": 0.4,
+  "ct_width": 0.09,
+  "ct_space": 0.11,
+  "ct_enc_m1": 0.04,
+  "ct_enc_poly": 0.01,
+  "ct_enc_act": 0.01,
+  "m1_width": 0.09,
+  "m1_space": 0.09,
+  "m1_area": 0.042,
+  "m1_min_hole": 0.18,
+  "m2_width": 0.1,
+  "m2_space": 0.1,
+  "m2_area": 0.052,
+  "m2_min_hole": 0.18,
+  "m3_width": 0.1,
+  "m3_space": 0.1,
+  "m3_area": 0.052,
+  "m3_min_hole": 0.18,
+  "m4_width": 0.1,
+  "m4_space": 0.1,
+  "m4_area": 0.052,
+  "m4_min_hole": 0.18,
+  "m5_width": 0.1,
+  "m5_space": 0.1,
+  "m5_area": 0.052,
+  "m5_min_hole": 0.18,
+  "v1_width": 0.09,
+  "v1_space": 0.11,
+  "v1_enc_lower": 0.04,
+  "v1_enc_upper": 0.04,
+  "v1_array_space": 0.13,
+  "v2_width": 0.09,
+  "v2_space": 0.11,
+  "v2_enc_lower": 0.04,
+  "v2_enc_upper": 0.04,
+  "v2_array_space": 0.13,
+  "v3_width": 0.09,
+  "v3_space": 0.11,
+  "v3_enc_lower": 0.04,
+  "v3_enc_upper": 0.04,
+  "v3_array_space": 0.13,
+  "v4_width": 0.09,
+  "v4_space": 0.11,
+  "v4_enc_lower": 0.04,
+  "v4_enc_upper": 0.04,
+  "v4_array_space": 0.13,
+  "tm2_width": 0.4,
+  "tm2_space": 0.4,
+  "tm2_area": 0.4,
+  "tv2_width": 0.36,
+  "tv2_space": 0.34,
+  "tv2_enc_m5": 0.02,
+  "tv2_enc_tm2": 0.02,
+  "tv2_array_space": 1.0,
+  "rv_width": 3.0,
+  "rv_space": 3.0,
+  "rv_array_space": 6.0,
+  "padm_width": 0.4,
+  "padm_space": 0.4,
+  "padm_area": 0.4,
+  "alpad_width": 0.4,
+  "alpad_space": 0.4,
+  "padm_alpad_enc": 0.4,
+  "m1_eol_len": 0.1,
+  "m1_eol_space": 0.08,
+  "m1_min_step": 0.03,
+  "m1_bent_width": 0.09,
+  "m1_jog_space": 0.09,
+  "m2_eol_len": 0.1,
+  "m2_eol_space": 0.09,
+  "m2_min_step": 0.03,
+  "m2_bent_width": 0.1,
+  "m2_jog_space": 0.1,
+  "m3_eol_len": 0.1,
+  "m3_eol_space": 0.09,
+  "m3_min_step": 0.03,
+  "m3_bent_width": 0.1,
+  "m4_eol_len": 0.1,
+  "m4_eol_space": 0.09,
+  "m4_min_step": 0.03,
+  "m4_bent_width": 0.1,
+  "m5_eol_len": 0.1,
+  "m5_eol_space": 0.09,
+  "m5_min_step": 0.03,
+  "m5_bent_width": 0.1,
+  "poly_eol_len": 0.1,
+  "poly_eol_space": 0.1,
+  "poly_min_step": 0.03,
+  "poly_bent_width": 0.06,
+  "antenna_ratio": 300.0,
+  "act_min_step": 0.03,
+  "poly_eol_width": 0.04,
+  "m1_eol_width": 0.04,
+  "m2_eol_width": 0.04,
+  "m3_eol_width": 0.04,
+  "m4_eol_width": 0.04,
+  "m5_eol_width": 0.04,
+  "act_eol_width": 0.04,
+  "act_eol_space": 0.1,
+  "poly_gate_overhang": 0.06,
+  "act_gate_overhang": 0.14,
+  "act_eol_len": 0.1,
+  "poly_density_min": 0.12,
+  "poly_density_max": 0.55,
+  "poly_density_tile": 10,
+  "act_density_min": 0.2,
+  "act_density_max": 0.65,
+  "act_density_tile": 20,
+  "m1_density_min": 0.2,
+  "m1_density_max": 0.7,
+  "m1_density_tile": 20,
+  "m2_density_min": 0.004,
+  "m2_density_max": 0.829,
+  "m2_density_tile": 20,
+  "m3_density_min": 0.004,
+  "m3_density_max": 0.77,
+  "m3_density_tile": 20,
+  "m4_density_min": 0.004,
+  "m4_density_max": 0.77,
+  "m4_density_tile": 20,
+  "m5_density_min": 0.004,
+  "m5_density_max": 0.77,
+  "m5_density_tile": 20,
+  "min_corner": 0.03,
+  "min_adj": 0.05,
+  "wide_metal_width": 20.0,
+  "em_via_width": 10.0,
+  "mom_dummy_margin": 1.0,
+  "cell_excl_margin": 0.1
+ },
+ "meta": {
+  "manufacturing_grid": {
+   "provenance": "lef",
+   "note": "MANUFACTURINGGRID 0.001 (N551P6M.lef)"
+  },
+  "act_width": {
+   "provenance": "gds",
+   "note": "measured H7C libraries, cell SDFFQX3H7R"
+  },
+  "act_space": {
+   "provenance": "gds",
+   "note": "measured H7C libraries, cell OA21X0P5H7R"
+  },
+  "act_area": {
+   "provenance": "gds",
+   "note": "measured H7C libraries"
+  },
+  "nw_width": {
+   "provenance": "gds",
+   "note": "measured H7C libraries; search-cap 0.4 on dense cells"
+  },
+  "nw_space": {
+   "provenance": "gds",
+   "note": "measured H7C libraries; value at 0.4 search cap on XNOR3X0P7H7R (>= 0.4)"
+  },
+  "nw_act_enc": {
+   "provenance": "gds",
+   "note": "NW extends 0.151 um beyond ACT (measured)"
+  },
+  "iowell_width": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "iowell_space": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "iowell_act_enc": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "iowell_ioact_enc": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "nw_iowell_sep": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "poly_width": {
+   "provenance": "gds",
+   "note": "gate L = 60 nm per released CDL; measured min 0.061"
+  },
+  "poly_space": {
+   "provenance": "gds",
+   "note": "measured min 0.112; gate pitch 0.25 minus L 0.06"
+  },
+  "poly_area": {
+   "provenance": "gds",
+   "note": "measured H7C libraries"
+  },
+  "poly_gate_width": {
+   "provenance": "gds",
+   "note": "gate length = CDL L=60n; measured 0.061"
+  },
+  "poly_act_sep": {
+   "provenance": "gds",
+   "note": "field poly to ACT separation, measured 0.051"
+  },
+  "np_width": {
+   "provenance": "gds",
+   "note": "measured H7C libraries; 0.4 cap on dense cells"
+  },
+  "np_space": {
+   "provenance": "gds",
+   "note": "measured H7C libraries"
+  },
+  "pp_width": {
+   "provenance": "gds",
+   "note": "measured H7C libraries"
+  },
+  "pp_space": {
+   "provenance": "gds",
+   "note": "measured H7C libraries; 0.4 cap on XNOR3X0P7H7R"
+  },
+  "esd_width": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "esd_space": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "nw_esd_enc": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "ioact_width": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "ioact_space": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "ioact_area": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "ct_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef WIDTH 0.09; measured 0.091"
+  },
+  "ct_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef SPACING 0.11; measured 0.111"
+  },
+  "ct_enc_m1": {
+   "provenance": "lef",
+   "note": "N551P6M.lef ENCLOSURE ABOVE 0.04 0 (M1 side; boundary CTs flag on standalone cells)"
+  },
+  "ct_enc_poly": {
+   "provenance": "gds",
+   "note": "poly-side CT enclosure not in LEF; measured floor 0.011 (boundary-influenced)"
+  },
+  "ct_enc_act": {
+   "provenance": "gds",
+   "note": "ACT-side CT enclosure not in LEF; measured floor 0.016 (boundary-influenced)"
+  },
+  "m1_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef WIDTH 0.09; measured 0.091"
+  },
+  "m1_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef SPACING 0.09; measured 0.091"
+  },
+  "m1_area": {
+   "provenance": "lef",
+   "note": "N551P6M.lef AREA 0.042"
+  },
+  "m1_min_hole": {
+   "provenance": "lef",
+   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+  },
+  "m2_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef WIDTH 0.1"
+  },
+  "m2_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef SPACING 0.1"
+  },
+  "m2_area": {
+   "provenance": "lef",
+   "note": "N551P6M.lef AREA 0.052"
+  },
+  "m2_min_hole": {
+   "provenance": "lef",
+   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+  },
+  "m3_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef WIDTH 0.1"
+  },
+  "m3_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef SPACING 0.1"
+  },
+  "m3_area": {
+   "provenance": "lef",
+   "note": "N551P6M.lef AREA 0.052"
+  },
+  "m3_min_hole": {
+   "provenance": "lef",
+   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+  },
+  "m4_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef WIDTH 0.1"
+  },
+  "m4_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef SPACING 0.1"
+  },
+  "m4_area": {
+   "provenance": "lef",
+   "note": "N551P6M.lef AREA 0.052"
+  },
+  "m4_min_hole": {
+   "provenance": "lef",
+   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+  },
+  "m5_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef WIDTH 0.1"
+  },
+  "m5_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef SPACING 0.1"
+  },
+  "m5_area": {
+   "provenance": "lef",
+   "note": "N551P6M.lef AREA 0.052"
+  },
+  "m5_min_hole": {
+   "provenance": "lef",
+   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+  },
+  "v1_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA1 WIDTH 0.09"
+  },
+  "v1_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA1 SPACING 0.11"
+  },
+  "v1_enc_lower": {
+   "provenance": "lef",
+   "note": "VIARULE MET2_MET1 MET1 ENCLOSURE 0.04 0"
+  },
+  "v1_enc_upper": {
+   "provenance": "lef",
+   "note": "VIARULE MET2_MET1 MET2 ENCLOSURE 0.04 0.005"
+  },
+  "v1_array_space": {
+   "provenance": "lef",
+   "note": "VIARULE MET2_MET1 SPACING 0.13 BY 0.13"
+  },
+  "v2_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA2 WIDTH 0.09"
+  },
+  "v2_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA2 SPACING 0.11"
+  },
+  "v2_enc_lower": {
+   "provenance": "lef",
+   "note": "VIARULE MET3_MET2 MET2 ENCLOSURE 0.04 0.005"
+  },
+  "v2_enc_upper": {
+   "provenance": "lef",
+   "note": "VIARULE MET3_MET2 MET3 ENCLOSURE 0.04 0.005"
+  },
+  "v2_array_space": {
+   "provenance": "lef",
+   "note": "VIARULE MET3_MET2 SPACING 0.13 BY 0.13"
+  },
+  "v3_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA3 WIDTH 0.09"
+  },
+  "v3_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA3 SPACING 0.11"
+  },
+  "v3_enc_lower": {
+   "provenance": "lef",
+   "note": "VIARULE MET4_MET3 MET3 ENCLOSURE 0.04 0.005"
+  },
+  "v3_enc_upper": {
+   "provenance": "lef",
+   "note": "VIARULE MET4_MET3 MET4 ENCLOSURE 0.04 0.005"
+  },
+  "v3_array_space": {
+   "provenance": "lef",
+   "note": "VIARULE MET4_MET3 SPACING 0.13 BY 0.13"
+  },
+  "v4_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA4 WIDTH 0.09"
+  },
+  "v4_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef VIA4 SPACING 0.11"
+  },
+  "v4_enc_lower": {
+   "provenance": "lef",
+   "note": "VIARULE MET5_MET4 MET4 ENCLOSURE 0.04 0.005"
+  },
+  "v4_enc_upper": {
+   "provenance": "lef",
+   "note": "VIARULE MET5_MET4 MET5 ENCLOSURE 0.04 0.005"
+  },
+  "v4_array_space": {
+   "provenance": "lef",
+   "note": "VIARULE MET5_MET4 SPACING 0.13 BY 0.13"
+  },
+  "tm2_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef T4M2 WIDTH 0.4; measured 0.4"
+  },
+  "tm2_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef T4M2 SPACING 0.4; measured 0.4"
+  },
+  "tm2_area": {
+   "provenance": "lef",
+   "note": "N551P6M.lef T4M2 AREA 0.4"
+  },
+  "tv2_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef T4V2 WIDTH 0.36; IO measured min 0.28 (pad array edge)"
+  },
+  "tv2_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef T4V2 SPACING 0.34"
+  },
+  "tv2_enc_m5": {
+   "provenance": "lef",
+   "note": "VIARULE T4M2_MET5 MET5 ENCLOSURE 0.1 0.05; LEF layer ENCLOSURE BELOW 0.02 0.02"
+  },
+  "tv2_enc_tm2": {
+   "provenance": "lef",
+   "note": "VIARULE T4M2_MET5 T4M2 ENCLOSURE 0.5 0.02"
+  },
+  "tv2_array_space": {
+   "provenance": "lef",
+   "note": "VIARULE T4M2_MET5 SPACING 1 BY 1"
+  },
+  "rv_width": {
+   "provenance": "lef",
+   "note": "N551P6M.lef RV WIDTH 3; layer not in released GDS"
+  },
+  "rv_space": {
+   "provenance": "lef",
+   "note": "N551P6M.lef RV SPACING 3; layer not in released GDS"
+  },
+  "rv_array_space": {
+   "provenance": "lef",
+   "note": "VIARULE RDL_T4M2 SPACING 6 BY 6"
+  },
+  "padm_width": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "padm_space": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "padm_area": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "alpad_width": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "alpad_space": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "padm_alpad_enc": {
+   "provenance": "gds",
+   "note": "IO library; at 0.4 search cap (>= 0.4)"
+  },
+  "m1_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder; not foundry data"
+  },
+  "m1_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.08 um (base spacing 0.09 - 0.01); not foundry data"
+  },
+  "m1_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "m1_bent_width": {
+   "provenance": "derived",
+   "note": "= base width; not foundry data"
+  },
+  "m1_jog_space": {
+   "provenance": "derived",
+   "note": "= base spacing; not foundry data"
+  },
+  "m2_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder; not foundry data"
+  },
+  "m2_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
+  },
+  "m2_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "m2_bent_width": {
+   "provenance": "derived",
+   "note": "= base width; not foundry data"
+  },
+  "m2_jog_space": {
+   "provenance": "derived",
+   "note": "= base spacing; not foundry data"
+  },
+  "m3_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder; not foundry data"
+  },
+  "m3_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
+  },
+  "m3_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "m3_bent_width": {
+   "provenance": "derived",
+   "note": "= base width; not foundry data"
+  },
+  "m4_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder; not foundry data"
+  },
+  "m4_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
+  },
+  "m4_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "m4_bent_width": {
+   "provenance": "derived",
+   "note": "= base width; not foundry data"
+  },
+  "m5_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder; not foundry data"
+  },
+  "m5_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
+  },
+  "m5_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "m5_bent_width": {
+   "provenance": "derived",
+   "note": "= base width; not foundry data"
+  },
+  "poly_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder; not foundry data"
+  },
+  "poly_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.1 um (base spacing 0.11 - 0.01); not foundry data"
+  },
+  "poly_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "poly_bent_width": {
+   "provenance": "derived",
+   "note": "= base width; not foundry data"
+  },
+  "antenna_ratio": {
+   "provenance": "derived",
+   "note": "FreePDK45-style placeholder 300:1; NOT an ICS55 value - checks disabled by default"
+  },
+  "act_min_step": {
+   "provenance": "derived",
+   "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
+  },
+  "poly_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "m1_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "m2_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "m3_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "m4_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "m5_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "act_eol_width": {
+   "provenance": "derived",
+   "note": "placeholder 0.04 um line-end width; not foundry data"
+  },
+  "act_eol_space": {
+   "provenance": "derived",
+   "note": "placeholder 0.10 um; not foundry data"
+  },
+  "poly_gate_overhang": {
+   "provenance": "derived",
+   "note": "placeholder 0.060 um; drawn minimum measured 0.110 um (H7CR), too large as a rule"
+  },
+  "act_gate_overhang": {
+   "provenance": "gds",
+   "note": "measured minimum 0.140 um (H7CR)"
+  },
+  "act_eol_len": {
+   "provenance": "derived",
+   "note": "placeholder 0.1 um line-end length; not foundry data"
+  },
+  "poly_density_min": {
+   "provenance": "derived",
+   "note": "user-specified min 12% on 10um tile; not foundry data"
+  },
+  "poly_density_max": {
+   "provenance": "derived",
+   "note": "user-specified max 55% on 10um tile; not foundry data"
+  },
+  "poly_density_tile": {
+   "provenance": "derived",
+   "note": "10um tile"
+  },
+  "act_density_min": {
+   "provenance": "derived",
+   "note": "user-specified min 20% on 20um tile; not foundry data"
+  },
+  "act_density_max": {
+   "provenance": "derived",
+   "note": "user-specified max 65% on 20um tile; not foundry data"
+  },
+  "act_density_tile": {
+   "provenance": "derived",
+   "note": "20um tile"
+  },
+  "m1_density_min": {
+   "provenance": "derived",
+   "note": "user-specified min 20% on 20um tile; not foundry data"
+  },
+  "m1_density_max": {
+   "provenance": "derived",
+   "note": "user-specified max 70% on 20um tile; not foundry data"
+  },
+  "m1_density_tile": {
+   "provenance": "derived",
+   "note": "20um tile"
+  },
+  "m2_density_min": {
+   "provenance": "gds",
+   "note": "measured IO cell min density 0.4% (filler cells)"
+  },
+  "m2_density_max": {
+   "provenance": "gds",
+   "note": "measured IO cell max density 82.9%"
+  },
+  "m2_density_tile": {
+   "provenance": "derived",
+   "note": "20um tile"
+  },
+  "m3_density_min": {
+   "provenance": "gds",
+   "note": "measured IO cell min density 0.4% (filler cells)"
+  },
+  "m3_density_max": {
+   "provenance": "gds",
+   "note": "measured IO cell max density 77.0%"
+  },
+  "m3_density_tile": {
+   "provenance": "derived",
+   "note": "20um tile"
+  },
+  "m4_density_min": {
+   "provenance": "gds",
+   "note": "measured IO cell min density 0.4% (filler cells)"
+  },
+  "m4_density_max": {
+   "provenance": "gds",
+   "note": "measured IO cell max density 77.0%"
+  },
+  "m4_density_tile": {
+   "provenance": "derived",
+   "note": "20um tile"
+  },
+  "m5_density_min": {
+   "provenance": "gds",
+   "note": "measured IO cell min density 0.4% (filler cells)"
+  },
+  "m5_density_max": {
+   "provenance": "gds",
+   "note": "measured IO cell max density 77.0%"
+  },
+  "m5_density_tile": {
+   "provenance": "derived",
+   "note": "20um tile"
+  },
+  "min_corner": {
+   "provenance": "derived",
+   "note": "empirical placeholder (user); not foundry data"
+  },
+  "min_adj": {
+   "provenance": "derived",
+   "note": "empirical placeholder (user); not foundry data"
+  },
+  "wide_metal_width": {
+   "provenance": "derived",
+   "note": "placeholder 20 um; not foundry data"
+  },
+  "em_via_width": {
+   "provenance": "derived",
+   "note": "placeholder 10 um; not foundry data"
+  },
+  "mom_dummy_margin": {
+   "provenance": "derived",
+   "note": "placeholder 1 um exclusion margin; not foundry data"
+  },
+  "cell_excl_margin": {
+   "provenance": "derived",
+   "note": "placeholder 0.1 um cell-frame margin for the -rd cell_exclusion=true mode"
+  }
+ }
+}

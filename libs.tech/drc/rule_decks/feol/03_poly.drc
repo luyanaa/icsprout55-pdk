@@ -1,0 +1,54 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 03 - Poly (POLY, PPO)
+#
+# Port of iDRC minimum-width / minimum-spacing / separation checks plus the
+# poly-to-active interaction rules (FreePDK45 POLY.* / IHP Gat.* style).
+# Values: measured from released std-cell GDS (provenance: gds); the tech LEF
+# carries no POLY layer entry, so all POLY values are measurements.
+#=========================================================================================
+
+if TABLES.include?('feol') || FEOL
+  #--- POLY: minimum width ------------------------------------------------------------
+  POLY.width(rval('poly_width').um, euclidian).output('poly.poly.width',
+    "poly.poly.width: POLY min width #{rval('poly_width')} um [gds]")
+
+  #--- POLY: minimum spacing ----------------------------------------------------------
+  POLY.space(rval('poly_space').um, euclidian).output('poly.poly.space',
+    "poly.poly.space: POLY min spacing #{rval('poly_space')} um [gds]")
+
+  #--- POLY: minimum area -------------------------------------------------------------
+  POLY.with_area(rval('poly_area').um2).output('poly.poly.area',
+    "poly.poly.area: POLY min area #{rval('poly_area')} um^2 [gds]")
+
+  #--- POLY to ACT separation (field poly) -------------------------------------------
+  POLY.not(ACT).sep(ACT, rval('poly_act_sep').um, euclidian).output('poly.poly_act.sep',
+    "poly.poly_act.sep: field POLY to ACT min separation #{rval('poly_act_sep')} um [gds]")
+
+  #--- Gate length (POLY over ACT) ---------------------------------------------------
+  GATES.width(rval('poly_gate_width').um, euclidian).output('poly.gate.width',
+    "poly.gate.width: min gate length #{rval('poly_gate_width')} um [gds]")
+  # NOTE: the directional poly-overhang / diffusion-overhang rules are
+  # implemented in the advanced module (adv.gate.poly_overhang /
+  # adv.gate.act_overhang) using gate-edge zones (extended_out/in), which
+  # express the direction without isotropic false positives.  Values are
+  # placeholders / measured minima (provenance: derived), not foundry rules.
+  # Disable with -rd no_advanced=true.
+
+  #--- PPO (poly resistor marker, 41/4): PPO must be covered by POLY ----------------
+  PPO.not(POLY).output('poly.ppo.inside',
+    "poly.ppo.inside: PPO marker must be inside POLY [gds]")
+end

@@ -1,0 +1,36 @@
+# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS MOS extraction
+#
+# Device classes are named exactly like the released CDL models so the
+# schematic netlist comparison is direct:
+#   nm1p2_svt_lp / nm1p2_lvt_lp / nm1p2_hvt_lp, pm1p2_* (core, L=60nm)
+#   nm3p3_lp / pm3p3_lp (IO, L=400-650nm)
+#
+# KLayout mos4 terminals: SD (source/drain), G (gate), tS/tD (contact regions
+# on source/drain), tG (contact region on gate), W (well/substrate).
+#=========================================================================================
+
+# --- core NMOS --------------------------------------------------------------------
+
+extract_devices(mos4('NM1P2_SVT_LP'),
+                { 'SD' => NSD, 'G' => NGATE_SVT,
+                  'tS' => NSD, 'tD' => NSD, 'tG' => POLY_CON,
+                  'W' => PSUB })
+extract_devices(mos4('PM1P2_SVT_LP'),
+                { 'SD' => PSD, 'G' => PGATE_SVT,
+                  'tS' => PSD, 'tD' => PSD, 'tG' => POLY_CON,
+                  'W' => NW })
