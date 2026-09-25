@@ -28,6 +28,28 @@ Via resistance: 2.5 Ω per via (VIA1-4, T4V2, RV).
 coupling dominates at 65nm-class nodes and must come from the foundry RC
 deck or from field-solver calibration on test structures.
 
+## 3D / RLC extension: gds2palace + AWS Palace (`palace/`)
+
+The 2D seed-based `rcx.py` is extended to 3D / frequency-dependent RLC by the
+gds2palace + Palace FEM workflow (the current replacement for the legacy
+Magic ext2fastcap/ext2fasthenry, which are not part of Magic 8.3):
+
+- `palace/ics55_stackup.xml` - technology stackup for the AWS Palace FEM
+  solver (schemaVersion 2.0): metal conductivities from the LEF RPERSQ +
+  bulk-Cu thickness inference (all ~5.81e7 S/m), via conductivities from the
+  LEF 2.5 ohm via resistance and the LEF via cut sizes, dielectric eps/thickness
+  = typical 55nm-node estimates.  Verified with the gds2palace 0.6.0 stackup
+  reader (every metal/via zmin lands in its intended dielectric).
+- `palace/run_model.py` - model script: GDSII + stackup -> gmsh mesh +
+  Palace config.json (1 GHz default, fine mesh); `--thermal` switches to the
+  Elmer steady-state thermal flow (heatsources + const-temp boundaries, the
+  stackup carries the thermal conductivities/densities).  Requires
+  `pip install gds2palace` (gdspy, gmsh, numpy, shapely); the Palace solver
+  itself is installed separately (apptainer/spack, see the gds2palace docs).
+
+All stackup values are estimates (no absolute thicknesses or permittivities
+in the released data) and are overridable in the XML.
+
 ## Notes
 
 - The layer map for extraction = `../klayout/tech/ics55.lyp`.
