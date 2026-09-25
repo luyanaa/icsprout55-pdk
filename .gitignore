@@ -223,3 +223,6 @@ __marimo__/
 /**/gds/
 *.tar.bz2
 *.mk
+
+# Local orchestrator state
+.slim/deepwork/

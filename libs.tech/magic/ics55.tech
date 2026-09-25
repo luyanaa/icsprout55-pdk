@@ -1,0 +1,376 @@
+# ============================================================================
+# ICsprout55 Magic technology file  (magic-vlsi 8.3.x, format 27)
+# ============================================================================
+# Clean-room draft for the ICsprout55 55nm LLULP 1P6M1TM process
+# (1.2V core + 3.3V IO).  Scope: interconnect RC extraction via `extract all`
+# + `ext2spice` (sheet resistance, area/perimeter capacitance, via resistance).
+#
+# Provenance of the extraction values (all from released PDK data):
+#   sheet resistance  RPERSQ                  - N551P6M.lef
+#   area capacitance  CAPACITANCE CPERSQDIST  - N551P6M_ecos.lef
+#   edge capacitance  EDGECAPACITANCE         - N551P6M_ecos.lef
+#   via resistance    VIA RESISTANCE          - N551P6M.lef (2.5 ohm, all levels)
+#   MOS device names  official CDL models     - H7CR svt / H7CL lvt / H7CH hvt
+#                                              / IO nm3p3_lp+pm3p3_lp
+# NOT released (placeholders, marked): poly/diff sheet resistance, gate-oxide
+# capacitance (Cox), layer-to-layer overlap and lateral coupling capacitance.
+# DRC is intentionally DUMMY - the ICsprout55 DRC runs in KLayout only.
+#
+# Usage:
+#   magic -T libs.tech/magic/ics55.tech -dnull -noconsole -rcfile /dev/null
+#   gds read <file.gds> ; cellname <top> ; extract all ; ext2spice
+# ============================================================================
+
+tech
+	format 35
+	ics55
+end
+
+version
+	version 0.1
+	description "ICsprout55 55nm LLULP 1P6M1TM (1.2V/3.3V), clean-room LEF-seed RC extraction"
+end
+
+# ---------------------------------------------------------------------------
+# Planes: the extraction order defines the capacitance reference ("substrate").
+# ---------------------------------------------------------------------------
+planes
+	well,w
+	active,a
+	metal1,m1
+	metal2,m2
+	metal3,m3
+	metal4,m4
+	metal5,m5
+	topm2,tm2
+end
+
+# ---------------------------------------------------------------------------
+# Tile types.  ndiff/pdiff are the ACT under NP/PP (compose below); poly and
+# diff share the active plane (transistor regions).  Contacts (ct, v1..tv2)
+# appear on both the planes they bridge.
+# ---------------------------------------------------------------------------
+types
+	well	nwell,nw
+	well	pwell
+	active	act
+	active	ndiffusion,ndiff,nd
+	active	pdiffusion,pdiff,pd
+	active	polysilicon,poly,p
+	active	np
+	active	pp
+	active	nvt1
+	active	pvt1
+	active	nvt3
+	active	pvt3
+	active	tgox
+	active	lvtndiff
+	active	lvtpdiff
+	active	hvtndiff
+	active	hvtpdiff
+	active	iondiff
+	active	iopdiff
+	active	nfet
+	active	pfet
+	active	lvtnfet
+	active	lvtpfet
+	active	hvtnfet
+	active	hvtpfet
+	active	ionfet
+	active	iopfet
+	active	ncontact,ct
+	metal1	metal1,m1
+	metal1	m2contact,v1
+	metal2	metal2,m2
+	metal2	m3contact,v2
+	metal3	metal3,m3
+	metal3	m4contact,v3
+	metal4	metal4,m4
+	metal4	m5contact,v4
+	metal5	metal5,m5
+	metal5	tm2contact,tv2
+	topm2	topmetal2,tm2
+end
+
+
+# ---------------------------------------------------------------------------
+# Contacts / vias
+# ---------------------------------------------------------------------------
+contact
+	ct	ndiff	m1
+	ct	pdiff	m1
+	ct	poly	m1
+	v1	m1	m2
+	v2	m2	m3
+	v3	m3	m4
+	v4	m4	m5
+	tv2	m5	tm2
+end
+# ---------------------------------------------------------------------------
+# Composition: the diff types are the ACT under the implants; the transistors
+# are poly over diff.
+# ---------------------------------------------------------------------------
+compose
+	compose	ndiff	act	np
+	compose	pdiff	act	pp
+	# threshold / IO variants (official CDL model split):
+	#   H7CR -> nm1p2_svt_lp / pm1p2_svt_lp  (plain ndiff/pdiff)
+	#   H7CL -> nm1p2_lvt_lp / pm1p2_lvt_lp  (NVT1/PVT1, 17/1, 18/1)
+	#   H7CH -> nm1p2_hvt_lp / pm1p2_hvt_lp  (NVT3/PVT3, 21/1, 22/1)
+	#   IO   -> nm3p3_lp / pm3p3_lp          (ACT under TGOX 28/1)
+	compose	lvtndiff	ndiff	nvt1
+	compose	lvtpdiff	pdiff	pvt1
+	compose	hvtndiff	ndiff	nvt3
+	compose	hvtpdiff	pdiff	pvt3
+	compose	iondiff	ndiff	tgox
+	compose	iopdiff	pdiff	tgox
+	compose	nfet	poly	ndiff
+	compose	pfet	poly	pdiff
+	compose	lvtnfet	poly	lvtndiff
+	compose	lvtpfet	poly	lvtpdiff
+	compose	hvtnfet	poly	hvtndiff
+	compose	hvtpfet	poly	hvtpdiff
+	compose	ionfet	poly	iondiff
+	compose	iopfet	poly	iopdiff
+end
+# ---------------------------------------------------------------------------
+# Connectivity for extraction (same-plane nets; the contact section handles
+# the via connections).  The p-substrate is the space on the well plane.
+# ---------------------------------------------------------------------------
+connect
+	nwell		nwell
+	ndiff,ct	ndiff,ct
+	pdiff,ct	pdiff,ct
+	poly		poly
+	m1,v1		m1,v1
+	m2,v2		m2,v2
+	m3,v3		m3,v3
+	m4,v4		m4,v4
+	m5,tv2		m5,tv2
+	tm2		tm2
+end
+
+
+# ---------------------------------------------------------------------------
+# Extraction: units microns, values in aF/um^2 (area), aF/um (perimeter) and
+# mOhm/square (sheet).  All capacitance/resistance values are the released
+# LEF seeds; the coupling model is intentionally absent (not released).
+# ---------------------------------------------------------------------------
+extract
+	style	lambda=0.001(ics55)
+	units	microns
+	step	1
+	sidehalo	0.2
+	planeorder	well	0
+	planeorder	active	1
+	planeorder	metal1	2
+	planeorder	metal2	3
+	planeorder	metal3	4
+	planeorder	metal4	5
+	planeorder	metal5	6
+	planeorder	topm2	7
+
+	# p-substrate = the pwell regions and the areas of the well plane where
+	# no nwell is drawn
+	substrate	pwell,space/w	w	$SUB
+
+	# --- sheet resistance (mOhm/sq), N551P6M.lef RPERSQ ---
+	# poly: sheet resistance NOT released - ideal conductor placeholder (0)
+	resist	poly	0
+	resist	m1	112
+	resist	m2	91
+	resist	m3	91
+	resist	m4	91
+	resist	m5	91
+	resist	tm2	24
+
+	# --- via resistance (mOhm per via), N551P6M.lef VIA RESISTANCE ---
+	resist	v1	2500
+	resist	v2	2500
+	resist	v3	2500
+	resist	v4	2500
+	resist	tv2	2500
+
+	# --- area capacitance to substrate/plane below (aF/um^2) ---
+	# poly: gate-oxide capacitance NOT released - placeholder (0)
+	areacap	poly	0
+	areacap	m1	763
+	areacap	m2	1107
+	areacap	m3	1107
+	areacap	m4	1107
+	areacap	m5	626
+	areacap	tm2	130
+
+	# --- perimeter (fringe) capacitance (aF/um) ---
+	perimc	m1	space	34
+	perimc	m2	space	39
+	perimc	m3	space	41
+	perimc	m4	space	41
+	perimc	m5	space	34
+	perimc	tm2	space	37
+
+	# --- MOS devices (official CDL model names; Cox/overlap NOT released) ---
+	# The last two fields (gate cap aF/um^2, overlap aF/um) are placeholders 0:
+	# the gate-oxide capacitance is not in the released data.  The extracted
+	# netlist device names match the official CDL models, so ext2spice output
+	# can be diffed against the CDL.
+	# device mosfet <model> <device-types> <sd-types> <well>
+	# (gate cap / overlap not released -> no cap terms)
+	device mosfet	nm1p2_svt_lp	nfet	ndiff,ct	pwell,space/w
+	device mosfet	pm1p2_svt_lp	pfet	pdiff,ct	nwell
+	device mosfet	nm1p2_lvt_lp	lvtnfet	lvtndiff,ct	pwell,space/w
+	device mosfet	pm1p2_lvt_lp	lvtpfet	lvtpdiff,ct	nwell
+	device mosfet	nm1p2_hvt_lp	hvtnfet	hvtndiff,ct	pwell,space/w
+	device mosfet	pm1p2_hvt_lp	hvtpfet	hvtpdiff,ct	nwell
+	device mosfet	nm3p3_lp	ionfet	iondiff,ct	pwell,space/w
+	device mosfet	pm3p3_lp	iopfet	iopdiff,ct	nwell
+end
+
+# ---------------------------------------------------------------------------
+# DRC: intentionally DUMMY.  The real ICsprout55 DRC is done in KLayout
+# (libs.tech/drc/ics55_drc.drc).  One harmless width rule keeps the section
+# non-empty so the tech file loads cleanly.
+# ---------------------------------------------------------------------------
+drc
+	style	lambda=0.001(ics55)
+	width	m1	0.09	dummy
+end
+
+# ---------------------------------------------------------------------------
+# Display styles (minimal; colors are nominal, not foundry-defined)
+# ---------------------------------------------------------------------------
+styles
+	styletype	mos
+
+	nwell		1
+	act		2
+	ndiff		3
+	pdiff		4
+	poly		5
+	np		6
+	pp		7
+	nvt1		8
+	pvt1		9
+	nvt3		10
+	pvt3		11
+	tgox		12
+	lvtndiff	13
+	lvtpdiff	14
+	hvtndiff	15
+	hvtpdiff	16
+	iondiff		17
+	iopdiff		18
+	nfet		19
+	pfet		20
+	lvtnfet		21
+	lvtpfet		22
+	hvtnfet		23
+	hvtpfet		24
+	ionfet		25
+	iopfet		26
+	ct		27
+	m1		28
+	m2		29
+	m3		30
+	m4		31
+	m5		32
+	tm2		33
+	v1		34
+	v2		35
+	v3		36
+	v4		37
+	tv2		38
+end
+
+# ---------------------------------------------------------------------------
+# CIF/GDS input mapping.  layer <magic-types> <cifname> [+/- booleans]
+# ---------------------------------------------------------------------------
+cifinput
+	style	lambda=0.001(ics55)
+	scalefactor	1
+
+	layer	act		CAA
+		calma	CAA	2	1
+	layer	nwell		CNW
+		calma	CNW	9	1
+	layer	np		CNP
+		calma	CNP	52	1
+	layer	pp		CPP
+		calma	CPP	53	1
+	layer	nvt1		CNVT1
+		calma	CNVT1	17	1
+	layer	pvt1		CPVT1
+		calma	CPVT1	18	1
+	layer	nvt3		CNVT3
+		calma	CNVT3	21	1
+	layer	pvt3		CPVT3
+		calma	CPVT3	22	1
+	layer	tgox		CTG
+		calma	CTG	28	1
+	layer	poly		CPG
+		calma	CPG	41	1
+	layer	ct		CCT
+		calma	CCT	72	1
+	layer	m1		CM1
+		calma	CM1	81	1
+	layer	m2		CM2
+		calma	CM2	82	1
+	layer	m3		CM3
+		calma	CM3	83	1
+	layer	m4		CM4
+		calma	CM4	84	1
+	layer	m5		CM5
+		calma	CM5	85	1
+	layer	tm2		CTM
+		calma	CTM	103	1
+	layer	v1		CV1
+		calma	CV1	91	1
+	layer	v2		CV2
+		calma	CV2	92	1
+	layer	v3		CV3
+		calma	CV3	93	1
+	layer	v4		CV4
+		calma	CV4	94	1
+	layer	tv2		CTV
+		calma	CTV	113	1
+end
+
+# ---------------------------------------------------------------------------
+# CIF/GDS output mapping.  layer <cifname> <magic-types> gds <num> <type>
+# scalefactor 1 = 1 DBU = 1 nm.
+# ---------------------------------------------------------------------------
+cifoutput
+	style	lambda=0.001(ics55)
+	scalefactor	1
+
+	layer	CAA	ndiff,pdiff
+		gds	2	1
+	layer	CNW	nwell
+		gds	9	1
+	layer	CPG	poly
+		gds	41	1
+	layer	CCT	ct
+		gds	72	1
+	layer	CM1	m1
+		gds	81	1
+	layer	CM2	m2
+		gds	82	1
+	layer	CM3	m3
+		gds	83	1
+	layer	CM4	m4
+		gds	84	1
+	layer	CM5	m5
+		gds	85	1
+	layer	CTM	tm2
+		gds	103	1
+	layer	CV1	v1
+		gds	91	1
+	layer	CV2	v2
+		gds	92	1
+	layer	CV3	v3
+		gds	93	1
+	layer	CV4	v4
+		gds	94	1
+	layer	CTV	tv2
+		gds	113	1
+end
