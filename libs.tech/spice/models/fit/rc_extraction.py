@@ -472,7 +472,7 @@ def flavor_paths(root: Path, flavor: str) -> Tuple[Path, Path]:
         tag = tags[flavor]
     except KeyError as exc:
         raise RCExtractionError("unknown flavor %s" % flavor) from exc
-    base = root / "IP" / "STD_cell" / "ics55_LLSC_H7C_V1p10C100" / ("ics55_LLSC_%s" % tag)
+    base = root / "libs.ref" / ("ics55_LLSC_%s" % tag)
     return (
         base / "gds" / ("ics55_LLSC_%s.gds" % tag),
         root / "prtech" / "techLEF" / "N551P6M_ecos.lef",

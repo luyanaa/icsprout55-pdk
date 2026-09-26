@@ -18,12 +18,14 @@ RELEASE_FILE_GDS_STD := ics55_LLSC_H7CH_gds.tar.bz2 \
 RELEASE_FILE_GDS_IO := ICsprout_55LLULP1233_IO_251013_gds.tar.bz2
 RELEASE_FILE_GDS    := $(RELEASE_FILE_GDS_STD) $(RELEASE_FILE_GDS_IO)
 RELEASE_FILE        := $(RELEASE_FILE_LIB) $(RELEASE_FILE_GDS)
+LIBS_REF := libs.ref
+STD_CELL_VARIANTS := ics55_LLSC_H7CR ics55_LLSC_H7CL ics55_LLSC_H7CH
 
-DECOMP_DIR_LIB_P := IP/STD_cell/ics55_LLSC_H7C_V1p10C100
+DECOMP_DIR_LIB_P := $(LIBS_REF)
 DECOMP_DIR_LIB   := $(patsubst %_liberty.tar.bz2, $(DECOMP_DIR_LIB_P)/%/liberty, $(RELEASE_FILE_LIB))
 
-DECOMP_DIR_GDS_STD_P := IP/STD_cell/ics55_LLSC_H7C_V1p10C100
-DECOMP_DIR_GDS_IO_P  := IP/IO
+DECOMP_DIR_GDS_STD_P := $(LIBS_REF)
+DECOMP_DIR_GDS_IO_P  := $(LIBS_REF)
 DECOMP_DIR_GDS       := $(patsubst %_gds.tar.bz2, $(DECOMP_DIR_GDS_STD_P)/%/gds, $(RELEASE_FILE_GDS_STD)) \
                         $(patsubst %_gds.tar.bz2, $(DECOMP_DIR_GDS_IO_P)/%/gds, $(RELEASE_FILE_GDS_IO))
 
@@ -77,7 +79,8 @@ $(DECOMP_DIR_GDS_IO_P)/%/gds: %_gds.tar.bz2
 	@tar -xjvf $< -C $(DECOMP_DIR_GDS_IO_P)/$*/
 	@touch $@
 
-unzip: start clean-dir $(DECOMP_DIR) clean-bz2
+unzip: start $(DECOMP_DIR)
+	@$(MAKE) --no-print-directory clean-bz2
 	@echo "\n[unzip] done!"
 
 start:
@@ -91,5 +94,27 @@ clean-bz2:
 
 clean-dir:
 	@echo "\n[clean] delete decompressed dirs"
-	@find IP/STD_cell -depth -type d -name "liberty" -exec rm -rfv {} \; || true
-	@find IP -depth -type d -name "gds" -exec rm -rfv {} \; || true
+	@find $(LIBS_REF) -depth -type d -name "liberty" -path "*/ics55_LLSC_H7C*" -exec rm -rfv {} \; || true
+	@find $(LIBS_REF) -depth -type d -name "gds" -exec rm -rfv {} \; || true
+
+
+# =============================================================================
+# Default goal: download + extract the release archives into libs.ref
+# =============================================================================
+# libs.ref is the real home of the digital-PDK views:
+#   - cdl, cell_list, doc, lef, verilog + IO liberty are tracked in git
+#   - gds + std-cell liberty are large binaries downloaded from the release
+#   archives (this Makefile) and gitignored
+# A fresh clone + `make` yields a ready std-cell library.
+# Existing release views are left intact; use `make clean-dir` to force refresh.
+.PHONY: all
+all: unzip
+
+.PHONY: stage-libs-ref
+stage-libs-ref:
+	@for lib in $(STD_CELL_VARIANTS); do \
+	  python3 libs.tech/pex/config_gen.py --openrcx --layers-rc --scl $$lib; \
+	done
+	@echo "RCX configs regenerated for $(STD_CELL_VARIANTS)."
+
+.DEFAULT_GOAL := all

@@ -86,7 +86,7 @@ comparisons; `data_val` is not an independent holdout.
 - Optuna + cmaes: `/tmp/optuna_env` virtual environment
 - PTM source cards: `~/Downloads/45nm_LP.pm`, `~/Downloads/45nm_HP.pm`, and
   `~/Downloads/65nm_bulk.pm`
-- Released source data under `IP/STD_cell/ics55_LLSC_H7C_V1p10C100`
+- Released source data under `libs.ref`
 
 ## Important simulator details
 

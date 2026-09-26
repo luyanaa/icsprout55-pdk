@@ -66,45 +66,39 @@ ICS55 is currently still in the development verification and iterative optimizat
 The ICsprout55 Open Source PDK contents:
 
 ```
-├── docs
-│   ├── quick-start_on_ICsprout_calibrelvs.pdf # Calibre LVS quick start
-│   └── ZJCX 55nm Design Rule Manual_V1.1.9.pdf
-├── IP
-│   ├── IO
-│   │   └── ICsprout_55LLULP1233_IO_251013   # Specific IO library
-│   │       ├── cdl
-│   │       ├── cell_list
-|   |       |── doc
-|   |       |── gds
-│   │       ├── lef
-│   │       ├── liberty
-│   │       └── verilog
-│   └── STD_cell                             # Standard cell library
-│       └── ics55_LLSC_H7C_V1p10C100         # 55nm LLSC H7C standard cell library version 1.10
-│           ├── ics55_LLSC_H7CH              # HVT standard cells
-│           │   ├── cdl
-│           │   ├── cell_list
-│           │   ├── doc
-│           │   ├── gds
-│           │   ├── lef
-│           │   ├── liberty
-│           │   └── verilog
-│           ├── ics55_LLSC_H7CL              # LVT standard cells
-│           │   ├── cdl
-│           │   ├── cell_list
-│           │   ├── doc
-│           │   ├── gds
-│           │   ├── lef
-│           │   ├── liberty
-│           │   └── verilog
-│           └── ics55_LLSC_H7CR              # RVT standard cells
-│               ├── cdl
-│               ├── cell_list
-│               ├── doc
-│               ├── gds
-│               ├── lef
-│               ├── liberty
-│               └── verilog
+├── libs.ref                                  # Reference libraries
+│   ├── ICsprout_55LLULP1233_IO_251013        # IO library
+│   │   ├── cdl
+│   │   ├── cell_list
+│   │   ├── doc
+│   │   ├── gds
+│   │   ├── lef
+│   │   ├── liberty
+│   │   └── verilog
+│   ├── ics55_LLSC_H7CH                     # HVT standard cells
+│   │   ├── cdl
+│   │   ├── cell_list
+│   │   ├── doc
+│   │   ├── gds                         # downloaded by `make`, gitignored
+│   │   ├── lef
+│   │   ├── liberty                    # downloaded by `make`, gitignored
+│   │   └── verilog
+│   ├── ics55_LLSC_H7CL                     # LVT standard cells
+│   │   ├── cdl
+│   │   ├── cell_list
+│   │   ├── doc
+│   │   ├── gds                         # downloaded by `make`, gitignored
+│   │   ├── lef
+│   │   ├── liberty                    # downloaded by `make`, gitignored
+│   │   └── verilog
+│   └── ics55_LLSC_H7CR                     # RVT standard cells
+│       ├── cdl
+│       ├── cell_list
+│       ├── doc
+│       ├── gds                         # downloaded by `make`, gitignored
+│       ├── lef
+│       ├── liberty                    # downloaded by `make`, gitignored
+│       └── verilog
 ├── prtech                                   # Place & Route technology files
 │   └── techLEF
 └── pv                                       # Physical-verification collateral

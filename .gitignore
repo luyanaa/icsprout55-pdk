@@ -226,3 +226,10 @@ __marimo__/
 
 # Local orchestrator state
 .slim/deepwork/
+
+# LibreLane libs.ref views.
+# Small views (cdl/cell_list/doc/lef/verilog + IO liberty) are tracked in git.
+# gds + std-cell liberty are large binaries downloaded from the release archives
+# by `make`; keep them out of git.
+libs.ref/*/gds/
+libs.ref/ics55_LLSC_H7C*/liberty/

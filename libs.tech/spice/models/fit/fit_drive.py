@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Fit a small BSIM4 drive subset against released Liberty timing points.
 
 The leakage fit and this transient timing fit are staged.  The timing objective
@@ -27,7 +41,7 @@ import fit_expanded as fx  # noqa: E402
 import simulate as sm  # noqa: E402
 
 FLAVORS = ("svt", "lvt", "hvt")
-LIB_DIR = ROOT / "IP" / "STD_cell" / "ics55_LLSC_H7C_V1p10C100"
+LIB_DIR = ROOT / "libs.ref"
 FLAVOR_TAG = {"svt": "H7CR", "lvt": "H7CL", "hvt": "H7CH"}
 DRIVE_CELLS = ("INVX1", "INVX3", "INVX4")
 DRIVE_SPECS = {

@@ -15,7 +15,7 @@ macros/<macro_name>/
 
 ## Known analog-capable cells already released in the IO library
 
-From `IP/IO/ICsprout_55LLULP1233_IO_251013` (use as reference macros):
+From `libs.ref/ICsprout_55LLULP1233_IO_251013` (use as reference macros):
 
 | Cell | Function |
 |---|---|

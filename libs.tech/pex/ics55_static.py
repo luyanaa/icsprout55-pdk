@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2026 ICsprout Integrated Circuit Co., Ltd.
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +21,12 @@ constants and equations are the small subset recovered from static inspection:
 and built-in layer/corner multipliers.  It deliberately does not invent ITF or
 CAPTAB contents.  Callers must provide exact process-key presence when they
 want the binary's hashed branch instead of its recovered fallback branch.
+
+PROVENANCE LIMIT: the binary also embeds the full StarRC-format ITF/CAPTAB
+data as XOR-ciphertext blobs (kItf*/kCaptab* symbols).  Decrypting those is
+NOT done here (clean-room boundary); the upstream LibreLane repository
+(ckdur/icsprout55-openpdk, hacking/decrypted_output) publishes the decrypted
+values.  See libs.tech/pex/README.md "RCX provenance limit".
 """
 from __future__ import annotations
 

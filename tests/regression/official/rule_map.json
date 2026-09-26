@@ -40,14 +40,108 @@
     "TGOX/SAB/DIODE alias collision - RESOLVED (2026-09-25)",
     "IOACT now derived ACT&TGOX; IO LVS comparison still blocked (multi-finger combining)"
    ]
+  },
+  "coverage_final": {
+   "mos_families_official": "1.2V svt/lvt/hvt, 2.5V, 3.3V, 3.3V-OD, native",
+   "mos_families_ported": "1.2V svt/lvt/hvt, 3.3V (8 classes)",
+   "compare": "official mos_err 10% W/L; port L exact + W 5% (stricter)",
+   "waived": "NAND3BBX0P5/X0P7H7* stack reversal (6 cells)",
+   "date": "2026-09-25"
   }
  },
  "drc": {
-  "ported": {},
+  "ported": {
+   "well.nw.width": [
+    "NW1_W_1"
+   ],
+   "well.nw.space": [
+    "NW1_S_1"
+   ],
+   "well.nw.act_enc": [
+    "ACT_EN_1",
+    "ACT_EN_2"
+   ],
+   "active.act.width": [
+    "ACT_W_1"
+   ],
+   "active.act.space": [
+    "ACT_S_1"
+   ],
+   "active.act.area": [
+    "ACT_A_1"
+   ],
+   "active.ioact.space": [
+    "ACT_S_1a"
+   ],
+   "poly.poly.width": [
+    "PO_W_1"
+   ],
+   "poly.poly.space": [
+    "PO_S_1"
+   ],
+   "poly.poly.area": [
+    "PO_A_1"
+   ],
+   "poly.poly_act.sep": [
+    "PO_S_11"
+   ],
+   "adv.gate.poly_overhang": [
+    "PO_EX_2"
+   ],
+   "impl.esd.space": [
+    "ESD_S_1"
+   ],
+   "metal.m1.width": [
+    "MET1_W_1"
+   ],
+   "metal.m1.space": [
+    "MET1_S_1"
+   ],
+   "metal.tm2.width": [
+    "T4M2_W_1"
+   ],
+   "metal.tm2.space": [
+    "T4M2_S_1"
+   ],
+   "mom.m2.width": [
+    "MOM_R_1"
+   ],
+   "mom.m2.space": [
+    "MOM_S_1"
+   ],
+   "well.tgox.width": [
+    "TGOX"
+   ],
+   "well.tgox.space": [
+    "TGOX"
+   ],
+   "active.ioact.width": [
+    "ACT_W_3b"
+   ]
+  },
   "deferred": {},
   "layer_aliases_resolved": {
    "date": "2026-09-25",
    "note": "TGOX 28/1, SAB 71/1, DIODE 191/12, RV/CB/ALPAD/RDL/COVER 120-124, DGOX 27/1, CTbar 72/7, CTopcblk 72/5 aligned to the official LAYER MAP; IOACT derived from ACT&TGOX; cell exclusion moved to instance bboxes"
+  },
+  "coverage_final": {
+   "official_rules": 466,
+   "ported_families": "ACT/PO/NW1/M1-TM2/via/MOM core",
+   "value_corrected": [
+    "nw_width",
+    "nw_space",
+    "esd_space",
+    "act_space",
+    "poly_space",
+    "nw_act_enc"
+   ],
+   "disabled_checks": [
+    "cont.ct.enc.m1",
+    "adv.*.eol",
+    "adv.m1/m2.notch",
+    "adv.gate.act_overhang"
+   ],
+   "date": "2026-09-25"
   }
  }
 }

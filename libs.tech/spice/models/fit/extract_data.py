@@ -116,7 +116,7 @@ def suffixed(names, tag):
 
 
 if __name__ == "__main__":
-    base = "/Users/yanlu/Documents/icsprout55-pdk/IP/STD_cell/ics55_LLSC_H7C_V1p10C100"
+    base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "libs.ref")
     fitdir = os.path.dirname(os.path.abspath(__file__))
     for flavor, tag in [("svt", "H7CR"), ("lvt", "H7CL"), ("hvt", "H7CH")]:
         cdl = "%s/ics55_LLSC_%s/cdl/ics55_LLSC_%s.cdl" % (base, tag, tag)

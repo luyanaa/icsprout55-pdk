@@ -84,15 +84,17 @@ netlists are provably equivalent.
   internal nodes) are combined, so cells that legitimately split a signal
   into several devices (e.g. OAI32X3H7L's B1 = 190n + 380n) are left
   untouched.
-- Foundry data inconsistencies (drawn widths deviate >5% from the CDL;
-  the deck reports the geometry truthfully, the compare flags them):
+- Foundry data inconsistencies (drawn widths deviate from the CDL; the deck
+  reports the geometry truthfully, the compare passes the 5-10% band with a
+  WARNING and fails beyond the official 10%):
   - INVX16H7L/H7R/H7H: NMOS drawn 3.04um vs CDL 2.4um, PMOS 2.4um vs
     3.04um (widths swapped, +27%).
   - OAI33X0P5H7L/H7R/H7H: fingers drawn 200nm vs CDL 150nm (+33%).
   - INVX7H7L/H7R/H7H: NMOS 1.2um vs CDL 1.05um, PMOS 1.52um vs 1.33um
     (+14%).
   - TBUFX8H7L/H7R/H7H: TG output-pass NMOS drawn 460nm vs CDL 500nm
-    (-8%); structure verified isomorphic (tristate function identical).
+    (-8%) - passes at the official 10% tolerance with a WARNING;
+    structure verified isomorphic (tristate function identical).
   - NAND3BBX0P7H7L/H7R/H7H: PMOS drawn 190nm vs CDL 222nm (-14%) on top of
     the stack-order issue below.
 - NAND3BBX0P5H7* / NAND3BBX0P7H7* (all three libs) draw the NMOS series stack

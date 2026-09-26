@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Evaluate Liberty combinational arcs with flattened CDL and manual GDS RC.
 
 This module deliberately handles combinational timing arcs only.  Sequential
@@ -27,14 +41,14 @@ FLAVOR_TAG = {"svt": "H7CR", "lvt": "H7CL", "hvt": "H7CH"}
 
 def _library(flavor: str) -> Path:
     tag = FLAVOR_TAG[flavor]
-    return (ROOT / "IP" / "STD_cell" / "ics55_LLSC_H7C_V1p10C100"
+    return (ROOT / "libs.ref"
             / ("ics55_LLSC_%s" % tag) / "liberty"
             / ("ics55_LLSC_%s_typ_tt_1p2_25_nldm.lib" % tag))
 
 
 def _cdl(flavor: str) -> Path:
     tag = FLAVOR_TAG[flavor]
-    return (ROOT / "IP" / "STD_cell" / "ics55_LLSC_H7C_V1p10C100"
+    return (ROOT / "libs.ref"
             / ("ics55_LLSC_%s" % tag) / "cdl"
             / ("ics55_LLSC_%s.cdl" % tag))
 

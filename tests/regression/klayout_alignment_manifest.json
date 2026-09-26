@@ -32,7 +32,7 @@
   "core_lvs_matrix": [
     {
       "flavor": "H7H",
-      "lib": "IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CH",
+      "lib": "libs.ref/ics55_LLSC_H7CH",
       "cells": ["INVX1H7H", "INVX3H7H", "INVX4H7H"],
       "expected": {
         "model_prefix": ["NM1P2_HVT_LP", "PM1P2_HVT_LP"],
@@ -46,7 +46,7 @@
     },
     {
       "flavor": "H7L",
-      "lib": "IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CL",
+      "lib": "libs.ref/ics55_LLSC_H7CL",
       "cells": ["INVX1H7L", "INVX3H7L", "INVX4H7L"],
       "expected": {
         "model_prefix": ["NM1P2_LVT_LP", "PM1P2_LVT_LP"],
@@ -60,7 +60,7 @@
     },
     {
       "flavor": "H7R",
-      "lib": "IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CR",
+      "lib": "libs.ref/ics55_LLSC_H7CR",
       "cells": ["INVX1H7R", "INVX3H7R", "INVX4H7R"],
       "expected": {
         "model_prefix": ["NM1P2_SVT_LP", "PM1P2_SVT_LP"],

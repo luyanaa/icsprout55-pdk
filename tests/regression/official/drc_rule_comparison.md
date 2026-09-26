@@ -1,7 +1,9 @@
 # Rule-to-rule comparison: official Calibre DRC vs KLayout port
 
-Generated 2026-09-25. Source of truth: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc`
-(545 RULECHECK tokens, 466 unique IDs). KLayout side: `libs.tech/drc/` (163 checks).
+Generated 2026-09-25 (final signoff sanity, refreshed 2026-09-25 evening).
+Source of truth: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc`
+(545 RULECHECK tokens, 466 unique IDs). KLayout side: `libs.tech/drc/`
+(152 checks registered; 11 checks disabled by user call - see section 4).
 Method: family-level crosswalk + value extraction from the official `@` comments
 vs `ics55_rules.json`. The official deck is an 8-metal-capable deck
 (T2/T4/T8 top-metal options); the KLayout port targets the released 6-metal
@@ -53,7 +55,25 @@ Per-voltage channel lengths (PO_W_2a..2f: 0.06/0.20/0.28/0.38/0.40 um for
 0.9/1.2/1.8/2.5/3.3V) exist in the official deck; the port uses a single
 `poly_width` 0.06 and does not distinguish IO/LDMOS channel lengths.
 
-## 3. Caution items
+## 3b. Final-state verification (2026-09-25)
+
+All checked std cells run CLEAN with the current deck (INVX1, ADDFX1,
+SDFFNRX2, AND2X8, NAND2X1, AOI2BB2X2 - zero flags).  The well.nw.width check
+uses the ABUT<90 analog (smoothed by well_width_smoothing 0.03); the
+poly.poly_act.sep check uses the 0.001 um floor; cont.ct.enc.m1, the
+adv.*.eol/notch families and adv.gate.act_overhang are disabled per the user
+call (documented in libs.tech/drc/README.md "Disabled checks").
+
+## 4. Disabled checks (user call 2026-09-25)
+
+| Check | Reason |
+|---|---|
+| cont.ct.enc.m1 | LEF ENCLOSURE ABOVE 0.04 vs the cells' uniform 0.025; no official rule |
+| adv.<layer>.eol (all) | placeholder approximation; no official line-end rule ported |
+| adv.m1/m2.notch | placeholder jog/notch approximation |
+| adv.gate.act_overhang | gate definition includes 0.32 um straps; official applies to channel gates only |
+
+## 5. Caution items
 
 1. Five loose values were corrected to the official numbers on 2026-09-25:
    NW1_W_1/NW1_S_1/ESD_S_1 0.47, ACT_S_1 0.11, PO_S_1 0.12 (also nw_act_enc ->

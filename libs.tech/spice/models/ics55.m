@@ -17,7 +17,7 @@
 *   (c) clearly marked TBD stubs for parameters that are NOT released.
 * Do NOT use the TBD values for design decisions or tapeout.
 *
-* Device inventory (from IP/*/cdl + IO datasheet):
+* Device inventory (from libs.ref/*/cdl + IO datasheet):
 *   MOS 1.2V  : nm1p2/pm1p2_{svt,lvt,hvt}_lp   (L = 60 nm drawn)
 *   MOS 3.3V  : nm3p3_lp / pm3p3_lp            (L = 400-650 nm drawn)
 *   Diodes    : dio_1p2_{pp_nw,np_pw}[_{lvt,hvt}]_lp, dio_3p3_pp_nw_lp

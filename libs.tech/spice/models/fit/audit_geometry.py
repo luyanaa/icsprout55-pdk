@@ -30,7 +30,7 @@ from typing import Dict, Iterable, Mapping
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
-CDL_ROOT = ROOT / "IP" / "STD_cell" / "ics55_LLSC_H7C_V1p10C100"
+CDL_ROOT = ROOT / "libs.ref"
 MODEL_PATH = HERE.parent / "fitted" / "ics55_mos_core.l"
 FLAVORS = {"svt": "H7CR", "lvt": "H7CL", "hvt": "H7CH"}
 FORBIDDEN_INSTANCE_FIELDS = {

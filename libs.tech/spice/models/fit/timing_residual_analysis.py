@@ -158,8 +158,7 @@ def _load_driver_entry(base_cell: str):
             return data[key], dataset
     source_tag = SOURCE_TAG[FLAVOR]
     source_base = (
-        ROOT / "IP" / "STD_cell" / "ics55_LLSC_H7C_V1p10C100"
-        / ("ics55_LLSC_%s" % source_tag)
+        ROOT / "libs.ref" / ("ics55_LLSC_%s" % source_tag)
     )
     cdl = source_base / "cdl" / ("ics55_LLSC_%s.cdl" % source_tag)
     liberty = source_base / "liberty" / (

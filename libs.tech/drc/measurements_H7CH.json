@@ -179,5 +179,5 @@
     "min_gate_width_um": 0.061,
     "min_gate_width_cell": "SDFFNX3H7H"
   },
-  "gds": "/Users/yanlu/Documents/icsprout55-pdk/IP/STD_cell/ics55_LLSC_H7C_V1p10C100/ics55_LLSC_H7CH/gds/ics55_LLSC_H7CH.gds"
+  "gds": "libs.ref/ics55_LLSC_H7CH/gds/ics55_LLSC_H7CH.gds"
 }

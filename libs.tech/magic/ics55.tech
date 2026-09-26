@@ -1,4 +1,19 @@
 # ============================================================================
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============================================================================
+# ============================================================================
 # ICsprout55 Magic technology file  (magic-vlsi 8.3.x, format 27)
 # ============================================================================
 # Clean-room draft for the ICsprout55 55nm LLULP 1P6M1TM process
@@ -280,6 +295,24 @@ styles
 	v3		36
 	v4		37
 	tv2		38
+end
+
+# ---------------------------------------------------------------------------
+# LEF layer-name mapping (needed by the Magic LEF/DEF readers in the
+# LibreLane stream-out flow).  layer <LEF-name> <magic-type>
+# ---------------------------------------------------------------------------
+lef
+    routing m1  MET1 m1
+    routing m2  MET2 m2
+    routing m3  MET3 m3
+    routing m4  MET4 m4
+    routing m5  MET5 m5
+    routing tm2 T4M2 tm2
+    cut v1  VIA1 v1
+    cut v2  VIA2 v2
+    cut v3  VIA3 v3
+    cut v4  VIA4 v4
+    cut tv2 T4V2 tv2
 end
 
 # ---------------------------------------------------------------------------
