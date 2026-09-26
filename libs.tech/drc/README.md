@@ -108,14 +108,21 @@ clean, which removes the grid-snapping/binarization jogs):
 
 ## Cell exclusion for real-GDS runs (analog / interconnect focus)
 
-KLayout 0.30.9 has no `forget_cell`/`cells()` DRC API, so the std-cell
-content is excluded via the drawn BOUNDARY layer (191/12, present in the
-released std-cell GDS): with `-rd cell_exclusion=true` the interior of every
-boundary (shrunk by `cell_excl_margin`, 0.1 um placeholder) is subtracted
-from all checked layers, so the DRC checks the top-level interconnect and
-analog shapes only.  The margin band keeps the shapes crossing the cell
-frames.  Std-cell verification runs leave this OFF (per-cell flags are the
-point there); enable it on real analog/interconnect GDS.
+KLayout 0.30.x has no hierarchy API for directly skipping selected cells in a
+deep DRC run.  With `-rd cell_exclusion=true`, the deck therefore walks the
+hierarchy and subtracts the interior of every instance bounding box (shrunk by
+`cell_excl_margin`, default 0.1 um) from every checked input layer.  The
+remaining margin band keeps shapes at cell frames, but can create artificial
+narrow fragments at those frames.
+
+This is an interconnect/analog screening mode, not a full-macro signoff mode:
+it excludes all child instances, not only released standard cells.  Leave it
+off for per-cell verification and for OpenRAM-generated SRAM internals.  The
+OpenRAM adapter's default `top_interconnect=true` mode instead copies only
+direct top-cell shapes and disables FEOL, density, antenna, and MOM checks;
+this avoids child-cell false positives but intentionally does not verify child
+geometry.  Use `-rd top_interconnect=false` to inspect the complete hierarchy,
+then review the known provisional-rule limitations below.
 
 ## Analog signoff (logged, NOT implemented yet - to be checked later)
 
@@ -177,6 +184,29 @@ provenance stay in `ics55_rules.json`; re-enable by uncommenting.
   (adv.gate.poly_overhang / adv.gate.act_overhang, direction-specific via
   gate-edge zones) with placeholder / measured values (provenance: derived)
   - not foundry rules; see the port-notes table above.
+- OpenRAM's `stdcell_library` setting selects the library/VT variant used by
+  its analytical/SPICE metadata; it does not make the generated SRAM GDS a
+  released standard-cell placement.  Full-hierarchy reports therefore name
+  generated cells such as `ics55_h7cr_sram_pbitcell` and
+  `ics55_h7cr_sram_hierarchical_decoder`; classify those findings against the
+  generated geometry and OpenRAM's rules before calling them standard-cell
+  false positives.
+- OpenRAM's generation-side DRC table is not a signoff substitute.  Its core
+  width/space values match the PDK for NW, POLY, ACT, CT, M1-M5, and V1-V4,
+  but its generic implant API cannot represent the separate NP (0.400/0.361)
+  and PP (0.181/0.400) rules.  `implant_enclose_active=0` also means those
+  masks are not widened to the PDK minimum by the generator.  A current
+  full-hierarchy H7CR SRAM core-only run records 1310 FEOL findings
+  (NP width/space, PP width/space, NW space, and POLY space); these are
+  generated-geometry findings, not standard-cell false positives.
+- The same H7CR core-only run records 536 BEOL findings (M1/M2/M3 spacing).
+  The OpenRAM adapter's default `top_interconnect=true` mode intentionally
+  skips all child geometry and can therefore report clean while these
+  generated cells remain unchecked.  Use `top_interconnect=false` for the
+  OpenRAM SRAM core audit.
+- OpenRAM's generator disables ACT/POLY minimum-area rules (`0.0` in its
+  local rule table) to avoid changing transistor/LVS geometry; the PDK deck
+  still checks ACT `0.0555 um^2` and POLY `0.0388 um^2`.
 - Standalone cells flag boundary CT-enclosure / poly-active separations that
   are satisfied by neighbor abutment in a real placement; run on the placed
   chip, not single cells.

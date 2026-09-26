@@ -88,7 +88,6 @@ if TABLES.include?('beol') || BEOL
   end
 
   #--- RV (LEF WIDTH 3 SPACING 3 ENCLOSURE 1.5; array 6) ------------------------------
-  RV = input(122, 1)
   RV.width(rval('rv_width').um, euclidian).output('via.rv.width',
     "via.rv.width: RV min width #{rval('rv_width')} um [lef]")
   RV.space(rval('rv_space').um, euclidian).output('via.rv.space',
