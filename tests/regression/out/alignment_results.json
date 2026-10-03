@@ -4,17 +4,7 @@
     {
       "fixture": "H7H/INVX1H7H",
       "status": "BLOCKED",
-      "reason": "missing provenance input: [Errno 2] No such file or directory: '/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/INVX1H7H_fresh.cir'"
-    },
-    {
-      "fixture": "H7H/INVX3H7H",
-      "status": "BLOCKED",
-      "reason": "missing provenance input: [Errno 2] No such file or directory: '/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/INVX3H7H_fresh.cir'"
-    },
-    {
-      "fixture": "H7H/INVX4H7H",
-      "status": "BLOCKED",
-      "reason": "missing provenance input: [Errno 2] No such file or directory: '/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/INVX4H7H_fresh.cir'"
+      "reason": "missing provenance input: [Errno 2] No such file or directory: '/Users/yanlu/Documents/icsprout55-pdk/libs.ref/ics55_LLSC_H7CH/gds/ics55_LLSC_H7CH.gds'"
     }
   ]
 }

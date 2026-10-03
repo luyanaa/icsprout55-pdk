@@ -33,58 +33,185 @@
     {
       "flavor": "H7H",
       "lib": "libs.ref/ics55_LLSC_H7CH",
-      "cells": ["INVX1H7H", "INVX3H7H", "INVX4H7H"],
+      "cells": [
+        "INVX1H7H",
+        "INVX3H7H",
+        "INVX4H7H"
+      ],
       "expected": {
-        "model_prefix": ["NM1P2_HVT_LP", "PM1P2_HVT_LP"],
+        "model_prefix": [
+          "NM1P2_HVT_LP",
+          "PM1P2_HVT_LP"
+        ],
         "L_um": 0.06,
-        "w_um_n_p": {"INVX1H7H": [0.21, 0.27], "INVX3H7H": [0.45, 0.57], "INVX4H7H": [0.60, 0.76]},
+        "w_um_n_p": {
+          "INVX1H7H": [
+            0.21,
+            0.27
+          ],
+          "INVX3H7H": [
+            0.45,
+            0.57
+          ],
+          "INVX4H7H": [
+            0.6,
+            0.76
+          ]
+        },
         "per_cell_devices": 2,
-        "terminals_nmos": ["Y", "A", "VSS", "VSS"],
-        "terminals_pmos": ["Y", "A", "VDD", "VDD"],
+        "terminals_nmos": [
+          "Y",
+          "A",
+          "VSS",
+          "VSS"
+        ],
+        "terminals_pmos": [
+          "Y",
+          "A",
+          "VDD",
+          "VDD"
+        ],
         "m": 1
       }
     },
     {
       "flavor": "H7L",
       "lib": "libs.ref/ics55_LLSC_H7CL",
-      "cells": ["INVX1H7L", "INVX3H7L", "INVX4H7L"],
+      "cells": [
+        "INVX1H7L",
+        "INVX3H7L",
+        "INVX4H7L"
+      ],
       "expected": {
-        "model_prefix": ["NM1P2_LVT_LP", "PM1P2_LVT_LP"],
+        "model_prefix": [
+          "NM1P2_LVT_LP",
+          "PM1P2_LVT_LP"
+        ],
         "L_um": 0.06,
-        "w_um_n_p": {"INVX1H7L": [0.21, 0.27], "INVX3H7L": [0.45, 0.57], "INVX4H7L": [0.60, 0.76]},
+        "w_um_n_p": {
+          "INVX1H7L": [
+            0.21,
+            0.27
+          ],
+          "INVX3H7L": [
+            0.45,
+            0.57
+          ],
+          "INVX4H7L": [
+            0.6,
+            0.76
+          ]
+        },
         "per_cell_devices": 2,
-        "terminals_nmos": ["Y", "A", "VSS", "VSS"],
-        "terminals_pmos": ["Y", "A", "VDD", "VDD"],
+        "terminals_nmos": [
+          "Y",
+          "A",
+          "VSS",
+          "VSS"
+        ],
+        "terminals_pmos": [
+          "Y",
+          "A",
+          "VDD",
+          "VDD"
+        ],
         "m": 1
       }
     },
     {
       "flavor": "H7R",
       "lib": "libs.ref/ics55_LLSC_H7CR",
-      "cells": ["INVX1H7R", "INVX3H7R", "INVX4H7R"],
+      "cells": [
+        "INVX1H7R",
+        "INVX3H7R",
+        "INVX4H7R"
+      ],
       "expected": {
-        "model_prefix": ["NM1P2_SVT_LP", "PM1P2_SVT_LP"],
+        "model_prefix": [
+          "NM1P2_SVT_LP",
+          "PM1P2_SVT_LP"
+        ],
         "L_um": 0.06,
-        "w_um_n_p": {"INVX1H7R": [0.21, 0.27], "INVX3H7R": [0.45, 0.57], "INVX4H7R": [0.60, 0.76]},
+        "w_um_n_p": {
+          "INVX1H7R": [
+            0.21,
+            0.27
+          ],
+          "INVX3H7R": [
+            0.45,
+            0.57
+          ],
+          "INVX4H7R": [
+            0.6,
+            0.76
+          ]
+        },
         "per_cell_devices": 2,
-        "terminals_nmos": ["Y", "A", "VSS", "VSS"],
-        "terminals_pmos": ["Y", "A", "VDD", "VDD"],
+        "terminals_nmos": [
+          "Y",
+          "A",
+          "VSS",
+          "VSS"
+        ],
+        "terminals_pmos": [
+          "Y",
+          "A",
+          "VDD",
+          "VDD"
+        ],
         "m": 1
       }
     }
   ],
   "stress_sentinels_h7h": [
-    "NAND3BBX0P5H7H", "NAND3BBX0P7H7H", "OAI33X0P5H7H",
-    "INVX7H7H", "INVX16H7H", "TBUFX8H7H"
+    "NAND3BBX0P5H7H",
+    "NAND3BBX0P7H7H",
+    "OAI33X0P5H7H",
+    "INVX7H7H",
+    "INVX16H7H",
+    "TBUFX8H7H"
   ],
   "drc_rule_families": {
     "ported_high_confidence": [],
     "deferred_gap": [
-      "DNW", "ACT", "NW1", "PSUB", "NVT3/PVT3", "NVT1/PVT1", "ULLD", "DG", "TG",
-      "PO", "NP", "PP", "SAB", "CT", "MET1", "T2V/T2M", "T4V/T4M", "T8V/T8M",
-      "CB", "RV", "RDL", "COVER", "CHIPEDGE", "AAres", "NWresAA", "NWresSTI",
-      "POLYres", "EFU", "HRP", "DEUPAD", "SRCK", "SL", "AADUM", "PODUM",
-      "ESDN/ESDP/ESD", "LU", "MOM", "AR antenna"
+      "DNW",
+      "ACT",
+      "NW1",
+      "PSUB",
+      "NVT3/PVT3",
+      "NVT1/PVT1",
+      "ULLD",
+      "DG",
+      "TG",
+      "PO",
+      "NP",
+      "PP",
+      "SAB",
+      "CT",
+      "MET1",
+      "T2V/T2M",
+      "T4V/T4M",
+      "T8V/T8M",
+      "CB",
+      "RV",
+      "RDL",
+      "COVER",
+      "CHIPEDGE",
+      "AAres",
+      "NWresAA",
+      "NWresSTI",
+      "POLYres",
+      "EFU",
+      "HRP",
+      "DEUPAD",
+      "SRCK",
+      "SL",
+      "AADUM",
+      "PODUM",
+      "ESDN/ESDP/ESD",
+      "LU",
+      "MOM",
+      "AR antenna"
     ]
   },
   "provenance": {
@@ -92,6 +219,23 @@
     "klayout_version": "0.30.7",
     "lvs_runner": "libs.tech/lvs/run_lvs.py",
     "drc_runner": "libs.tech/drc/ics55_drc.drc",
-    "hashes_expected": "filled by run_alignment.py at execution time"
+    "hashes_expected": "frozen_hashes section; drift fails the run unless regenerated deliberately with run_alignment.py --update-hashes"
+  },
+  "frozen_hashes": {
+    "lvs_runner": "a2ddaecf935d82465f053545e43e166838699bd262bf0f71ace94cd765f4488f",
+    "normalizer": "4be775277d78f0f74d1f8efe9140517e753924ce33bd912325ef028d4de5db29",
+    "harness": "a4adeaaeb437cbe0e8a1666bae07851ab1db389fbe4b7aa05f53aafb529273af",
+    "lvs_rule_decks": {
+      "combine_fingers.lvs": "fe15f3071820702bc00c6b400213d1e6d7e9cf209445e5b2ac8d421cba618df3",
+      "devices_connections.lvs": "97c3d166cb2de49eaed43ec3373fd4675f7a63c718a1fb55a938277ef489d9d8",
+      "general_derivations.lvs": "24eabd808dae25574d74a44fc058fa396281a780aa827acc0a037a93360fea88",
+      "layers_definitions.lvs": "a5542678e9a64a7c22f12c9cfba6ba46af06855e033b4217faa323cc434b9f92",
+      "min_conn.lvs": "5a76cd2af1bd41634e9a3e63a38cf12f1eb6efcb3c07bac812c4af84e6904349",
+      "mos_derivations.lvs": "cc4719455caff79cb6eba7bc227e31b3b718e8529943cc0fa1b12bc7448b3dc6",
+      "mos_extraction.lvs": "adbbb9d5e8ce252e34dc302dc9cae15280d00cb294b2a2a8cb858db45ba295b9",
+      "mos_extraction_svtonly.lvs": "e3039a6da8c653f3b9d09758e8e3686beb8f5e8dc3ec832877a3985d37345221",
+      "res_diode_derivations.lvs": "c6339ef3005c2336252c9776a9b0b1c0cc824e9625fd25465031c665ca1633d5",
+      "res_diode_extraction.lvs": "295ec365c6a7785f6c006894370395dded6d5593e34df56116055d2555ebdc4b"
+    }
   }
 }

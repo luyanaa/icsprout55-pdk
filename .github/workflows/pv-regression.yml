@@ -1,0 +1,35 @@
+name: pv-regression
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  static:
+    name: Layer-map + LEF/Liberty checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Layer-mapping cross-check
+        run: python3 tests/regression/layer_map_check.py
+      - name: LEF-Liberty pin consistency
+        run: python3 tests/regression/lef_liberty_check.py
+
+  drc-fixtures:
+    name: DRC fixture self-consistency (KLayout)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: DeterminateSystems/install-nix-action@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch LibreLane dev shell
+        run: git clone --depth 1 https://github.com/librelane/librelane /tmp/librelane
+      - name: DRC fixtures (BEOL metal/via rules)
+        run: python3 tests/regression/drc_fixture_check.py --librelane /tmp/librelane

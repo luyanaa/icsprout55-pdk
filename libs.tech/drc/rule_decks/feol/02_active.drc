@@ -29,7 +29,7 @@ if TABLES.include?('feol') || FEOL
     "active.act.space: ACT min spacing #{rval('act_space')} um [gds]")
 
   #--- ACT: minimum area -------------------------------------------------------------
-  ACT.with_area(rval('act_area').um2).output('active.act.area',
+  ACT.not(ACT.with_area(rval('act_area').um2, 1e9.um2)).output('active.act.area',
     "active.act.area: ACT min area #{rval('act_area')} um^2 [gds]")
 
   #--- ACT must be covered by NP or PP (no un-implanted active) ----------------------
@@ -41,6 +41,6 @@ if TABLES.include?('feol') || FEOL
     "active.ioact.width: IOACT (ACT in TGOX) min width #{rval('ioact_width')} um [gds]")
   IOACT.space(rval('ioact_space').um, euclidian).output('active.ioact.space',
     "active.ioact.space: IOACT (ACT in TGOX) min spacing #{rval('ioact_space')} um [gds]")
-  IOACT.with_area(rval('ioact_area').um2).output('active.ioact.area',
+  IOACT.not(IOACT.with_area(rval('ioact_area').um2, 1e9.um2)).output('active.ioact.area',
     "active.ioact.area: IOACT (ACT in TGOX) min area #{rval('ioact_area')} um^2 [gds]")
 end

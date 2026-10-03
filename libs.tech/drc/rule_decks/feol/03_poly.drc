@@ -31,7 +31,7 @@ if TABLES.include?('feol') || FEOL
     "poly.poly.space: POLY min spacing #{rval('poly_space')} um [gds]")
 
   #--- POLY: minimum area -------------------------------------------------------------
-  POLY.with_area(rval('poly_area').um2).output('poly.poly.area',
+  POLY.not(POLY.with_area(rval('poly_area').um2, 1e9.um2)).output('poly.poly.area',
     "poly.poly.area: POLY min area #{rval('poly_area')} um^2 [gds]")
 
   #--- POLY to ACT separation (field poly) -------------------------------------------

@@ -1,0 +1,63 @@
+{
+  "schema": "ics55-drc-fixture-check/1.0",
+  "results": [
+    {
+      "fixture": "clean",
+      "expected_category": null,
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_width",
+      "expected_category": "metal.m1.width",
+      "categories": [
+        "metal.m1.width"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_space",
+      "expected_category": "metal.m1.space",
+      "categories": [
+        "metal.m1.space"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_area",
+      "expected_category": "metal.m1.area",
+      "categories": [
+        "metal.m1.area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_width",
+      "expected_category": "via.v1.width",
+      "categories": [
+        "via.v1.width"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_enc",
+      "expected_category": "via.v1.enc",
+      "categories": [
+        "via.v1.enc.lower",
+        "via.v1.enc.upper"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_space",
+      "expected_category": "via.v1.space",
+      "categories": [
+        "via.v1.array_space",
+        "via.v1.space"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "deck_sha256": "fa4321bdbdb1573d4c8e87d2592fa2c5bb416d586fe7066e960730afdc3f98c2",
+  "fixtures_sha256": "10015f1a08b00c0d4a25abd7609c27fafa5bcd1b37c4ce3d9ac7cc12354d12cd"
+}

@@ -28,12 +28,12 @@ if TABLES.include?('beol') || BEOL
       "metal.#{key}.width: #{name} min width #{rval("#{key}_width")} um [lef]")
     layer.space(rval("#{key}_space").um, euclidian).output("metal.#{key}.space",
       "metal.#{key}.space: #{name} min spacing #{rval("#{key}_space")} um [lef]")
-    layer.with_area(rval("#{key}_area").um2).output("metal.#{key}.area",
+    layer.not(layer.with_area(rval("#{key}_area").um2, 1e9.um2)).output("metal.#{key}.area",
       "metal.#{key}.area: #{name} min area #{rval("#{key}_area")} um^2 [lef]")
     # MaxWidth (LEF MAXWIDTH 10): wide-metal slotting rule is not defined by the
     # foundry; the LEF MAXWIDTH is a P&R constraint, not a DRC rule - not checked.
     # MinHole: MINENCLOSEDAREA from LEF (0.18) - hole must be larger than this.
-    layer.holes.with_area(rval("#{key}_min_hole").um2).output("metal.#{key}.min_hole",
+    layer.holes.not(layer.holes.with_area(rval("#{key}_min_hole").um2, 1e9.um2)).output("metal.#{key}.min_hole",
       "metal.#{key}.min_hole: #{name} min enclosed area #{rval("#{key}_min_hole")} um^2 [lef]")
   end
 
@@ -68,6 +68,6 @@ if TABLES.include?('beol') || BEOL
     "metal.tm2.width: T4M2 min width #{rval('tm2_width')} um [lef]")
   TM2.space(rval('tm2_space').um, euclidian).output('metal.tm2.space',
     "metal.tm2.space: T4M2 min spacing #{rval('tm2_space')} um [lef]")
-  TM2.with_area(rval('tm2_area').um2).output('metal.tm2.area',
+  TM2.not(TM2.with_area(rval('tm2_area').um2, 1e9.um2)).output('metal.tm2.area',
     "metal.tm2.area: T4M2 min area #{rval('tm2_area')} um^2 [lef]")
 end

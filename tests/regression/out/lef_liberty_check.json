@@ -1,0 +1,75 @@
+{
+  "schema": "ics55-lef-liberty-check/1.0",
+  "results": [
+    {
+      "lib": "ICsprout_55LLULP1233_IO_251013",
+      "status": "PASS",
+      "lef_only_cells": [
+        "P65_1233_CORNER (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_CUT (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER0005 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER001 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER01 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER1 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER10 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER2 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER20 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER5 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_FILLER50 (ICSIOA_N55_3P3_1P6M1TM.lef)",
+        "P65_1233_CORNER (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_CUT (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER0005 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER001 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER01 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER1 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER10 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER2 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER20 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER5 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)",
+        "P65_1233_FILLER50 (ICSIOA_N55_3P3_1P6M1TM_ecos.lef)"
+      ],
+      "lef_files": [
+        "ICSIOA_N55_3P3_1P6M1TM.lef",
+        "ICSIOA_N55_3P3_1P6M1TM_ecos.lef"
+      ],
+      "liberty_corners": [
+        "ICSIOA_N55_3P3_ff_1p32_3p63_125c.lib",
+        "ICSIOA_N55_3P3_ff_1p32_3p63_m40c.lib",
+        "ICSIOA_N55_3P3_ff_1p32_3p63v_0c.lib",
+        "ICSIOA_N55_3P3_ss_1p08_2p97_125c.lib",
+        "ICSIOA_N55_3P3_ss_1p08_2p97_m40c.lib",
+        "ICSIOA_N55_3P3_tt_1p2_3p3_25c.lib"
+      ],
+      "cells_checked": 12,
+      "pins_checked": 28
+    },
+    {
+      "lib": "ics55_LLSC_H7CH",
+      "status": "SKIPPED",
+      "reason": "no liberty locally (downloaded by make)"
+    },
+    {
+      "lib": "ics55_LLSC_H7CL",
+      "status": "SKIPPED",
+      "reason": "no liberty locally (downloaded by make)"
+    },
+    {
+      "lib": "ics55_LLSC_H7CR",
+      "status": "SKIPPED",
+      "reason": "no liberty locally (downloaded by make)"
+    }
+  ],
+  "lef_sha256": {
+    "ICSIOA_N55_3P3_1P6M1TM.lef": "6d90b042a7b82719213b4986691be5fc7218b96c7e8e2f03c656abdfb27370f3",
+    "ICSIOA_N55_3P3_1P6M1TM_ecos.lef": "2448e84ff1f82bea34f4eb578e3985a798dd3d43cc758f10d4298a6b97305076",
+    "ics55_LLSC_H7CH.lef": "684068cee607ae747fb2c59a7bf12dc658ac062e01b946f3171a75ba84f656f5",
+    "ics55_LLSC_H7CH_ant.lef": "9fba90d5eeb7efec7fd1d975d76ba0166388d2bb67c2c35dd540041cf000e6c0",
+    "ics55_LLSC_H7CH_ecos.lef": "85d7d9fd5bef66aae9e8fea4eecbd025283726baf06acbe6656a58651c31f194",
+    "ics55_LLSC_H7CL.lef": "572ba90a129711f2d4881edc5f26ac0f91299d564d6067b6a7286e597106884b",
+    "ics55_LLSC_H7CL_ant.lef": "cbf3e257ad8691f1d1112d275a951e55aaa4e8f15d051b367c43a2f91a77eb1e",
+    "ics55_LLSC_H7CL_ecos.lef": "cbeeeff9ad367e4c47f9c82cd04898f6742154cf1226c6a415e22647a516193f",
+    "ics55_LLSC_H7CR.lef": "6e8a3b88db7427269f683f5a321bdf295c41092c36d8a770926751103be13a0c",
+    "ics55_LLSC_H7CR_ant.lef": "499ff98622adf948865f4a28da2d61a1a71fb6f606a701c047a773eba6880baa",
+    "ics55_LLSC_H7CR_ecos.lef": "68809cc10e730905f2362901e100a879e6248334bcd4babe7e5113abdb5ab88e"
+  }
+}

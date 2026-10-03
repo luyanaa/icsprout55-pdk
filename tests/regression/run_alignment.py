@@ -61,6 +61,8 @@ def main():
     ap.add_argument("--manifest", default=ROOT / "tests" / "regression" / "klayout_alignment_manifest.json")
     ap.add_argument("--out", default=ROOT / "tests" / "regression" / "out")
     ap.add_argument("--no-run", action="store_true", help="compare existing outputs only")
+    ap.add_argument("--update-hashes", action="store_true",
+                    help="rewrite frozen_hashes in the manifest after the run")
     ap.add_argument("--drc", action="store_true", help="also run DRC on the same layouts (basic)")
     ap.add_argument("--librelane", default=Path.home() / "Documents" / "librelane")
     args = ap.parse_args()
@@ -71,6 +73,36 @@ def main():
 
     results = []
     rc = 0
+    # frozen-input drift check: the LVS port and harness are frozen by hash in
+    # the manifest; any drift invalidates PASS records.  Regenerate deliberately
+    # with --update-hashes.
+    rule_decks = sorted((ROOT / "libs.tech" / "lvs" / "rule_decks").glob("*"))
+    current_hashes = {
+        "lvs_runner": sha256(LVS_RUNNER),
+        "normalizer": sha256(NORMALIZER),
+        "harness": sha256(Path(__file__).resolve()),
+        "lvs_rule_decks": {p.name: sha256(p) for p in rule_decks},
+    }
+    frozen = manifest.get("frozen_hashes")
+    if frozen:
+        def _diff(frozen_part, current_part, prefix=""):
+            out = {}
+            for key, val in current_part.items():
+                fv = frozen_part.get(key)
+                if isinstance(val, dict):
+                    out.update(_diff(fv if isinstance(fv, dict) else {}, val, f"{prefix}{key}."))
+                elif fv is not None and fv != val:
+                    out[f"{prefix}{key}"] = (fv[:12], val[:12])
+            return out
+        drifted = _diff(frozen, current_hashes)
+        if drifted:
+            results.append({"fixture": "frozen_hashes", "status": "FAIL",
+                            "issues": [f"input drift from frozen manifest: {drifted}"]})
+            rc = 1
+        if args.update_hashes:
+            manifest["frozen_hashes"] = current_hashes
+            Path(args.manifest).write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
+            print("frozen_hashes updated in manifest")
     for cell in [c.strip() for c in args.cells.split(",") if c.strip()]:
         ent, exp = expected_from_manifest(manifest, cell)
         if not ent or exp is None:

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>metal.m1.width</name>
+   <description>metal.m1.width: M1 min width 0.09 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.space</name>
+   <description>metal.m1.space: M1 min spacing 0.09 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.area</name>
+   <description>metal.m1.area: M1 min area 0.042 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.min_hole</name>
+   <description>metal.m1.min_hole: M1 min enclosed area 0.18 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.width</name>
+   <description>metal.m2.width: M2 min width 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.space</name>
+   <description>metal.m2.space: M2 min spacing 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.area</name>
+   <description>metal.m2.area: M2 min area 0.052 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.min_hole</name>
+   <description>metal.m2.min_hole: M2 min enclosed area 0.18 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.width</name>
+   <description>metal.m3.width: M3 min width 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.space</name>
+   <description>metal.m3.space: M3 min spacing 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.area</name>
+   <description>metal.m3.area: M3 min area 0.052 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.min_hole</name>
+   <description>metal.m3.min_hole: M3 min enclosed area 0.18 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.width</name>
+   <description>metal.m4.width: M4 min width 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.space</name>
+   <description>metal.m4.space: M4 min spacing 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.area</name>
+   <description>metal.m4.area: M4 min area 0.052 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.min_hole</name>
+   <description>metal.m4.min_hole: M4 min enclosed area 0.18 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.width</name>
+   <description>metal.m5.width: M5 min width 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.space</name>
+   <description>metal.m5.space: M5 min spacing 0.1 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.area</name>
+   <description>metal.m5.area: M5 min area 0.052 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.min_hole</name>
+   <description>metal.m5.min_hole: M5 min enclosed area 0.18 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.width</name>
+   <description>metal.tm2.width: T4M2 min width 0.4 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.space</name>
+   <description>metal.tm2.space: T4M2 min spacing 0.4 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.area</name>
+   <description>metal.tm2.area: T4M2 min area 0.4 um^2 [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.width</name>
+   <description>via.v1.width: V1 min width 0.09 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.space</name>
+   <description>via.v1.space: V1 min spacing 0.11 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.enc.lower</name>
+   <description>via.v1.enc.lower: V1 enclosure by M1 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.enc.upper</name>
+   <description>via.v1.enc.upper: V1 enclosure by M1 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.array_space</name>
+   <description>via.v1.array_space: V1 array spacing 0.13 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.width</name>
+   <description>via.v2.width: V2 min width 0.09 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.space</name>
+   <description>via.v2.space: V2 min spacing 0.11 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.enc.lower</name>
+   <description>via.v2.enc.lower: V2 enclosure by M2 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.enc.upper</name>
+   <description>via.v2.enc.upper: V2 enclosure by M2 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.array_space</name>
+   <description>via.v2.array_space: V2 array spacing 0.13 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.width</name>
+   <description>via.v3.width: V3 min width 0.09 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.space</name>
+   <description>via.v3.space: V3 min spacing 0.11 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.enc.lower</name>
+   <description>via.v3.enc.lower: V3 enclosure by M3 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.enc.upper</name>
+   <description>via.v3.enc.upper: V3 enclosure by M3 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.array_space</name>
+   <description>via.v3.array_space: V3 array spacing 0.13 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.width</name>
+   <description>via.v4.width: V4 min width 0.09 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.space</name>
+   <description>via.v4.space: V4 min spacing 0.11 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.enc.lower</name>
+   <description>via.v4.enc.lower: V4 enclosure by M4 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.enc.upper</name>
+   <description>via.v4.enc.upper: V4 enclosure by M4 0.04 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.array_space</name>
+   <description>via.v4.array_space: V4 array spacing 0.13 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.width</name>
+   <description>via.tv2.width: T4V2 min width 0.36 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.space</name>
+   <description>via.tv2.space: T4V2 min spacing 0.34 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enc.m5</name>
+   <description>via.tv2.enc.m5: T4V2 enclosure by M5 0.02 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enc.tm2</name>
+   <description>via.tv2.enc.tm2: T4V2 enclosure by T4M2 0.02 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.array_space</name>
+   <description>via.tv2.array_space: T4V2 array spacing 1.0 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.rv.width</name>
+   <description>via.rv.width: RV min width 3.0 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.rv.space</name>
+   <description>via.rv.space: RV min spacing 3.0 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.rv.array_space</name>
+   <description>via.rv.array_space: RV array spacing 6.0 um [lef]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.width</name>
+   <description>pad.rv.width: RV min width 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.space</name>
+   <description>pad.rv.space: RV min spacing 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.area</name>
+   <description>pad.rv.area: RV min area 0.4 um^2 [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.alpad.width</name>
+   <description>pad.alpad.width: ALPAD min width 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.alpad.space</name>
+   <description>pad.alpad.space: ALPAD min spacing 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.width</name>
+   <description>pad.rdl.width: RDL min width 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.width</name>
+   <description>pad.cover.width: COVER min width 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.alpad_enc</name>
+   <description>pad.rv.alpad_enc: ALPAD enclosure of RV 0.4 um [gds]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>'via.v1.space'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>edge-pair: (0.83,0.3;0.83,0.7)|(0.8,0.7;0.8,0.3)</value>
+   </values>
+  </item>
+  <item>
+   <tags/>
+   <category>'via.v1.array_space'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>edge-pair: (0.83,0.3;0.83,0.7)|(0.8,0.7;0.8,0.3)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

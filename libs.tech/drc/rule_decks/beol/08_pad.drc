@@ -27,7 +27,7 @@ if TABLES.include?('beol') || BEOL
     "pad.rv.width: RV min width #{rval('padm_width')} um [gds]")
   RV.space(rval('padm_space').um, euclidian).output('pad.rv.space',
     "pad.rv.space: RV min spacing #{rval('padm_space')} um [gds]")
-  RV.with_area(rval('padm_area').um2).output('pad.rv.area',
+  RV.not(RV.with_area(rval('padm_area').um2, 1e9.um2)).output('pad.rv.area',
     "pad.rv.area: RV min area #{rval('padm_area')} um^2 [gds]")
 
   ALPAD.width(rval('alpad_width').um, euclidian).output('pad.alpad.width',
