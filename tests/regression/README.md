@@ -65,12 +65,22 @@ are aligned to this profile first; other profiles remain explicit gaps.
 - `normalize_lvs.py` — canonical MOS-graph normalizer for extracted netlists
   and CDL-derived expectations (model names case-folded, named-net aliasing,
   units, optional geometry presence vs zero).
-- `out/` — generated outputs (git-ignored).
+- `layer_map_check.py` — layer-mapping consistency harness: cross-checks the
+  official Calibre LAYER MAP tables (`pv/DRC`, `pv/LVS`), the official GDS
+  layer map (`techfile/icsprout55.layermap`), the KLayout stream map
+  (`libs.tech/klayout/tech/ics55.map`), and the deck `input(g, d)` usage
+  (`layers_def.drc`, `layers_definitions.lvs`).  Also evaluates which metal
+  and via gates the official DRC deck enables for the frozen profile and
+  requires the KLayout port to cover exactly that set.  Catches silent
+  stream-in drops (e.g. an unmapped metal) and misaliased layer numbers.
+  Plain `python3`, no nix-shell needed.
+- `out/` — generated outputs.
 
 ## Usage
 
 ```sh
 nix-shell ~/Documents/librelane --run 'python3 tests/regression/run_alignment.py --cells INVX1H7H,INVX3H7H,INVX4H7H'
+python3 tests/regression/layer_map_check.py
 ```
 
 See `run_alignment.py --help` for options (`--drc`, `--manifest`, `--out`,

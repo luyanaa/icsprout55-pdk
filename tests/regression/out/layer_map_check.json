@@ -1,0 +1,95 @@
+{
+  "schema": "ics55-layer-map-check/1.0",
+  "status": "PASS",
+  "checks": {
+    "official_drc_vs_lvs": {
+      "drc_entries": 260,
+      "lvs_entries": 258,
+      "drc_only": [
+        "140/1",
+        "141/1",
+        "354/13",
+        "999/1111"
+      ],
+      "lvs_only": [
+        "354/12",
+        "388/12"
+      ],
+      "internal_conflicts": []
+    },
+    "layermap_coverage": {
+      "missing_from_layermap": [],
+      "layermap_not_in_drc_deck": []
+    },
+    "klayout_map_vs_official": {
+      "unresolved": [],
+      "wrong_numbers": [],
+      "ambiguous": []
+    },
+    "deck_usage_vs_map": {
+      "drc": {
+        "inputs": 38,
+        "documented_local_aux": [
+          "60/1 (MOM_MARKER)",
+          "60/2 (DUMMY)",
+          "60/3 (NO_FILL)",
+          "60/4 (DM_EXCEL)"
+        ],
+        "unmapped": [],
+        "layers_def_sha256": "6af89b1a79ee028b1e0d60ae2cff63ffd698b129ef737f22a74d6ebfe5095e22"
+      },
+      "lvs": {
+        "inputs": 40,
+        "documented_local_aux": [],
+        "unmapped": [],
+        "layers_def_sha256": "a5542678e9a64a7c22f12c9cfba6ba46af06855e033b4217faa323cc434b9f92"
+      }
+    },
+    "profile_coverage": {
+      "profile": "TOTALMETAL=6, TOP_METAL_NUM=SINGLE (frozen)",
+      "frozen_options": {
+        "total_metal": 6,
+        "top_metal": 1,
+        "T2V1_T2M1": 0,
+        "T2V2_T2M2": 0,
+        "T4V1_T4M1": 0,
+        "T4V2_T4M2": 1,
+        "T8V1_T8M1": 0,
+        "T8V2_T8M2": 0
+      },
+      "enabled_gates": {
+        "CHECK_M1": 1,
+        "CHECK_M2": 1,
+        "CHECK_M3": 1,
+        "CHECK_M4": 1,
+        "CHECK_M5": 1,
+        "CHECK_T4M2": 1,
+        "CHECK_T4V2": 1,
+        "CHECK_V1": 1,
+        "CHECK_V2": 1,
+        "CHECK_V3": 1,
+        "CHECK_V4": 1
+      },
+      "gaps": [],
+      "deck_defaults_vs_frozen": {
+        "total_metal": 6,
+        "top_metal": 1,
+        "T2V1_T2M1": 0,
+        "T2V2_T2M2": 0,
+        "T4V1_T4M1": 0,
+        "T4V2_T4M2": 1,
+        "T8V1_T8M1": 0,
+        "T8V2_T8M2": 0
+      }
+    }
+  },
+  "provenance": {
+    "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc": "e979fded0bef271f4635736163b03b7db2071569a88feb7cab211413feb7f1db",
+    "ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs": "da10271332e64f12b0da845eaa9807f503c6279dd955e63727b53d8731ea7748",
+    "icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
+    "ics55.map": "16eba2bbbd771f45483d5be753e87fce588ff93cae859d65416b422cf3e6f928",
+    "layers_def.drc": "6af89b1a79ee028b1e0d60ae2cff63ffd698b129ef737f22a74d6ebfe5095e22",
+    "layers_definitions.lvs": "a5542678e9a64a7c22f12c9cfba6ba46af06855e033b4217faa323cc434b9f92"
+  },
+  "issues": []
+}
