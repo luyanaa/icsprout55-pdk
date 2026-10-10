@@ -1,0 +1,392 @@
+{
+  "upstream_repo": "ckdur/icsprout55-openpdk",
+  "upstream_commit": "195870e61e9fa92d049df2daa4a7f5000c6aad3e",
+  "upstream_commit_date": "2026-10-08T15:20:54Z",
+  "upstream_subdir": "icsprout55/libs.tech",
+  "release": "ICsprout_55LLULP1225_V1p1 (hspice readme revision 1.1)",
+  "license": "Vendor (ICsprout). Not Apache-2.0. Educational / research evaluation only.",
+  "variants": {
+    "hspice": {
+      "ICsprout_55LLULP1225_V1p1_hsp.lib": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/ICsprout_55LLULP1225_V1p1_hsp.lib",
+        "upstream_sha256": "5e6b2963aaac08620b1740e4bd074659fa46696c4f58b00190b59bff967a6160",
+        "upstream_bytes": 3030,
+        "imported_sha256": "d13806bd9620b06a1f89060f4f5e0ec9450b8c6490e4a2347728579162138be9",
+        "imported_bytes": 4154
+      },
+      "readme.txt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/readme.txt",
+        "upstream_sha256": "fa712e8ad147c0cd7c120f1a40d60a9d649874e47937da0f816b432ed85e1097",
+        "upstream_bytes": 16665,
+        "imported_sha256": "6d3d6c03d6bcc8d520ec74652ff91eed9491d41843a494e7aebb4c751f4e3ac9",
+        "imported_bytes": 17766
+      },
+      "model_wrapper1_hsp.lib": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/model_wrapper1_hsp.lib",
+        "upstream_sha256": "68d08d3bf4dec3b622eed4b3b68172d62e466f458bea2ac8a9dec3fc72e511ba",
+        "upstream_bytes": 144213,
+        "imported_sha256": "688b3cefc789b90d73ec4216b080cbd19e78bbacda60e5ace05a371a424c1a71",
+        "imported_bytes": 145326
+      },
+      "model_wrapper2_hsp.lib": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/model_wrapper2_hsp.lib",
+        "upstream_sha256": "64d4209a0b2b4e44c9fe872c0eb7180a277fdef15a80d7e3f275c79fb056ace3",
+        "upstream_bytes": 38532,
+        "imported_sha256": "6e28aef6ef4419f8c8f9b087478c08239f5cfbda32b316c89fef911e11b90bd6",
+        "imported_bytes": 39645
+      },
+      "mos/nsvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nsvt.mdl",
+        "upstream_sha256": "7f5ea70849846ac6ff147c4a046fc694cafa0f0e475343683f5cf4c5b0fbbaa6",
+        "upstream_bytes": 26516,
+        "imported_sha256": "6b6379e2fa1b4e06577121cc4dda2c72044b87e78bbf62cfd364390be7e323b4",
+        "imported_bytes": 27619
+      },
+      "mos/nlvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nlvt.mdl",
+        "upstream_sha256": "654f3e77103bfc823548321883877027425d64d87bb486f0312425ff331a8a14",
+        "upstream_bytes": 25381,
+        "imported_sha256": "4882e0f9d7218dd6d73747d670597f1eff0e5d24a7bc0effe3391cb723ec2c96",
+        "imported_bytes": 26484
+      },
+      "mos/nhvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nhvt.mdl",
+        "upstream_sha256": "93e421723e3ad1822932c4a6455961beaa9a7eae821f2b8c326dd3909ae2c06a",
+        "upstream_bytes": 439079,
+        "imported_sha256": "54936c8057e5c52bd5166a2f98224253f4d8baa6db583201fb2d94e019340812",
+        "imported_bytes": 440182
+      },
+      "mos/psvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/psvt.mdl",
+        "upstream_sha256": "e2456068b80eba04f923ca51ad0024dbc3125d4216497feede98fe602ac6e22d",
+        "upstream_bytes": 23917,
+        "imported_sha256": "173024956c86dcc3d56d226e4eb9ad56c583f824dd99bc05d2976a027d9e35ea",
+        "imported_bytes": 25020
+      },
+      "mos/plvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/plvt.mdl",
+        "upstream_sha256": "a833b2522774add7b04e7cc25b36cb2bd69f99afab526f4f1c80b7c1210a6f07",
+        "upstream_bytes": 23466,
+        "imported_sha256": "d5d3f88f6c755a2ddf6479401e388ea1382b0c09e0ac4c4587cc8ec85ec0cac0",
+        "imported_bytes": 24569
+      },
+      "mos/phvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/phvt.mdl",
+        "upstream_sha256": "6c117d0d915aca9a9ebcb8df180514afbe977a4bfb17d81e6c5e93a25be9ebda",
+        "upstream_bytes": 442736,
+        "imported_sha256": "f22ebf140824db0f4c42af7133a3f6907f238cd24f5f2baf34a263259ded915b",
+        "imported_bytes": 443839
+      },
+      "mos/nnat1p2_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nnat1p2_lp.mdl",
+        "upstream_sha256": "b839258ef29ae72abba439738d080af57ae9432c1dc4e0e9364ac1cc061ebde5",
+        "upstream_bytes": 17126,
+        "imported_sha256": "099e09606ead6eb83cf70aeb83624d2b3e72d1f1d528116fcc823c7eeccd54ea",
+        "imported_bytes": 18235
+      },
+      "mos/nio25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nio25.mdl",
+        "upstream_sha256": "6e38d91e0c99a8bfcea8aa398b501c29dc8d5317bf88be5af4aa83022822d132",
+        "upstream_bytes": 11217,
+        "imported_sha256": "a595ca1816972c40d5b0cae67b9739e26f89d620fc72e5e7ef2c30a2aa593f8f",
+        "imported_bytes": 12321
+      },
+      "mos/nio25od33.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nio25od33.mdl",
+        "upstream_sha256": "15ccaf2bb713678b81d7d8a03f8542c72e572f992c2911965b9e27bc76b6e9b5",
+        "upstream_bytes": 13582,
+        "imported_sha256": "e6909814124267403877777263605cec748d90d36f1d2eece00b26522b805bf8",
+        "imported_bytes": 14690
+      },
+      "mos/nt25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nt25.mdl",
+        "upstream_sha256": "007fc4a120fe09ac1087816bd189b8272a91438b1bd3140ce9d977bfd130d5a1",
+        "upstream_bytes": 12228,
+        "imported_sha256": "df0b0daa7af500c3c43a029c7cea495cc705a04faead56f45282d3312ce928c6",
+        "imported_bytes": 13331
+      },
+      "mos/nt25od33.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/nt25od33.mdl",
+        "upstream_sha256": "1c6ec03ee75cd06778b518c75f2fa3f0890bda2cb2782306f7abbfc8c26c06bd",
+        "upstream_bytes": 12160,
+        "imported_sha256": "7c7bfa108adbdb19de03cdecbe4de1894d40e6226d7d052e50d1162ee1fdd6b2",
+        "imported_bytes": 13267
+      },
+      "mos/pio25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/pio25.mdl",
+        "upstream_sha256": "47ef8622db901d1da32065abbb0b8d0700345be8c4b034e32af2c1e346b70e1b",
+        "upstream_bytes": 12973,
+        "imported_sha256": "b484b9ff252e5af350df54b559e0a577d37405277423e212103253df79d2af1f",
+        "imported_bytes": 14077
+      },
+      "mos/piood33.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mos/piood33.mdl",
+        "upstream_sha256": "ceb3fac928dc403f5f79cefbd187433f02a99b6ecd082269d483fb848ea834a8",
+        "upstream_bytes": 13204,
+        "imported_sha256": "4915ca0e67647ae8bdfd63dbe8a6a4e2e45bb7b27c62db09cf3b4241f1962dea",
+        "imported_bytes": 14310
+      },
+      "bjt/npn12_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/bjt/npn12_lp.mdl",
+        "upstream_sha256": "04ad1b65b4c8968840d862a1f10ed1a3daa8cc563d1dc8262dce49a0d6643912",
+        "upstream_bytes": 13117,
+        "imported_sha256": "7b65e39d4802cb52845efb2c4edc451c99061df1f5f57e48cb1fdfe90891aa0c",
+        "imported_bytes": 14224
+      },
+      "bjt/npn25_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/bjt/npn25_lp.mdl",
+        "upstream_sha256": "c16728b21b9bfcdf078385f1966047f8d035ac2365673f4dff5c5271ec1c7f2b",
+        "upstream_bytes": 13320,
+        "imported_sha256": "2698d3d43bd8a85f21466500c58862a69f8547d58e18c04f8fa7a5f5d2d9c690",
+        "imported_bytes": 14427
+      },
+      "bjt/pnp12_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/bjt/pnp12_lp.mdl",
+        "upstream_sha256": "897cb18af6a104edfea12a097fa19d4fad262af5038b1fd17ed29f9c5057e47b",
+        "upstream_bytes": 13569,
+        "imported_sha256": "179c260f6f875c133fb5dd3a4c6bcef7de9ce9808191f2946f8bc4a17cb8d68a",
+        "imported_bytes": 14676
+      },
+      "bjt/pnp25_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/bjt/pnp25_lp.mdl",
+        "upstream_sha256": "bc7bd08e68a4db12888df59023ce1d3d2717ae16171f974b0b19957ae619cca9",
+        "upstream_bytes": 13130,
+        "imported_sha256": "9a4d216328c167807de7964b349819a78dcfbb775735f1c285999b8246a82b84",
+        "imported_bytes": 14237
+      },
+      "dio/dio_core.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/dio/dio_core.mdl",
+        "upstream_sha256": "65067872ad61d0264202e7af766c204c87f2e4fc0ae7cd212b88c95630d77171",
+        "upstream_bytes": 15866,
+        "imported_sha256": "f8a42b06c62f87376b76f8a8731317433bf0baee0695f6c78005dc61e2e2206e",
+        "imported_bytes": 16973
+      },
+      "dio/dio_io25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/dio/dio_io25.mdl",
+        "upstream_sha256": "83196932453f408773b5c98125f0b7eb782d05ffb5dd3cab6410a8acf7495754",
+        "upstream_bytes": 7440,
+        "imported_sha256": "b6e4ea6ff6750023a06f1eb39baa42d2cf475d9cfd4df589f67910546151da47",
+        "imported_bytes": 8547
+      },
+      "dio/dio_well.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/dio/dio_well.mdl",
+        "upstream_sha256": "70de585b071f0fc9d1c18f4d2381d6ef63f144381121bf5c3480c94c184a9601",
+        "upstream_bytes": 15493,
+        "imported_sha256": "5f787bf8ded9ee8baab868dd57da4572b64d82795f278515b65d09e9ab1ef827",
+        "imported_bytes": 16600
+      },
+      "mom/mom.ckt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/mom/mom.ckt",
+        "upstream_sha256": "922dfbf383996b1e85a4b6546f3e771712068dd88b26eaaf539f72f00e0fd0f3",
+        "upstream_bytes": 3484,
+        "imported_sha256": "67d7cabd305d202692aaa226684bee1c91e444a38505eb634aec58653a540091",
+        "imported_bytes": 4586
+      },
+      "res/resistor.ckt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/res/resistor.ckt",
+        "upstream_sha256": "1ad4119412b77205c9121b7d376fba83792ee20490e3b365547b7d09ed1826f0",
+        "upstream_bytes": 52644,
+        "imported_sha256": "39d426888b3bf1c72cd6bd92e9b24a53e83509a1269dd6295c5ac262ae2fb6e5",
+        "imported_bytes": 53751
+      },
+      "var/varactor.ckt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/hspice/var/varactor.ckt",
+        "upstream_sha256": "653e287a5f748dd312c898977d1e3d72bce4b0c9d4322ed11aecfc979b6cb826",
+        "upstream_bytes": 8480,
+        "imported_sha256": "6fa094c17290c87c98f723fac18bf0d699c8ed28ac403c9893528946e69686d2",
+        "imported_bytes": 9587
+      }
+    },
+    "ngspice": {
+      "ICsprout_55LLULP1225_V1p1_hsp.lib": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/ICsprout_55LLULP1225_V1p1_hsp.lib",
+        "upstream_sha256": "5e6b2963aaac08620b1740e4bd074659fa46696c4f58b00190b59bff967a6160",
+        "upstream_bytes": 3030,
+        "imported_sha256": "538dc00d2da055c26facc672c2daf42209fd2252161bbd96bed8f690e5b9f430",
+        "imported_bytes": 4155
+      },
+      "readme.txt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/readme.txt",
+        "upstream_sha256": "fa712e8ad147c0cd7c120f1a40d60a9d649874e47937da0f816b432ed85e1097",
+        "upstream_bytes": 16665,
+        "imported_sha256": "80374b852767f45496d2afc992c22e7010796a1d5b4a9e21c80f3ca0e302ebcc",
+        "imported_bytes": 17767
+      },
+      "model_wrapper1_hsp.lib": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/model_wrapper1_hsp.lib",
+        "upstream_sha256": "dc4f6a592f194dbcef25e0be55ddefdc8f88a4190a57b27a1c091e57ff567856",
+        "upstream_bytes": 144213,
+        "imported_sha256": "1a2089af2d3e0b39cec83c0d4ed31fe850b82a2f5b275561ff48915fd9bd54d3",
+        "imported_bytes": 145327
+      },
+      "model_wrapper2_hsp.lib": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/model_wrapper2_hsp.lib",
+        "upstream_sha256": "64d4209a0b2b4e44c9fe872c0eb7180a277fdef15a80d7e3f275c79fb056ace3",
+        "upstream_bytes": 38532,
+        "imported_sha256": "5a04b9b45b901f328fbbd469d3c2fda8078f4f55985e082f00c8f83c712fdeec",
+        "imported_bytes": 39646
+      },
+      "mos/nsvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nsvt.mdl",
+        "upstream_sha256": "e19662f557788b2e0c1333f11c040e4d0d105feb070f5570c974c36178990667",
+        "upstream_bytes": 26525,
+        "imported_sha256": "a37b691830974e77ed79a6b4e897f93bd6fe04f5df45573ae5a657f992fdd566",
+        "imported_bytes": 27629
+      },
+      "mos/nlvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nlvt.mdl",
+        "upstream_sha256": "108cc2ca4a778d321738eb7f1f8c42e445fb27477d894ddd81941e35d391706f",
+        "upstream_bytes": 25390,
+        "imported_sha256": "2553101c49a634ae9dcf425f1fea08cc14cbc1e3362e98f0daf018e35aa752b5",
+        "imported_bytes": 26494
+      },
+      "mos/nhvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nhvt.mdl",
+        "upstream_sha256": "11e38c68111135953ea08e8e4f97ce21c6ab827ad5b30248fb6701239b9173bc",
+        "upstream_bytes": 435216,
+        "imported_sha256": "d3f9acca083c66a75822b3088b7815e79a4030800231ebfe99b918672c19bd66",
+        "imported_bytes": 436320
+      },
+      "mos/psvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/psvt.mdl",
+        "upstream_sha256": "99e5de590ce5ea6833fdd0a8359062f0ae232cbabe6263da5d2ecd769511331d",
+        "upstream_bytes": 23924,
+        "imported_sha256": "12f10d31ffb4f058e0f45b6740dea1a7280776d3b4c43af77bd9c1441c2b49e0",
+        "imported_bytes": 25028
+      },
+      "mos/plvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/plvt.mdl",
+        "upstream_sha256": "b51e8f4855959b26a67440eee4d686df21cf08e5aee0246183900778be9d1219",
+        "upstream_bytes": 23475,
+        "imported_sha256": "68df55413ecb9735198b6e0379a0f017d9ca22f927b27505aaed7d567c8936c8",
+        "imported_bytes": 24579
+      },
+      "mos/phvt.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/phvt.mdl",
+        "upstream_sha256": "cff6dac6a6518b8d322ad1c90aef51a24fdf484b0b71dee8da70a07b0b086b6d",
+        "upstream_bytes": 438816,
+        "imported_sha256": "b36a450b8852779ac8fb126d864c28f08dc934757e831978e1bdbd5de9f95746",
+        "imported_bytes": 439920
+      },
+      "mos/nnat1p2_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nnat1p2_lp.mdl",
+        "upstream_sha256": "61e342767148727c40329c6c5040453f703e62cb46572dc81bff802002ac44c6",
+        "upstream_bytes": 17136,
+        "imported_sha256": "bc0e3d304669cb277cf1d31d08ad27d695411ce63dbb91e6a7aafbc314fadbdf",
+        "imported_bytes": 18246
+      },
+      "mos/nio25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nio25.mdl",
+        "upstream_sha256": "5df4b832ed410cedb967311870905e7ab1700941872621b9c840ddd7f5eda114",
+        "upstream_bytes": 11219,
+        "imported_sha256": "89b0572450476a92f0ffb76588568382ef412680d3200eb5bca6c51ba7c00af5",
+        "imported_bytes": 12324
+      },
+      "mos/nio25od33.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nio25od33.mdl",
+        "upstream_sha256": "5b1de3858b017a8720df8652ec2f970a5a06016719078fb7e585947bd2da8581",
+        "upstream_bytes": 13588,
+        "imported_sha256": "b5fb538fc4c38affea7d5c05493a009790da38e01dc4daf3a936c79b4d192567",
+        "imported_bytes": 14697
+      },
+      "mos/nt25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nt25.mdl",
+        "upstream_sha256": "58d8f6dfb3edea93513dfc82eaf707d76497971670802521eba94c210840a808",
+        "upstream_bytes": 12238,
+        "imported_sha256": "4f2e2b93e34b504341ccafb4c6ecafd08537229a1f4b919bf349aca9889dc250",
+        "imported_bytes": 13342
+      },
+      "mos/nt25od33.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/nt25od33.mdl",
+        "upstream_sha256": "6f28ed26ad9f50235763babe8d34c9b99505fb72ef02d339f54563e8bde20674",
+        "upstream_bytes": 12170,
+        "imported_sha256": "4c8126e6105fba29a7f8d336bb64fba85203a9787ce48f8c736279af07aa2207",
+        "imported_bytes": 13278
+      },
+      "mos/pio25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/pio25.mdl",
+        "upstream_sha256": "f0ef3c8b6e20ed72fe80de4e9c9a77d36dc12299c3a1df0096b09903c58b7540",
+        "upstream_bytes": 12983,
+        "imported_sha256": "90ca666392f48a7c8dd579c1518bac2ec948a4a0e5a463d0257962ba08185cb6",
+        "imported_bytes": 14088
+      },
+      "mos/piood33.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mos/piood33.mdl",
+        "upstream_sha256": "b94603efdc263ae87143a43f3fd54b4981356cbbd8b50901835a9a5a03e4b3c2",
+        "upstream_bytes": 13214,
+        "imported_sha256": "c3cda8ef3df96aa92a9329c1e02f206e7ef406a1d4cb334d9d32ac0d0b292269",
+        "imported_bytes": 14321
+      },
+      "bjt/npn12_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/bjt/npn12_lp.mdl",
+        "upstream_sha256": "04ad1b65b4c8968840d862a1f10ed1a3daa8cc563d1dc8262dce49a0d6643912",
+        "upstream_bytes": 13117,
+        "imported_sha256": "44e6df66a3e37a2bdffad5933bcea20dc926083c1d8d354b344fa7ea75fc265d",
+        "imported_bytes": 14225
+      },
+      "bjt/npn25_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/bjt/npn25_lp.mdl",
+        "upstream_sha256": "c16728b21b9bfcdf078385f1966047f8d035ac2365673f4dff5c5271ec1c7f2b",
+        "upstream_bytes": 13320,
+        "imported_sha256": "d91a52f8f5178cc635b04c5bf87601e6001d4840e5a98976a31ea9cdfb1e2388",
+        "imported_bytes": 14428
+      },
+      "bjt/pnp12_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/bjt/pnp12_lp.mdl",
+        "upstream_sha256": "897cb18af6a104edfea12a097fa19d4fad262af5038b1fd17ed29f9c5057e47b",
+        "upstream_bytes": 13569,
+        "imported_sha256": "aaa997b78bffa4969100daf64ad2a253973a85824fa4dec1b023abe36c229496",
+        "imported_bytes": 14677
+      },
+      "bjt/pnp25_lp.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/bjt/pnp25_lp.mdl",
+        "upstream_sha256": "bc7bd08e68a4db12888df59023ce1d3d2717ae16171f974b0b19957ae619cca9",
+        "upstream_bytes": 13130,
+        "imported_sha256": "608c2a50b33d3ec7b0b9d2d7c6e75423fa137b39fd410ce881e406be0d5d64f1",
+        "imported_bytes": 14238
+      },
+      "dio/dio_core.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/dio/dio_core.mdl",
+        "upstream_sha256": "65067872ad61d0264202e7af766c204c87f2e4fc0ae7cd212b88c95630d77171",
+        "upstream_bytes": 15866,
+        "imported_sha256": "fa4396a51808fff7abea7a03bf6581e36d8c693ad477397e21eaeb8b6ffe547f",
+        "imported_bytes": 16974
+      },
+      "dio/dio_io25.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/dio/dio_io25.mdl",
+        "upstream_sha256": "83196932453f408773b5c98125f0b7eb782d05ffb5dd3cab6410a8acf7495754",
+        "upstream_bytes": 7440,
+        "imported_sha256": "6d494058926a09921f72d4a3e6b898eba27a641a3cf6e3547638a39867924477",
+        "imported_bytes": 8548
+      },
+      "dio/dio_well.mdl": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/dio/dio_well.mdl",
+        "upstream_sha256": "70de585b071f0fc9d1c18f4d2381d6ef63f144381121bf5c3480c94c184a9601",
+        "upstream_bytes": 15493,
+        "imported_sha256": "127195cc4035e7c3b696bd11d3645f4efacbd25f971ee2f0be6098e2e2b4f316",
+        "imported_bytes": 16601
+      },
+      "mom/mom.ckt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/mom/mom.ckt",
+        "upstream_sha256": "87fde77fd7fad79ae1626ba8a41b99f1c30b42998ae181b03f62781fee2869e5",
+        "upstream_bytes": 3484,
+        "imported_sha256": "fab54dad938daa10c3cf86ed5e5252f54ca9cc273a261a8fac1cacb7ec3f2fbe",
+        "imported_bytes": 4587
+      },
+      "res/resistor.ckt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/res/resistor.ckt",
+        "upstream_sha256": "566bb73bca0da24e126bd902362302a0e8adab485eb6ecdd9744ac8f9b927dc2",
+        "upstream_bytes": 52644,
+        "imported_sha256": "faec956f76a5a395c5454eea6feef3f89780fc9eb6485b156702736f1917823d",
+        "imported_bytes": 53752
+      },
+      "var/varactor.ckt": {
+        "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/icsprout55/libs.tech/ngspice/var/varactor.ckt",
+        "upstream_sha256": "b564249e6cbb7434d58cbb706bfc200d1e8cabc6c5a65607255d720021ef8b80",
+        "upstream_bytes": 8480,
+        "imported_sha256": "724cd76bf107302ca55d47e0f6ee4507de2369acf623cd7b9f4586abe1a92408",
+        "imported_bytes": 9588
+      }
+    }
+  }
+}

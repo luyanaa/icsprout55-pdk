@@ -26,5 +26,6 @@ From `libs.ref/ICsprout_55LLULP1233_IO_251013` (use as reference macros):
 | P65_1233_VDD1A / VSS1A | analog power/ground pads |
 | P65_1233_CUT | power-cut cell (digital/analog rail split) |
 
-Primitives for user macros: see `../spice/models/` (device inventory) and
-`../klayout/pcells/` (analog MOS, guard ring, resistor, MOM templates).
+Primitives for user macros: see `../spice/foundry/` (vendor device models,
+educational use) and `../klayout/pcells/` (analog MOS, guard ring, resistor,
+MOM layout templates).

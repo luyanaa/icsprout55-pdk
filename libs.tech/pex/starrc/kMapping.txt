@@ -1,0 +1,53 @@
+* ============================================================================
+* PROVENANCE - VENDOR DATA, UNVERIFIED REDISTRIBUTION STATUS
+* ============================================================================
+* Content : ICsprout 55nm StarRC RC technology data
+*           (layer mapping: kMapping.txt)
+* Vendor  : ICsprout (foundry), delivered inside the proprietary ECOS iRCX
+*           library libircx_ics55.so as XOR-ciphertext blobs.
+* Origin  : decrypted by the upstream open-PDK project and published at
+*           https://github.com/ckdur/icsprout55-openpdk
+*           path hacking/decrypted_output/kMapping.txt
+*           pinned commit 195870e61e9fa92d049df2daa4a7f5000c6aad3e (2026-10-08T15:20:54Z)
+* License : Vendor (ICsprout). NOT Apache-2.0. These files are NOT part of the
+*           released ICsprout PDK and were NOT obtained under a redistribution
+*           grant. Included strictly for educational study and offline
+*           comparison against the clean-room RC stack.
+* Warning : Do not treat as signoff data. Do not redistribute. Use the
+*           released LEFs plus independent extraction for production flows.
+* Note    : Everything below this banner is byte-identical to the upstream
+*           file; see ORIGIN.json for SHA-256 hashes of both.
+* ============================================================================
+conducting_layers
+  MET1	M1
+  MET2	M2
+  MET3	M3
+  MET4	M4
+  MET5	M5
+  T4M2	TM
+  RDL	RDL
+
+via_layers
+  VIA1	V1
+  VIA2	V2
+  VIA3	V3
+  VIA4	V4
+  T4V2	TV
+  RV	RV
+
+marker_layers
+
+remove_layers
+  GT
+  POLY
+  VTNH
+  VTPH
+  LVN
+  LVP
+  NW
+  SN
+  CT
+  ACT
+  NP
+  PP
+  NW1

@@ -1,0 +1,4078 @@
+{
+  "sources": {
+    "itf": {
+      "Typ": "libs.tech/pex/starrc/kItfTyp.txt",
+      "Rcbest": "libs.tech/pex/starrc/kItfRcbest.txt",
+      "Rcworst": "libs.tech/pex/starrc/kItfRcworst.txt",
+      "Cworst": "libs.tech/pex/starrc/kItfCworst.txt"
+    },
+    "captab": {
+      "Typ": "libs.tech/pex/starrc/kCaptabTyp.txt",
+      "Rcbest": "libs.tech/pex/starrc/kCaptabRcbest.txt",
+      "Rcworst": "libs.tech/pex/starrc/kCaptabRcworst.txt",
+      "Cbest": "libs.tech/pex/starrc/kCaptabCbest.txt",
+      "Cworst": "libs.tech/pex/starrc/kCaptabCworst.txt"
+    }
+  },
+  "provenance_warning": "ITF/CAPTAB are StarRC vendor data decrypted from the proprietary ECOS iRCX library (upstream hacking/decrypted_output). Redistribution status is unverified; use only as an offline comparison target.",
+  "itf_header": {
+    "technology": "ICsprout_55LLULP_StarRC_1P6M_5lc_V1p1_TYP",
+    "global_temperature_c": 25.0,
+    "half_node_scale_factor": 0.9
+  },
+  "resistance_crosscheck": [
+    {
+      "itf_conductor": "M1",
+      "lef_layer": "MET1",
+      "itf_rpsq_ohm_sq": 0.1122,
+      "lef_rpersq_ohm_sq": 0.1122,
+      "relative_delta": 0.0
+    },
+    {
+      "itf_conductor": "M2",
+      "lef_layer": "MET2",
+      "itf_rpsq_ohm_sq": 0.0914,
+      "lef_rpersq_ohm_sq": 0.0914,
+      "relative_delta": 0.0
+    },
+    {
+      "itf_conductor": "M3",
+      "lef_layer": "MET3",
+      "itf_rpsq_ohm_sq": 0.0914,
+      "lef_rpersq_ohm_sq": 0.0914,
+      "relative_delta": 0.0
+    },
+    {
+      "itf_conductor": "M4",
+      "lef_layer": "MET4",
+      "itf_rpsq_ohm_sq": 0.0914,
+      "lef_rpersq_ohm_sq": 0.0914,
+      "relative_delta": 0.0
+    },
+    {
+      "itf_conductor": "M5",
+      "lef_layer": "MET5",
+      "itf_rpsq_ohm_sq": 0.0914,
+      "lef_rpersq_ohm_sq": 0.0914,
+      "relative_delta": 0.0
+    },
+    {
+      "itf_conductor": "TM",
+      "lef_layer": "T4M2",
+      "itf_rpsq_ohm_sq": 0.0239,
+      "lef_rpersq_ohm_sq": 0.0239,
+      "relative_delta": 0.0
+    },
+    {
+      "itf_conductor": "RDL",
+      "lef_layer": "RDL",
+      "itf_rpsq_ohm_sq": 0.0151,
+      "lef_rpersq_ohm_sq": 0.0151,
+      "relative_delta": 0.0
+    }
+  ],
+  "thickness_crosscheck": [
+    {
+      "conductor": "RDL",
+      "itf_thickness_um": 1.45,
+      "config_gen_inferred_um": 1.139072847682119,
+      "relative_delta": -0.2144325188399179
+    },
+    {
+      "conductor": "TM",
+      "itf_thickness_um": 0.9,
+      "config_gen_inferred_um": 0.7196652719665272,
+      "relative_delta": -0.20037192003719204
+    },
+    {
+      "conductor": "M5",
+      "itf_thickness_um": 0.21,
+      "config_gen_inferred_um": 0.18818380743982493,
+      "relative_delta": -0.10388663123892884
+    },
+    {
+      "conductor": "M4",
+      "itf_thickness_um": 0.21,
+      "config_gen_inferred_um": 0.18818380743982493,
+      "relative_delta": -0.10388663123892884
+    },
+    {
+      "conductor": "M3",
+      "itf_thickness_um": 0.21,
+      "config_gen_inferred_um": 0.18818380743982493,
+      "relative_delta": -0.10388663123892884
+    },
+    {
+      "conductor": "M2",
+      "itf_thickness_um": 0.21,
+      "config_gen_inferred_um": 0.18818380743982493,
+      "relative_delta": -0.10388663123892884
+    },
+    {
+      "conductor": "M1",
+      "itf_thickness_um": 0.18,
+      "config_gen_inferred_um": 0.1532976827094474,
+      "relative_delta": -0.1483462071697366
+    }
+  ],
+  "capacitance_crosscheck": [
+    {
+      "conductor": "M1",
+      "lef_cpersqdist_pf_um2": 0.000763,
+      "lef_edgecapacitance_pf_um": 3.39e-05,
+      "rows": [
+        {
+          "width_um": 0.09,
+          "lef_area_plus_edge_fF_um": 0.10257,
+          "captab_self_fF_um": 0.097861,
+          "ratio_captab_over_lef": 0.9540898898313348
+        },
+        {
+          "width_um": 0.18,
+          "lef_area_plus_edge_fF_um": 0.17123999999999998,
+          "captab_self_fF_um": 0.056167,
+          "ratio_captab_over_lef": 0.32800163513197855
+        },
+        {
+          "width_um": 0.225,
+          "lef_area_plus_edge_fF_um": 0.205575,
+          "captab_self_fF_um": 0.046748,
+          "ratio_captab_over_lef": 0.22740119177915602
+        },
+        {
+          "width_um": 0.27,
+          "lef_area_plus_edge_fF_um": 0.23991,
+          "captab_self_fF_um": 0.040157,
+          "ratio_captab_over_lef": 0.16738360218415238
+        },
+        {
+          "width_um": 0.315,
+          "lef_area_plus_edge_fF_um": 0.274245,
+          "captab_self_fF_um": 0.035238,
+          "ratio_captab_over_lef": 0.1284909478750752
+        },
+        {
+          "width_um": 0.36,
+          "lef_area_plus_edge_fF_um": 0.30857999999999997,
+          "captab_self_fF_um": 0.031292,
+          "ratio_captab_over_lef": 0.10140644241363667
+        },
+        {
+          "width_um": 0.405,
+          "lef_area_plus_edge_fF_um": 0.3429150000000001,
+          "captab_self_fF_um": 0.028072,
+          "ratio_captab_over_lef": 0.08186285231033928
+        },
+        {
+          "width_um": 0.45,
+          "lef_area_plus_edge_fF_um": 0.37725000000000003,
+          "captab_self_fF_um": 0.02541,
+          "ratio_captab_over_lef": 0.06735586481113319
+        },
+        {
+          "width_um": 0.54,
+          "lef_area_plus_edge_fF_um": 0.44592000000000004,
+          "captab_self_fF_um": 0.021248,
+          "ratio_captab_over_lef": 0.04764980265518478
+        },
+        {
+          "width_um": 0.72,
+          "lef_area_plus_edge_fF_um": 0.5832599999999999,
+          "captab_self_fF_um": 0.015602,
+          "ratio_captab_over_lef": 0.02674964852724343
+        },
+        {
+          "width_um": 0.9,
+          "lef_area_plus_edge_fF_um": 0.7206,
+          "captab_self_fF_um": 0.01188,
+          "ratio_captab_over_lef": 0.016486261448792672
+        },
+        {
+          "width_um": 1.08,
+          "lef_area_plus_edge_fF_um": 0.85794,
+          "captab_self_fF_um": 0.009336,
+          "ratio_captab_over_lef": 0.010881879851737884
+        }
+      ]
+    },
+    {
+      "conductor": "M2",
+      "lef_cpersqdist_pf_um2": 0.0011069,
+      "lef_edgecapacitance_pf_um": 3.91e-05,
+      "rows": [
+        {
+          "width_um": 0.1,
+          "lef_area_plus_edge_fF_um": 0.14979,
+          "captab_self_fF_um": 0.089515,
+          "ratio_captab_over_lef": 0.5976033113024901
+        },
+        {
+          "width_um": 0.2,
+          "lef_area_plus_edge_fF_um": 0.26048,
+          "captab_self_fF_um": 0.051564,
+          "ratio_captab_over_lef": 0.19795761670761672
+        },
+        {
+          "width_um": 0.25,
+          "lef_area_plus_edge_fF_um": 0.315825,
+          "captab_self_fF_um": 0.043115,
+          "ratio_captab_over_lef": 0.1365154753423573
+        },
+        {
+          "width_um": 0.3,
+          "lef_area_plus_edge_fF_um": 0.37117,
+          "captab_self_fF_um": 0.037236,
+          "ratio_captab_over_lef": 0.10032060780774307
+        },
+        {
+          "width_um": 0.35,
+          "lef_area_plus_edge_fF_um": 0.42651500000000003,
+          "captab_self_fF_um": 0.032802,
+          "ratio_captab_over_lef": 0.07690702554423642
+        },
+        {
+          "width_um": 0.4,
+          "lef_area_plus_edge_fF_um": 0.48186000000000007,
+          "captab_self_fF_um": 0.029279,
+          "ratio_captab_over_lef": 0.06076246212592868
+        },
+        {
+          "width_um": 0.45,
+          "lef_area_plus_edge_fF_um": 0.5372050000000002,
+          "captab_self_fF_um": 0.02645,
+          "ratio_captab_over_lef": 0.04923632505281968
+        },
+        {
+          "width_um": 0.5,
+          "lef_area_plus_edge_fF_um": 0.59255,
+          "captab_self_fF_um": 0.024119,
+          "ratio_captab_over_lef": 0.040703738081174584
+        },
+        {
+          "width_um": 0.6,
+          "lef_area_plus_edge_fF_um": 0.7032400000000001,
+          "captab_self_fF_um": 0.020483,
+          "ratio_captab_over_lef": 0.02912661395825038
+        },
+        {
+          "width_um": 0.8,
+          "lef_area_plus_edge_fF_um": 0.9246200000000001,
+          "captab_self_fF_um": 0.015453,
+          "ratio_captab_over_lef": 0.016712811749691765
+        },
+        {
+          "width_um": 1.0,
+          "lef_area_plus_edge_fF_um": 1.1460000000000001,
+          "captab_self_fF_um": 0.012167,
+          "ratio_captab_over_lef": 0.010616928446771378
+        },
+        {
+          "width_um": 1.2,
+          "lef_area_plus_edge_fF_um": 1.36738,
+          "captab_self_fF_um": 0.009878,
+          "ratio_captab_over_lef": 0.007224034284544164
+        }
+      ]
+    },
+    {
+      "conductor": "M3",
+      "lef_cpersqdist_pf_um2": 0.0011069,
+      "lef_edgecapacitance_pf_um": 4.09e-05,
+      "rows": [
+        {
+          "width_um": 0.1,
+          "lef_area_plus_edge_fF_um": 0.15159,
+          "captab_self_fF_um": 0.090039,
+          "ratio_captab_over_lef": 0.5939639817929943
+        },
+        {
+          "width_um": 0.2,
+          "lef_area_plus_edge_fF_um": 0.26228000000000007,
+          "captab_self_fF_um": 0.052237,
+          "ratio_captab_over_lef": 0.19916501448833301
+        },
+        {
+          "width_um": 0.25,
+          "lef_area_plus_edge_fF_um": 0.31762500000000005,
+          "captab_self_fF_um": 0.043842,
+          "ratio_captab_over_lef": 0.1380306965761511
+        },
+        {
+          "width_um": 0.3,
+          "lef_area_plus_edge_fF_um": 0.37297,
+          "captab_self_fF_um": 0.038009,
+          "ratio_captab_over_lef": 0.10190900072391881
+        },
+        {
+          "width_um": 0.35,
+          "lef_area_plus_edge_fF_um": 0.428315,
+          "captab_self_fF_um": 0.033617,
+          "ratio_captab_over_lef": 0.07848662783231967
+        },
+        {
+          "width_um": 0.4,
+          "lef_area_plus_edge_fF_um": 0.4836600000000001,
+          "captab_self_fF_um": 0.030136,
+          "ratio_captab_over_lef": 0.062308233056279194
+        },
+        {
+          "width_um": 0.45,
+          "lef_area_plus_edge_fF_um": 0.5390050000000001,
+          "captab_self_fF_um": 0.027348,
+          "ratio_captab_over_lef": 0.050737933785400875
+        },
+        {
+          "width_um": 0.5,
+          "lef_area_plus_edge_fF_um": 0.59435,
+          "captab_self_fF_um": 0.025057,
+          "ratio_captab_over_lef": 0.042158660721796914
+        },
+        {
+          "width_um": 0.6,
+          "lef_area_plus_edge_fF_um": 0.70504,
+          "captab_self_fF_um": 0.021497,
+          "ratio_captab_over_lef": 0.030490468625893566
+        },
+        {
+          "width_um": 0.8,
+          "lef_area_plus_edge_fF_um": 0.92642,
+          "captab_self_fF_um": 0.016603,
+          "ratio_captab_over_lef": 0.01792167699315645
+        },
+        {
+          "width_um": 1.0,
+          "lef_area_plus_edge_fF_um": 1.1478,
+          "captab_self_fF_um": 0.013417,
+          "ratio_captab_over_lef": 0.011689318696637046
+        },
+        {
+          "width_um": 1.2,
+          "lef_area_plus_edge_fF_um": 1.36918,
+          "captab_self_fF_um": 0.011185,
+          "ratio_captab_over_lef": 0.00816912312479002
+        }
+      ]
+    },
+    {
+      "conductor": "M4",
+      "lef_cpersqdist_pf_um2": 0.0011069,
+      "lef_edgecapacitance_pf_um": 4.09e-05,
+      "rows": [
+        {
+          "width_um": 0.1,
+          "lef_area_plus_edge_fF_um": 0.15159,
+          "captab_self_fF_um": 0.090108,
+          "ratio_captab_over_lef": 0.5944191569364733
+        },
+        {
+          "width_um": 0.2,
+          "lef_area_plus_edge_fF_um": 0.26228000000000007,
+          "captab_self_fF_um": 0.052405,
+          "ratio_captab_over_lef": 0.1998055513192008
+        },
+        {
+          "width_um": 0.25,
+          "lef_area_plus_edge_fF_um": 0.31762500000000005,
+          "captab_self_fF_um": 0.044073,
+          "ratio_captab_over_lef": 0.13875796930342382
+        },
+        {
+          "width_um": 0.3,
+          "lef_area_plus_edge_fF_um": 0.37297,
+          "captab_self_fF_um": 0.03831,
+          "ratio_captab_over_lef": 0.10271603614231706
+        },
+        {
+          "width_um": 0.35,
+          "lef_area_plus_edge_fF_um": 0.428315,
+          "captab_self_fF_um": 0.033991,
+          "ratio_captab_over_lef": 0.07935981695714603
+        },
+        {
+          "width_um": 0.4,
+          "lef_area_plus_edge_fF_um": 0.4836600000000001,
+          "captab_self_fF_um": 0.030581,
+          "ratio_captab_over_lef": 0.06322830087251374
+        },
+        {
+          "width_um": 0.45,
+          "lef_area_plus_edge_fF_um": 0.5390050000000001,
+          "captab_self_fF_um": 0.027864,
+          "ratio_captab_over_lef": 0.051695253290785795
+        },
+        {
+          "width_um": 0.5,
+          "lef_area_plus_edge_fF_um": 0.59435,
+          "captab_self_fF_um": 0.025642,
+          "ratio_captab_over_lef": 0.04314292925044166
+        },
+        {
+          "width_um": 0.6,
+          "lef_area_plus_edge_fF_um": 0.70504,
+          "captab_self_fF_um": 0.022212,
+          "ratio_captab_over_lef": 0.03150459548394417
+        },
+        {
+          "width_um": 0.8,
+          "lef_area_plus_edge_fF_um": 0.92642,
+          "captab_self_fF_um": 0.017523,
+          "ratio_captab_over_lef": 0.01891474709095227
+        },
+        {
+          "width_um": 1.0,
+          "lef_area_plus_edge_fF_um": 1.1478,
+          "captab_self_fF_um": 0.014474,
+          "ratio_captab_over_lef": 0.012610210838125111
+        },
+        {
+          "width_um": 1.2,
+          "lef_area_plus_edge_fF_um": 1.36918,
+          "captab_self_fF_um": 0.012327,
+          "ratio_captab_over_lef": 0.009003198995018915
+        }
+      ]
+    },
+    {
+      "conductor": "M5",
+      "lef_cpersqdist_pf_um2": 0.0006259,
+      "lef_edgecapacitance_pf_um": 3.44e-05,
+      "rows": [
+        {
+          "width_um": 0.1,
+          "lef_area_plus_edge_fF_um": 0.09699,
+          "captab_self_fF_um": 0.10045,
+          "ratio_captab_over_lef": 1.0356737808021446
+        },
+        {
+          "width_um": 0.2,
+          "lef_area_plus_edge_fF_um": 0.15958,
+          "captab_self_fF_um": 0.060094,
+          "ratio_captab_over_lef": 0.3765760120315829
+        },
+        {
+          "width_um": 0.25,
+          "lef_area_plus_edge_fF_um": 0.190875,
+          "captab_self_fF_um": 0.050991,
+          "ratio_captab_over_lef": 0.2671434184675835
+        },
+        {
+          "width_um": 0.3,
+          "lef_area_plus_edge_fF_um": 0.22217,
+          "captab_self_fF_um": 0.044645,
+          "ratio_captab_over_lef": 0.20094972318494844
+        },
+        {
+          "width_um": 0.35,
+          "lef_area_plus_edge_fF_um": 0.253465,
+          "captab_self_fF_um": 0.039858,
+          "ratio_captab_over_lef": 0.15725248061862585
+        },
+        {
+          "width_um": 0.4,
+          "lef_area_plus_edge_fF_um": 0.28476,
+          "captab_self_fF_um": 0.036061,
+          "ratio_captab_over_lef": 0.12663646579575782
+        },
+        {
+          "width_um": 0.45,
+          "lef_area_plus_edge_fF_um": 0.31605500000000003,
+          "captab_self_fF_um": 0.03302,
+          "ratio_captab_over_lef": 0.10447548686146398
+        },
+        {
+          "width_um": 0.5,
+          "lef_area_plus_edge_fF_um": 0.34735,
+          "captab_self_fF_um": 0.030523,
+          "ratio_captab_over_lef": 0.08787390240391536
+        },
+        {
+          "width_um": 0.6,
+          "lef_area_plus_edge_fF_um": 0.40994,
+          "captab_self_fF_um": 0.026646,
+          "ratio_captab_over_lef": 0.0649997560618627
+        },
+        {
+          "width_um": 0.8,
+          "lef_area_plus_edge_fF_um": 0.5351199999999999,
+          "captab_self_fF_um": 0.021314,
+          "ratio_captab_over_lef": 0.03983031843324862
+        },
+        {
+          "width_um": 1.0,
+          "lef_area_plus_edge_fF_um": 0.6603,
+          "captab_self_fF_um": 0.017821,
+          "ratio_captab_over_lef": 0.026989247311827957
+        },
+        {
+          "width_um": 1.2,
+          "lef_area_plus_edge_fF_um": 0.78548,
+          "captab_self_fF_um": 0.015345,
+          "ratio_captab_over_lef": 0.019535825227886133
+        }
+      ]
+    },
+    {
+      "conductor": "TM",
+      "lef_cpersqdist_pf_um2": 0.0001299,
+      "lef_edgecapacitance_pf_um": 3.68e-05,
+      "rows": [
+        {
+          "width_um": 0.4,
+          "lef_area_plus_edge_fF_um": 0.08876,
+          "captab_self_fF_um": 0.121247,
+          "ratio_captab_over_lef": 1.3660094637223974
+        },
+        {
+          "width_um": 0.8,
+          "lef_area_plus_edge_fF_um": 0.14072,
+          "captab_self_fF_um": 0.069239,
+          "ratio_captab_over_lef": 0.4920338260375212
+        },
+        {
+          "width_um": 1.0,
+          "lef_area_plus_edge_fF_um": 0.16670000000000001,
+          "captab_self_fF_um": 0.057914,
+          "ratio_captab_over_lef": 0.34741451709658067
+        },
+        {
+          "width_um": 1.2,
+          "lef_area_plus_edge_fF_um": 0.19268000000000002,
+          "captab_self_fF_um": 0.050102,
+          "ratio_captab_over_lef": 0.2600269877517127
+        },
+        {
+          "width_um": 1.4,
+          "lef_area_plus_edge_fF_um": 0.21866,
+          "captab_self_fF_um": 0.044248,
+          "ratio_captab_over_lef": 0.20235982804353794
+        },
+        {
+          "width_um": 1.6,
+          "lef_area_plus_edge_fF_um": 0.24464000000000008,
+          "captab_self_fF_um": 0.039617,
+          "ratio_captab_over_lef": 0.16193999345977758
+        },
+        {
+          "width_um": 1.8,
+          "lef_area_plus_edge_fF_um": 0.2706200000000001,
+          "captab_self_fF_um": 0.035905,
+          "ratio_captab_over_lef": 0.13267681619983737
+        },
+        {
+          "width_um": 2.0,
+          "lef_area_plus_edge_fF_um": 0.29660000000000003,
+          "captab_self_fF_um": 0.032844,
+          "ratio_captab_over_lef": 0.11073499662845582
+        },
+        {
+          "width_um": 2.4,
+          "lef_area_plus_edge_fF_um": 0.34856000000000004,
+          "captab_self_fF_um": 0.02805,
+          "ratio_captab_over_lef": 0.08047394996557262
+        },
+        {
+          "width_um": 3.2,
+          "lef_area_plus_edge_fF_um": 0.4524800000000001,
+          "captab_self_fF_um": 0.02134,
+          "ratio_captab_over_lef": 0.04716230551626591
+        },
+        {
+          "width_um": 4.0,
+          "lef_area_plus_edge_fF_um": 0.5564000000000001,
+          "captab_self_fF_um": 0.016838,
+          "ratio_captab_over_lef": 0.030262401150251608
+        },
+        {
+          "width_um": 4.8,
+          "lef_area_plus_edge_fF_um": 0.66032,
+          "captab_self_fF_um": 0.013597,
+          "ratio_captab_over_lef": 0.020591531378725464
+        }
+      ]
+    },
+    {
+      "conductor": "RDL",
+      "lef_cpersqdist_pf_um2": 5.74e-05,
+      "lef_edgecapacitance_pf_um": 2.81e-05,
+      "rows": [
+        {
+          "width_um": 2.0,
+          "lef_area_plus_edge_fF_um": 0.1429,
+          "captab_self_fF_um": 0.046925,
+          "ratio_captab_over_lef": 0.32837648705388384
+        },
+        {
+          "width_um": 4.0,
+          "lef_area_plus_edge_fF_um": 0.2577,
+          "captab_self_fF_um": 0.024058,
+          "ratio_captab_over_lef": 0.09335661622041133
+        },
+        {
+          "width_um": 5.0,
+          "lef_area_plus_edge_fF_um": 0.31509999999999994,
+          "captab_self_fF_um": 0.018668,
+          "ratio_captab_over_lef": 0.05924468422722946
+        },
+        {
+          "width_um": 6.0,
+          "lef_area_plus_edge_fF_um": 0.3725,
+          "captab_self_fF_um": 0.014763,
+          "ratio_captab_over_lef": 0.03963221476510067
+        },
+        {
+          "width_um": 7.0,
+          "lef_area_plus_edge_fF_um": 0.4299,
+          "captab_self_fF_um": 0.01185,
+          "ratio_captab_over_lef": 0.027564549895324492
+        },
+        {
+          "width_um": 8.0,
+          "lef_area_plus_edge_fF_um": 0.48729999999999996,
+          "captab_self_fF_um": 0.00964,
+          "ratio_captab_over_lef": 0.019782474861481634
+        },
+        {
+          "width_um": 9.0,
+          "lef_area_plus_edge_fF_um": 0.5447,
+          "captab_self_fF_um": 0.007932,
+          "ratio_captab_over_lef": 0.014562144299614468
+        },
+        {
+          "width_um": 10.0,
+          "lef_area_plus_edge_fF_um": 0.6021,
+          "captab_self_fF_um": 0.006593,
+          "ratio_captab_over_lef": 0.010950008304268394
+        },
+        {
+          "width_um": 12.0,
+          "lef_area_plus_edge_fF_um": 0.7169,
+          "captab_self_fF_um": 0.004587,
+          "ratio_captab_over_lef": 0.0063983819221648764
+        },
+        {
+          "width_um": 16.0,
+          "lef_area_plus_edge_fF_um": 0.9465,
+          "captab_self_fF_um": 0.002406,
+          "ratio_captab_over_lef": 0.002541996830427892
+        },
+        {
+          "width_um": 20.0,
+          "lef_area_plus_edge_fF_um": 1.1761,
+          "captab_self_fF_um": 0.001418,
+          "ratio_captab_over_lef": 0.0012056797891335771
+        },
+        {
+          "width_um": 24.0,
+          "lef_area_plus_edge_fF_um": 1.4057000000000002,
+          "captab_self_fF_um": 0.000887,
+          "ratio_captab_over_lef": 0.0006310023475848331
+        }
+      ]
+    }
+  ],
+  "geometry_truth": [
+    {
+      "conductor": "RDL",
+      "thickness_um": 1.45,
+      "wmin_um": 2.7,
+      "smin_um": 1.8,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "TM",
+      "thickness_um": 0.9,
+      "wmin_um": 0.36,
+      "smin_um": 0.36,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "M5",
+      "thickness_um": 0.21,
+      "wmin_um": 0.09,
+      "smin_um": 0.09,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "M4",
+      "thickness_um": 0.21,
+      "wmin_um": 0.09,
+      "smin_um": 0.09,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "M3",
+      "thickness_um": 0.21,
+      "wmin_um": 0.09,
+      "smin_um": 0.09,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "M2",
+      "thickness_um": 0.21,
+      "wmin_um": 0.09,
+      "smin_um": 0.09,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "M1",
+      "thickness_um": 0.18,
+      "wmin_um": 0.081,
+      "smin_um": 0.081,
+      "layer_type": "METAL"
+    },
+    {
+      "conductor": "NPOLY",
+      "thickness_um": 0.1,
+      "wmin_um": 0.054,
+      "smin_um": 0.108,
+      "layer_type": "GATE"
+    },
+    {
+      "conductor": "PPOLY",
+      "thickness_um": 0.1,
+      "wmin_um": 0.054,
+      "smin_um": 0.108,
+      "layer_type": "GATE"
+    },
+    {
+      "conductor": "NDIFF",
+      "thickness_um": 0.15,
+      "wmin_um": 0.072,
+      "smin_um": 0.09,
+      "layer_type": "DIFFUSION"
+    },
+    {
+      "conductor": "PDIFF",
+      "thickness_um": 0.15,
+      "wmin_um": 0.072,
+      "smin_um": 0.09,
+      "layer_type": "DIFFUSION"
+    }
+  ],
+  "dielectric_crosscheck": {
+    "itf_imd_er_values": [
+      3.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "itf_passivation_er_values": [
+      4.0,
+      7.0
+    ],
+    "config_gen_estimates": {
+      "EPS_IMD": 3.3,
+      "EPS_PMD": 3.9,
+      "EPS_PASS": 4.0,
+      "EPS_SUB": 11.9,
+      "SPACING_PMD_um": 0.15,
+      "SPACING_IMD_um": 0.12
+    },
+    "config_gen_eps_imd_in_itf_range": false
+  },
+  "via_crosscheck": [
+    {
+      "via": "RV",
+      "from": "TM",
+      "to": "RDL",
+      "itf_rpv_ohm": 0.08,
+      "itf_area_um2": 7.29
+    },
+    {
+      "via": "TV",
+      "from": "M5",
+      "to": "TM",
+      "itf_rpv_ohm": 0.25,
+      "itf_area_um2": 0.104976
+    },
+    {
+      "via": "V4",
+      "from": "M4",
+      "to": "M5",
+      "itf_rpv_ohm": 2.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "V3",
+      "from": "M3",
+      "to": "M4",
+      "itf_rpv_ohm": 2.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "V2",
+      "from": "M2",
+      "to": "M3",
+      "itf_rpv_ohm": 2.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "V1",
+      "from": "M1",
+      "to": "M2",
+      "itf_rpv_ohm": 2.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "CT_NP",
+      "from": "NPOLY",
+      "to": "M1",
+      "itf_rpv_ohm": 30.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "CT_PP",
+      "from": "PPOLY",
+      "to": "M1",
+      "itf_rpv_ohm": 29.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "CT_ND",
+      "from": "NDIFF",
+      "to": "M1",
+      "itf_rpv_ohm": 37.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "CT_PD",
+      "from": "PDIFF",
+      "to": "M1",
+      "itf_rpv_ohm": 36.0,
+      "itf_area_um2": 0.006561
+    },
+    {
+      "via": "NSUBCONT",
+      "from": "SUBSTRATE",
+      "to": "NDIFF",
+      "itf_rpv_ohm": 1e-06,
+      "itf_area_um2": null
+    },
+    {
+      "via": "PSUBCONT",
+      "from": "SUBSTRATE",
+      "to": "PDIFF",
+      "itf_rpv_ohm": 1e-06,
+      "itf_area_um2": null
+    }
+  ],
+  "captab_corner_scaling": {
+    "Rcbest": {
+      "source": "libs.tech/pex/starrc/kCaptabRcbest.txt",
+      "blocks_compared": 84,
+      "self_mean_over_blocks": 1.1276754320734805,
+      "self_min": 1.0489794581135536,
+      "self_max": 1.9411764705882355,
+      "per_block": [
+        {
+          "block": "A M1 OVER SUBSTRATE",
+          "self_min": 1.06384531842541,
+          "self_max": 1.1111825192802056,
+          "self_mean": 1.0762799793211835,
+          "coupling_min": 0.9609959476309228,
+          "coupling_max": 0.9815646419286221
+        },
+        {
+          "block": "A M2 OVER M1",
+          "self_min": 1.0839329743873598,
+          "self_max": 1.1433343455815366,
+          "self_mean": 1.1142664842478398,
+          "coupling_min": 0.9299702863317126,
+          "coupling_max": 0.9689073388683271
+        },
+        {
+          "block": "A M2 OVER SUBSTRATE",
+          "self_min": 1.060747663551402,
+          "self_max": 1.0912127961125735,
+          "self_mean": 1.0680633695847852,
+          "coupling_min": 0.9663876651982379,
+          "coupling_max": 0.9857028683065447
+        },
+        {
+          "block": "A M3 OVER M2",
+          "self_min": 1.084078148996702,
+          "self_max": 1.1360911270983214,
+          "self_mean": 1.1134406971153579,
+          "coupling_min": 0.9297837947060013,
+          "coupling_max": 0.9691800768833936
+        },
+        {
+          "block": "A M3 OVER M1",
+          "self_min": 1.0681872845345948,
+          "self_max": 1.117630465444288,
+          "self_mean": 1.0849105679335291,
+          "coupling_min": 0.9539833318397706,
+          "coupling_max": 0.9703217744454857
+        },
+        {
+          "block": "A M3 OVER SUBSTRATE",
+          "self_min": 1.0581551000981646,
+          "self_max": 1.0752793920429145,
+          "self_mean": 1.0624123757087804,
+          "coupling_min": 0.9719377897990725,
+          "coupling_max": 0.9928801974558572
+        },
+        {
+          "block": "A M4 OVER M3",
+          "self_min": 1.0843897824030275,
+          "self_max": 1.1242275729810356,
+          "self_mean": 1.1096621205156103,
+          "coupling_min": 0.9294364928435592,
+          "coupling_max": 0.9694039998673344
+        },
+        {
+          "block": "A M4 OVER M2",
+          "self_min": 1.0684190414898538,
+          "self_max": 1.1097744360902255,
+          "self_mean": 1.0827543803068576,
+          "coupling_min": 0.9546810564183558,
+          "coupling_max": 0.968642447418738
+        },
+        {
+          "block": "A M4 OVER M1",
+          "self_min": 1.0616994071835406,
+          "self_max": 1.0879624910814392,
+          "self_mean": 1.0684870738250154,
+          "coupling_min": 0.9666496827087868,
+          "coupling_max": 0.9847962520993547
+        },
+        {
+          "block": "A M4 OVER SUBSTRATE",
+          "self_min": 1.0543850171078697,
+          "self_max": 1.065332711856883,
+          "self_mean": 1.0573212316572738,
+          "coupling_min": 0.9785639412997904,
+          "coupling_max": 0.9934248141795312
+        },
+        {
+          "block": "A M5 OVER M4",
+          "self_min": 1.0753057163935527,
+          "self_max": 1.1284949434860203,
+          "self_mean": 1.0974993035527616,
+          "coupling_min": 0.9364294599853275,
+          "coupling_max": 0.9676166008531962
+        },
+        {
+          "block": "A M5 OVER M3",
+          "self_min": 1.0612426811150921,
+          "self_max": 1.104363520543582,
+          "self_mean": 1.0749654181940542,
+          "coupling_min": 0.9598747972998454,
+          "coupling_max": 0.98004158004158
+        },
+        {
+          "block": "A M5 OVER M2",
+          "self_min": 1.0557019573132707,
+          "self_max": 1.0842506000165522,
+          "self_mean": 1.0630464243565256,
+          "coupling_min": 0.968325614255436,
+          "coupling_max": 0.9960502409353029
+        },
+        {
+          "block": "A M5 OVER M1",
+          "self_min": 1.0526678932842686,
+          "self_max": 1.070515162586774,
+          "self_mean": 1.0569744625910216,
+          "coupling_min": 0.9745383068202598,
+          "coupling_max": 1.0017352503718393
+        },
+        {
+          "block": "A M5 OVER SUBSTRATE",
+          "self_min": 1.0489794581135536,
+          "self_max": 1.0589547038327525,
+          "self_mean": 1.0515720977012144,
+          "coupling_min": 0.9854171134462794,
+          "coupling_max": 1.0060018863071252
+        },
+        {
+          "block": "A TM OVER M5",
+          "self_min": 1.0799866513274026,
+          "self_max": 1.1560464007627522,
+          "self_mean": 1.1023203405562756,
+          "coupling_min": 0.9410177805027591,
+          "coupling_max": 0.9666423687042244
+        },
+        {
+          "block": "A TM OVER M4",
+          "self_min": 1.0752372627372628,
+          "self_max": 1.1429460839247914,
+          "self_mean": 1.0929306668300627,
+          "coupling_min": 0.9508840115836001,
+          "coupling_max": 0.9642996573114128
+        },
+        {
+          "block": "A TM OVER M3",
+          "self_min": 1.0705347157150196,
+          "self_max": 1.130941139439723,
+          "self_mean": 1.0854261774649576,
+          "coupling_min": 0.9576901682658878,
+          "coupling_max": 0.9684842421210605
+        },
+        {
+          "block": "A TM OVER M2",
+          "self_min": 1.0672405770125641,
+          "self_max": 1.1206848681166126,
+          "self_mean": 1.0795956009385217,
+          "coupling_min": 0.9606922457740811,
+          "coupling_max": 0.9777914867365823
+        },
+        {
+          "block": "A TM OVER M1",
+          "self_min": 1.0644468093815234,
+          "self_max": 1.112018178757785,
+          "self_mean": 1.0750313239088933,
+          "coupling_min": 0.9619715110808268,
+          "coupling_max": 0.9847172694854814
+        },
+        {
+          "block": "A TM OVER SUBSTRATE",
+          "self_min": 1.060025311878503,
+          "self_max": 1.098036331543723,
+          "self_mean": 1.0683760425050541,
+          "coupling_min": 0.9645758730892149,
+          "coupling_max": 0.9935947508201844
+        },
+        {
+          "block": "A RDL OVER TM",
+          "self_min": 1.1105769230769231,
+          "self_max": 1.2110948905109489,
+          "self_mean": 1.1669066593280462,
+          "coupling_min": 0.9199134199134199,
+          "coupling_max": 0.946514904345247
+        },
+        {
+          "block": "A RDL OVER M5",
+          "self_min": 1.0973107845855283,
+          "self_max": 1.2236244321049974,
+          "self_mean": 1.1796861205796223,
+          "coupling_min": 0.9170555511613806,
+          "coupling_max": 0.9630584192439863
+        },
+        {
+          "block": "A RDL OVER M4",
+          "self_min": 1.0927275359521282,
+          "self_max": 1.2228260869565217,
+          "self_mean": 1.176657643087132,
+          "coupling_min": 0.9174819615996087,
+          "coupling_max": 0.9646671998578157
+        },
+        {
+          "block": "A RDL OVER M3",
+          "self_min": 1.0888304188883973,
+          "self_max": 1.225944404846757,
+          "self_mean": 1.1732303612598685,
+          "coupling_min": 0.9182512144344206,
+          "coupling_max": 0.9658177072337486
+        },
+        {
+          "block": "A RDL OVER M2",
+          "self_min": 1.08558171118153,
+          "self_max": 1.22846670739157,
+          "self_mean": 1.1692354483416354,
+          "coupling_min": 0.9192779951194949,
+          "coupling_max": 0.9665661600311776
+        },
+        {
+          "block": "A RDL OVER M1",
+          "self_min": 1.0828026885999824,
+          "self_max": 1.227176220806794,
+          "self_mean": 1.164965231571016,
+          "coupling_min": 0.9204967353731917,
+          "coupling_max": 0.9670566234669913
+        },
+        {
+          "block": "A RDL OVER SUBSTRATE",
+          "self_min": 1.0781459776238678,
+          "self_max": 1.2306064880112835,
+          "self_mean": 1.156376998110357,
+          "coupling_min": 0.923568481433028,
+          "coupling_max": 0.967289944241492
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M2",
+          "self_min": 1.0835639370024939,
+          "self_max": 1.3408190224570675,
+          "self_mean": 1.1667252807732431,
+          "coupling_min": 0.9291235425127735,
+          "coupling_max": 0.9703394209617173
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M3",
+          "self_min": 1.0704327847719641,
+          "self_max": 1.2472307329719536,
+          "self_mean": 1.1192322109843325,
+          "coupling_min": 0.9432744806069632,
+          "coupling_max": 0.9624135178286323
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M4",
+          "self_min": 1.0675879078033477,
+          "self_max": 1.1933954552885402,
+          "self_mean": 1.099311101321984,
+          "coupling_min": 0.9497237569060772,
+          "coupling_max": 0.9736415844500073
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M5",
+          "self_min": 1.0658143173113233,
+          "self_max": 1.1639911430943815,
+          "self_mean": 1.0901348257641281,
+          "coupling_min": 0.9535160072696771,
+          "coupling_max": 0.9773779700903362
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER TM",
+          "self_min": 1.0645853065746913,
+          "self_max": 1.13363452621567,
+          "self_mean": 1.0818313470137755,
+          "coupling_min": 0.9576786713939168,
+          "coupling_max": 0.9799596085132826
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0641629217490547,
+          "self_max": 1.1208113863050542,
+          "self_mean": 1.0786544530324034,
+          "coupling_min": 0.9595442031202203,
+          "coupling_max": 0.9808957093642342
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M3",
+          "self_min": 1.108335757928426,
+          "self_max": 1.9411764705882355,
+          "self_mean": 1.39726219746906,
+          "coupling_min": 0.9158680520528599,
+          "coupling_max": 0.971672697349881
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M4",
+          "self_min": 1.0892146381049297,
+          "self_max": 1.4948275862068967,
+          "self_mean": 1.2195203146956939,
+          "coupling_min": 0.9239450593743218,
+          "coupling_max": 0.9717053576702699
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M5",
+          "self_min": 1.0859379957107143,
+          "self_max": 1.3350515463917525,
+          "self_mean": 1.1667392759685977,
+          "coupling_min": 0.9274755471229023,
+          "coupling_max": 0.9692459077845808
+        },
+        {
+          "block": "B M2 OVER M1 UNDER TM",
+          "self_min": 1.0844354787871149,
+          "self_max": 1.2077139413419045,
+          "self_mean": 1.1304167870019948,
+          "coupling_min": 0.9293321722821354,
+          "coupling_max": 0.9682324944582084
+        },
+        {
+          "block": "B M2 OVER M1 UNDER RDL",
+          "self_min": 1.0841139144885936,
+          "self_max": 1.1662747732616727,
+          "self_mean": 1.1200182759850823,
+          "coupling_min": 0.9297401023431187,
+          "coupling_max": 0.9685619834710744
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M3",
+          "self_min": 1.0859430695590184,
+          "self_max": 1.2907662082514737,
+          "self_mean": 1.1566269973654129,
+          "coupling_min": 0.9274547187797904,
+          "coupling_max": 0.9697888861926718
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M4",
+          "self_min": 1.0710058495567134,
+          "self_max": 1.2257751937984498,
+          "self_mean": 1.114298750730572,
+          "coupling_min": 0.9445864977292676,
+          "coupling_max": 0.9620577768473938
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M5",
+          "self_min": 1.066336869710335,
+          "self_max": 1.1777777777777778,
+          "self_mean": 1.0938807361849905,
+          "coupling_min": 0.951922723766849,
+          "coupling_max": 0.9751175230993678
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER TM",
+          "self_min": 1.0627650352599396,
+          "self_max": 1.1255869957856715,
+          "self_mean": 1.0770566684007066,
+          "coupling_min": 0.9594190175970632,
+          "coupling_max": 0.9828107454435517
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0616194313127314,
+          "self_max": 1.1048063361180427,
+          "self_mean": 1.0715713437670507,
+          "coupling_min": 0.9634156657080021,
+          "coupling_max": 0.9846342962507683
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M4",
+          "self_min": 1.108335757928426,
+          "self_max": 1.9411764705882355,
+          "self_mean": 1.39726219746906,
+          "coupling_min": 0.9158680520528599,
+          "coupling_max": 0.971672697349881
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M5",
+          "self_min": 1.0892146381049297,
+          "self_max": 1.4948275862068967,
+          "self_mean": 1.2195203146956939,
+          "coupling_min": 0.9239450593743218,
+          "coupling_max": 0.9717053576702699
+        },
+        {
+          "block": "B M3 OVER M2 UNDER TM",
+          "self_min": 1.0848161852922975,
+          "self_max": 1.2297236067059354,
+          "self_mean": 1.1373909884014421,
+          "coupling_min": 0.9288995406430997,
+          "coupling_max": 0.9684039140457499
+        },
+        {
+          "block": "B M3 OVER M2 UNDER RDL",
+          "self_min": 1.0842993951612903,
+          "self_max": 1.1635006784260515,
+          "self_mean": 1.1204177349776447,
+          "coupling_min": 0.9295013757465942,
+          "coupling_max": 0.9687762462328936
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M4",
+          "self_min": 1.088813585528011,
+          "self_max": 1.4936936936936935,
+          "self_mean": 1.2202031932708872,
+          "coupling_min": 0.9242156564118186,
+          "coupling_max": 0.9721709273472214
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M5",
+          "self_min": 1.0734806566012451,
+          "self_max": 1.3278688524590163,
+          "self_mean": 1.148109466726669,
+          "coupling_min": 0.9355880605880605,
+          "coupling_max": 0.9662467589086987
+        },
+        {
+          "block": "B M3 OVER M1 UNDER TM",
+          "self_min": 1.0697107203630176,
+          "self_max": 1.1826795527761986,
+          "self_mean": 1.1012738961805215,
+          "coupling_min": 0.9484689168037885,
+          "coupling_max": 0.9670354652925129
+        },
+        {
+          "block": "B M3 OVER M1 UNDER RDL",
+          "self_min": 1.0687977482911137,
+          "self_max": 1.1386000310414404,
+          "self_mean": 1.0900960414433722,
+          "coupling_min": 0.952253083829823,
+          "coupling_max": 0.9692283902891604
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M4",
+          "self_min": 1.0846769604309725,
+          "self_max": 1.248569942797712,
+          "self_mean": 1.1436384824913721,
+          "coupling_min": 0.9287434112058306,
+          "coupling_max": 0.9693063610778536
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M5",
+          "self_min": 1.069928005269015,
+          "self_max": 1.1964066966108615,
+          "self_mean": 1.105303436178893,
+          "coupling_min": 0.947135355435379,
+          "coupling_max": 0.965975664713835
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER TM",
+          "self_min": 1.061497140475584,
+          "self_max": 1.1191016333938295,
+          "self_mean": 1.074516660207227,
+          "coupling_min": 0.9601673774845095,
+          "coupling_max": 0.9880141650776355
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0594969920228976,
+          "self_max": 1.0905025760668807,
+          "self_mean": 1.066521215744567,
+          "coupling_min": 0.966845353394297,
+          "coupling_max": 0.991224794622853
+        },
+        {
+          "block": "B M4 OVER M3 UNDER M5",
+          "self_min": 1.108335757928426,
+          "self_max": 1.9411764705882355,
+          "self_mean": 1.39726219746906,
+          "coupling_min": 0.9158680520528599,
+          "coupling_max": 0.971672697349881
+        },
+        {
+          "block": "B M4 OVER M3 UNDER TM",
+          "self_min": 1.0856972495686592,
+          "self_max": 1.2524882137244628,
+          "self_mean": 1.1452493553379564,
+          "coupling_min": 0.9279176201372998,
+          "coupling_max": 0.9687894869850898
+        },
+        {
+          "block": "B M4 OVER M3 UNDER RDL",
+          "self_min": 1.084673192295548,
+          "self_max": 1.1561679790026247,
+          "self_mean": 1.1180491247191915,
+          "coupling_min": 0.9291218280855587,
+          "coupling_max": 0.9688681561502579
+        },
+        {
+          "block": "B M4 OVER M2 UNDER M5",
+          "self_min": 1.088813585528011,
+          "self_max": 1.4936936936936935,
+          "self_mean": 1.2202031932708872,
+          "coupling_min": 0.9242156564118186,
+          "coupling_max": 0.9721709273472214
+        },
+        {
+          "block": "B M4 OVER M2 UNDER TM",
+          "self_min": 1.0704562282850145,
+          "self_max": 1.201662758473673,
+          "self_mean": 1.1073140732707762,
+          "coupling_min": 0.9465000991473328,
+          "coupling_max": 0.9632753981528617
+        },
+        {
+          "block": "B M4 OVER M2 UNDER RDL",
+          "self_min": 1.069188992752014,
+          "self_max": 1.1350146086421653,
+          "self_mean": 1.0890837430929377,
+          "coupling_min": 0.9526457629293752,
+          "coupling_max": 0.9674446710476622
+        },
+        {
+          "block": "B M4 OVER M1 UNDER M5",
+          "self_min": 1.0855826117868115,
+          "self_max": 1.333846153846154,
+          "self_mean": 1.1674876330638861,
+          "coupling_min": 0.927645511133928,
+          "coupling_max": 0.9699617114379483
+        },
+        {
+          "block": "B M4 OVER M1 UNDER TM",
+          "self_min": 1.0653401239685736,
+          "self_max": 1.1605251379979116,
+          "self_mean": 1.0886744378915494,
+          "coupling_min": 0.9538479333744602,
+          "coupling_max": 0.9778294444905754
+        },
+        {
+          "block": "B M4 OVER M1 UNDER RDL",
+          "self_min": 1.0628260005145838,
+          "self_max": 1.108818861936069,
+          "self_mean": 1.0739063123072297,
+          "coupling_min": 0.9625167880835132,
+          "coupling_max": 0.9831377661886137
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER M5",
+          "self_min": 1.0841830296300037,
+          "self_max": 1.2181978798586572,
+          "self_mean": 1.13415037557348,
+          "coupling_min": 0.9293184276956366,
+          "coupling_max": 0.9690679434277255
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER TM",
+          "self_min": 1.0619209460403183,
+          "self_max": 1.118865118407505,
+          "self_mean": 1.0745259668141678,
+          "coupling_min": 0.9606750331280692,
+          "coupling_max": 0.9851694915254238
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0574304125423504,
+          "self_max": 1.079385057987953,
+          "self_mean": 1.0621967745730385,
+          "coupling_min": 0.970947068597199,
+          "coupling_max": 0.9912509307520476
+        },
+        {
+          "block": "B M5 OVER M4 UNDER TM",
+          "self_min": 1.0777515341236565,
+          "self_max": 1.3063499757634511,
+          "self_mean": 1.1488138200535143,
+          "coupling_min": 0.9329091075962921,
+          "coupling_max": 0.9676986166864008
+        },
+        {
+          "block": "B M5 OVER M4 UNDER RDL",
+          "self_min": 1.0756406955002968,
+          "self_max": 1.161955514365153,
+          "self_mean": 1.1061138147923504,
+          "coupling_min": 0.9359726140289708,
+          "coupling_max": 0.96684764853218
+        },
+        {
+          "block": "B M5 OVER M3 UNDER TM",
+          "self_min": 1.0647408927655209,
+          "self_max": 1.2319170984455956,
+          "self_mean": 1.111701719871703,
+          "coupling_min": 0.9447071662422699,
+          "coupling_max": 0.9690123067213631
+        },
+        {
+          "block": "B M5 OVER M3 UNDER RDL",
+          "self_min": 1.0621465950198434,
+          "self_max": 1.1309595654797826,
+          "self_mean": 1.0817456041431475,
+          "coupling_min": 0.9566666666666667,
+          "coupling_max": 0.9783824331696672
+        },
+        {
+          "block": "B M5 OVER M2 UNDER TM",
+          "self_min": 1.0616633214067546,
+          "self_max": 1.1865936667653152,
+          "self_mean": 1.0937541046414518,
+          "coupling_min": 0.95,
+          "coupling_max": 0.9820405854486319
+        },
+        {
+          "block": "B M5 OVER M2 UNDER RDL",
+          "self_min": 1.0568712304494496,
+          "self_max": 1.1069199962745646,
+          "self_mean": 1.0689916814775169,
+          "coupling_min": 0.9624468927774178,
+          "coupling_max": 0.9938114024909106
+        },
+        {
+          "block": "B M5 OVER M1 UNDER TM",
+          "self_min": 1.0597804477482928,
+          "self_max": 1.1592964824120604,
+          "self_mean": 1.0848479908397766,
+          "coupling_min": 0.953205691199719,
+          "coupling_max": 0.9865934065934066
+        },
+        {
+          "block": "B M5 OVER M1 UNDER RDL",
+          "self_min": 1.05442895528558,
+          "self_max": 1.0911400704860257,
+          "self_mean": 1.0625407816921124,
+          "coupling_min": 0.9662663442226505,
+          "coupling_max": 0.9991937434491655
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER TM",
+          "self_min": 1.058518404012298,
+          "self_max": 1.132417102966841,
+          "self_mean": 1.0772186183769938,
+          "coupling_min": 0.9573916649388348,
+          "coupling_max": 0.9897139424881748
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.052013551032884,
+          "self_max": 1.0744805384840503,
+          "self_mean": 1.0569129307013159,
+          "coupling_min": 0.9737859105089165,
+          "coupling_max": 1.0029940119760479
+        },
+        {
+          "block": "B TM OVER M5 UNDER RDL",
+          "self_min": 1.0956942816017998,
+          "self_max": 1.6688963210702341,
+          "self_mean": 1.2835056153955318,
+          "coupling_min": 0.9177188987787207,
+          "coupling_max": 0.9754152823920265
+        },
+        {
+          "block": "B TM OVER M4 UNDER RDL",
+          "self_min": 1.0903229377092731,
+          "self_max": 1.560530679933665,
+          "self_mean": 1.241378282994707,
+          "coupling_min": 0.9220668433720258,
+          "coupling_max": 0.9748707042997898
+        },
+        {
+          "block": "B TM OVER M3 UNDER RDL",
+          "self_min": 1.0875235143903526,
+          "self_max": 1.4863731656184487,
+          "self_mean": 1.2136826226787738,
+          "coupling_min": 0.9250645371420301,
+          "coupling_max": 0.9736244170132475
+        },
+        {
+          "block": "B TM OVER M2 UNDER RDL",
+          "self_min": 1.0858456130863865,
+          "self_max": 1.4324942791762012,
+          "self_mean": 1.194400250640138,
+          "coupling_min": 0.9272838219216396,
+          "coupling_max": 0.9723775934753259
+        },
+        {
+          "block": "B TM OVER M1 UNDER RDL",
+          "self_min": 1.0847747917395243,
+          "self_max": 1.3915407854984894,
+          "self_mean": 1.18028356105441,
+          "coupling_min": 0.9290767086543772,
+          "coupling_max": 0.9713227184026697
+        },
+        {
+          "block": "B TM OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.083524302923841,
+          "self_max": 1.3317265556529359,
+          "self_mean": 1.1608129120951278,
+          "coupling_min": 0.9316124798337482,
+          "coupling_max": 0.969800427863904
+        }
+      ]
+    },
+    "Rcworst": {
+      "source": "libs.tech/pex/starrc/kCaptabRcworst.txt",
+      "blocks_compared": 84,
+      "self_mean_over_blocks": 0.8771131976233428,
+      "self_min": 0.47058823529411764,
+      "self_max": 0.9491520290732889,
+      "per_block": [
+        {
+          "block": "A M1 OVER SUBSTRATE",
+          "self_min": 0.8857112253641817,
+          "self_max": 0.9345879252942119,
+          "self_mean": 0.9207021542598333,
+          "coupling_min": 1.0251319624990152,
+          "coupling_max": 1.0466064919284848
+        },
+        {
+          "block": "A M2 OVER M1",
+          "self_min": 0.8642575159429092,
+          "self_max": 0.9144568006843458,
+          "self_mean": 0.8866495740071879,
+          "coupling_min": 1.0359274449001366,
+          "coupling_max": 1.0850553754727172
+        },
+        {
+          "block": "A M2 OVER SUBSTRATE",
+          "self_min": 0.9046365661064992,
+          "self_max": 0.9375391395106112,
+          "self_mean": 0.9292105536616592,
+          "coupling_min": 1.019181245004884,
+          "coupling_max": 1.040044052863436
+        },
+        {
+          "block": "A M3 OVER M2",
+          "self_min": 0.8706091596265007,
+          "self_max": 0.9142979430499258,
+          "self_mean": 0.8877678478460093,
+          "coupling_min": 1.0356459369955566,
+          "coupling_max": 1.0853034283020138
+        },
+        {
+          "block": "A M3 OVER M1",
+          "self_min": 0.8832157968970381,
+          "self_max": 0.9297376752600632,
+          "self_mean": 0.9125575020007378,
+          "coupling_min": 1.0386917012316752,
+          "coupling_max": 1.055822272427751
+        },
+        {
+          "block": "A M3 OVER SUBSTRATE",
+          "self_min": 0.9207867679928476,
+          "self_max": 0.9400931358362493,
+          "self_mean": 0.9353106855054113,
+          "coupling_min": 1.010822099867097,
+          "coupling_max": 1.0335683925811439
+        },
+        {
+          "block": "A M4 OVER M3",
+          "self_min": 0.8807909604519774,
+          "self_max": 0.9139955849889624,
+          "self_mean": 0.8915284658672743,
+          "coupling_min": 1.0355543763059267,
+          "coupling_max": 1.0855770193173855
+        },
+        {
+          "block": "A M4 OVER M2",
+          "self_min": 0.8903622693096377,
+          "self_max": 0.9295099793842461,
+          "self_mean": 0.9149459278618782,
+          "coupling_min": 1.0376612371716412,
+          "coupling_max": 1.054866481832774
+        },
+        {
+          "block": "A M4 OVER M1",
+          "self_min": 0.9087758638263174,
+          "self_max": 0.9365570149947694,
+          "self_mean": 0.9289992865880844,
+          "coupling_min": 1.020684168655529,
+          "coupling_max": 1.039974060864329
+        },
+        {
+          "block": "A M4 OVER SUBSTRATE",
+          "self_min": 0.9341345940427044,
+          "self_max": 0.9441151236253023,
+          "self_mean": 0.9410208220654637,
+          "coupling_min": 1.0095292548122736,
+          "coupling_max": 1.0263102725366875
+        },
+        {
+          "block": "A M5 OVER M4",
+          "self_min": 0.8736862978385882,
+          "self_max": 0.9228946368290447,
+          "self_mean": 0.9013861121209028,
+          "coupling_min": 1.0374264554292147,
+          "coupling_max": 1.0776689738764313
+        },
+        {
+          "block": "A M5 OVER M3",
+          "self_min": 0.8935131117953073,
+          "self_max": 0.9362055405051123,
+          "self_mean": 0.9218664297580513,
+          "coupling_min": 1.027997227997228,
+          "coupling_max": 1.0483675448521093
+        },
+        {
+          "block": "A M5 OVER M2",
+          "self_min": 0.9116113547959944,
+          "self_max": 0.9422174008847907,
+          "self_mean": 0.9338816101924392,
+          "coupling_min": 1.00821549885457,
+          "coupling_max": 1.0377734423643683
+        },
+        {
+          "block": "A M5 OVER M1",
+          "self_min": 0.9248812568505663,
+          "self_max": 0.9453851223891452,
+          "self_mean": 0.9404013563239256,
+          "coupling_min": 1.0008263097008758,
+          "coupling_max": 1.0313128542695191
+        },
+        {
+          "block": "A M5 OVER SUBSTRATE",
+          "self_min": 0.940298656047785,
+          "self_max": 0.9491520290732889,
+          "self_mean": 0.9464669721520907,
+          "coupling_min": 0.9954557146531767,
+          "coupling_max": 1.0189791979412395
+        },
+        {
+          "block": "A TM OVER M5",
+          "self_min": 0.8420467185761957,
+          "self_max": 0.9186521353485145,
+          "self_mean": 0.8956500151503413,
+          "coupling_min": 1.037904821409976,
+          "coupling_max": 1.0722665031677907
+        },
+        {
+          "block": "A TM OVER M4",
+          "self_min": 0.8534429087286763,
+          "self_max": 0.9233370241035688,
+          "self_mean": 0.9041692493147138,
+          "coupling_min": 1.0405370233809048,
+          "coupling_max": 1.0594802621551593
+        },
+        {
+          "block": "A TM OVER M3",
+          "self_min": 0.863917742104711,
+          "self_max": 0.9276970045038236,
+          "self_mean": 0.9112336252086791,
+          "coupling_min": 1.040207603801901,
+          "coupling_max": 1.0510269941911234
+        },
+        {
+          "block": "A TM OVER M2",
+          "self_min": 0.8732068486811662,
+          "self_max": 0.9310181203475785,
+          "self_mean": 0.916886590818577,
+          "coupling_min": 1.0287888134896155,
+          "coupling_max": 1.0473235846525357
+        },
+        {
+          "block": "A TM OVER M1",
+          "self_min": 0.881248947988554,
+          "self_max": 0.9337676056338028,
+          "self_mean": 0.9214321803988076,
+          "coupling_min": 1.0202314242049342,
+          "coupling_max": 1.0456276396870456
+        },
+        {
+          "block": "A TM OVER SUBSTRATE",
+          "self_min": 0.8945355593145548,
+          "self_max": 0.9380863039399625,
+          "self_mean": 0.9282698133410284,
+          "coupling_min": 1.0088267458209654,
+          "coupling_max": 1.0433945554657118
+        },
+        {
+          "block": "A RDL OVER TM",
+          "self_min": 0.8131973836090803,
+          "self_max": 0.8907849829351535,
+          "self_mean": 0.8502642629315389,
+          "coupling_min": 1.0652454397152602,
+          "coupling_max": 1.0959537061577878
+        },
+        {
+          "block": "A RDL OVER M5",
+          "self_min": 0.8049967553536664,
+          "self_max": 0.8997656072787763,
+          "self_mean": 0.8346353479299183,
+          "coupling_min": 1.0445276535045063,
+          "coupling_max": 1.1003453821614069
+        },
+        {
+          "block": "A RDL OVER M4",
+          "self_min": 0.802257525083612,
+          "self_max": 0.9042322169674741,
+          "self_mean": 0.8359006583650209,
+          "coupling_min": 1.0423176041944369,
+          "coupling_max": 1.100097835391953
+        },
+        {
+          "block": "A RDL OVER M3",
+          "self_min": 0.8026874115983027,
+          "self_max": 0.9080494563066105,
+          "self_mean": 0.8380122318639917,
+          "coupling_min": 1.0406694432182408,
+          "coupling_max": 1.0995142262317836
+        },
+        {
+          "block": "A RDL OVER M2",
+          "self_min": 0.8008552229688455,
+          "self_max": 0.911249434133092,
+          "self_mean": 0.8405459807916507,
+          "coupling_min": 1.0394642380981685,
+          "coupling_max": 1.098578456056087
+        },
+        {
+          "block": "A RDL OVER M1",
+          "self_min": 0.7988322717622081,
+          "self_max": 0.9140134429999116,
+          "self_mean": 0.8432695404900529,
+          "coupling_min": 1.0386405149169349,
+          "coupling_max": 1.0973840310672982
+        },
+        {
+          "block": "A RDL OVER SUBSTRATE",
+          "self_min": 0.7983074753173484,
+          "self_max": 0.918657432072456,
+          "self_mean": 0.8495614907132455,
+          "coupling_min": 1.0377331282445683,
+          "coupling_max": 1.094294052530945
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M2",
+          "self_min": 0.7007926023778073,
+          "self_max": 0.9144318039470237,
+          "self_mean": 0.8380091550143468,
+          "coupling_min": 1.0334844167540194,
+          "coupling_max": 1.0869251932398796
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M3",
+          "self_min": 0.7638463351402309,
+          "self_max": 0.9280390057281867,
+          "self_mean": 0.877678053692657,
+          "coupling_min": 1.041423668610651,
+          "coupling_max": 1.0693886741471836
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.8056236717345104,
+          "self_max": 0.93057298631828,
+          "self_mean": 0.8962702823221007,
+          "coupling_min": 1.0354881460756884,
+          "coupling_max": 1.0611786372007366
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.8317187932466095,
+          "self_max": 0.9321716926507346,
+          "self_mean": 0.9055497811690341,
+          "coupling_min": 1.030592879374478,
+          "coupling_max": 1.0562751757365136
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.8611342289858519,
+          "self_max": 0.9337169612380936,
+          "self_mean": 0.914378444425468,
+          "coupling_min": 1.02703122572627,
+          "coupling_max": 1.0507184176152267
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.8748178863610893,
+          "self_max": 0.9342142806191598,
+          "self_mean": 0.9179657633900665,
+          "coupling_min": 1.0259160663952396,
+          "coupling_max": 1.0484092994799632
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M3",
+          "self_min": 0.47058823529411764,
+          "self_max": 0.8887256328193193,
+          "self_mean": 0.6955973876230623,
+          "coupling_min": 1.0342114458985718,
+          "coupling_max": 1.1017855341470797
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M4",
+          "self_min": 0.6137931034482759,
+          "self_max": 0.90827354346734,
+          "self_mean": 0.7978794092784627,
+          "coupling_min": 1.0324295587453483,
+          "coupling_max": 1.0930766130282457
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M5",
+          "self_min": 0.7047128129602356,
+          "self_max": 0.9120315732033858,
+          "self_mean": 0.837728410083261,
+          "coupling_min": 1.0350337373484944,
+          "coupling_max": 1.0884556249795543
+        },
+        {
+          "block": "B M2 OVER M1 UNDER TM",
+          "self_min": 0.8019284853354761,
+          "self_max": 0.9138372312929459,
+          "self_mean": 0.870109736742827,
+          "coupling_min": 1.0365921241361324,
+          "coupling_max": 1.0859066246902003
+        },
+        {
+          "block": "B M2 OVER M1 UNDER RDL",
+          "self_min": 0.8407793080282163,
+          "self_max": 0.9142367930704538,
+          "self_mean": 0.8805988565125219,
+          "coupling_min": 1.0363140495867769,
+          "coupling_max": 1.0853083759762996
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M3",
+          "self_min": 0.7367387033398821,
+          "self_max": 0.9121728281902434,
+          "self_mean": 0.8466592076620287,
+          "coupling_min": 1.0346244843484593,
+          "coupling_max": 1.0883698760724498
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.78125,
+          "self_max": 0.9274860616031442,
+          "self_mean": 0.8823430119089671,
+          "coupling_min": 1.0413177726606657,
+          "coupling_max": 1.0676079064138766
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.8189300411522634,
+          "self_max": 0.9314181269122264,
+          "self_mean": 0.9014906635615461,
+          "coupling_min": 1.0331496190630571,
+          "coupling_max": 1.0587771039295506
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.8670680313064419,
+          "self_max": 0.9355273437499999,
+          "self_mean": 0.9189242767122868,
+          "coupling_min": 1.0229765915176643,
+          "coupling_max": 1.048731844786473
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.8892264294238907,
+          "self_max": 0.9366339861670664,
+          "self_mean": 0.9251184376282517,
+          "coupling_min": 1.0207217490561067,
+          "coupling_max": 1.0437320250380646
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M4",
+          "self_min": 0.47058823529411764,
+          "self_max": 0.8887256328193193,
+          "self_mean": 0.6955973876230623,
+          "coupling_min": 1.0342114458985718,
+          "coupling_max": 1.1017855341470797
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M5",
+          "self_min": 0.6137931034482759,
+          "self_max": 0.90827354346734,
+          "self_mean": 0.7978794092784627,
+          "coupling_min": 1.0324295587453483,
+          "coupling_max": 1.0930766130282457
+        },
+        {
+          "block": "B M3 OVER M2 UNDER TM",
+          "self_min": 0.7843226098776619,
+          "self_max": 0.9133905004862154,
+          "self_mean": 0.8637028647728839,
+          "coupling_min": 1.0363032579433527,
+          "coupling_max": 1.086545502962519
+        },
+        {
+          "block": "B M3 OVER M2 UNDER RDL",
+          "self_min": 0.8439620081411127,
+          "self_max": 0.9140120967741936,
+          "self_mean": 0.8803990382730605,
+          "coupling_min": 1.0360983482370765,
+          "coupling_max": 1.0856318367894773
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M4",
+          "self_min": 0.6162162162162163,
+          "self_max": 0.9087641086429933,
+          "self_mean": 0.7976108488664343,
+          "coupling_min": 1.0319551041606554,
+          "coupling_max": 1.0928114529393846
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M5",
+          "self_min": 0.7075064710957721,
+          "self_max": 0.9244862360945857,
+          "self_mean": 0.8522311223627915,
+          "coupling_min": 1.0356806865377115,
+          "coupling_max": 1.0790499537837077
+        },
+        {
+          "block": "B M3 OVER M1 UNDER TM",
+          "self_min": 0.8178889520560926,
+          "self_max": 0.9289279636982416,
+          "self_mean": 0.8949160750835566,
+          "coupling_min": 1.043145602024967,
+          "coupling_max": 1.0626331676136362
+        },
+        {
+          "block": "B M3 OVER M1 UNDER RDL",
+          "self_min": 0.860779140152103,
+          "self_max": 0.929479415460195,
+          "self_mean": 0.9067801877387306,
+          "coupling_min": 1.0407453224060617,
+          "coupling_max": 1.057935555350383
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.7685907436297451,
+          "self_max": 0.9135652591777635,
+          "self_mean": 0.8579759276722596,
+          "coupling_min": 1.0352339340413292,
+          "coupling_max": 1.0868419340144466
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.8060432829726419,
+          "self_max": 0.928652540255729,
+          "self_mean": 0.8909567320079842,
+          "coupling_min": 1.0426825850568915,
+          "coupling_max": 1.064419443117154
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.8730716878402904,
+          "self_max": 0.9366378393019521,
+          "self_mean": 0.9214571875692251,
+          "coupling_min": 1.0170707345863979,
+          "coupling_max": 1.047905995781862
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9031787693205018,
+          "self_max": 0.9386982845610495,
+          "self_mean": 0.9304903606700664,
+          "coupling_min": 1.0129761015683345,
+          "coupling_max": 1.039776566512005
+        },
+        {
+          "block": "B M4 OVER M3 UNDER M5",
+          "self_min": 0.47058823529411764,
+          "self_max": 0.8887256328193193,
+          "self_mean": 0.6955973876230623,
+          "coupling_min": 1.0342114458985718,
+          "coupling_max": 1.1017855341470797
+        },
+        {
+          "block": "B M4 OVER M3 UNDER TM",
+          "self_min": 0.7647983237297014,
+          "self_max": 0.9124124632091748,
+          "self_mean": 0.8565315462680848,
+          "coupling_min": 1.0358857720495327,
+          "coupling_max": 1.087741091860085
+        },
+        {
+          "block": "B M4 OVER M3 UNDER RDL",
+          "self_min": 0.8484251968503937,
+          "self_max": 0.9136596147773919,
+          "self_mean": 0.8826709628408677,
+          "coupling_min": 1.0361404370243064,
+          "coupling_max": 1.086023648199814
+        },
+        {
+          "block": "B M4 OVER M2 UNDER M5",
+          "self_min": 0.6162162162162163,
+          "self_max": 0.9087641086429933,
+          "self_mean": 0.7976108488664343,
+          "coupling_min": 1.0319551041606554,
+          "coupling_max": 1.0928114529393846
+        },
+        {
+          "block": "B M4 OVER M2 UNDER TM",
+          "self_min": 0.8011085056491154,
+          "self_max": 0.9280856638377855,
+          "self_mean": 0.889013347095866,
+          "coupling_min": 1.042245086831074,
+          "coupling_max": 1.0651846269781462
+        },
+        {
+          "block": "B M4 OVER M2 UNDER RDL",
+          "self_min": 0.8637551899123481,
+          "self_max": 0.9291855716878403,
+          "self_mean": 0.9079048825592274,
+          "coupling_min": 1.0404444979822924,
+          "coupling_max": 1.0573715210647003
+        },
+        {
+          "block": "B M4 OVER M1 UNDER M5",
+          "self_min": 0.7061538461538461,
+          "self_max": 0.9124622298961481,
+          "self_mean": 0.837286512203256,
+          "coupling_min": 1.0342469916129817,
+          "coupling_max": 1.0883334402874927
+        },
+        {
+          "block": "B M4 OVER M1 UNDER TM",
+          "self_min": 0.8344025063404445,
+          "self_max": 0.9325674128469343,
+          "self_mean": 0.9068173772835543,
+          "coupling_min": 1.029975919621357,
+          "coupling_max": 1.055782608695652
+        },
+        {
+          "block": "B M4 OVER M1 UNDER RDL",
+          "self_min": 0.8855134890047609,
+          "self_max": 0.9354901616646191,
+          "self_mean": 0.9227386941104379,
+          "coupling_min": 1.0229465449804434,
+          "coupling_max": 1.0451627088830255
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.7928445229681979,
+          "self_max": 0.9141133713593459,
+          "self_mean": 0.8666546447947265,
+          "coupling_min": 1.0355939143856114,
+          "coupling_max": 1.086057109136806
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.8731266445486786,
+          "self_max": 0.9362793680405761,
+          "self_mean": 0.9215668783481451,
+          "coupling_min": 1.0203036723163843,
+          "coupling_max": 1.0472860472860472
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9140519643980942,
+          "self_max": 0.9410380169228937,
+          "self_mean": 0.9352697039646651,
+          "coupling_min": 1.0122859270290394,
+          "coupling_max": 1.0357464989318774
+        },
+        {
+          "block": "B M5 OVER M4 UNDER TM",
+          "self_min": 0.722249151720795,
+          "self_max": 0.9199430424808165,
+          "self_mean": 0.8520946567238489,
+          "coupling_min": 1.0364744274698934,
+          "coupling_max": 1.082479273105516
+        },
+        {
+          "block": "B M5 OVER M4 UNDER RDL",
+          "self_min": 0.8394346617238183,
+          "self_max": 0.9224783635814011,
+          "self_mean": 0.8921318227708289,
+          "coupling_min": 1.0382551066444718,
+          "coupling_max": 1.078322609274462
+        },
+        {
+          "block": "B M5 OVER M3 UNDER TM",
+          "self_min": 0.7747150259067357,
+          "self_max": 0.9333812211390456,
+          "self_mean": 0.8839717970259239,
+          "coupling_min": 1.0424108551593563,
+          "coupling_max": 1.0675403225806452
+        },
+        {
+          "block": "B M5 OVER M3 UNDER RDL",
+          "self_min": 0.8649366324683161,
+          "self_max": 0.9356252860702843,
+          "self_mean": 0.9142303580635649,
+          "coupling_min": 1.0302100381887616,
+          "coupling_max": 1.0523505106416153
+        },
+        {
+          "block": "B M5 OVER M2 UNDER TM",
+          "self_min": 0.8108907960935188,
+          "self_max": 0.9361275016728512,
+          "self_mean": 0.9009151190149113,
+          "coupling_min": 1.026232058262038,
+          "coupling_max": 1.0611840657325213
+        },
+        {
+          "block": "B M5 OVER M2 UNDER RDL",
+          "self_min": 0.8860016764459346,
+          "self_max": 0.9411353801069956,
+          "self_mean": 0.926954777326186,
+          "coupling_min": 1.010984760578634,
+          "coupling_max": 1.0450270623008713
+        },
+        {
+          "block": "B M5 OVER M1 UNDER TM",
+          "self_min": 0.8347989949748743,
+          "self_max": 0.9375918402627712,
+          "self_mean": 0.9099205043567177,
+          "coupling_min": 1.0203663003663004,
+          "coupling_max": 1.0564201651150535
+        },
+        {
+          "block": "B M5 OVER M1 UNDER RDL",
+          "self_min": 0.901237603475125,
+          "self_max": 0.9435949711179069,
+          "self_mean": 0.9338383655512641,
+          "coupling_min": 1.0039506570990888,
+          "coupling_max": 1.041316555314178
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.8608202443280977,
+          "self_max": 0.9391456690884732,
+          "self_mean": 0.9180944792891995,
+          "coupling_min": 1.0163675951648024,
+          "coupling_max": 1.0515564935554385
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9187152472929471,
+          "self_max": 0.9460476503525038,
+          "self_mean": 0.9401500660031371,
+          "coupling_min": 0.9991683300066534,
+          "coupling_max": 1.0333845509149322
+        },
+        {
+          "block": "B TM OVER M5 UNDER RDL",
+          "self_min": 0.5418060200668896,
+          "self_max": 0.9013316556569152,
+          "self_mean": 0.7567541674557954,
+          "coupling_min": 1.0283995875816243,
+          "coupling_max": 1.1010401573173256
+        },
+        {
+          "block": "B TM OVER M4 UNDER RDL",
+          "self_min": 0.5837479270315091,
+          "self_max": 0.9068636946435326,
+          "self_mean": 0.7830836292900014,
+          "coupling_min": 1.0282374259145075,
+          "coupling_max": 1.0965176857691254
+        },
+        {
+          "block": "B TM OVER M3 UNDER RDL",
+          "self_min": 0.6184486373165619,
+          "self_max": 0.9098774071011188,
+          "self_mean": 0.80200700568835,
+          "coupling_min": 1.0291393720352382,
+          "coupling_max": 1.092420586388127
+        },
+        {
+          "block": "B TM OVER M2 UNDER RDL",
+          "self_min": 0.646834477498093,
+          "self_max": 0.9117389932855663,
+          "self_mean": 0.8159800055634007,
+          "coupling_min": 1.0302675447055907,
+          "coupling_max": 1.0892028533831983
+        },
+        {
+          "block": "B TM OVER M1 UNDER RDL",
+          "self_min": 0.6700906344410876,
+          "self_max": 0.9129565365543092,
+          "self_mean": 0.8267053426090379,
+          "coupling_min": 1.0313357278203568,
+          "coupling_max": 1.0868325372495902
+        },
+        {
+          "block": "B TM OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.7063978965819456,
+          "self_max": 0.9143802330869305,
+          "self_mean": 0.8421894104963802,
+          "coupling_min": 1.0330568824546493,
+          "coupling_max": 1.083655510143967
+        }
+      ]
+    },
+    "Cbest": {
+      "source": "libs.tech/pex/starrc/kCaptabCbest.txt",
+      "blocks_compared": 84,
+      "self_mean_over_blocks": 1.0613695221150126,
+      "self_min": 0.9366537932259068,
+      "self_max": 3.3235294117647056,
+      "per_block": [
+        {
+          "block": "A M1 OVER SUBSTRATE",
+          "self_min": 0.9588702343119322,
+          "self_max": 1.0231362467866323,
+          "self_mean": 0.9872393780987171,
+          "coupling_min": 0.9484066251743021,
+          "coupling_max": 0.9799889702985899
+        },
+        {
+          "block": "A M2 OVER M1",
+          "self_min": 0.972601016454486,
+          "self_max": 1.1044640145763742,
+          "self_mean": 1.0509862877446499,
+          "coupling_min": 0.7327458130740141,
+          "coupling_max": 0.8148944683405022
+        },
+        {
+          "block": "A M2 OVER SUBSTRATE",
+          "self_min": 0.9376305647098253,
+          "self_max": 0.9925086049807654,
+          "self_mean": 0.9600567290917871,
+          "coupling_min": 0.9441531419059509,
+          "coupling_max": 0.9745138087203622
+        },
+        {
+          "block": "A M3 OVER M2",
+          "self_min": 0.9728215715400691,
+          "self_max": 1.0941247002398082,
+          "self_mean": 1.0505584024170853,
+          "coupling_min": 0.7325385599784467,
+          "coupling_max": 0.8149806127373485
+        },
+        {
+          "block": "A M3 OVER M1",
+          "self_min": 0.94058118498417,
+          "self_max": 1.0399153737658675,
+          "self_mean": 0.9843216318297529,
+          "coupling_min": 0.8971651514066862,
+          "coupling_max": 0.9329896907216495
+        },
+        {
+          "block": "A M3 OVER SUBSTRATE",
+          "self_min": 0.9369051188929243,
+          "self_max": 0.9818506928922665,
+          "self_mean": 0.9564835535093995,
+          "coupling_min": 0.9493334621329211,
+          "coupling_max": 0.9784507309663946
+        },
+        {
+          "block": "A M4 OVER M3",
+          "self_min": 0.9726900031535793,
+          "self_max": 1.0912429378531072,
+          "self_mean": 1.0478002477846677,
+          "coupling_min": 0.734861375237714,
+          "coupling_max": 0.8159099200689861
+        },
+        {
+          "block": "A M4 OVER M2",
+          "self_min": 0.940429532634059,
+          "self_max": 1.0380041011619958,
+          "self_mean": 0.9826985249439533,
+          "coupling_min": 0.9003424294842376,
+          "coupling_max": 0.9339961759082218
+        },
+        {
+          "block": "A M4 OVER M1",
+          "self_min": 0.9376284743944947,
+          "self_max": 1.0093772296401997,
+          "self_mean": 0.9658776009920711,
+          "coupling_min": 0.9254097355621858,
+          "coupling_max": 0.9665871121718377
+        },
+        {
+          "block": "A M4 OVER SUBSTRATE",
+          "self_min": 0.9366537932259068,
+          "self_max": 0.9768800194694574,
+          "self_mean": 0.953721637559727,
+          "coupling_min": 0.9580712788259959,
+          "coupling_max": 0.9820645999026133
+        },
+        {
+          "block": "A M5 OVER M4",
+          "self_min": 0.9756991795399165,
+          "self_max": 1.0993456276026177,
+          "self_mean": 1.0462215790209293,
+          "coupling_min": 0.7510446237759563,
+          "coupling_max": 0.8224146407218865
+        },
+        {
+          "block": "A M5 OVER M3",
+          "self_min": 0.9465112501015351,
+          "self_max": 1.0437413738188765,
+          "self_mean": 0.9898307593848381,
+          "coupling_min": 0.9074742794849082,
+          "coupling_max": 0.9498267498267497
+        },
+        {
+          "block": "A M5 OVER M2",
+          "self_min": 0.943954754670437,
+          "self_max": 1.0171315070760574,
+          "self_mean": 0.9748475832272172,
+          "coupling_min": 0.9321767799670304,
+          "coupling_max": 0.9810411564894541
+        },
+        {
+          "block": "A M5 OVER M1",
+          "self_min": 0.9433824704378396,
+          "self_max": 1.0018268176835952,
+          "self_mean": 0.9685984046731665,
+          "coupling_min": 0.9478880965441581,
+          "coupling_max": 0.989340604858701
+        },
+        {
+          "block": "A M5 OVER SUBSTRATE",
+          "self_min": 0.9430164260826283,
+          "self_max": 0.9844900619094168,
+          "self_mean": 0.9629309109929136,
+          "coupling_min": 0.9712631353206092,
+          "coupling_max": 0.9954557146531767
+        },
+        {
+          "block": "A TM OVER M5",
+          "self_min": 0.9534201582520264,
+          "self_max": 1.1042428094708407,
+          "self_mean": 1.023365227538024,
+          "coupling_min": 0.8241727425687044,
+          "coupling_max": 0.8562428407789232
+        },
+        {
+          "block": "A TM OVER M4",
+          "self_min": 0.9448854441700025,
+          "self_max": 1.0820570290125762,
+          "self_mean": 1.004776386655691,
+          "coupling_min": 0.871266942338617,
+          "coupling_max": 0.8990588867975262
+        },
+        {
+          "block": "A TM OVER M3",
+          "self_min": 0.9418804854491244,
+          "self_max": 1.0652607281502466,
+          "self_mean": 0.9938506338623037,
+          "coupling_min": 0.8925395761056529,
+          "coupling_max": 0.936655827913957
+        },
+        {
+          "block": "A TM OVER M2",
+          "self_min": 0.9401348299625844,
+          "self_max": 1.0520129569643684,
+          "self_mean": 0.98608640048026,
+          "coupling_min": 0.9045663696196633,
+          "coupling_max": 0.9595585715264926
+        },
+        {
+          "block": "A TM OVER M1",
+          "self_min": 0.9391471646791502,
+          "self_max": 1.0417438141726982,
+          "self_mean": 0.9805932732648612,
+          "coupling_min": 0.9125539439955872,
+          "coupling_max": 0.9743104577541665
+        },
+        {
+          "block": "A TM OVER SUBSTRATE",
+          "self_min": 0.9379943421280527,
+          "self_max": 1.0211811428991688,
+          "self_mean": 0.9715466260823681,
+          "coupling_min": 0.9328481768125986,
+          "coupling_max": 0.9930479612560539
+        },
+        {
+          "block": "A RDL OVER TM",
+          "self_min": 0.9711538461538463,
+          "self_max": 1.126202385532897,
+          "self_mean": 1.0586752689287202,
+          "coupling_min": 0.9197455605618872,
+          "coupling_max": 0.9418359780513124
+        },
+        {
+          "block": "A RDL OVER M5",
+          "self_min": 1.0682259243390377,
+          "self_max": 1.163530175210902,
+          "self_mean": 1.1276277681512574,
+          "coupling_min": 0.917240106514804,
+          "coupling_max": 0.957822732282954
+        },
+        {
+          "block": "A RDL OVER M4",
+          "self_min": 1.0647138307113213,
+          "self_max": 1.169314381270903,
+          "self_mean": 1.1301052555329376,
+          "coupling_min": 0.9176654029595206,
+          "coupling_max": 0.9593175153292456
+        },
+        {
+          "block": "A RDL OVER M3",
+          "self_min": 1.0609355717512283,
+          "self_max": 1.1693776520509196,
+          "self_mean": 1.1293932007198104,
+          "coupling_min": 0.9183900069396252,
+          "coupling_max": 0.9600982668944207
+        },
+        {
+          "block": "A RDL OVER M2",
+          "self_min": 1.0598687188773201,
+          "self_max": 1.1777642028100184,
+          "self_mean": 1.1314566422958867,
+          "coupling_min": 0.9193941976217221,
+          "coupling_max": 0.9614382704654073
+        },
+        {
+          "block": "A RDL OVER M1",
+          "self_min": 1.0575970637658088,
+          "self_max": 1.1809978768577494,
+          "self_mean": 1.129904920297864,
+          "coupling_min": 0.9205820850936713,
+          "coupling_max": 0.9619031051578671
+        },
+        {
+          "block": "A RDL OVER SUBSTRATE",
+          "self_min": 1.0522535961640915,
+          "self_max": 1.1706629055007052,
+          "self_mean": 1.1171604668609258,
+          "coupling_min": 0.9306128610244542,
+          "coupling_max": 0.9668333012882139
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M2",
+          "self_min": 0.9928484392971427,
+          "self_max": 1.3778071334214004,
+          "self_mean": 1.1471841277507435,
+          "coupling_min": 0.7544543429844098,
+          "coupling_max": 0.8355602143711337
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M3",
+          "self_min": 0.9625536692621971,
+          "self_max": 1.180532641998586,
+          "self_mean": 1.0367396862555291,
+          "coupling_min": 0.903618929786576,
+          "coupling_max": 0.942589143161256
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.9599938277954942,
+          "self_max": 1.1093673369298676,
+          "self_mean": 1.0106955451416555,
+          "coupling_min": 0.9253930981184794,
+          "coupling_max": 0.9676041820055955
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.9594080424995128,
+          "self_max": 1.075145308607805,
+          "self_mean": 1.0004215460893138,
+          "coupling_min": 0.933860992725991,
+          "coupling_max": 0.9738100660441813
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9591310487378104,
+          "self_max": 1.0501723932944953,
+          "self_mean": 0.9937680535820714,
+          "coupling_min": 0.9391904977083467,
+          "coupling_max": 0.9770079229454716
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9589272203022432,
+          "self_max": 1.0304830214053569,
+          "self_mean": 0.9889310429657384,
+          "coupling_min": 0.9464641765253223,
+          "coupling_max": 0.9793297839022862
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M3",
+          "self_min": 1.0191591504218795,
+          "self_max": 3.3235294117647056,
+          "self_mean": 1.7324514129712387,
+          "coupling_min": 0.6787652577423585,
+          "coupling_max": 0.7870210679381827
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M4",
+          "self_min": 0.9781793824791005,
+          "self_max": 1.6241379310344828,
+          "self_mean": 1.1978178712426986,
+          "coupling_min": 0.7325520106656745,
+          "coupling_max": 0.8221099887766554
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M5",
+          "self_min": 0.9743404271519397,
+          "self_max": 1.3490427098674522,
+          "self_mean": 1.114990024313539,
+          "coupling_min": 0.7339461546010665,
+          "coupling_max": 0.8192552792702736
+        },
+        {
+          "block": "B M2 OVER M1 UNDER TM",
+          "self_min": 0.9731450545294081,
+          "self_max": 1.1984732824427482,
+          "self_mean": 1.0737109941364176,
+          "coupling_min": 0.7327014535467882,
+          "coupling_max": 0.8144966749250229
+        },
+        {
+          "block": "B M2 OVER M1 UNDER RDL",
+          "self_min": 0.9726796595658961,
+          "self_max": 1.1246221027880416,
+          "self_mean": 1.0557674330519435,
+          "coupling_min": 0.733133584702397,
+          "coupling_max": 0.8157685950413224
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M3",
+          "self_min": 0.973635298910276,
+          "self_max": 1.2567125081859856,
+          "self_mean": 1.0959629964997308,
+          "coupling_min": 0.7360025421035907,
+          "coupling_max": 0.8192338024751274
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.9417900557535875,
+          "self_max": 1.1308139534883723,
+          "self_mean": 1.006891056576928,
+          "coupling_min": 0.8947386014173017,
+          "coupling_max": 0.9289473684210526
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.9388580831304661,
+          "self_max": 1.074238683127572,
+          "self_mean": 0.9833250019834278,
+          "coupling_min": 0.9157668113163118,
+          "coupling_max": 0.9589884908413033
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9380607296065233,
+          "self_max": 1.0335942203491872,
+          "self_mean": 0.9703176482522288,
+          "coupling_min": 0.9251840502260922,
+          "coupling_max": 0.9689038611039128
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9376649519123239,
+          "self_max": 1.001410437235543,
+          "self_mean": 0.96200109043939,
+          "coupling_min": 0.9407551824294752,
+          "coupling_max": 0.9736587935727457
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M4",
+          "self_min": 1.0191591504218795,
+          "self_max": 3.3235294117647056,
+          "self_mean": 1.7324514129712387,
+          "coupling_min": 0.6787652577423585,
+          "coupling_max": 0.7870210679381827
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M5",
+          "self_min": 0.9781793824791005,
+          "self_max": 1.6241379310344828,
+          "self_mean": 1.1978178712426986,
+          "coupling_min": 0.7325520106656745,
+          "coupling_max": 0.8221099887766554
+        },
+        {
+          "block": "B M3 OVER M2 UNDER TM",
+          "self_min": 0.9735170427995908,
+          "self_max": 1.2473946533756228,
+          "self_mean": 1.0864554180867714,
+          "coupling_min": 0.7327741162372678,
+          "coupling_max": 0.8143729950187804
+        },
+        {
+          "block": "B M3 OVER M2 UNDER RDL",
+          "self_min": 0.9729082661290323,
+          "self_max": 1.1183853459972863,
+          "self_mean": 1.056329307203839,
+          "coupling_min": 0.7330380511375076,
+          "coupling_max": 0.8160828681059895
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M4",
+          "self_min": 0.9772844405504303,
+          "self_max": 1.6342342342342342,
+          "self_mean": 1.202736824281053,
+          "coupling_min": 0.7304599451720987,
+          "coupling_max": 0.8182526400830976
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M5",
+          "self_min": 0.9447248951679045,
+          "self_max": 1.2868852459016393,
+          "self_mean": 1.0541930898038554,
+          "coupling_min": 0.8669481265327663,
+          "coupling_max": 0.9001035866891105
+        },
+        {
+          "block": "B M3 OVER M1 UNDER TM",
+          "self_min": 0.94114577424844,
+          "self_max": 1.1313246162592383,
+          "self_mean": 1.0052502599834303,
+          "coupling_min": 0.8854811109648546,
+          "coupling_max": 0.9282358290391027
+        },
+        {
+          "block": "B M3 OVER M1 UNDER RDL",
+          "self_min": 0.9406404582140068,
+          "self_max": 1.0554089709762533,
+          "self_mean": 0.9876472683901132,
+          "coupling_min": 0.8966873129654117,
+          "coupling_max": 0.9326581104066802
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.9723560580193988,
+          "self_max": 1.2085283411336454,
+          "self_mean": 1.0804404418829396,
+          "coupling_min": 0.7324786880978721,
+          "coupling_max": 0.8153872467463811
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.9408144261997228,
+          "self_max": 1.1043282972641895,
+          "self_mean": 0.9988708161197661,
+          "coupling_min": 0.8945530278756808,
+          "coupling_max": 0.9314255670722549
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9374581865215645,
+          "self_max": 1.0393602540834845,
+          "self_mean": 0.9709162597025975,
+          "coupling_min": 0.9176792468013196,
+          "coupling_max": 0.9704894215926632
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9369348326604158,
+          "self_max": 0.991153883542335,
+          "self_mean": 0.9585545181519616,
+          "coupling_min": 0.9443218162980314,
+          "coupling_max": 0.9773151605675877
+        },
+        {
+          "block": "B M4 OVER M3 UNDER M5",
+          "self_min": 1.0191591504218795,
+          "self_max": 3.3235294117647056,
+          "self_mean": 1.7324514129712387,
+          "coupling_min": 0.6787652577423585,
+          "coupling_max": 0.7870210679381827
+        },
+        {
+          "block": "B M4 OVER M3 UNDER TM",
+          "self_min": 0.9743606008322337,
+          "self_max": 1.3373493975903614,
+          "self_mean": 1.1100804275887561,
+          "coupling_min": 0.7337365152010461,
+          "coupling_max": 0.8137319939347992
+        },
+        {
+          "block": "B M4 OVER M3 UNDER RDL",
+          "self_min": 0.9727691821913483,
+          "self_max": 1.1210629921259843,
+          "self_mean": 1.0545569743817738,
+          "coupling_min": 0.7356516540454364,
+          "coupling_max": 0.8173663965954662
+        },
+        {
+          "block": "B M4 OVER M2 UNDER M5",
+          "self_min": 0.9772844405504303,
+          "self_max": 1.6342342342342342,
+          "self_mean": 1.202736824281053,
+          "coupling_min": 0.7304599451720987,
+          "coupling_max": 0.8182526400830976
+        },
+        {
+          "block": "B M4 OVER M2 UNDER TM",
+          "self_min": 0.9417782081221164,
+          "self_max": 1.1861010445534002,
+          "self_mean": 1.0193211907223585,
+          "coupling_min": 0.8774801587301587,
+          "coupling_max": 0.9225510871936586
+        },
+        {
+          "block": "B M4 OVER M2 UNDER RDL",
+          "self_min": 0.9404605263157895,
+          "self_max": 1.0572043672151314,
+          "self_mean": 0.9865549862673593,
+          "coupling_min": 0.9002421472664643,
+          "coupling_max": 0.9338318604124178
+        },
+        {
+          "block": "B M4 OVER M1 UNDER M5",
+          "self_min": 0.9734784043876799,
+          "self_max": 1.3523076923076924,
+          "self_mean": 1.1185059208587933,
+          "coupling_min": 0.7317910543541039,
+          "coupling_max": 0.815455208459949
+        },
+        {
+          "block": "B M4 OVER M1 UNDER TM",
+          "self_min": 0.9389259783757054,
+          "self_max": 1.1214381620170073,
+          "self_mean": 0.9948917197026033,
+          "coupling_min": 0.889789571201694,
+          "coupling_max": 0.9518392427136095
+        },
+        {
+          "block": "B M4 OVER M1 UNDER RDL",
+          "self_min": 0.9376293793149749,
+          "self_max": 1.0235774200861483,
+          "self_mean": 0.9686723448604572,
+          "coupling_min": 0.9232419181859967,
+          "coupling_max": 0.9661886136462408
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.972086214729191,
+          "self_max": 1.1775618374558303,
+          "self_mean": 1.0714844401266466,
+          "coupling_min": 0.7316001704750352,
+          "coupling_max": 0.8136044350647306
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9379609350556474,
+          "self_max": 1.0631506692598098,
+          "self_mean": 0.9779437729203749,
+          "coupling_min": 0.9016680957206329,
+          "coupling_max": 0.9632768361581922
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9366562131625186,
+          "self_max": 0.9872336599838173,
+          "self_mean": 0.9558122814512592,
+          "coupling_min": 0.9514360313315927,
+          "coupling_max": 0.9805787073439219
+        },
+        {
+          "block": "B M5 OVER M4 UNDER TM",
+          "self_min": 0.9798953518595952,
+          "self_max": 1.5133301017935046,
+          "self_mean": 1.158239077927041,
+          "coupling_min": 0.7445467617095481,
+          "coupling_max": 0.8142923152453289
+        },
+        {
+          "block": "B M5 OVER M4 UNDER RDL",
+          "self_min": 0.9758724542920162,
+          "self_max": 1.1306765523632991,
+          "self_mean": 1.0538960111890499,
+          "coupling_min": 0.7517829408222131,
+          "coupling_max": 0.8240794038488464
+        },
+        {
+          "block": "B M5 OVER M3 UNDER TM",
+          "self_min": 0.9500461775269369,
+          "self_max": 1.3032124352331607,
+          "self_mean": 1.0607838212347482,
+          "coupling_min": 0.8547486033519552,
+          "coupling_max": 0.9196591984853265
+        },
+        {
+          "block": "B M5 OVER M3 UNDER RDL",
+          "self_min": 0.9466205563749174,
+          "self_max": 1.064936632468316,
+          "self_mean": 0.9946477714242742,
+          "coupling_min": 0.9058020477815699,
+          "coupling_max": 0.9487861429350791
+        },
+        {
+          "block": "B M5 OVER M2 UNDER TM",
+          "self_min": 0.9473710890767889,
+          "self_max": 1.2191476768274636,
+          "self_mean": 1.033075560295765,
+          "coupling_min": 0.8611463091203772,
+          "coupling_max": 0.9442126847203564
+        },
+        {
+          "block": "B M5 OVER M2 UNDER RDL",
+          "self_min": 0.9440146293430861,
+          "self_max": 1.0337151904628854,
+          "self_mean": 0.9785688304475509,
+          "coupling_min": 0.9275941528047815,
+          "coupling_max": 0.9795002707511411
+        },
+        {
+          "block": "B M5 OVER M1 UNDER TM",
+          "self_min": 0.9467825032831599,
+          "self_max": 1.1767587939698492,
+          "self_mean": 1.0213482256064184,
+          "coupling_min": 0.862426225301514,
+          "coupling_max": 0.9502564102564102
+        },
+        {
+          "block": "B M5 OVER M1 UNDER RDL",
+          "self_min": 0.9434362644512287,
+          "self_max": 1.0159003360380296,
+          "self_mean": 0.9717619547636591,
+          "coupling_min": 0.9406074517358692,
+          "coupling_max": 0.987583649117149
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9464179540667734,
+          "self_max": 1.1366710296684117,
+          "self_mean": 1.0114836606160944,
+          "coupling_min": 0.8644894531123818,
+          "coupling_max": 0.954125685111495
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.943063624203949,
+          "self_max": 0.996268656716418,
+          "self_mean": 0.9656944419606729,
+          "coupling_min": 0.9592121804721331,
+          "coupling_max": 0.9934298070525616
+        },
+        {
+          "block": "B TM OVER M5 UNDER RDL",
+          "self_min": 0.9583917183791358,
+          "self_max": 1.4849498327759196,
+          "self_mean": 1.1404321595625293,
+          "coupling_min": 0.8480387083419582,
+          "coupling_max": 0.8922327872608545
+        },
+        {
+          "block": "B TM OVER M4 UNDER RDL",
+          "self_min": 0.9489442953205856,
+          "self_max": 1.3598673300165838,
+          "self_mean": 1.086829554620574,
+          "coupling_min": 0.8857493128744587,
+          "coupling_max": 0.912305427273528
+        },
+        {
+          "block": "B TM OVER M3 UNDER RDL",
+          "self_min": 0.9456011050627505,
+          "self_max": 1.279874213836478,
+          "self_mean": 1.056420524189574,
+          "coupling_min": 0.9028041074249605,
+          "coupling_max": 0.9216040606439097
+        },
+        {
+          "block": "B TM OVER M2 UNDER RDL",
+          "self_min": 0.943643819566491,
+          "self_max": 1.2257818459191456,
+          "self_mean": 1.0362794644900153,
+          "coupling_min": 0.9127253672831719,
+          "coupling_max": 0.9266525225250049
+        },
+        {
+          "block": "B TM OVER M1 UNDER RDL",
+          "self_min": 0.9425120383073736,
+          "self_max": 1.1861027190332325,
+          "self_mean": 1.0223635517064507,
+          "coupling_min": 0.9191563085477145,
+          "coupling_max": 0.929876410531972
+        },
+        {
+          "block": "B TM OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9411843384129759,
+          "self_max": 1.1187554776511832,
+          "self_mean": 1.0008486304793203,
+          "coupling_min": 0.9283112022456252,
+          "coupling_max": 0.9351170764586936
+        }
+      ]
+    },
+    "Cworst": {
+      "source": "libs.tech/pex/starrc/kCaptabCworst.txt",
+      "blocks_compared": 84,
+      "self_mean_over_blocks": 0.9355109473707403,
+      "self_min": 0.14705882352941177,
+      "self_max": 1.083673127408814,
+      "per_block": [
+        {
+          "block": "A M1 OVER SUBSTRATE",
+          "self_min": 0.9710796915167094,
+          "self_max": 1.0414261043725284,
+          "self_mean": 1.0090316799338501,
+          "coupling_min": 1.02536831324352,
+          "coupling_max": 1.0608836789900813
+        },
+        {
+          "block": "A M2 OVER M1",
+          "self_min": 0.8867294260552687,
+          "self_max": 1.0059125446585822,
+          "self_mean": 0.9268625587507175,
+          "coupling_min": 1.445733720116035,
+          "coupling_max": 1.780692868719611
+        },
+        {
+          "block": "A M2 OVER SUBSTRATE",
+          "self_min": 1.0087062158331648,
+          "self_max": 1.083673127408814,
+          "self_mean": 1.0511711189219441,
+          "coupling_min": 1.0173164017405203,
+          "coupling_max": 1.0709945900957136
+        },
+        {
+          "block": "A M3 OVER M2",
+          "self_min": 0.8908872901678656,
+          "self_max": 1.0058662101261362,
+          "self_mean": 0.9274748844595523,
+          "coupling_min": 1.4447421410860197,
+          "coupling_max": 1.7788778877887788
+        },
+        {
+          "block": "A M3 OVER M1",
+          "self_min": 0.9438645980253879,
+          "self_max": 1.0764586160108547,
+          "self_mean": 1.0123601045210955,
+          "coupling_min": 1.0887222742892846,
+          "coupling_max": 1.1473960821786908
+        },
+        {
+          "block": "A M3 OVER SUBSTRATE",
+          "self_min": 1.0173446580241394,
+          "self_max": 1.0831750685813926,
+          "self_mean": 1.0530296221212767,
+          "coupling_min": 1.0077843174482628,
+          "coupling_max": 1.0608095054095827
+        },
+        {
+          "block": "A M4 OVER M3",
+          "self_min": 0.8957627118644068,
+          "self_max": 1.0059791863765375,
+          "self_mean": 0.9297391193800367,
+          "coupling_min": 1.4427382176378891,
+          "coupling_max": 1.7714609815500617
+        },
+        {
+          "block": "A M4 OVER M2",
+          "self_min": 0.9472317156527683,
+          "self_max": 1.0766860741714053,
+          "self_mean": 1.0137767678463998,
+          "coupling_min": 1.0865774378585085,
+          "coupling_max": 1.1432259073842301
+        },
+        {
+          "block": "A M4 OVER M1",
+          "self_min": 0.9812455407196005,
+          "self_max": 1.0818772901957279,
+          "self_mean": 1.0381695684488392,
+          "coupling_min": 1.0274021037744188,
+          "coupling_max": 1.0983365349245924
+        },
+        {
+          "block": "A M4 OVER SUBSTRATE",
+          "self_min": 1.024499067088505,
+          "self_max": 1.0834887024459539,
+          "self_mean": 1.0562093992841093,
+          "coupling_min": 1.004002287021155,
+          "coupling_max": 1.049475890985325
+        },
+        {
+          "block": "A M5 OVER M4",
+          "self_min": 0.8956970057505453,
+          "self_max": 1.003453980460978,
+          "self_mean": 0.9344640757099861,
+          "coupling_min": 1.4264237118797278,
+          "coupling_max": 1.735255653727154
+        },
+        {
+          "block": "A M5 OVER M3",
+          "self_min": 0.9472343136214034,
+          "self_max": 1.0670944683616277,
+          "self_mean": 1.0066867011730245,
+          "coupling_min": 1.0733194733194733,
+          "coupling_max": 1.1373458536033487
+        },
+        {
+          "block": "A M5 OVER M2",
+          "self_min": 0.9774062732765041,
+          "self_max": 1.0718690773442434,
+          "self_mean": 1.028044938997692,
+          "coupling_min": 1.018721857966664,
+          "coupling_max": 1.094041918517937
+        },
+        {
+          "block": "A M5 OVER M1",
+          "self_min": 0.9959810010960907,
+          "self_max": 1.0728167945030362,
+          "self_mean": 1.0370126816702643,
+          "coupling_min": 1.0052883820856058,
+          "coupling_max": 1.0726366794660815
+        },
+        {
+          "block": "A M5 OVER SUBSTRATE",
+          "self_min": 1.0194200065167809,
+          "self_max": 1.0734295669487308,
+          "self_mean": 1.0453418085321917,
+          "coupling_min": 0.9955414558861356,
+          "coupling_max": 1.0388162127385805
+        },
+        {
+          "block": "A TM OVER M5",
+          "self_min": 0.8736691562053075,
+          "self_max": 1.0315538030543872,
+          "self_mean": 0.9536819145832985,
+          "coupling_min": 1.235655524315318,
+          "coupling_max": 1.352217453505007
+        },
+        {
+          "block": "A TM OVER M4",
+          "self_min": 0.8950317519611506,
+          "self_max": 1.0466570138829743,
+          "self_mean": 0.9761391506825063,
+          "coupling_min": 1.1703682817854508,
+          "coupling_max": 1.2063329567918668
+        },
+        {
+          "block": "A TM OVER M3",
+          "self_min": 0.9126009862553771,
+          "self_max": 1.0531138453785747,
+          "self_mean": 0.9909540568911709,
+          "coupling_min": 1.111430715357679,
+          "coupling_max": 1.1555001457206697
+        },
+        {
+          "block": "A TM OVER M2",
+          "self_min": 0.9263304025913929,
+          "self_max": 1.0563402581602126,
+          "self_mean": 1.0008005695672801,
+          "coupling_min": 1.069778600315306,
+          "coupling_max": 1.1310705661389857
+        },
+        {
+          "block": "A TM OVER M1",
+          "self_min": 0.9375526005722943,
+          "self_max": 1.0581742490836414,
+          "self_mean": 1.007904162226912,
+          "coupling_min": 1.0441743686776799,
+          "coupling_max": 1.1164231807796166
+        },
+        {
+          "block": "A TM OVER SUBSTRATE",
+          "self_min": 0.9621239979407222,
+          "self_max": 1.0603561325228668,
+          "self_mean": 1.020490021609803,
+          "coupling_min": 1.0117169192313702,
+          "coupling_max": 1.0869816333602864
+        },
+        {
+          "block": "A RDL OVER TM",
+          "self_min": 0.8891852570320078,
+          "self_max": 1.0384615384615385,
+          "self_mean": 0.9626448085321521,
+          "coupling_min": 1.0703766869345988,
+          "coupling_max": 1.0961569043201698
+        },
+        {
+          "block": "A RDL OVER M5",
+          "self_min": 0.8621399176954733,
+          "self_max": 0.9448621553884712,
+          "self_mean": 0.8916414541829855,
+          "coupling_min": 1.0520650975815342,
+          "coupling_max": 1.1002662870099396
+        },
+        {
+          "block": "A RDL OVER M4",
+          "self_min": 0.8575691806836679,
+          "self_max": 0.9361065534214843,
+          "self_mean": 0.8861733817492126,
+          "coupling_min": 1.0498355993957167,
+          "coupling_max": 1.0999755411520118
+        },
+        {
+          "block": "A RDL OVER M3",
+          "self_min": 0.8518387553041019,
+          "self_max": 0.9382727547907886,
+          "self_mean": 0.8826390046413164,
+          "coupling_min": 1.0479818820413411,
+          "coupling_max": 1.0993407356002778
+        },
+        {
+          "block": "A RDL OVER M2",
+          "self_min": 0.8492354740061162,
+          "self_max": 0.9406292440018108,
+          "self_mean": 0.8814064839143311,
+          "coupling_min": 1.0467868643980884,
+          "coupling_max": 1.0983847852190418
+        },
+        {
+          "block": "A RDL OVER M1",
+          "self_min": 0.8466029723991507,
+          "self_max": 0.9427124789953127,
+          "self_mean": 0.8812282439906154,
+          "coupling_min": 1.0459250239192832,
+          "coupling_max": 1.097170656766099
+        },
+        {
+          "block": "A RDL OVER SUBSTRATE",
+          "self_min": 0.8520365752285952,
+          "self_max": 0.9483857218966436,
+          "self_mean": 0.8907833739961181,
+          "coupling_min": 1.038862718707941,
+          "coupling_max": 1.083576532152561
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M2",
+          "self_min": 0.6598414795244387,
+          "self_max": 0.9656315124184346,
+          "self_mean": 0.8200316901820414,
+          "coupling_min": 1.3763896475868485,
+          "coupling_max": 1.7234704572252064
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M3",
+          "self_min": 0.7961348102757483,
+          "self_max": 1.0348265430237757,
+          "self_mean": 0.9438925057354653,
+          "coupling_min": 1.08761309207025,
+          "coupling_max": 1.134344455679137
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.8669282327938532,
+          "self_max": 1.0396049789116346,
+          "self_mean": 0.9775206537845347,
+          "coupling_min": 1.0443969960241495,
+          "coupling_max": 1.0960197229701234
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.9057569886520896,
+          "self_max": 1.0405817018265355,
+          "self_mean": 0.9911871261613175,
+          "coupling_min": 1.0345403476808623,
+          "coupling_max": 1.081904700868395
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9310426822018785,
+          "self_max": 1.0409815097158412,
+          "self_mean": 0.998872198436089,
+          "coupling_min": 1.030060587230076,
+          "coupling_max": 1.0756435371344124
+        },
+        {
+          "block": "B M1 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9614479435167544,
+          "self_max": 1.041359072411607,
+          "self_mean": 1.0067805617615757,
+          "coupling_min": 1.0262292514876292,
+          "coupling_max": 1.0634533898305085
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M3",
+          "self_min": 0.14705882352941177,
+          "self_max": 0.9053971486761712,
+          "self_mean": 0.4897181496214363,
+          "coupling_min": 1.548521637189589,
+          "coupling_max": 1.945485725814587
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M4",
+          "self_min": 0.49482758620689654,
+          "self_max": 0.9957621114732138,
+          "self_mean": 0.7792589065719498,
+          "coupling_min": 1.412502215133794,
+          "coupling_max": 1.752581155241373
+        },
+        {
+          "block": "B M2 OVER M1 UNDER M5",
+          "self_min": 0.6597938144329897,
+          "self_max": 1.0029568152688417,
+          "self_mean": 0.8561449225891624,
+          "coupling_min": 1.4257153567412222,
+          "coupling_max": 1.767084301089339
+        },
+        {
+          "block": "B M2 OVER M1 UNDER TM",
+          "self_min": 0.7705905986339896,
+          "self_max": 1.0049044947361785,
+          "self_mean": 0.8959860239958556,
+          "coupling_min": 1.442153475029339,
+          "coupling_max": 1.7781164177104964
+        },
+        {
+          "block": "B M2 OVER M1 UNDER RDL",
+          "self_min": 0.863621095062143,
+          "self_max": 1.0057914085712847,
+          "self_mean": 0.9212191588765947,
+          "coupling_min": 1.442694214876033,
+          "coupling_max": 1.7788513331537839
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M3",
+          "self_min": 0.7583497053045186,
+          "self_max": 1.0062379061004176,
+          "self_mean": 0.890025726015477,
+          "coupling_min": 1.4209688182479983,
+          "coupling_max": 1.7612646965363838
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.8505329457364341,
+          "self_max": 1.0763412850744905,
+          "self_mean": 0.9892467816199256,
+          "coupling_min": 1.0963015647226175,
+          "coupling_max": 1.1485492712929537
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.908477366255144,
+          "self_max": 1.0817103958164276,
+          "self_mean": 1.0197789093370697,
+          "coupling_min": 1.0424704165991248,
+          "coupling_max": 1.1114138661822586
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9459361830222758,
+          "self_max": 1.082906777477851,
+          "self_mean": 1.0345464565351148,
+          "coupling_min": 1.027122743370476,
+          "coupling_max": 1.1026944205687805
+        },
+        {
+          "block": "B M2 OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.9966366496690897,
+          "self_max": 1.083616640572579,
+          "self_mean": 1.0485047772199367,
+          "coupling_min": 1.0186144525419265,
+          "coupling_max": 1.0756773962519397
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M4",
+          "self_min": 0.14705882352941177,
+          "self_max": 0.9053971486761712,
+          "self_mean": 0.4897181496214363,
+          "coupling_min": 1.548521637189589,
+          "coupling_max": 1.945485725814587
+        },
+        {
+          "block": "B M3 OVER M2 UNDER M5",
+          "self_min": 0.49482758620689654,
+          "self_max": 0.9957621114732138,
+          "self_mean": 0.7792589065719498,
+          "coupling_min": 1.412502215133794,
+          "coupling_max": 1.752581155241373
+        },
+        {
+          "block": "B M3 OVER M2 UNDER TM",
+          "self_min": 0.7113729043951064,
+          "self_max": 1.0040791584052131,
+          "self_mean": 0.877591309368316,
+          "coupling_min": 1.4406847968017025,
+          "coupling_max": 1.7764130217695226
+        },
+        {
+          "block": "B M3 OVER M2 UNDER RDL",
+          "self_min": 0.8622795115332429,
+          "self_max": 1.0057333669354838,
+          "self_mean": 0.9206021250830431,
+          "coupling_min": 1.4410190537358167,
+          "coupling_max": 1.7765250654318503
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M4",
+          "self_min": 0.5009009009009008,
+          "self_max": 0.9971138483739628,
+          "self_mean": 0.7803946012620643,
+          "coupling_min": 1.414377632869756,
+          "coupling_max": 1.757995735607676
+        },
+        {
+          "block": "B M3 OVER M1 UNDER M5",
+          "self_min": 0.6937014667817083,
+          "self_max": 1.0688368546905864,
+          "self_mean": 0.9248896243914277,
+          "coupling_min": 1.1481937071086366,
+          "coupling_max": 1.2001248612652609
+        },
+        {
+          "block": "B M3 OVER M1 UNDER TM",
+          "self_min": 0.8180784536668562,
+          "self_max": 1.0750652297220646,
+          "self_mean": 0.9786882484155218,
+          "coupling_min": 1.101242800848742,
+          "coupling_max": 1.1719518963922293
+        },
+        {
+          "block": "B M3 OVER M1 UNDER RDL",
+          "self_min": 0.9234828496042217,
+          "self_max": 1.0764180523640807,
+          "self_mean": 1.0079491035267834,
+          "coupling_min": 1.0890675738364002,
+          "coupling_max": 1.1474314136939456
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M4",
+          "self_min": 0.7961518460738429,
+          "self_max": 1.0062723674393315,
+          "self_mean": 0.9009393824962464,
+          "coupling_min": 1.4297109449100494,
+          "coupling_max": 1.7754929394156307
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.8760718660677828,
+          "self_max": 1.0759351366082988,
+          "self_mean": 0.9952413374599881,
+          "coupling_min": 1.0924590656451856,
+          "coupling_max": 1.149098124098124
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.9301270417422869,
+          "self_max": 1.0818094643414655,
+          "self_mean": 1.0279901782335585,
+          "coupling_min": 1.026150912557886,
+          "coupling_max": 1.1187334030739517
+        },
+        {
+          "block": "B M3 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0041800330514243,
+          "self_max": 1.083141468406242,
+          "self_mean": 1.0502081025256969,
+          "coupling_min": 1.0092419716206125,
+          "coupling_max": 1.0677507995855668
+        },
+        {
+          "block": "B M4 OVER M3 UNDER M5",
+          "self_min": 0.14705882352941177,
+          "self_max": 0.9053971486761712,
+          "self_mean": 0.4897181496214363,
+          "coupling_min": 1.548521637189589,
+          "coupling_max": 1.945485725814587
+        },
+        {
+          "block": "B M4 OVER M3 UNDER TM",
+          "self_min": 0.6050288108957569,
+          "self_max": 1.0021567035420682,
+          "self_mean": 0.8403704561347293,
+          "coupling_min": 1.4388109679049785,
+          "coupling_max": 1.769761359921543
+        },
+        {
+          "block": "B M4 OVER M3 UNDER RDL",
+          "self_min": 0.8648293963254593,
+          "self_max": 1.0056709820018945,
+          "self_mean": 0.9206249405531225,
+          "coupling_min": 1.4385301579507326,
+          "coupling_max": 1.7691975554669856
+        },
+        {
+          "block": "B M4 OVER M2 UNDER M5",
+          "self_min": 0.5009009009009008,
+          "self_max": 0.9971138483739628,
+          "self_mean": 0.7803946012620643,
+          "coupling_min": 1.414377632869756,
+          "coupling_max": 1.757995735607676
+        },
+        {
+          "block": "B M4 OVER M2 UNDER TM",
+          "self_min": 0.7401406949477723,
+          "self_max": 1.0735888819274362,
+          "self_mean": 0.9530465239333891,
+          "coupling_min": 1.113591738782634,
+          "coupling_max": 1.1914463831713857
+        },
+        {
+          "block": "B M4 OVER M2 UNDER RDL",
+          "self_min": 0.9232661848377671,
+          "self_max": 1.076497277676951,
+          "self_mean": 1.007620906744012,
+          "coupling_min": 1.088299720522698,
+          "coupling_max": 1.1456071076011844
+        },
+        {
+          "block": "B M4 OVER M1 UNDER M5",
+          "self_min": 0.6692307692307693,
+          "self_max": 1.0042404082979965,
+          "self_mean": 0.8586403977039564,
+          "coupling_min": 1.425428467242008,
+          "coupling_max": 1.7719951228903292
+        },
+        {
+          "block": "B M4 OVER M1 UNDER TM",
+          "self_min": 0.8136655229001939,
+          "self_max": 1.078888214534583,
+          "self_mean": 0.9875505547409218,
+          "coupling_min": 1.0613634476459355,
+          "coupling_max": 1.1675265017667846
+        },
+        {
+          "block": "B M4 OVER M1 UNDER RDL",
+          "self_min": 0.9620267513035593,
+          "self_max": 1.0817285635958778,
+          "self_mean": 1.0333589864444706,
+          "coupling_min": 1.029986962190352,
+          "coupling_max": 1.1035697870384558
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER M5",
+          "self_min": 0.8250883392226149,
+          "self_max": 1.0066251072636416,
+          "self_mean": 0.9106537579827427,
+          "coupling_min": 1.4346394934954485,
+          "coupling_max": 1.7800216372160116
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.8887999084772908,
+          "self_max": 1.0805211639029186,
+          "self_mean": 1.0124642523605616,
+          "coupling_min": 1.0424611581920904,
+          "coupling_max": 1.1525060410008574
+        },
+        {
+          "block": "B M4 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0101591297311876,
+          "self_max": 1.0833611352060675,
+          "self_mean": 1.0524959879975286,
+          "coupling_min": 1.0073529411764706,
+          "coupling_max": 1.062330880607643
+        },
+        {
+          "block": "B M5 OVER M4 UNDER TM",
+          "self_min": 0.4580707707222491,
+          "self_max": 0.9923604597285477,
+          "self_mean": 0.7740564230917779,
+          "coupling_min": 1.429231524532879,
+          "coupling_max": 1.7473613363110716
+        },
+        {
+          "block": "B M5 OVER M4 UNDER RDL",
+          "self_min": 0.8621408711770157,
+          "self_max": 1.0031572936842932,
+          "self_mean": 0.9254658891815409,
+          "coupling_min": 1.4202150002333576,
+          "coupling_max": 1.7318140036134266
+        },
+        {
+          "block": "B M5 OVER M3 UNDER TM",
+          "self_min": 0.6068393782383419,
+          "self_max": 1.0575679835813239,
+          "self_mean": 0.8878166118425274,
+          "coupling_min": 1.154559798043547,
+          "coupling_max": 1.2605052222492106
+        },
+        {
+          "block": "B M5 OVER M3 UNDER RDL",
+          "self_min": 0.9210621605310801,
+          "self_max": 1.066927732289071,
+          "self_mean": 1.0002901993500406,
+          "coupling_min": 1.0747408619749046,
+          "coupling_max": 1.1390217391304347
+        },
+        {
+          "block": "B M5 OVER M2 UNDER TM",
+          "self_min": 0.6907369044095887,
+          "self_max": 1.062554494393414,
+          "self_mean": 0.9248012139131196,
+          "coupling_min": 1.1148978293148555,
+          "coupling_max": 1.2492847186560045
+        },
+        {
+          "block": "B M5 OVER M2 UNDER RDL",
+          "self_min": 0.9559467262736333,
+          "self_max": 1.0717400478266985,
+          "self_mean": 1.022922432830545,
+          "coupling_min": 1.0210412315309043,
+          "coupling_max": 1.0995535392813423
+        },
+        {
+          "block": "B M5 OVER M1 UNDER TM",
+          "self_min": 0.7384422110552764,
+          "self_max": 1.0635821800181837,
+          "self_mean": 0.9409646552987411,
+          "coupling_min": 1.1065201465201464,
+          "coupling_max": 1.2504127876339364
+        },
+        {
+          "block": "B M5 OVER M1 UNDER RDL",
+          "self_min": 0.9774608638636179,
+          "self_max": 1.0727290926380062,
+          "self_mean": 1.0325848585599149,
+          "coupling_min": 1.0079819398532612,
+          "coupling_max": 1.0818133377054557
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER TM",
+          "self_min": 0.787849040139616,
+          "self_max": 1.0641936491620563,
+          "self_mean": 0.9550200586528056,
+          "coupling_min": 1.1012087994594189,
+          "coupling_max": 1.2487751564031053
+        },
+        {
+          "block": "B M5 OVER SUBSTRATE UNDER RDL",
+          "self_min": 1.0037313432835822,
+          "self_max": 1.0733365275199138,
+          "self_mean": 1.0414913452078831,
+          "coupling_min": 0.9989188290086495,
+          "coupling_max": 1.0548959351864786
+        },
+        {
+          "block": "B TM OVER M5 UNDER RDL",
+          "self_min": 0.5986622073578595,
+          "self_max": 1.0237353084160257,
+          "self_mean": 0.8419137484087859,
+          "coupling_min": 1.167476228663077,
+          "coupling_max": 1.2786172635065203
+        },
+        {
+          "block": "B TM OVER M4 UNDER RDL",
+          "self_min": 0.6650082918739635,
+          "self_max": 1.0403556834638552,
+          "self_mean": 0.8903052076458406,
+          "coupling_min": 1.1165737583208548,
+          "coupling_max": 1.1706891216903152
+        },
+        {
+          "block": "B TM OVER M3 UNDER RDL",
+          "self_min": 0.7180293501048217,
+          "self_max": 1.0474649896854753,
+          "self_mean": 0.9220125323494003,
+          "coupling_min": 1.0980214990898098,
+          "coupling_max": 1.1340201211126926
+        },
+        {
+          "block": "B TM OVER M2 UNDER RDL",
+          "self_min": 0.7581998474446987,
+          "self_max": 1.0510387093866884,
+          "self_mean": 0.942867586695968,
+          "coupling_min": 1.088681012867495,
+          "coupling_max": 1.1149197226783434
+        },
+        {
+          "block": "B TM OVER M1 UNDER RDL",
+          "self_min": 0.7885196374622356,
+          "self_max": 1.0530851245079316,
+          "self_mean": 0.957796644156805,
+          "coupling_min": 1.083175429169377,
+          "coupling_max": 1.1034826086015455
+        },
+        {
+          "block": "B TM OVER SUBSTRATE UNDER RDL",
+          "self_min": 0.8523225241016651,
+          "self_max": 1.0555164204124945,
+          "self_mean": 0.9836233827592963,
+          "coupling_min": 1.0747443073586729,
+          "coupling_max": 1.087724456103849
+        }
+      ]
+    }
+  },
+  "captab_reference_shape": {
+    "A M1 OVER SUBSTRATE": [
+      [
+        0.09,
+        0.097861,
+        0.012693
+      ],
+      [
+        0.18,
+        0.056167,
+        0.015503
+      ],
+      [
+        0.225,
+        0.046748,
+        0.016701
+      ],
+      [
+        0.27,
+        0.040157,
+        0.017801
+      ],
+      [
+        0.315,
+        0.035238,
+        0.018826
+      ],
+      [
+        0.36,
+        0.031292,
+        0.019777
+      ],
+      [
+        0.405,
+        0.028072,
+        0.020665
+      ],
+      [
+        0.45,
+        0.02541,
+        0.021501
+      ],
+      [
+        0.54,
+        0.021248,
+        0.023044
+      ],
+      [
+        0.72,
+        0.015602,
+        0.025664
+      ],
+      [
+        0.9,
+        0.01188,
+        0.027725
+      ],
+      [
+        1.08,
+        0.009336,
+        0.029403
+      ]
+    ],
+    "A M2 OVER M1": [
+      [
+        0.1,
+        0.079492,
+        0.029616
+      ],
+      [
+        0.2,
+        0.040228,
+        0.038307
+      ],
+      [
+        0.25,
+        0.031558,
+        0.041584
+      ],
+      [
+        0.3,
+        0.025653,
+        0.044361
+      ],
+      [
+        0.35,
+        0.021296,
+        0.046685
+      ],
+      [
+        0.4,
+        0.01792,
+        0.048598
+      ],
+      [
+        0.45,
+        0.015312,
+        0.050237
+      ],
+      [
+        0.5,
+        0.013251,
+        0.051654
+      ],
+      [
+        0.6,
+        0.010235,
+        0.053984
+      ],
+      [
+        0.8,
+        0.006513,
+        0.056985
+      ],
+      [
+        1.0,
+        0.004485,
+        0.058773
+      ],
+      [
+        1.2,
+        0.003293,
+        0.059982
+      ]
+    ],
+    "A M2 OVER SUBSTRATE": [
+      [
+        0.1,
+        0.089515,
+        0.011261
+      ],
+      [
+        0.2,
+        0.051564,
+        0.013527
+      ],
+      [
+        0.25,
+        0.043115,
+        0.014463
+      ],
+      [
+        0.3,
+        0.037236,
+        0.01531
+      ],
+      [
+        0.35,
+        0.032802,
+        0.016083
+      ],
+      [
+        0.4,
+        0.029279,
+        0.016791
+      ],
+      [
+        0.45,
+        0.02645,
+        0.017451
+      ],
+      [
+        0.5,
+        0.024119,
+        0.018069
+      ],
+      [
+        0.6,
+        0.020483,
+        0.019208
+      ],
+      [
+        0.8,
+        0.015453,
+        0.021127
+      ],
+      [
+        1.0,
+        0.012167,
+        0.0227
+      ],
+      [
+        1.2,
+        0.009878,
+        0.02403
+      ]
+    ]
+  },
+  "itf_corner_deltas": {
+    "Rcbest": [
+      {
+        "conductor": "RDL",
+        "rpsq_typ": 0.0151,
+        "rpsq_corner": 0.01174,
+        "rpsq_ratio": 0.7774834437086092,
+        "thickness_typ": 1.45,
+        "thickness_corner": 1.595,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "TM",
+        "rpsq_typ": 0.0239,
+        "rpsq_corner": 0.01688,
+        "rpsq_ratio": 0.706276150627615,
+        "thickness_typ": 0.9,
+        "thickness_corner": 0.99,
+        "thickness_ratio": 1.0999999999999999
+      },
+      {
+        "conductor": "M5",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M4",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M3",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M2",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M1",
+        "rpsq_typ": 0.1122,
+        "rpsq_corner": 0.0827,
+        "rpsq_ratio": 0.7370766488413547,
+        "thickness_typ": 0.18,
+        "thickness_corner": 0.198,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "NPOLY",
+        "rpsq_typ": 11.1,
+        "rpsq_corner": 7.33,
+        "rpsq_ratio": 0.6603603603603604,
+        "thickness_typ": 0.1,
+        "thickness_corner": 0.11,
+        "thickness_ratio": 1.0999999999999999
+      },
+      {
+        "conductor": "PPOLY",
+        "rpsq_typ": 10.252,
+        "rpsq_corner": 6.5715,
+        "rpsq_ratio": 0.6409968786578228,
+        "thickness_typ": 0.1,
+        "thickness_corner": 0.11,
+        "thickness_ratio": 1.0999999999999999
+      },
+      {
+        "conductor": "NDIFF",
+        "rpsq_typ": 11.5,
+        "rpsq_corner": 7.77,
+        "rpsq_ratio": 0.6756521739130434,
+        "thickness_typ": 0.15,
+        "thickness_corner": 0.165,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "PDIFF",
+        "rpsq_typ": 10.22,
+        "rpsq_corner": 6.5306,
+        "rpsq_ratio": 0.6390019569471623,
+        "thickness_typ": 0.15,
+        "thickness_corner": 0.165,
+        "thickness_ratio": 1.1
+      }
+    ],
+    "Rcworst": [
+      {
+        "conductor": "RDL",
+        "rpsq_typ": 0.0151,
+        "rpsq_corner": 0.01846,
+        "rpsq_ratio": 1.2225165562913907,
+        "thickness_typ": 1.45,
+        "thickness_corner": 1.305,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "TM",
+        "rpsq_typ": 0.0239,
+        "rpsq_corner": 0.03092,
+        "rpsq_ratio": 1.2937238493723848,
+        "thickness_typ": 0.9,
+        "thickness_corner": 0.81,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "M5",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.1175,
+        "rpsq_ratio": 1.285557986870897,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.189,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "M4",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.1175,
+        "rpsq_ratio": 1.285557986870897,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.189,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "M3",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.1175,
+        "rpsq_ratio": 1.285557986870897,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.189,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "M2",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.1175,
+        "rpsq_ratio": 1.285557986870897,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.189,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "M1",
+        "rpsq_typ": 0.1122,
+        "rpsq_corner": 0.1417,
+        "rpsq_ratio": 1.2629233511586453,
+        "thickness_typ": 0.18,
+        "thickness_corner": 0.162,
+        "thickness_ratio": 0.9
+      },
+      {
+        "conductor": "NPOLY",
+        "rpsq_typ": 11.1,
+        "rpsq_corner": 14.87,
+        "rpsq_ratio": 1.3396396396396395,
+        "thickness_typ": 0.1,
+        "thickness_corner": 0.09,
+        "thickness_ratio": 0.8999999999999999
+      },
+      {
+        "conductor": "PPOLY",
+        "rpsq_typ": 10.252,
+        "rpsq_corner": 13.9325,
+        "rpsq_ratio": 1.359003121342177,
+        "thickness_typ": 0.1,
+        "thickness_corner": 0.09,
+        "thickness_ratio": 0.8999999999999999
+      },
+      {
+        "conductor": "NDIFF",
+        "rpsq_typ": 11.5,
+        "rpsq_corner": 15.23,
+        "rpsq_ratio": 1.3243478260869566,
+        "thickness_typ": 0.15,
+        "thickness_corner": 0.135,
+        "thickness_ratio": 0.9000000000000001
+      },
+      {
+        "conductor": "PDIFF",
+        "rpsq_typ": 10.22,
+        "rpsq_corner": 13.9094,
+        "rpsq_ratio": 1.3609980430528374,
+        "thickness_typ": 0.15,
+        "thickness_corner": 0.135,
+        "thickness_ratio": 0.9000000000000001
+      }
+    ],
+    "Cworst": [
+      {
+        "conductor": "RDL",
+        "rpsq_typ": 0.0151,
+        "rpsq_corner": 0.01174,
+        "rpsq_ratio": 0.7774834437086092,
+        "thickness_typ": 1.45,
+        "thickness_corner": 1.595,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "TM",
+        "rpsq_typ": 0.0239,
+        "rpsq_corner": 0.01688,
+        "rpsq_ratio": 0.706276150627615,
+        "thickness_typ": 0.9,
+        "thickness_corner": 0.99,
+        "thickness_ratio": 1.0999999999999999
+      },
+      {
+        "conductor": "M5",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M4",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M3",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M2",
+        "rpsq_typ": 0.0914,
+        "rpsq_corner": 0.0653,
+        "rpsq_ratio": 0.7144420131291028,
+        "thickness_typ": 0.21,
+        "thickness_corner": 0.231,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "M1",
+        "rpsq_typ": 0.1122,
+        "rpsq_corner": 0.0827,
+        "rpsq_ratio": 0.7370766488413547,
+        "thickness_typ": 0.18,
+        "thickness_corner": 0.198,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "NPOLY",
+        "rpsq_typ": 11.1,
+        "rpsq_corner": 7.33,
+        "rpsq_ratio": 0.6603603603603604,
+        "thickness_typ": 0.1,
+        "thickness_corner": 0.11,
+        "thickness_ratio": 1.0999999999999999
+      },
+      {
+        "conductor": "PPOLY",
+        "rpsq_typ": 10.252,
+        "rpsq_corner": 6.5715,
+        "rpsq_ratio": 0.6409968786578228,
+        "thickness_typ": 0.1,
+        "thickness_corner": 0.11,
+        "thickness_ratio": 1.0999999999999999
+      },
+      {
+        "conductor": "NDIFF",
+        "rpsq_typ": 11.5,
+        "rpsq_corner": 7.77,
+        "rpsq_ratio": 0.6756521739130434,
+        "thickness_typ": 0.15,
+        "thickness_corner": 0.165,
+        "thickness_ratio": 1.1
+      },
+      {
+        "conductor": "PDIFF",
+        "rpsq_typ": 10.22,
+        "rpsq_corner": 6.5306,
+        "rpsq_ratio": 0.6390019569471623,
+        "thickness_typ": 0.15,
+        "thickness_corner": 0.165,
+        "thickness_ratio": 1.1
+      }
+    ]
+  }
+}

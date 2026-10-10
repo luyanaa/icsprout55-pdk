@@ -1,0 +1,865 @@
+{
+  "generator": "libs.tech/pex/config_gen.py",
+  "base_source": "released LEF seeds + user-approved estimates",
+  "override_source": "StarRC vendor ITF/CAPTAB under libs.tech/pex/starrc (ICsprout vendor data, educational use only; not Apache-2.0)",
+  "corner_model": {
+    "R axis": "conductor THICKNESS + RPSQ (from ITF)",
+    "C axis": "dielectric stack eps + CAPTAB corner ratio",
+    "vendor pairing": {
+      "typ": "typ x typ",
+      "rcbest": "low R (t x1.1, RPSQ x0.63-0.78)",
+      "rcworst": "high R (t x0.9, RPSQ x1.26-1.36)",
+      "cbest": "low C (dielectrics x1.1 shaped), conductors as rcworst",
+      "cworst": "high C (dielectrics x0.9 shaped), conductors as rcbest"
+    },
+    "mixing": "--rc-corner/--c-corner mix the axes independently"
+  },
+  "liberty_corner_map": {
+    "nom_tt_025C_1v20": {
+      "rc_corner": "typ",
+      "c_corner": "typ"
+    },
+    "nom_ss_125C_1v08": {
+      "rc_corner": "rcworst",
+      "c_corner": "cworst"
+    },
+    "nom_ff_n40C_1v32": {
+      "rc_corner": "rcbest",
+      "c_corner": "cbest"
+    }
+  },
+  "corners": {
+    "typ": {
+      "rc_corner": "typ",
+      "c_corner": "typ",
+      "eps": {
+        "imd": 3.6100700668078867,
+        "pmd": 4.091157702825889,
+        "pass": 4.8999999999999995,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.1122,
+          "thickness_um": 0.18,
+          "sigma_s_m": 49514755.397108346,
+          "cap_pf_um2": 0.000763,
+          "edge_pf_um": 3.39e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0011069,
+          "edge_pf_um": 3.91e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0011069,
+          "edge_pf_um": 4.09e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0011069,
+          "edge_pf_um": 4.09e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0006259,
+          "edge_pf_um": 3.44e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.0239,
+          "thickness_um": 0.9,
+          "sigma_s_m": 46490004.649000466,
+          "cap_pf_um2": 0.0001299,
+          "edge_pf_um": 3.68e-05,
+          "cap_ratio_vs_typ": 1.0
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "V2",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "V3",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "V4",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.25,
+          "cut_um": 0.36,
+          "sigma_s_m": 3703703.703703844
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 30.0,
+        "CT_PP": 29.0,
+        "CT_ND": 37.0,
+        "CT_PD": 36.0
+      }
+    },
+    "rcbest": {
+      "rc_corner": "rcbest",
+      "c_corner": "rcbest",
+      "eps": {
+        "imd": 3.6100700668078867,
+        "pmd": 4.091157702825889,
+        "pass": 4.9,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.0827,
+          "thickness_um": 0.198,
+          "sigma_s_m": 61070194.0810768,
+          "cap_pf_um2": 0.0007795446610127687,
+          "edge_pf_um": 3.463507733726455e-05,
+          "cap_ratio_vs_typ": 1.0216836972644412
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.00112981791538337,
+          "edge_pf_um": 3.9909549635459176e-05,
+          "cap_ratio_vs_typ": 1.020704594257268
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0011306478070079082,
+          "edge_pf_um": 4.1777482434387425e-05,
+          "cap_ratio_vs_typ": 1.0214543382490813
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0011305201661288712,
+          "edge_pf_um": 4.177276609871789e-05,
+          "cap_ratio_vs_typ": 1.0213390244185303
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0006407947022436278,
+          "edge_pf_um": 3.5218625590638754e-05,
+          "cap_ratio_vs_typ": 1.0237972555418242
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.01688,
+          "thickness_um": 0.99,
+          "sigma_s_m": 59840107.23347217,
+          "cap_pf_um2": 0.000133097321137594,
+          "edge_pf_um": 3.7705784587093596e-05,
+          "cap_ratio_vs_typ": 1.0246137116058043
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "V2",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "V3",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "V4",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.225,
+          "cut_um": 0.36,
+          "sigma_s_m": 4115226.3374487157
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 27.0,
+        "CT_PP": 26.1,
+        "CT_ND": 33.3,
+        "CT_PD": 32.4
+      }
+    },
+    "rcworst": {
+      "rc_corner": "rcworst",
+      "c_corner": "rcworst",
+      "eps": {
+        "imd": 3.6100700668078867,
+        "pmd": 4.091157702825888,
+        "pass": 4.8999999999999995,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.1417,
+          "thickness_um": 0.162,
+          "sigma_s_m": 43562734.694233164,
+          "cap_pf_um2": 0.0007483039214088239,
+          "edge_pf_um": 3.324705496167645e-05,
+          "cap_ratio_vs_typ": 0.9807390844152344
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0010861128128217214,
+          "edge_pf_um": 3.836571594663412e-05,
+          "cap_ratio_vs_typ": 0.9812203566914096
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0010848724645889235,
+          "edge_pf_um": 4.0086081671051556e-05,
+          "cap_ratio_vs_typ": 0.9800997963582287
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0010845003701550535,
+          "edge_pf_um": 4.00723327665929e-05,
+          "cap_ratio_vs_typ": 0.9797636373250098
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0006112480116382839,
+          "edge_pf_um": 3.359471417216323e-05,
+          "cap_ratio_vs_typ": 0.976590528260559
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.03092,
+          "thickness_um": 0.81,
+          "sigma_s_m": 39927810.5185824,
+          "cap_pf_um2": 0.00012687805459503384,
+          "edge_pf_um": 3.59438984534045e-05,
+          "cap_ratio_vs_typ": 0.9767363710164267
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734005393
+        },
+        {
+          "via": "V2",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734006989
+        },
+        {
+          "via": "V3",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734006989
+        },
+        {
+          "via": "V4",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734006989
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.275,
+          "cut_um": 0.36,
+          "sigma_s_m": 3367003.3670034944
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 33.0,
+        "CT_PP": 31.9,
+        "CT_ND": 40.7,
+        "CT_PD": 39.6
+      }
+    },
+    "cbest": {
+      "rc_corner": "cbest",
+      "c_corner": "cbest",
+      "eps": {
+        "imd": 3.617756911215444,
+        "pmd": 4.091157702825889,
+        "pass": 4.9,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.1417,
+          "thickness_um": 0.162,
+          "sigma_s_m": 43562734.694233164,
+          "cap_pf_um2": 0.0007430270949531943,
+          "edge_pf_um": 3.301260618468321e-05,
+          "cap_ratio_vs_typ": 0.9738231912885902
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.00106311522794546,
+          "edge_pf_um": 3.75533520757679e-05,
+          "cap_ratio_vs_typ": 0.9604437871040382
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0010641352427965352,
+          "edge_pf_um": 3.9319840482770154e-05,
+          "cap_ratio_vs_typ": 0.9613652929772655
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0010666608259267013,
+          "edge_pf_um": 3.9413160882105046e-05,
+          "cap_ratio_vs_typ": 0.9636469653326418
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0006101149829874585,
+          "edge_pf_um": 3.353244194722571e-05,
+          "cap_ratio_vs_typ": 0.9747802891635381
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.03092,
+          "thickness_um": 0.81,
+          "sigma_s_m": 39927810.5185824,
+          "cap_pf_um2": 0.0001257732657797722,
+          "edge_pf_um": 3.563091748033577e-05,
+          "cap_ratio_vs_typ": 0.9682314532699937
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "V2",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "V3",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "V4",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.25,
+          "cut_um": 0.36,
+          "sigma_s_m": 3703703.703703844
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 30.0,
+        "CT_PP": 29.0,
+        "CT_ND": 37.0,
+        "CT_PD": 36.0
+      }
+    },
+    "cworst": {
+      "rc_corner": "cworst",
+      "c_corner": "cworst",
+      "eps": {
+        "imd": 3.6009309293242735,
+        "pmd": 4.091157702825889,
+        "pass": 4.8999999999999995,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.0827,
+          "thickness_um": 0.198,
+          "sigma_s_m": 61070194.0810768,
+          "cap_pf_um2": 0.0007851879787716034,
+          "edge_pf_um": 3.488580927962956e-05,
+          "cap_ratio_vs_typ": 1.0290799197530844
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0011611946331685928,
+          "edge_pf_um": 4.101789697072181e-05,
+          "cap_ratio_vs_typ": 1.0490510734199952
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.001156028001607846,
+          "edge_pf_um": 4.2715281656663555e-05,
+          "cap_ratio_vs_typ": 1.044383414588351
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0011526263480328629,
+          "edge_pf_um": 4.258959041877684e-05,
+          "cap_ratio_vs_typ": 1.0413102791876978
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0006456047227746721,
+          "edge_pf_um": 3.5482988438167e-05,
+          "cap_ratio_vs_typ": 1.0314822220397382
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.01688,
+          "thickness_um": 0.99,
+          "sigma_s_m": 59840107.23347217,
+          "cap_pf_um2": 0.00013445287634393497,
+          "edge_pf_um": 3.808980638534878e-05,
+          "cap_ratio_vs_typ": 1.0350490865583908
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "V2",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "V3",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "V4",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.25,
+          "cut_um": 0.36,
+          "sigma_s_m": 3703703.703703844
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 30.0,
+        "CT_PP": 29.0,
+        "CT_ND": 37.0,
+        "CT_PD": 36.0
+      }
+    },
+    "nom_tt_025C_1v20": {
+      "rc_corner": "typ",
+      "c_corner": "typ",
+      "eps": {
+        "imd": 3.6100700668078867,
+        "pmd": 4.091157702825889,
+        "pass": 4.8999999999999995,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.1122,
+          "thickness_um": 0.18,
+          "sigma_s_m": 49514755.397108346,
+          "cap_pf_um2": 0.000763,
+          "edge_pf_um": 3.39e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0011069,
+          "edge_pf_um": 3.91e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0011069,
+          "edge_pf_um": 4.09e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0011069,
+          "edge_pf_um": 4.09e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.0914,
+          "thickness_um": 0.21,
+          "sigma_s_m": 52099614.46285298,
+          "cap_pf_um2": 0.0006259,
+          "edge_pf_um": 3.44e-05,
+          "cap_ratio_vs_typ": 1.0
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.0239,
+          "thickness_um": 0.9,
+          "sigma_s_m": 46490004.649000466,
+          "cap_pf_um2": 0.0001299,
+          "edge_pf_um": 3.68e-05,
+          "cap_ratio_vs_typ": 1.0
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407405933
+        },
+        {
+          "via": "V2",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "V3",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "V4",
+          "r_ohm": 2.0,
+          "cut_um": 0.09,
+          "sigma_s_m": 7407407.407407688
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.25,
+          "cut_um": 0.36,
+          "sigma_s_m": 3703703.703703844
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 30.0,
+        "CT_PP": 29.0,
+        "CT_ND": 37.0,
+        "CT_PD": 36.0
+      }
+    },
+    "nom_ss_125C_1v08": {
+      "rc_corner": "rcworst",
+      "c_corner": "cworst",
+      "eps": {
+        "imd": 3.6009309293242735,
+        "pmd": 4.091157702825889,
+        "pass": 4.8999999999999995,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.1417,
+          "thickness_um": 0.162,
+          "sigma_s_m": 43562734.694233164,
+          "cap_pf_um2": 0.0007851879787716034,
+          "edge_pf_um": 3.488580927962956e-05,
+          "cap_ratio_vs_typ": 1.0290799197530844
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0011611946331685928,
+          "edge_pf_um": 4.101789697072181e-05,
+          "cap_ratio_vs_typ": 1.0490510734199952
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.001156028001607846,
+          "edge_pf_um": 4.2715281656663555e-05,
+          "cap_ratio_vs_typ": 1.044383414588351
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0011526263480328629,
+          "edge_pf_um": 4.258959041877684e-05,
+          "cap_ratio_vs_typ": 1.0413102791876978
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.1175,
+          "thickness_um": 0.189,
+          "sigma_s_m": 45029832.26387483,
+          "cap_pf_um2": 0.0006456047227746721,
+          "edge_pf_um": 3.5482988438167e-05,
+          "cap_ratio_vs_typ": 1.0314822220397382
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.03092,
+          "thickness_um": 0.81,
+          "sigma_s_m": 39927810.5185824,
+          "cap_pf_um2": 0.00013445287634393497,
+          "edge_pf_um": 3.808980638534878e-05,
+          "cap_ratio_vs_typ": 1.0350490865583908
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734005393
+        },
+        {
+          "via": "V2",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734006989
+        },
+        {
+          "via": "V3",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734006989
+        },
+        {
+          "via": "V4",
+          "r_ohm": 2.2,
+          "cut_um": 0.09,
+          "sigma_s_m": 6734006.734006989
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.275,
+          "cut_um": 0.36,
+          "sigma_s_m": 3367003.3670034944
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 33.0,
+        "CT_PP": 31.9,
+        "CT_ND": 40.7,
+        "CT_PD": 39.6
+      }
+    },
+    "nom_ff_n40C_1v32": {
+      "rc_corner": "rcbest",
+      "c_corner": "cbest",
+      "eps": {
+        "imd": 3.617756911215444,
+        "pmd": 4.091157702825889,
+        "pass": 4.9,
+        "sub": 11.9
+      },
+      "metals": [
+        {
+          "layer": "M1",
+          "rpsq": 0.0827,
+          "thickness_um": 0.198,
+          "sigma_s_m": 61070194.0810768,
+          "cap_pf_um2": 0.0007430270949531943,
+          "edge_pf_um": 3.301260618468321e-05,
+          "cap_ratio_vs_typ": 0.9738231912885902
+        },
+        {
+          "layer": "M2",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.00106311522794546,
+          "edge_pf_um": 3.75533520757679e-05,
+          "cap_ratio_vs_typ": 0.9604437871040382
+        },
+        {
+          "layer": "M3",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0010641352427965352,
+          "edge_pf_um": 3.9319840482770154e-05,
+          "cap_ratio_vs_typ": 0.9613652929772655
+        },
+        {
+          "layer": "M4",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0010666608259267013,
+          "edge_pf_um": 3.9413160882105046e-05,
+          "cap_ratio_vs_typ": 0.9636469653326418
+        },
+        {
+          "layer": "M5",
+          "rpsq": 0.0653,
+          "thickness_um": 0.231,
+          "sigma_s_m": 66294093.85917808,
+          "cap_pf_um2": 0.0006101149829874585,
+          "edge_pf_um": 3.353244194722571e-05,
+          "cap_ratio_vs_typ": 0.9747802891635381
+        },
+        {
+          "layer": "TM2",
+          "rpsq": 0.01688,
+          "thickness_um": 0.99,
+          "sigma_s_m": 59840107.23347217,
+          "cap_pf_um2": 0.0001257732657797722,
+          "edge_pf_um": 3.563091748033577e-05,
+          "cap_ratio_vs_typ": 0.9682314532699937
+        }
+      ],
+      "vias": [
+        {
+          "via": "V1",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "V2",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "V3",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "V4",
+          "r_ohm": 1.8,
+          "cut_um": 0.09,
+          "sigma_s_m": 8230452.674895481
+        },
+        {
+          "via": "TV2",
+          "r_ohm": 0.225,
+          "cut_um": 0.36,
+          "sigma_s_m": 4115226.3374487157
+        }
+      ],
+      "contacts_ohm": {
+        "CT_NP": 27.0,
+        "CT_PP": 26.1,
+        "CT_ND": 33.3,
+        "CT_PD": 32.4
+      }
+    }
+  }
+}

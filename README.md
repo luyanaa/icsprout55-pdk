@@ -4,7 +4,12 @@
 
 ## Todo
 
-- RAMs, SPICE models, PDN, RC extraction, etc.
+- RAMs, PDN, remaining RC-extraction calibration adoption, etc.
+- Vendor device models now ship under `libs.tech/spice/foundry/` (ICsprout
+  vendor data, educational use only — see `libs.tech/spice/README.md`).
+- The StarRC ITF/CAPTAB comparison that backs the RC calibration study is in
+  `libs.tech/pex/starrc/CALIBRATION.json`; adopting those numbers into
+  `config_gen.py` is still open.
 - Recover remaining proprietary ITF/captable interpolation and IDB ingestion semantics from static ICS55 clues (future research).
 - More user guides, tutorials, and datasheets.
 

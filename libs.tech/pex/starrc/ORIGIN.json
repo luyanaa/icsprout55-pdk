@@ -1,0 +1,110 @@
+{
+  "upstream_repo": "ckdur/icsprout55-openpdk",
+  "upstream_commit": "195870e61e9fa92d049df2daa4a7f5000c6aad3e",
+  "upstream_commit_date": "2026-10-08T15:20:54Z",
+  "upstream_subdir": "hacking/decrypted_output",
+  "obtained_by": "XOR decryption of the ECOS iRCX library libircx_ics55.so by the upstream project (see upstream hacking/NOTES.md, hacking/extractor.py)",
+  "license": "Vendor (ICsprout). Not Apache-2.0. Not released PDK collateral; educational / offline comparison only.",
+  "banner_applied": true,
+  "files": {
+    "kMapping.txt": {
+      "upstream_relpath": "kMapping.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kMapping.txt",
+      "upstream_sha256": "5bd3becb63804649c837fba61ade345f62b47233ea75e7dd54b5928c770b8e7e",
+      "upstream_bytes": 263,
+      "imported_sha256": "46278a4ef085d5eba0899acc3e28489279e9875f6d9808f5082439f8be567f46",
+      "imported_bytes": 1634
+    },
+    "kItfTyp.txt": {
+      "upstream_relpath": "kItfTyp.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kItfTyp.txt",
+      "upstream_sha256": "e7341465738533f4bfc365383c8ace3b3cc895c390f88b6efe2c0bd86de6d772",
+      "upstream_bytes": 4558,
+      "imported_sha256": "8d44c1e880e16965917852a1c147591614334c2b693bef34f4fde4de06f975c1",
+      "imported_bytes": 5980
+    },
+    "kItfRcbest.txt": {
+      "upstream_relpath": "kItfRcbest.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kItfRcbest.txt",
+      "upstream_sha256": "e06c0d6021c281f9c9807ab817f2c3c1bbd375554d4a05daeb6a02b8b772d5ec",
+      "upstream_bytes": 4704,
+      "imported_sha256": "774c5369b1f980b188444b7ef49f4d8edff59b45161c82feb976f81bd69da1bc",
+      "imported_bytes": 6132
+    },
+    "kItfRcworst.txt": {
+      "upstream_relpath": "kItfRcworst.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kItfRcworst.txt",
+      "upstream_sha256": "fe94a7d0954e7522854930a57177bbefce8e42dd1eb7257d96fddb0a7e08e93f",
+      "upstream_bytes": 4709,
+      "imported_sha256": "2b8763651ce4ec95a5ac46cb8563ea8d7c32f88928e5b5d4cb1c4b16ed54b769",
+      "imported_bytes": 6139
+    },
+    "kItfCbest.txt": {
+      "upstream_relpath": "kItfRcbest_21eac0.txt",
+      "renamed_from": "kItfRcbest_21eac0.txt",
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kItfRcbest_21eac0.txt",
+      "upstream_sha256": "40e726c7aa7212913d627490b127a20405c4bea250dd4d9cca8a3534377d495f",
+      "upstream_bytes": 4694,
+      "imported_sha256": "9d910d3e5c1a2480f367aa85357ea7ca9b8098a8310d7eb0511c5c91c2fd81ca",
+      "imported_bytes": 6128
+    },
+    "kItfCworst.txt": {
+      "upstream_relpath": "kItfCworst.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kItfCworst.txt",
+      "upstream_sha256": "ce942cb9819afcd156bbc8ac8ced5dbf1e2a3db65ac7aafa4da982e6dd9d0636",
+      "upstream_bytes": 4684,
+      "imported_sha256": "26046b107d3f447e99449ecd82c5e8061335cec84dbe9adb35ec14213cc14792",
+      "imported_bytes": 6112
+    },
+    "kCaptabTyp.txt": {
+      "upstream_relpath": "kCaptabTyp.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kCaptabTyp.txt",
+      "upstream_sha256": "4adaac2d377cf3be5567b0c210cf822bde11b1ab1b6646299a2dcf8529fd651d",
+      "upstream_bytes": 29071,
+      "imported_sha256": "dd57b4d0d1fd3ef722a1899498033fce323491ba24384cfa76550eb93b781e4f",
+      "imported_bytes": 30457
+    },
+    "kCaptabRcbest.txt": {
+      "upstream_relpath": "kCaptabRcbest.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kCaptabRcbest.txt",
+      "upstream_sha256": "7ef70d665413f93c2e02bc8b8460f5c7333bea8d81f142eb43de77599db1d57b",
+      "upstream_bytes": 29071,
+      "imported_sha256": "e3ea7a731ad80e57c95655123afa12adf02a30c04edfc7a8c756e8a83602e62e",
+      "imported_bytes": 30463
+    },
+    "kCaptabRcworst.txt": {
+      "upstream_relpath": "kCaptabRcworst.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kCaptabRcworst.txt",
+      "upstream_sha256": "0c1027458c323502e949c792b9517a547d8c8568f8571cca546fa3daf524171b",
+      "upstream_bytes": 29071,
+      "imported_sha256": "17e7ed36133a96275f9f931e6faa787cb37cfcf20ad024bf02713e50fe74c303",
+      "imported_bytes": 30465
+    },
+    "kCaptabCbest.txt": {
+      "upstream_relpath": "kCaptabCbest.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kCaptabCbest.txt",
+      "upstream_sha256": "b8189e8491499dc803bb2829b7accfa1c096c1e96d7f24a9a20e7a931cbc2069",
+      "upstream_bytes": 29071,
+      "imported_sha256": "7aa86a7b7b8e37662dbc380b05dd35b09ab619ee8ae301f7bb53494e0d6b165b",
+      "imported_bytes": 30461
+    },
+    "kCaptabCworst.txt": {
+      "upstream_relpath": "kCaptabCworst.txt",
+      "renamed_from": null,
+      "upstream_url": "https://raw.githubusercontent.com/ckdur/icsprout55-openpdk/195870e61e9fa92d049df2daa4a7f5000c6aad3e/hacking/decrypted_output/kCaptabCworst.txt",
+      "upstream_sha256": "926904b2721031ed9b6cbaf342aaa73d9311c9792d8341feffb0cbe5caa24bfb",
+      "upstream_bytes": 29071,
+      "imported_sha256": "8e39fad38bfc581fd6ac11cec8a6ec707ccd9f7e2f12ac17ff6ae6a7a7afaa4e",
+      "imported_bytes": 30463
+    }
+  }
+}

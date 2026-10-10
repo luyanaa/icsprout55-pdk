@@ -59,9 +59,9 @@ the nwell node.  The extracted W/L are the drawn geometry (W in the 100nm
 
 ## Known limitations
 
-- **Gate-oxide capacitance (Cox) and MOS overlap caps are NOT released** -
-  the device lines carry no cap terms (placeholder).  The MOS models in
-  `libs.tech/spice/models/mos_core.l` are structural stubs only.
+- **Gate-oxide capacitance (Cox) and MOS overlap caps are NOT in the released LEF** -
+  the extracted device lines carry no cap terms. Use the vendor BSIM4 cards
+  under `libs.tech/spice/foundry/` for device-level simulation.
 - **Poly/diff sheet resistance NOT released** - the poly is an ideal
   conductor (resist 0) in the extraction.
 - **No layer-to-layer overlap capacitance and no lateral (wire-to-wire)

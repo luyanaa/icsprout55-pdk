@@ -1,16 +1,18 @@
 # ICsprout55 — provisional analog kit (`libs.tech/`)
 
 Analog-facing companion to the released digital ICsprout55 PDK
-(65nm-class 1.2V/3.3V LP, salicide). Built entirely from **released data**
-(tech LEF, std-cell/IO CDL, IO datasheet, GDS analysis) — see the
-`spice/models/README.md` for what is real vs. placeholder.
+(65nm-class 1.2V/3.3V LP, salicide). The tooling is built from **released
+data** (tech LEF, std-cell/IO CDL, IO datasheet, GDS analysis); the device
+models under `spice/foundry/` are separate **vendor data** — see
+`spice/README.md` for what is real versus what is vendor-supplied and
+educational-use only.
 
 ## Layout
 
 ```
 libs.tech/
 ├── klayout/    KLayout technology + layer map + analog PCells
-├── spice/models  SPICE device inventory, corners, MC/aging/noise stubs
+├── spice/foundry  ICsprout foundry device models (vendor data; educational use)
 ├── xschem/     schematic symbols for all primitives
 ├── drc/        KLayout DRC deck (LEF-derived, provisional)
 ├── lvs/        LVS setup (reserved) + device recognition map
@@ -132,22 +134,27 @@ fail-closed; it does not claim IDB/DEF compatibility.
 
 | Family | Devices | Status |
 |---|---|---|
-| Core MOS | nm1p2/pm1p2 {svt,lvt,hvt}\_lp (L=60n) | names/geometry real; model params TBD |
-| IO MOS | nm3p3_lp / pm3p3_lp (L=400-650n) | names/geometry real; model params TBD |
-| Resistors | re_ndif/pdif/nwaa/nwsti/npo/ppo/hrpo/m1..m4/tm2/alpa [\_sab] 2t/3t | metal Rsq real (LEF); re_ppo_sab ≈850 Ω/sq derived; rest TBD |
-| Caps | mom_2t/3t | TBD |
-| Varactors | var1p2/var3p3_npd_nw_lp | TBD |
-| Diodes/ESD | dio_1p2\* (pp_nw/np_pw, lvt/hvt), dio_3p3_pp_nw_lp | TBD |
+| Core MOS | nm1p2/pm1p2 {svt,lvt,hvt}\_lp (L=60n) | foundry BSIM4 cards vendor-supplied (`spice/foundry/`) |
+| IO MOS | nm2p5/pm2p5_lp, nmod/pmod3p3_lp, nnat families (L=400-650n) | foundry BSIM4 cards vendor-supplied |
+| Resistors | re_ndif/pdif/nwaa/nwsti/npo/ppo/hrpo/m1..m4/tm2/alpa [\_sab] 2t/3t | foundry subcircuit models vendor-supplied (`spice/foundry/`) |
+| Caps | mom_2t/3t | foundry subcircuit models vendor-supplied |
+| Varactors | var1p2/var3p3_npd_nw_lp | foundry subcircuit models vendor-supplied |
+| Diodes/ESD | dio_1p2\* (pp_nw/np_pw, lvt/hvt), dio_2p5\_\*, dio_well family | foundry model cards vendor-supplied |
 | Guard rings / multi-finger | PCells + xschem symbols | layout templates (measured geometry) |
-| BJT / inductors | — | **not present** in released data |
+| BJT | vpnp/vnpn 1p2/2p5 (2x/5x/10x) | foundry model cards vendor-supplied |
+| Inductors | — | **not present** in released data |
 
 ## Provenance & honesty notes
 
 - Every layer number, device name, terminal order, drawn gate length and
   sheet resistance in this tree traces to a file in the released PDK or to
   GDS measurements (methods: klayout scripting, geometry extraction).
+- The device models under `spice/foundry/` are **ICsprout vendor data**, not
+  released PDK collateral, and are included for educational / research
+  evaluation only. They are **not** Apache-2.0.
 - Values marked `TBD` / `[ref …]` are **not** foundry data. Do not use
   them for tapeout decisions.
 - The PDK README states silicon verification is pending (first engineering
   shuttle Dec 2025); treat all parameters as pre-silicon.
-- License: Apache-2.0 (same as the PDK).
+- License: Apache-2.0 (same as the PDK), excluding `spice/foundry/` and
+  `pex/starrc/` which are vendor data.

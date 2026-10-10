@@ -26,18 +26,22 @@ xschem --rcfile /path/to/libs.tech/xschem/xschemrc &
 ## Netlisting behavior
 
 - MOS / diode → SPICE primitive devices (`M1 D G S B nm1p2_svt_lp ...`,
-  `D1 A K dio_3p3_pp_nw_lp AREA=... PJ=...`); model cards are in
-  `../spice/models/mos_core.l`, `mos_io.l`, `diode.l`.
+  `D1 A K dio_1p2_np_pw_lp AREA=... PJ=...`); the model cards live in
+  `../spice/foundry/{hspice,ngspice}/` (vendor data — see `../spice/README.md`).
 - Resistors / MOM / varactors → subcircuit calls
   (`XR1 POS NEG re_ppo_sab_2t W=... L=... M=...`); definitions in
-  `../spice/models/resistor.l`, `capacitor.l`.
-- Terminal order matches the released CDL usage exactly, so netlists stay
-  valid when foundry models arrive.
-- Instance parameters shown on symbols: `R=expr_eng(850*L/W/M)` is the
-  derived re_ppo_sab estimate — replace when foundry data ships.
+  `../spice/foundry/*/res/resistor.ckt`, `.../mom/mom.ckt`,
+  `.../var/varactor.ckt`.
+- Terminal order matches the released CDL usage exactly.
+- Instance parameters shown on symbols: `R=expr_eng(850*L/W/M)` is a legacy
+  estimate placeholder; use the vendor resistor subcircuits
+  (`re_*` with `W`/`L`/`M`) for real values.
 
 ## Notes
 
-- BJT / inductor: not present in the released PDK data → no symbols.
+- BJT: symbols are not provided yet, but the vendor BJT model cards
+  (`vpnp1p2_*`, `vnpn1p2_*`, `vpnp2p5_*`, `vnpn2p5_*`) ship in
+  `../spice/foundry/*/bjt/`.
+- Inductor: not present in the released PDK data → no symbols.
 - Guard rings are layout constructs (see `../klayout/pcells/`); the symbol
   exists for schematic documentation only and does not netlist a device.
