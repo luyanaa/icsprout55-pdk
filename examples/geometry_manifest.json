@@ -1,0 +1,42 @@
+{
+  "RF_NMOS_F1": {
+    "wf": 2,
+    "w_total": 2,
+    "l": 0.06,
+    "nf": 1,
+    "gate_pitch": 0.36,
+    "sa_drawn": 0.24,
+    "sb_drawn": 0.24,
+    "sd_drawn": 0.3
+  },
+  "RF_NMOS_F2": {
+    "wf": 2,
+    "w_total": 4,
+    "l": 0.06,
+    "nf": 2,
+    "gate_pitch": 0.36,
+    "sa_drawn": 0.24,
+    "sb_drawn": 0.24,
+    "sd_drawn": 0.3
+  },
+  "RF_NMOS_F8": {
+    "wf": 5,
+    "w_total": 40,
+    "l": 0.06,
+    "nf": 8,
+    "gate_pitch": 0.36,
+    "sa_drawn": 0.24,
+    "sb_drawn": 0.24,
+    "sd_drawn": 0.3
+  },
+  "RF_PMOS_F4": {
+    "wf": 2,
+    "w_total": 8,
+    "l": 0.06,
+    "nf": 4,
+    "gate_pitch": 0.36,
+    "sa_drawn": 0.24,
+    "sb_drawn": 0.24,
+    "sd_drawn": 0.3
+  }
+}

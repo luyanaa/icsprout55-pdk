@@ -1,0 +1,36 @@
+* ICsprout55 RF MOS v0.1: UNCALIBRATED extrinsic 4T structures.
+* Requires vendor model .lib tt_mos in the simulation deck.
+* wf is per-finger drawn width; vendor wrapper w expects TOTAL width.
+* Default extrinsic R is tiny to make the baseline nearly identical to
+* the vendor BSIM model; C defaults to zero (no fabricated RF coefficients).
+* Do not claim signoff-quality fT/fmax/noise without S-parameter correlation.
+* Pin order: D G S B
+.subckt ics55_rf_nmos_svt_4t D G S B wf=2u l=60n nf=4
++ sa=0.24u sb=0.24u sd=0.30u mismod=0
++ rg_feed=1u rd_feed=1u rs_feed=1u rb_feed=1u
++ cgd_feed=0 cgs_feed=0 cds_feed=0
+Rg G Gi {rg_feed}
+Rd D Di {rd_feed}
+Rs S Si {rs_feed}
+Rb B Bi {rb_feed}
+Xcore Di Gi Si Bi nm1p2_svt_lp w={wf*nf} l={l} nf={nf}
++ sa={sa} sb={sb} sd={sd} mismod={mismod} prelayout=0
+Cgd Gi Di {cgd_feed}
+Cgs Gi Si {cgs_feed}
+Cds Di Si {cds_feed}
+.ends ics55_rf_nmos_svt_4t
+
+.subckt ics55_rf_pmos_svt_4t D G S B wf=2u l=60n nf=4
++ sa=0.24u sb=0.24u sd=0.30u mismod=0
++ rg_feed=1u rd_feed=1u rs_feed=1u rb_feed=1u
++ cgd_feed=0 cgs_feed=0 cds_feed=0
+Rg G Gi {rg_feed}
+Rd D Di {rd_feed}
+Rs S Si {rs_feed}
+Rb B Bi {rb_feed}
+Xcore Di Gi Si Bi pm1p2_svt_lp w={wf*nf} l={l} nf={nf}
++ sa={sa} sb={sb} sd={sd} mismod={mismod} prelayout=0
+Cgd Gi Di {cgd_feed}
+Cgs Gi Si {cgs_feed}
+Cds Di Si {cds_feed}
+.ends ics55_rf_pmos_svt_4t

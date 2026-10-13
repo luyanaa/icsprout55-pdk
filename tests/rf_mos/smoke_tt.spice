@@ -1,0 +1,19 @@
+* Run from repository root with ngspice. Vendor data must already be installed.
+.lib 'libs.tech/spice/foundry/ngspice/ICsprout_55LLULP1225_V1p1_hsp.lib' tt_mos
+.include 'libs.tech/spice/rf/ics55_rf_mos.spice'
+.param VDD=1.2
+Vd d 0 1.2
+Vg g 0 0.7
+Vs s 0 0
+Vb b 0 0
+XRF d g s b ics55_rf_nmos_svt_4t wf=2u l=60n nf=4 mismod=0
+XBASE dref g s b nm1p2_svt_lp w=8u l=60n nf=4 mismod=0 prelayout=0
+Vdref dref 0 1.2
+.op
+.control
+set noaskquit
+op
+print i(Vd) i(Vdref)
+quit
+.endc
+.end
