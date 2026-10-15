@@ -23,8 +23,9 @@ Checks (fail-closed: any parse failure => BLOCKED, exit 2):
      UNTRACEABLE.
   D. deck input(g, d) calls are covered by the KLayout map (or officially
      traceable); untraceable usage is flagged.
-  E. frozen official profile coverage: TOTALMETAL=6 requires MET1..MET6;
-     missing metals are reported as gaps (silent stream-in drops).
+  E. frozen official profile coverage: TOTALMETAL=6 / TOP_METAL_NUM=SINGLE
+     selects M1..M5 plus T4M2 (and the corresponding vias); missing layers
+     are reported as gaps (silent stream-in drops).
 
 Status semantics (mirrors run_alignment.py): PASS (all checks), FAIL
 (mapping disagreement, coverage gap, or layer untraceable to any official
@@ -64,35 +65,46 @@ CROSSWALK: dict[str, tuple[str, str]] = {
     "M5LBL": ("MET5", "text"),
     "V1": ("VIA1", "drawing"), "V2": ("VIA2", "drawing"),
     "V3": ("VIA3", "drawing"), "V4": ("VIA4", "drawing"),
+    "V1BAR": ("VIA1", "bar"), "V2BAR": ("VIA2", "bar"),
+    "V3BAR": ("VIA3", "bar"), "V4BAR": ("VIA4", "bar"),
     # TM2/TV2 are the IO top-metal layers (T4M2/T4V2), per the IO pad LEFs.
     "TM2": ("T4M2", "drawing"), "TM2LBL": ("T4M2", "text"),
-    "TV2": ("T4V2", "drawing"),
+    "TV2": ("T4V2", "drawing"), "TV2BAR": ("T4V2", "bar"),
     "LVTN": ("NVT1", "drawing"), "LVTP": ("PVT1", "drawing"),
     "HVTN": ("NVT3", "drawing"), "HVTP": ("PVT3", "drawing"),
-    "NW": ("NW1", "drawing"), "VPW": ("PSUB", "mark"),
+    "NW": ("NW1", "drawing"), "NW1RES": ("NW1", "res"),
     "CTbar": ("CT", "bar"), "CTopcblk": ("CT", "opcblk"),
-    "CELLBOUND": ("CHIPBLK", "mark"), "L313": ("SUBCKTLVS", "mark"),
-    "L354": ("SRINGBLK", "mark"), "L356": ("NOSHRINK", "mark"),
-    "L357": ("NODRC", "mark"),
-    "PIN": ("MET1", "dm"),  # collides with official MET1 dm; see report
+    "CELLBOUND": ("CHIPBLK", "mark"),
+    "PVDD": ("VDD", "mark"), "PVSS": ("VSS", "mark"),
+    "SRINGBLK_MANUAL": ("SRINGBLK", "mark"),
     "PPO": ("POLY", "res"),
+    "ALPADRES": ("ALPAD", "res"),
+    "MET5RES": ("MET5", "res"),
+    "T4M2RES": ("T4M2", "res"),
 }
 
-# Official (g, d) entries with no layermap counterpart (checked in B).
-OFFICIAL_LAYERMAP_EXCEPTIONS = {(354, 13), (999, 1111)}
+for layer in ("ACT", "POLY"):
+    CROSSWALK[f"{layer}DUM"] = (layer, "dm")
+    CROSSWALK[f"{layer}DUMB"] = (layer, "dmblk")
+for i in range(1, 9):
+    layer = f"MET{i}"
+    CROSSWALK[f"{layer}DUM"] = (layer, "dm")
+    CROSSWALK[f"{layer}DUMB"] = (layer, "dmblk")
+    CROSSWALK[f"{layer}SLOT"] = (layer, "slot")
+    CROSSWALK[f"{layer}MOM"] = (layer, "mom")
+for name, purpose in (("DUM", "dm"), ("DUMB", "dmblk"), ("SLOT", "slot")):
+    CROSSWALK[f"T4M2{name}"] = ("T4M2", purpose)
+
+# GDS layer pairs with no techfile layermap entry. The Calibre DRC source
+# uses 354/13 for SRINGBLK; the manual separately lists GRID as 179/40.
+TECHFILE_LAYERMAP_EXCEPTIONS = {(179, 40), (354, 13), (999, 1111)}
 
 # Official layermap (g, d) entries never referenced by the official DRC deck.
 LAYERMAP_DRC_EXCEPTIONS = {(0, 1), (7, 12), (354, 12), (388, 12)}
 
-# Deck input layers that are intentional local conventions, documented in the
-# decks themselves (not present in the official GDS flow or KLayout stream map).
-# See libs.tech/drc/rule_decks/mom.drc:19-20 (analog MOM / dummy-fill marks).
-DOCUMENTED_AUX = {
-    (60, 1): "MOM_MARKER",
-    (60, 2): "DUMMY",
-    (60, 3): "NO_FILL",
-    (60, 4): "DM_EXCEL",
-}
+# No local auxiliary input layers remain; all DRC inputs are official or
+# explicitly listed in TECHFILE_LAYERMAP_EXCEPTIONS above.
+DOCUMENTED_AUX: dict[tuple[int, int], str] = {}
 
 # Frozen official profile option values (klayout_alignment_manifest.json), in
 # the official DRC deck's variable names (pv/DRC/<deck>.drc:34-60).  Used to
@@ -298,7 +310,7 @@ def main() -> int:
 
     # B. official (g, d) covered by techfile layermap
     b: dict[str, Any] = {}
-    miss = sorted(set(drc_map) - set(layermap) - OFFICIAL_LAYERMAP_EXCEPTIONS)
+    miss = sorted(set(drc_map) - set(layermap) - TECHFILE_LAYERMAP_EXCEPTIONS)
     b["missing_from_layermap"] = [f"{g}/{d}" for g, d in miss]
     extra = sorted(set(layermap) - set(drc_map) - LAYERMAP_DRC_EXCEPTIONS)
     b["layermap_not_in_drc_deck"] = [f"{g}/{d}" for g, d in extra]
@@ -307,16 +319,21 @@ def main() -> int:
     rec["checks"]["layermap_coverage"] = b
 
     # C. KLayout map vs official (g, d)
-    c: dict[str, Any] = {"unresolved": [], "wrong_numbers": [], "ambiguous": []}
+    c: dict[str, Any] = {
+        "documented_exceptions": [], "unresolved": [], "wrong_numbers": [], "ambiguous": []
+    }
     for name, kds in sorted(kl_map.items()):
         alias = resolve_klayout_name(name)
         for g, d in kds:
             official_hits = [(n, p) for n, p in layermap.get((g, d), [])]
             if not official_hits:
-                c["unresolved"].append(f"{name} {g}/{d} -> no official (g,d)")
+                if (g, d) in TECHFILE_LAYERMAP_EXCEPTIONS:
+                    c["documented_exceptions"].append(f"{name} {g}/{d}")
+                else:
+                    c["unresolved"].append(f"{name} {g}/{d} -> no official (g,d)")
                 continue
             if alias is None:
-                # identity-resolved: same name with any purpose is a match
+                # Identity-resolved: same name with any purpose is a match.
                 match = any(n == name for n, p in official_hits)
             else:
                 oname, opurpose = alias

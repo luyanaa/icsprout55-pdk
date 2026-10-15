@@ -19,7 +19,7 @@
 # must lie on the 1 nm grid.  FreePDK45-style check (ongrid).
 #=========================================================================================
 
-if TABLES.include?('grid') || GRID
+if GRID
   grid = rval('manufacturing_grid').um
   [
     ['ACT', ACT], ['NW', NW], ['LVTN', LVTN], ['LVTP', LVTP],

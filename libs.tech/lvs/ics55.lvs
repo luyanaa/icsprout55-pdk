@@ -77,7 +77,6 @@ COMBINE_DEVICES = bool_check?($combine_devices)
 PURGE = bool_check?($purge)
 SIMPLIFY = !bool_check?($no_simplify)
 WELL_TIES = !bool_check?($no_well_ties)
-TOP_LVL_PINS = bool_check?($top_lvl_pins)
 
 case $run_mode
 when 'flat'
@@ -227,6 +226,57 @@ end
 # multi-finger combine pass (rule_decks/combine_fingers.lvs)
 align
 
+# The SPICE reader canonicalizes the reference root name to upper case, while
+# the GDS primary cell retains its spelling. Normalize only a case-equivalent
+# root identifier; it does not rewrite signal, pin, or device labels.
+unless NET_ONLY
+  extracted_top = netlist.top_circuit
+  reference_top = schematic.top_circuit
+  if extracted_top && reference_top &&
+     extracted_top.name.casecmp(reference_top.name).zero?
+    reference_top.name = extracted_top.name
+  end
+end
+# Calibre PORT DEPTH 0: only direct top-cell text on a conductor creates a pin.
+top_cell = src.cell_obj
+layout = top_cell.layout
+top_circuit = netlist.circuit_by_name(top_cell.name)
+raise "Missing extracted top circuit #{top_cell.name.inspect}" unless top_circuit
+port_layers = {81 => M1, 82 => M2, 83 => M3, 84 => M4, 85 => M5, 103 => TM2}
+ports = Hash.new { |h, label| h[label] = {} }
+direct_text_count = 0
+port_layers.each do |number, conductor|
+  [1, 6].each do |datatype|
+    index = layout.find_layer(number, datatype)
+    next unless index
+    top_cell.each_shape(index) do |shape|
+      next unless shape.is_text?
+      direct_text_count += 1
+      position = shape.text_pos
+      point = RBA::DPoint.new(position.x * layout.dbu, position.y * layout.dbu)
+      physical_net = l2n_data.probe_net(conductor.data, point)
+      unless physical_net && physical_net.circuit == top_circuit
+        raise "PORT DEPTH 0: #{shape.text_string.inspect} on #{number}/#{datatype} at #{point} has no top-level conductor"
+      end
+      net = top_circuit.net_by_cluster_id(physical_net.cluster_id)
+      raise "PORT DEPTH 0: physical net for #{shape.text_string.inspect} was removed" unless net
+      ports[shape.text_string][net.cluster_id] = net
+    end
+  end
+end
+disconnected = ports.select { |_label, nets| nets.size > 1 }
+unless disconnected.empty?
+  detail = disconnected.map { |label, nets| "#{label}=#{nets.keys.sort.join(',')}" }.join('; ')
+  raise "PORT DEPTH 0: disconnected duplicate top labels: #{detail}"
+end
+old_pins = top_circuit.each_pin.to_a
+old_pins.each { |pin| top_circuit.remove_pin(pin.id) }
+ports.sort_by { |label, _nets| label }.each do |label, nets|
+  pin = top_circuit.create_pin(label)
+  top_circuit.connect_pin(pin, nets.values.first)
+end
+puts "PORT DEPTH 0: direct_texts=#{direct_text_count} ports=#{ports.size} previous_pins=#{old_pins.size}"
+
 netlist.simplify if SIMPLIFY
 netlist.combine_devices if COMBINE_DEVICES
 netlist.purge if PURGE
@@ -236,7 +286,8 @@ schematic.purge if PURGE
 
 max_res(1e9)
 min_caps(1e-18)
-max_depth(0)
+max_depth(8)
+max_branch_complexity(1024)
 
 # Device parameter comparison: L and all non-geometric parameters are
 # compared exactly; W uses the official 10% relative tolerance (Calibre

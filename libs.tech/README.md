@@ -14,7 +14,7 @@ libs.tech/
 ├── klayout/    KLayout technology + layer map + analog PCells
 ├── spice/foundry  ICsprout foundry device models (vendor data; educational use)
 ├── xschem/     schematic symbols for all primitives
-├── drc/        KLayout DRC deck (LEF-derived, provisional)
+├── drc/        source-driven partial KLayout DRC port; not Calibre-equivalent signoff
 ├── lvs/        LVS setup (reserved) + device recognition map
 ├── macros/     analog macro library (reserved) + IO analog cell inventory
 ├── pex/        LEF RC seeds + clean-room routed RCX/SPEF extraction

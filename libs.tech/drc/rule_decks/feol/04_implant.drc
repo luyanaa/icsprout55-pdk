@@ -13,46 +13,26 @@
 # limitations under the License.
 
 #=========================================================================================
-# FEOL 04 - Implants (NP, PP, LVTN, LVTP, HVTN, HVTP, ESD)
+# FEOL 04 - Implants
 #
-# Port of iDRC minimum-width / minimum-spacing checks.  Vt-adjust implants are
-# marker layers; their width/spacing rules are measured from the released
-# LVT/HVT std-cell libraries.
+# Port source implant area checks only.  The remaining checks use layer-derived
+# active/tap classes, edge coincidence, connectivity, and ABUT<90 qualifiers
+# that are not equivalent to plain width/space/enclosure primitives.
 #=========================================================================================
 
-if TABLES.include?('feol') || FEOL
-  #--- NP: minimum width / spacing -----------------------------------------------------
-  NP.width(rval('np_width').um, euclidian).output('implant.np.width',
-    "implant.np.width: NP min width #{rval('np_width')} um [gds]")
-  NP.space(rval('np_space').um, euclidian).output('implant.np.space',
-    "implant.np.space: NP min spacing #{rval('np_space')} um [gds]")
+if FEOL
+  NP.not(NP.with_area(0.12.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('implant.np.area',
+    "NP_A_1: NP minimum area 0.12 um^2; waived inside SRAMALL and NODRC")
+  NP.holes.not(NP.holes.with_area(0.12.um2, 1e9.um2)).not_inside(NODRC).output('implant.np.enclosed_area',
+    "NP_A_2: NP enclosed area minimum 0.12 um^2; waived inside NODRC")
+  PP.not(PP.with_area(0.12.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.area',
+    "PP_A_1: PP minimum area 0.12 um^2; waived inside SRAMALL and NODRC")
+  PP.holes.not(PP.holes.with_area(0.12.um2, 1e9.um2)).not_inside(NODRC).output('implant.pp.enclosed_area',
+    "PP_A_2: PP enclosed area minimum 0.12 um^2; waived inside NODRC")
 
-  #--- PP: minimum width / spacing -----------------------------------------------------
-  PP.width(rval('pp_width').um, euclidian).output('implant.pp.width',
-    "implant.pp.width: PP min width #{rval('pp_width')} um [gds]")
-  PP.space(rval('pp_space').um, euclidian).output('implant.pp.space',
-    "implant.pp.space: PP min spacing #{rval('pp_space')} um [gds]")
-
-  #--- NP and PP overlap ----------------------------------------------------------------
-  # NOTE: not checked.  The implant masks of adjacent rows overlap in field by
-  # design (masks are drawn generous across cell boundaries); STI blocks the
-  # implants outside ACT, so NP/PP mask overlap is not a violation.
-
-  #--- LVTN / LVTP / HVTN / HVTP: markers inside their implant ------------------------
-  LVTN.not(NP).output('implant.lvtn.inside',
-    "implant.lvtn.inside: LVTN must be inside NP [gds]")
-  LVTP.not(PP).output('implant.lvtp.inside',
-    "implant.lvtp.inside: LVTP must be inside PP [gds]")
-  HVTN.not(NP).output('implant.hvtn.inside',
-    "implant.hvtn.inside: HVTN must be inside NP [gds]")
-  HVTP.not(PP).output('implant.hvtp.inside',
-    "implant.hvtp.inside: HVTP must be inside PP [gds]")
-
-  #--- ESD (55/1): width / spacing / NW enclosure -------------------------------------
-  ESD.width(rval('esd_width').um, euclidian).output('implant.esd.width',
-    "implant.esd.width: ESD min width #{rval('esd_width')} um [gds]")
-  ESD.space(rval('esd_space').um, euclidian).output('implant.esd.space',
-    "implant.esd.space: ESD min spacing #{rval('esd_space')} um [gds]")
-  NW.enclosing(ESD, rval('nw_esd_enc').um).output('implant.esd.nw_enc',
-    "implant.esd.nw_enc: NW enclosure of ESD #{rval('nw_esd_enc')} um [gds]")
+  # Unsupported source rules: NP_W_1, NP_S_1 through NP_S_6, NP_EN_1
+  # through NP_EN_3, NP_EX_1 / NP_EX_1a, NP_O_1, NP_A_3; PP_W_1,
+  # PP_S_1 through PP_S_6, PP_EN_1 through PP_EN_3, PP_EX_1 / PP_EX_1a,
+  # PP_O_1, PP_A_3, PP_R_1.  In particular, NP_W_1 allows single-point
+  # interaction and source S rules require directional/abutment qualifiers.
 end

@@ -21,46 +21,47 @@
 #   nm3p3_lp / pm3p3_lp (IO, L=400-650nm)
 #
 # KLayout mos4 terminals: SD (source/drain), G (gate), tS/tD (contact regions
-# on source/drain), tG (contact region on gate), W (well/substrate).
+# on source/drain), tG (contact region on gate), W (separate bulk annotation
+# connected to physical body layers or standard-cell global ties).
 #=========================================================================================
 
 # --- core NMOS --------------------------------------------------------------------
 
 extract_devices(mos4('NM1P2_SVT_LP'),
-                { 'SD' => NSD, 'G' => NGATE_SVT,
-                  'tS' => NSD, 'tD' => NSD, 'tG' => POLY_CON,
-                  'W' => PSUB })
+                { 'SD' => N_SD, 'G' => NGATE_SVT,
+                  'tS' => N_SD, 'tD' => N_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 extract_devices(mos4('NM1P2_LVT_LP'),
-                { 'SD' => NSD, 'G' => NGATE_LVT,
-                  'tS' => NSD, 'tD' => NSD, 'tG' => POLY_CON,
-                  'W' => PSUB })
+                { 'SD' => N_SD, 'G' => NGATE_LVT,
+                  'tS' => N_SD, 'tD' => N_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 extract_devices(mos4('NM1P2_HVT_LP'),
-                { 'SD' => NSD, 'G' => NGATE_HVT,
-                  'tS' => NSD, 'tD' => NSD, 'tG' => POLY_CON,
-                  'W' => PSUB })
+                { 'SD' => N_SD, 'G' => NGATE_HVT,
+                  'tS' => N_SD, 'tD' => N_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 
 # --- core PMOS --------------------------------------------------------------------
 
 extract_devices(mos4('PM1P2_SVT_LP'),
-                { 'SD' => PSD, 'G' => PGATE_SVT,
-                  'tS' => PSD, 'tD' => PSD, 'tG' => POLY_CON,
-                  'W' => NW })
+                { 'SD' => P_SD, 'G' => PGATE_SVT,
+                  'tS' => P_SD, 'tD' => P_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 extract_devices(mos4('PM1P2_LVT_LP'),
-                { 'SD' => PSD, 'G' => PGATE_LVT,
-                  'tS' => PSD, 'tD' => PSD, 'tG' => POLY_CON,
-                  'W' => NW })
+                { 'SD' => P_SD, 'G' => PGATE_LVT,
+                  'tS' => P_SD, 'tD' => P_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 extract_devices(mos4('PM1P2_HVT_LP'),
-                { 'SD' => PSD, 'G' => PGATE_HVT,
-                  'tS' => PSD, 'tD' => PSD, 'tG' => POLY_CON,
-                  'W' => NW })
+                { 'SD' => P_SD, 'G' => PGATE_HVT,
+                  'tS' => P_SD, 'tD' => P_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 
 # --- IO MOS (3.3V) ----------------------------------------------------------------
 
 extract_devices(mos4('NM3P3_LP'),
-                { 'SD' => NIOSD, 'G' => NIOGATE_REG,
-                  'tS' => NIOSD, 'tD' => NIOSD, 'tG' => POLY_CON,
-                  'W' => PSUB })
+                { 'SD' => NIO_SD, 'G' => NIOGATE_REG,
+                  'tS' => NIO_SD, 'tD' => NIO_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })
 extract_devices(mos4('PM3P3_LP'),
-                { 'SD' => PIOSD, 'G' => PIOGATE_REG,
-                  'tS' => PIOSD, 'tD' => PIOSD, 'tG' => POLY_CON,
-                  'W' => NW })
+                { 'SD' => PIO_SD, 'G' => PIOGATE_REG,
+                  'tS' => PIO_SD, 'tD' => PIO_SD, 'tG' => POLY_CON,
+                  'W' => MOS_BULK_ANNOTATION })

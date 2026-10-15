@@ -13,43 +13,229 @@
 # limitations under the License.
 
 #=========================================================================================
-# Density checks (window-based, for placed-chip layouts)
+# Source-derived ICsprout55 Density_rules translation.
 #
-#   POLY : 12-55%  on 10um x 10um tiles
-#   ACT  : 20-65% on 20um x 20um tiles
-#   M1   : 20-70% on 20um x 20um tiles
-#   M2..M5 : empirical bounds (measured IO-cell density ranges) on 20um tiles
+# Rule IDs and limits below come from the supplied Calibre source; this KLayout
+# implementation is not Calibre-verified and makes no cross-tool equivalence
+# claim. The source's DRC:1 is the drawn-layout extent. Window grids are
+# anchored at that extent's lower-left corner; BACKUP adds a final window flush
+# with the far edge when the regular step grid would leave a strip uncovered.
+# A layout smaller than one window gets one origin-anchored window with
+# zero-density padding. Global density uses the source-described full-chip
+# extent as its denominator.
 #
-# The tile analysis is only meaningful on layouts at least as large as the
-# tile size (a std cell is smaller than one tile, so its density would be
-# diluted by the empty tile area).  The checks are therefore skipped when the
-# source layout's bounding box is smaller than the tile - i.e. no per-cell
-# density checks.  Disable with -rd no_density=true.
-#
-# Rule values: provenance in ics55_rules.json - POLY/ACT/M1 are user-specified
-# (foundry-style) values, M2-M5 are empirical (measured IO library cell
-# densities).  Not foundry rule data.
+# The source's GRADIENT statements omit STEP; D_3 rules are intentionally not
+# emitted because the exact neighboring-window selection is not established.
 #=========================================================================================
 
 if DENSITY
-  # layout bounding box (microns), taken as the union of the checked layers;
-  # density checks only run on placed-chip-size layouts, not on single cells
-  layer_bboxes = [POLY, ACT, M1, M2, M3, M4, M5].map { |l| l.bbox }
-  layout_bbox = layer_bboxes.reduce do |a, b|
-    RBA::Box.new([a.left, b.left].min, [a.bottom, b.bottom].min,
-                 [a.right, b.right].max, [a.top, b.top].max)
-  end
-  lbw = layout_bbox.width.to_f
-  lbh = layout_bbox.height.to_f
+  density_chip = extent
+  density_box = density_chip.bbox
 
-  [
-    ['POLY', POLY, 'poly'], ['ACT', ACT, 'act'], ['M1', M1, 'm1'],
-    ['M2', M2, 'm2'], ['M3', M3, 'm3'], ['M4', M4, 'm4'], ['M5', M5, 'm5']
-  ].each do |name, layer, key|
-    tile = rval("#{key}_density_tile").um
-    next if lbw < tile || lbh < tile
-    layer.without_density(rval("#{key}_density_min"), rval("#{key}_density_max"),
-                          tile_size(tile, tile)).output("dens.#{key}",
-      "dens.#{key}: #{name} density outside #{rval("#{key}_density_min") * 100}% .. #{rval("#{key}_density_max") * 100}% on #{rval("#{key}_density_tile")}um tiles [derived]")
+  if density_box && density_box.width > 0 && density_box.height > 0
+    density_x0 = density_box.left
+    density_y0 = density_box.bottom
+    density_x1 = density_box.right
+    density_y1 = density_box.top
+
+    density_window = rval('density_window')
+    density_step = rval('density_step')
+    density_act_min = rval('density_act_min')
+    density_act_max = rval('density_act_max')
+    density_act_global_min = rval('density_act_global_min')
+    density_act_global_max = rval('density_act_global_max')
+    density_act_dummy_window = rval('density_act_dummy_window')
+    density_act_dummy_step = rval('density_act_dummy_step')
+    density_dummy_min = rval('density_dummy_min')
+    density_poly_window_min = rval('density_poly_window_min')
+    density_poly_window_max = rval('density_poly_window_max')
+    density_poly_global_min = rval('density_poly_global_min')
+    density_poly_global_max = rval('density_poly_global_max')
+    density_metal_min = rval('density_metal_min')
+    density_metal_max = rval('density_metal_max')
+    density_t4m2_min = rval('density_t4m2_min')
+    density_t4m2_max = rval('density_t4m2_max')
+    density_dummy_margin = rval('density_dummy_margin')
+    density_metal_dummy_halo = rval('density_metal_dummy_halo')
+
+    # Source DENSITY ... BACKUP grid: regular windows from the extent origin,
+    # plus a backed-up last window at the far edge when needed.
+    density_axis_windows = lambda do |lower, upper, window, step|
+      far_origin = upper - window
+      if far_origin <= lower + dbu * 0.5
+        [[lower], nil]
+      else
+        count = ((far_origin - lower) / step).floor + 1
+        regular = Array.new(count) { |index| lower + index * step }
+        backup = far_origin - regular[-1] > dbu * 0.5 ? far_origin : nil
+        [regular, backup]
+      end
+    end
+
+    density_window_tiles = lambda do |layer, comparison, threshold, window, step|
+      x_regular, x_backup = density_axis_windows.call(density_x0, density_x1, window, step)
+      y_regular, y_backup = density_axis_windows.call(density_y0, density_y1, window, step)
+      window_dbu = (window / dbu).round
+      density_epsilon = 1.5 / (window_dbu.to_f * window_dbu)
+      # KLayout 0.30.12 can round exact density one DBU-squared to the
+      # violating side; this margin keeps exact-threshold tiles out.
+      density_range = comparison == :lt ?
+        (0.0 .. (threshold - density_epsilon)) : ((threshold + density_epsilon) .. nil)
+      density_window_domain = density_chip.sized(
+        [window - (density_x1 - density_x0), 0.0].max.um,
+        [window - (density_y1 - density_y0), 0.0].max.um
+      )
+      parts = []
+      add_grid = lambda do |x, y, nx, ny|
+        # KLayout 0.30.12 emits no windows for tile_count(1, 1). On a singleton
+        # axis, use one non-overlapping extra tile and clip it at the intended
+        # source-window domain. KLayout offsets overlapping windows by half the
+        # overlap, so compensate in tile_origin.
+        grid_step_x = nx == 1 ? window : step
+        grid_step_y = ny == 1 ? window : step
+        grid_x = x + (window - grid_step_x) / 2.0
+        grid_y = y + (window - grid_step_y) / 2.0
+        tile_count_x = nx == 1 ? 2 : nx
+        tile_count_y = ny == 1 ? 2 : ny
+        markers = layer.with_density(
+          density_range,
+          tile_size(window.um, window.um),
+          tile_step(grid_step_x.um, grid_step_y.um),
+          tile_origin(grid_x, grid_y),
+          tile_count(tile_count_x, tile_count_y),
+          padding_zero
+        )
+        parts << markers.and(density_window_domain)
+      end
+      add_grid.call(x_regular[0], y_regular[0], x_regular.length, y_regular.length)
+      add_grid.call(x_backup, y_regular[0], 1, y_regular.length) if x_backup
+      add_grid.call(x_regular[0], y_backup, x_regular.length, 1) if y_backup
+      add_grid.call(x_backup, y_backup, 1, 1) if x_backup && y_backup
+      parts.reduce { |all, part| all + part }
+    end
+
+    density_output = lambda do |markers, rule_id, description|
+      markers.output(
+        rule_id,
+        "#{rule_id}: #{description} [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]"
+      )
+    end
+
+    density_window_rule = lambda do |layer, comparison, threshold, window, step,
+                                     rule_id, description, inside_region|
+      markers = density_window_tiles.call(layer, comparison, threshold, window, step)
+      markers = markers.inside(inside_region) if inside_region
+      density_output.call(markers.not_inside(NODRC), rule_id, description)
+    end
+
+    density_global_rule = lambda do |layer, comparison, threshold, rule_id, description|
+      chip_area = density_chip.area
+      if chip_area > 0
+        density = layer.area.to_f / chip_area
+        violation = comparison == :lt ? density < threshold : density > threshold
+        density_output.call(density_chip.not_inside(NODRC), rule_id, description) if violation
+      end
+    end
+
+    # Density includes dummy shapes. Metal slot geometry is removed before
+    # dummy is added, matching the manual's §3.2.6 density convention.
+    density_aa_all = ACT.or(ACTDUM)
+    density_po_all = POLY.or(POLYDUM)
+    density_m1_all = M1.not(MET1SLOT).or(MET1DUM)
+    density_m2_all = M2.not(MET2SLOT).or(MET2DUM)
+    density_m3_all = M3.not(MET3SLOT).or(MET3DUM)
+    density_m4_all = M4.not(MET4SLOT).or(MET4DUM)
+    density_m5_all = M5.not(MET5SLOT).or(MET5DUM)
+    density_t4m2_all = TM2.not(T4M2SLOT).or(T4M2DUM)
+
+    # AA_D_1: 100um windows, 50um step; AA_all includes active dummy.
+    density_window_rule.call(density_aa_all, :lt, density_act_min, density_window, density_step,
+      'ACT_D_1_min', "AA_all density < #{density_act_min * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+    density_window_rule.call(density_aa_all, :gt, density_act_max, density_window, density_step,
+      'ACT_D_1_max', "AA_all density > #{density_act_max * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+
+    # AA_D_2: low density in 20um windows within AADUMB sized outward by 2.5um.
+    density_act_d2_region = ACTDUMB.sized(density_dummy_margin.um)
+    density_window_rule.call(density_aa_all, :lt, density_dummy_min,
+      density_act_dummy_window, density_act_dummy_step,
+      'ACT_D_2', "AA_all density < #{density_dummy_min * 100}% in #{density_act_dummy_window}um windows, #{density_act_dummy_step}um step, inside ACTDUMB sized by #{density_dummy_margin}um",
+      density_act_d2_region)
+
+    # ACT_D_3 is intentionally unsupported: its source GRADIENT omits STEP.
+    # AA_D_4: whole-chip density, with the drawn extent as denominator.
+    density_global_rule.call(density_aa_all, :lt, density_act_global_min,
+      'ACT_D_4_min', "global AA_all density < #{density_act_global_min * 100}% over the drawn-layout extent")
+    density_global_rule.call(density_aa_all, :gt, density_act_global_max,
+      'ACT_D_4_max', "global AA_all density > #{density_act_global_max * 100}% over the drawn-layout extent")
+
+    # PO_D_1: whole-chip density, with dummy poly included.
+    density_global_rule.call(density_po_all, :lt, density_poly_global_min,
+      'PO_D_1_min', "global PO_all density < #{density_poly_global_min * 100}% over the drawn-layout extent")
+    density_global_rule.call(density_po_all, :gt, density_poly_global_max,
+      'PO_D_1_max', "global PO_all density > #{density_poly_global_max * 100}% over the drawn-layout extent")
+
+    density_window_rule.call(density_po_all, :lt, density_poly_window_min, density_window, density_step,
+      'PO_D_2_min', "PO_all density < #{density_poly_window_min * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+    density_window_rule.call(density_po_all, :gt, density_poly_window_max, density_window, density_step,
+      'PO_D_2_max', "PO_all density > #{density_poly_window_max * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+
+    # PO_D_3 is intentionally unsupported: its source GRADIENT omits STEP.
+
+    # M1/Mn D_1 checks are limited to windows inside the source check_region_1.
+    # The source expression excludes GRID, SRINGBLK, INDALL, then NODRC.
+    density_check_region_1 = density_chip.not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not(NODRC)
+    density_metal_rules = [
+      ['MET1', density_m1_all, MET1DUMB],
+      ['M2', density_m2_all, MET2DUMB],
+      ['M3', density_m3_all, MET3DUMB],
+      ['M4', density_m4_all, MET4DUMB],
+      ['M5', density_m5_all, MET5DUMB]
+    ]
+    density_metal_rules.each do |name, metal_all, dummy_block|
+      prefix = name == 'MET1' ? 'MET1' : name
+      density_window_tiles.call(metal_all, :lt, density_metal_min, density_window, density_step)
+        .inside(density_check_region_1)
+        .output("#{prefix}_D_1_min",
+          "#{prefix}_D_1_min: metal density < #{density_metal_min * 100}% in #{density_window}um windows, #{density_step}um step; inside source check_region_1 [KLayout translation; not Calibre-verified]")
+      density_window_tiles.call(metal_all, :gt, density_metal_max, density_window, density_step)
+        .inside(density_check_region_1)
+        .output("#{prefix}_D_1_max",
+          "#{prefix}_D_1_max: metal density > #{density_metal_max * 100}% in #{density_window}um windows, #{density_step}um step; inside source check_region_1 [KLayout translation; not Calibre-verified]")
+
+      # Source Z = SIZE (SIZE dummy_block BY 2.5) BY 12.5 UNDEROVER.
+      # Positive KLayout sizing maps UNDEROVER to symmetric outward growth.
+      density_dummy_region = dummy_block.sized(density_dummy_margin.um)
+        .sized(density_metal_dummy_halo.um)
+      density_window_tiles.call(metal_all, :lt, density_dummy_min, density_window, density_step)
+        .and(density_dummy_region)
+        .not_inside(NODRC)
+        .output("#{prefix}_D_2",
+          "#{prefix}_D_2: metal density < #{density_dummy_min * 100}% in #{density_window}um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]")
+      # MET1_D_3/Mn_D_3 are intentionally unsupported: source GRADIENT omits
+      # STEP, so the exact neighboring-window selection is not established.
+    end
+
+    # The selected top metal is T4M2 (TM2), not T4M1/T8M. T4M2_D_1 uses
+    # density_checkarea plus GRID/SRINGBLK/INDALL result exclusions.
+    density_t4m2_checkarea = density_chip.not(INDALL)
+    density_window_tiles.call(density_t4m2_all, :lt, density_t4m2_min, density_window, density_step)
+      .inside(density_t4m2_checkarea)
+      .not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not_inside(NODRC)
+      .output('T4M2_D_1_min',
+        "T4M2_D_1_min: T4M2ALLi density < #{density_t4m2_min * 100}% in #{density_window}um windows, #{density_step}um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]")
+    density_window_tiles.call(density_t4m2_all, :gt, density_t4m2_max, density_window, density_step)
+      .inside(density_t4m2_checkarea)
+      .not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not_inside(NODRC)
+      .output('T4M2_D_1_max',
+        "T4M2_D_1_max: T4M2ALLi density > #{density_t4m2_max * 100}% in #{density_window}um windows, #{density_step}um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]")
+
+    # T4M2_D_2 uses only the dummy-block area sized up by 2.5um.
+    density_t4m2_dummy_region = T4M2DUMB.sized(density_dummy_margin.um)
+    density_window_rule.call(density_t4m2_all, :lt, density_dummy_min, density_window, density_step,
+      'T4M2_D_2', "T4M2ALLi density < #{density_dummy_min * 100}% in #{density_window}um windows, #{density_step}um step, inside T4M2DUMB sized by #{density_dummy_margin}um",
+      density_t4m2_dummy_region)
+
+    # T4M2_D_3 is intentionally unsupported because its source GRADIENT omits
+    # STEP, so the exact neighboring-window selection is not established.
   end
 end

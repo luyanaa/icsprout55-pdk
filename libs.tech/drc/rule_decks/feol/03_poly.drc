@@ -13,46 +13,24 @@
 # limitations under the License.
 
 #=========================================================================================
-# FEOL 03 - Poly (POLY, PPO)
+# FEOL 03 - Poly
 #
-# Port of iDRC minimum-width / minimum-spacing / separation checks plus the
-# poly-to-active interaction rules (FreePDK45 POLY.* / IHP Gat.* style).
-# Values: measured from released std-cell GDS (provenance: gds); the tech LEF
-# carries no POLY layer entry, so all POLY values are measurements.
+# Port source area checks that map directly to KLayout regions.  Rules whose
+# Calibre definition depends on edge classes, connectivity, density windows,
+# or directional enclosure remain disabled instead of using geometric proxies.
 #=========================================================================================
 
-if TABLES.include?('feol') || FEOL
-  #--- POLY: minimum width ------------------------------------------------------------
-  POLY.width(rval('poly_width').um, euclidian).output('poly.poly.width',
-    "poly.poly.width: POLY min width #{rval('poly_width')} um [gds]")
+if FEOL
+  POLY.not(POLY.with_area(0.04.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('poly.poly.area',
+    "PO_A_1: POLY minimum area 0.04 um^2; waived inside SRAMALL and NODRC")
+  POLY.holes.not(POLY.holes.with_area(0.09.um2, 1e9.um2)).not_inside(NODRC).output('poly.poly.enclosed_area',
+    "PO_A_2: POLY enclosed area minimum 0.09 um^2; waived inside NODRC")
 
-  #--- POLY: minimum spacing ----------------------------------------------------------
-  POLY.space(rval('poly_space').um, euclidian).output('poly.poly.space',
-    "poly.poly.space: POLY min spacing #{rval('poly_space')} um [gds]")
-
-  #--- POLY: minimum area -------------------------------------------------------------
-  POLY.not(POLY.with_area(rval('poly_area').um2, 1e9.um2)).output('poly.poly.area',
-    "poly.poly.area: POLY min area #{rval('poly_area')} um^2 [gds]")
-
-  #--- POLY to ACT separation (field poly) -------------------------------------------
-  # 0.001 um floor: the official PO_S_11 (EXT AA PO < 0.05 ABUT<90) waives the
-  # colocated gate-overhang edges (poly edge touching the ACT at the gate end); the
-  # plain sep() flags every gate overhang as a 0-distance pair.  The classic sep()
-  # has no min/max range in KLayout 0.30.9, so use the universal-DRC expression.
-  POLY.not(ACT).drc((separation(ACT) < rval('poly_act_sep').um) & (separation(ACT) > 0.001.um)).output('poly.poly_act.sep',
-    "poly.poly_act.sep: field POLY to ACT min separation #{rval('poly_act_sep')} um [gds]")
-
-  #--- Gate length (POLY over ACT) ---------------------------------------------------
-  GATES.width(rval('poly_gate_width').um, euclidian).output('poly.gate.width',
-    "poly.gate.width: min gate length #{rval('poly_gate_width')} um [gds]")
-  # NOTE: the directional poly-overhang / diffusion-overhang rules are
-  # implemented in the advanced module (adv.gate.poly_overhang /
-  # adv.gate.act_overhang) using gate-edge zones (extended_out/in), which
-  # express the direction without isotropic false positives.  Values are
-  # placeholders / measured minima (provenance: derived), not foundry rules.
-  # Disable with -rd no_advanced=true.
-
-  #--- PPO (poly resistor marker, 41/4): PPO must be covered by POLY ----------------
-  PPO.not(POLY).output('poly.ppo.inside',
-    "poly.ppo.inside: PPO marker must be inside POLY [gds]")
+  # Unsupported source rules: PO_W_1, PO_W_2a through PO_W_2f, PO_W_3,
+  # PO_S_1 through PO_S_3, PO_S_5 through PO_S_7, PO_S_9, PO_S_11,
+  # PO_S_12, PO_S_14, PO_S_15, PO_S_16, PO_EX_1, PO_EX_2, PO_L_1,
+  # PO_R_1, PO_R_2.  PO_S_4_R, PO_S_7a_R, PO_S_8_R, PO_S_13_R,
+  # PO_S_14a_R, PO_EN_1_R through PO_EN_3_R, PO_EX_1_R, PO_EX_3_R,
+  # PO_L_2_R, and PO_A_1_R remain disabled (OPEN_RECOMMENDED_ON=NO).
+  # PO_D_* are disabled because density-window/gradient operators are absent.
 end

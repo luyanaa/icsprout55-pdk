@@ -1,0 +1,149 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Source-backed special rules for the active ICsprout55 profile
+# (Poly_EFuse_CHECK, DUP_CHECK/DEUPAD, ESD_CHECK, LATCH_UP_CHECK).
+#
+# The supplied Calibre deck is the behavioral authority. Only checks whose
+# source geometry and exclusion layers are directly representable are emitted:
+#
+#   Poly_EFuse_CHECK=YES : EFU_1b_G, EFU_1c_G, EFU_2b_G, EFU_2c_G
+#   DUP_CHECK=YES        : DEUPAD_R_2, DEUPAD_R_5, DEUPAD_R_6
+#   ESD geometry         : ESD_A_1, ESD_A_2
+#
+# Rules are emitted only when the source geometry and exclusions survive the
+# mapping. DEUPAD_R_3 is omitted because KLayout cannot reproduce Calibre's
+# ENCLOSE marker geometry. ESD_W_1 and ESD_S_1 are omitted because their
+# ABUT<90 SINGULAR REGION qualifiers have no KLayout width()/space()
+# equivalent. Device, connectivity, and Calibre-only edge/sizing semantics
+# are listed below as omitted; no geometry approximation is emitted.
+# No marker here may be presented as a Calibre-equivalent signoff result.
+#=========================================================================================
+
+if SPECIAL
+  # ESD_A_1 and ESD_A_2 thresholds come from the source values JSON.
+  esd_area_min = rval('esd_area_min').um2
+
+  #-----------------------------------------------------------------------------------------
+  # Poly E-Fuse (source lines 6377-6400, Poly_EFuse_CHECK=YES)
+  # Source bodies are exact marker Booleans with a NOT INSIDE NODRC waiver.
+  #-----------------------------------------------------------------------------------------
+  FUSEALL.not_interacting(EFUSEALL).not_inside(NODRC).output('EFU_1b_G',
+    'EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]')
+  EFUSEALL.not(FUSEALL).not_inside(NODRC).output('EFU_1c_G',
+    'EFU_1c_G: FUSEALL (292/12) must fully cover EFUSEALL (293/12) [Calibre source]')
+  EFUSEALL.not_interacting(POEFUSEBLK).not_inside(NODRC).output('EFU_2b_G',
+    'EFU_2b_G: EFUSEALL (293/12) must interact with POEFUSEBLK (294/12) [Calibre source]')
+  POEFUSEBLK.not(EFUSEALL).not_inside(NODRC).output('EFU_2c_G',
+    'EFU_2c_G: EFUSEALL (293/12) must fully cover POEFUSEBLK (294/12) [Calibre source]')
+
+  #-----------------------------------------------------------------------------------------
+  # DEUPAD - device under pad (source lines 6484-6526, DUP_CHECK=YES)
+  #
+  # Source defines padarea = DEUPAD AND MD with MD = CBi OR COVER (lines 869 and
+  # 1011), i.e. the ALPA/PA pad metal plus the passivation cover.  The active
+  # profile is total_metal=6 / top_metal=1, so the source metal_all list is
+  # M1..M5,T4M2 and via_all is V1..V4,T4V2: TM = T4M2, TM-1 = M5, and the via
+  # directly underneath the top via is V4.
+  #-----------------------------------------------------------------------------------------
+  deupad_pad_metal = CB + COVER
+  deupad_area = DEUPAD.and(deupad_pad_metal)
+
+  # DEUPAD_R_2: ((MD INTERACT DEUPAD) NOT DEUPAD) NOT INSIDE NODRC.
+  deupad_pad_metal.interacting(DEUPAD).not(DEUPAD).not_inside(NODRC).output('DEUPAD_R_2',
+    'DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]')
+
+  # DEUPAD_R_3 uses ENCLOSE on padarea against each uncovered upper-metal
+  # region. Its Calibre marker is the enclosing padarea polygon, not the
+  # uncovered geometry; omit it rather than emit different marker geometry.
+
+  # DEUPAD_R_5: ((ALPAR OR MOMLVS1 OR INDALL OR (TMres AND TM) OR
+  # (TM-1res AND TM-1)) AND padarea) NOT INSIDE NODRC.
+  deupad_forbidden_device = ALPADRES + MOMLVS1 + INDALL +
+    MET5RES.and(M5) + T4M2RES.and(TM2)
+  deupad_forbidden_device.and(deupad_area).not_inside(NODRC).output('DEUPAD_R_5',
+    'DEUPAD_R_5: ALPADres, MOMLVS1, INDALL and M5/T4M2 resistors must be outside the DEUPAD area [Calibre source]')
+
+  # DEUPAD_R_6: (padarea AND [lindex $via_all end-1]) NOT INSIDE NODRC.
+  # Source V4 includes both the interior cut and via-bar geometry.
+  deupad_area.and(V4.or(V4BAR)).not_inside(NODRC).output('DEUPAD_R_6',
+    'DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]')
+
+  # The source DEUPAD group defines no R_1 or R_4 body, so nothing is emitted
+  # for them; the manual's DEUPAD-R.4 (devices from a device truth table must
+  # sit below TM-1) has no source expression in the supplied .drc and its device
+  # table is not part of that source.
+  #
+  # DEUPAD_R_7 is not emitted.  It requires Calibre
+  # "EXT <topvia> <= 0.51 SINGULAR REGION" followed by
+  # "<topvia> INTERACT <that region>" to merge vias whose spacing is at most
+  # 0.51 um into one array, then flags padarea not interacting such an array.
+  # KLayout has no equivalent pairwise-space clustering operator, and an
+  # unqualified top-via spacing test would be a different rule.
+
+  #-----------------------------------------------------------------------------------------
+  # ESD implant geometry (source lines 8705-8727).
+  #
+  # ESD_A_1 and ESD_A_2 sit outside the ESD_CHECK conditional in the source.
+  # ESD1 is drawn on 55/1 (this deck's ESD layer).
+  #-----------------------------------------------------------------------------------------
+  # ESD_A_1: (AREA ESD1 < 0.6) NOT INSIDE NODRC.
+  ESD.not(ESD.with_area(esd_area_min, 1e9.um2)).not_inside(NODRC).output('ESD_A_1',
+    'ESD_A_1: ESD1 area must be at least 0.6 um^2 [Calibre source]')
+
+  # ESD_A_2: (AREA ((HOLES ESD1 INNER) NOT ESD1) < 0.6) NOT INSIDE NODRC.
+  esd_enclosed_void = ESD.holes.not(ESD)
+  esd_enclosed_void.not(esd_enclosed_void.with_area(esd_area_min, 1e9.um2)).not_inside(NODRC).output('ESD_A_2',
+    'ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]')
+
+  # ESD_W_1 and ESD_S_1 are omitted: ABUT<90 SINGULAR REGION qualifiers are
+  # not expressible by KLayout's width()/space() primitives.
+
+  #-----------------------------------------------------------------------------------------
+  # Omitted source checks in the assigned sections
+  #
+  # ESD_CHECK=YES device rules: ESDN_1_SEDP_1, ESDN_2_ESDP_2, ESDN_4_ESDP_4,
+  # ESDN_5_ESDP_5, ESDN_6_ESDP_6, ESDN_7_ESDP_7, ESDN_8_ESDP_8, ESDN_9,
+  # ESDN_10, ESDN_11, ESDN_12/ESDP_9, and (IO=1833) ESDN_3/ESDP_3.  They are
+  # defined on ESDIOE-scoped device classes (EGATE, ENMOS/EPMOS, ENMOS_DRAIN,
+  # EPMOS_DRAIN, ESAB, ECT, ESD3C, EGATEHV) and use ENC/EXT/INTERNAL with
+  # ABUT<90, OPPOSITE REGION, SINGULAR REGION and INSIDE EDGE qualifiers, plus
+  # LENGTH/INSIDE EDGE finger-width extraction.  Those qualifiers and the
+  # ESDIOE device recognition are not reproducible here, so the rules are not
+  # approximated.
+  #
+  # ESDN_13_R and ESDP_10_R are inside OPEN_RECOMMENDED_ON (NO in this profile)
+  # and additionally need Calibre NET AREA RATIO connectivity over the ESD
+  # drain net; not emitted.
+  #
+  # LATCH_UP_CHECK=YES rules: LU_R_2, LU_W_1, LU_S_1a, LU_S_1b, LU_S_1c,
+  # LU_S_1d (both LU_3_CHECK FAST and ACCURATE forms) and LU_S_2_NTAP /
+  # LU_S_2_PTAP.  LU_R_2, LU_W_1 and LU_S_1a-d are defined on the IO-pad
+  # net classes NACT_IO_PAD / PACT_IO_PAD / NMOS_IO_PAD / PMOS_IO_PAD
+  # (lines 8734-9138).  Those classes come from Calibre net tracing of MD/CB,
+  # the metal stack, ALPA and the VDD/VSS/VCC/GND pad text, with POWER_PAD
+  # subtracted; deriving them from geometry would fabricate I/O net
+  # identification, so no LU geometry rule is emitted on a synthetic pad class.
+  # LU_W_1 additionally needs DONUT/INT with ABUT<90 SINGULAR REGION, and
+  # LU_S_1a-d need SIZE ... BEVEL and ENCLOSE-based device extraction.
+  # LU_S_2_NTAP / LU_S_2_PTAP depend on PMOS1/NMOS1 (PACT/NACT ENCLOSE GATE
+  # device recognition), the PW/PSUB/NW/DNW well topology, and
+  # "SIZE <layer> BY <d> INSIDE OF <other> STEP 0.38 BEVEL 4" growth with
+  # same-well island restriction and an INSIDE EDGE SRINGBLK waiver.  KLayout's
+  # sized()/inside() primitives have neither that corner/step model nor an
+  # equivalent same-well pickup distance measure, so a plain 35um distance check
+  # would be a different rule and is not emitted.
+  #-----------------------------------------------------------------------------------------
+end

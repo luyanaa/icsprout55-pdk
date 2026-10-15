@@ -1,63 +1,863 @@
 {
-  "schema": "ics55-drc-fixture-check/1.0",
+  "schema": "ics55-drc-fixture-check/1.3",
+  "status": "FAIL",
+  "profiles": {
+    "main": {
+      "tables": "main",
+      "no_feol": false,
+      "no_beol": false,
+      "check_grid": false,
+      "advanced": false,
+      "no_density": true,
+      "no_mom": true,
+      "cell_exclusion": false,
+      "run_mode": "deep"
+    },
+    "density": {
+      "tables": "density",
+      "no_feol": false,
+      "no_beol": false,
+      "check_grid": false,
+      "advanced": false,
+      "no_density": false,
+      "no_mom": true,
+      "cell_exclusion": false,
+      "run_mode": "deep"
+    },
+    "mom": {
+      "tables": "mom",
+      "no_feol": false,
+      "no_beol": false,
+      "check_grid": false,
+      "advanced": false,
+      "no_density": true,
+      "no_mom": false,
+      "cell_exclusion": false,
+      "run_mode": "deep"
+    }
+  },
+  "klayout": {
+    "kind": "bin",
+    "executable": "/nix/store/rslb2hkgqa3fxvq4f0l5b65m79nnfg4d-klayout-0.30.12/Applications/klayout.app/Contents/MacOS/klayout",
+    "version": "KLayout 0.30.12"
+  },
+  "profile_sha256": "7682a0184b2456a32930e0da3f2253aa3c205e31bb52fe6c8e53027c4d4c9472",
+  "rule_inputs_sha256": {
+    "libs.tech/drc/ics55_drc.drc": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
+    "libs.tech/drc/rule_decks/advanced/10_eol_jog.drc": "d86b151f0e587210230d76a40f6146c9c6a0a5c3a06d09e0876f0559891e4630",
+    "libs.tech/drc/rule_decks/beol/06_metal.drc": "e7df782b456fa7e5f51721904bbb1f687a2eb1aa9adaef96390cecf90731753b",
+    "libs.tech/drc/rule_decks/beol/07_via.drc": "5768814db026906efc0a2b7e31f41d9170a50c76a417557c0b59370bd4185833",
+    "libs.tech/drc/rule_decks/beol/08_pad.drc": "7c5cd80efab74dc3acf7bea82af1cbf59cec08d39b8b5141e91ef8d60d6c4a17",
+    "libs.tech/drc/rule_decks/density.drc": "1df84175cf31c5d469de5c0f2cf7be1441d33620ac42af0576de6c8515e660ef",
+    "libs.tech/drc/rule_decks/dummy_slot.drc": "a9f1889aa9f7b25a9aad9bfa60b13df197aa95b5ea5b45ecd1f1770615826a3d",
+    "libs.tech/drc/rule_decks/feol/01_wells.drc": "9c713e70421c40ff7f6a2b136f6bb22ca7fa79916cb4426b995e687ac811e168",
+    "libs.tech/drc/rule_decks/feol/02_active.drc": "5792bb281a41c1ab140766288dda4fa9340b81e2eb0b5f562d4e273c89fe74e6",
+    "libs.tech/drc/rule_decks/feol/03_poly.drc": "f474b046dfeb2c43f5d0ac7827f7dd0d26bd3471ddba94294934ce4885b7eab3",
+    "libs.tech/drc/rule_decks/feol/04_implant.drc": "b90514f2d4672b58ff81aeb6d41dc767652d68e6f4ee911af8c11c6072dc56e0",
+    "libs.tech/drc/rule_decks/feol/05_cont.drc": "c97447c5b301bc2dfe233f464908a046bdb887395a5af61d9f5da530713c7969",
+    "libs.tech/drc/rule_decks/geometry/09_grid.drc": "abbaede9dfe7bb6fcf8995560775edd3d123a2dee6dcfcd6b9ba6d9c7cc94383",
+    "libs.tech/drc/rule_decks/layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
+    "libs.tech/drc/rule_decks/mom.drc": "918d1fbe9c93527087268ace3e7677ffc10f20038d7d9a581661fd3138bfa3e8",
+    "libs.tech/drc/rule_decks/special.drc": "bbbf4c024b1beca75c693aa1720c7fb113b6b9983bff404f2c98d4b06536e4ae",
+    "libs.tech/drc/rule_decks/ics55_rules.json": "2a3d7fd6ecd9ff2a0eda1c45e9c1b8470e3948050c134089eff6d463ff166367",
+    "techfile/icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
+    "libs.tech/klayout/tech/ics55.map": "26a90887ffb7d750fb55fd5a7dc8c366bf4c8557b318241ca3f7f8719e4777f1"
+  },
   "results": [
     {
       "fixture": "clean",
-      "expected_category": null,
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "67c7d50af372d1d2300d98556504a1c1005f1b31391650f80054ab5873380398",
       "categories": [],
       "status": "PASS"
     },
     {
-      "fixture": "m1_width",
-      "expected_category": "metal.m1.width",
+      "fixture": "act_area",
+      "profile": "main",
+      "expected_categories": [
+        "active.act.area"
+      ],
+      "gds_sha256": "4b8b332f1566e57a13c2adca062781509dd419fef16758d36fc6e141d8841be7",
       "categories": [
-        "metal.m1.width"
+        "active.act.area"
       ],
       "status": "PASS"
     },
     {
-      "fixture": "m1_space",
-      "expected_category": "metal.m1.space",
+      "fixture": "act_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "517724802455056a0b2dfc0ede1cbde73119cc1db4ef3dafa7d12482bfdc0db7",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "act_area_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "0a28b316a6c0fcd79366e6e91acfcdf9dbf2429584f6fae8df0f8543e6585a63",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "poly_area",
+      "profile": "main",
+      "expected_categories": [
+        "poly.poly.area"
+      ],
+      "gds_sha256": "84e49fb42ccdb4b251e48a1f8cfd0e9389429ac1cb2a1355c6f552925c8bcf9a",
       "categories": [
-        "metal.m1.space"
+        "poly.poly.area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "poly_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "bb812d835fd2d75883a273797909b349126ece48e0486b98107ee0c522edc767",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "poly_area_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "a5024c4cd5fc97e92447e4171fb63de4a234dbe6f04b756743c890ada542ca0e",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "poly_area_partial_marker",
+      "profile": "main",
+      "expected_categories": [
+        "poly.poly.area"
+      ],
+      "gds_sha256": "fca6e05862b28aefe0ef1a789767e66aa9118822b5438c0f29c6c926a3499376",
+      "categories": [
+        "poly.poly.area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "poly_hole",
+      "profile": "main",
+      "expected_categories": [
+        "poly.poly.enclosed_area"
+      ],
+      "gds_sha256": "90b7c9ad6a7ce8a4e3ea430a110ea2d64148ea21a5a9872c5ad4103ded801b13",
+      "categories": [
+        "poly.poly.enclosed_area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "poly_hole_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "ff8ead241afcac58c7f64dd7990042e85754d9a2d9885095f98927537624e256",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "np_area",
+      "profile": "main",
+      "expected_categories": [
+        "implant.np.area"
+      ],
+      "gds_sha256": "7659b67c1e4346e5fdeca62c14c4e31932a53938bf3f7d5c582b9c63f9def7ec",
+      "categories": [
+        "implant.np.area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "np_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "f9fd39cc77ad9dfa63f9a9edeb7da3fc8d1ed0e636b74c516afd51a658cb85ef",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "pp_area",
+      "profile": "main",
+      "expected_categories": [
+        "implant.pp.area"
+      ],
+      "gds_sha256": "14112447964633b75b62dc4d53547ee1d68f358568ab9b1ff3718b0140163c09",
+      "categories": [
+        "implant.pp.area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "pp_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "bbcb1a4d084fae08d5a9777a42c15997f2bc06f251f00f66985b6c960b9cc1ef",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "ct_outside_required_layers",
+      "profile": "main",
+      "expected_categories": [
+        "cont.ct.inside"
+      ],
+      "gds_sha256": "5a562b0e2a54e5e067a0bfbe7b885e6b90b1411c7e646f7d224d53402db964f0",
+      "categories": [
+        "cont.ct.inside"
       ],
       "status": "PASS"
     },
     {
       "fixture": "m1_area",
-      "expected_category": "metal.m1.area",
+      "profile": "main",
+      "expected_categories": [
+        "metal.m1.area"
+      ],
+      "gds_sha256": "c2f1d9ae6a6a502285298106c70b1e86f053252b7019bf96173a3d2c7dc705fc",
       "categories": [
         "metal.m1.area"
       ],
       "status": "PASS"
     },
     {
-      "fixture": "v1_width",
-      "expected_category": "via.v1.width",
+      "fixture": "m1_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "53ddc028fe4d3db8c6d6181a9d57eaa2a94a4a540c35763a40efb13ada9df230",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_area_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "a1d7a03b761e0a60317b3ce2a3b84012faf3ab71b4d9c3a547b3744c44c9f1f7",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_hole",
+      "profile": "main",
+      "expected_categories": [
+        "metal.m1.min_hole"
+      ],
+      "gds_sha256": "b6fa0a80910d7c4048d7fdd44cb68fd0eff98a6769707a40414e21a104f39a34",
+      "categories": [
+        "metal.m1.min_hole"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_hole_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "10be9f16e14416c97e25d7a6e25ed9ff550cfd5c24154db78d48fbd056090e16",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "t4m2_area",
+      "profile": "main",
+      "expected_categories": [
+        "metal.tm2.area"
+      ],
+      "gds_sha256": "f5e7fc3ab9c9d70e2509b64d419cfb5231a7a6203110c3544a697cbfda5fcb96",
+      "categories": [
+        "metal.tm2.area"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "t4m2_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "eb7f38cc52ff3183c382fb1f852424b8b09d22e5b2646d2c1357878a342f4852",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "t4m2_hole",
+      "profile": "main",
+      "expected_categories": [
+        "metal.tm2.min_hole"
+      ],
+      "gds_sha256": "39d053de1bcab3953a9a88676c5842603c03cfbe45f1d29141664c9467f2503e",
+      "categories": [
+        "metal.tm2.min_hole"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "t4m2_hole_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "64332b712ab6a8c9e0b4e8a187bcad37bcb5d976b18702a3a3379af0b457f820",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_wrong_square",
+      "profile": "main",
+      "expected_categories": [
+        "via.v1.width"
+      ],
+      "gds_sha256": "2af96c2e064f47584c1038e6b044b4013e6a2191b40b5c5a1e26a7a0b9e9ebc6",
       "categories": [
         "via.v1.width"
       ],
       "status": "PASS"
     },
     {
-      "fixture": "v1_enc",
-      "expected_category": "via.v1.enc",
+      "fixture": "v1_square_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "71e03e70d6660af33b6f82fb35cc4fab1d1ce3ea00607476e86462c3e06ac448",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_bar_not_used_by_w1",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "6ad603de223821c3ae6a1dcc258e28662709197d2299042fd80c3e56b0a63acf",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_uncovered_lower_metal",
+      "profile": "main",
+      "expected_categories": [
+        "via.v1.cover.lower"
+      ],
+      "gds_sha256": "1a3eba99639b46065b7d1a0a9c88539780392d309d472ba53053253da19b9072",
       "categories": [
-        "via.v1.enc.lower",
-        "via.v1.enc.upper"
+        "via.v1.cover.lower"
       ],
       "status": "PASS"
     },
     {
-      "fixture": "v1_space",
-      "expected_category": "via.v1.space",
-      "categories": [
-        "via.v1.array_space",
-        "via.v1.space"
+      "fixture": "v1_uncovered_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "03f5afa8e68f9efc3638a795beefeab6a505c548746088ae0d89fa6f897649eb",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_diagonal_edges",
+      "profile": "main",
+      "expected_categories": [
+        "via.v1.rotated",
+        "via.v1.width"
       ],
+      "gds_sha256": "1b5b8d4b64d09431c33af43fec574c46b8a135ee91226af81878252ecacadb61",
+      "categories": [
+        "via.v1.rotated",
+        "via.v1.width"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_diagonal_sringblk_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "900fa4b48f132b2fd3a3330a44823f3277afd0a9c31096659e4add75fdba1ac7",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "v1_grid_exclusion",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "fabd004a12e9471be6204c4c1812f07e49db935cf17062b45af8057ed2fe4a7e",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "rv_wrong_rectangle",
+      "profile": "main",
+      "expected_categories": [
+        "pad.rv.width"
+      ],
+      "gds_sha256": "ff7f0e7ea17f037c441c72c25e5ffde2bb16083b064f24f8cddfdeccff539ce4",
+      "categories": [
+        "pad.rv.width"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "rv_grid_exclusion",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "1624fe9047cb8ae72551a197c0e5841b070eb4d500354a4427e3566aa10c038f",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "rv_exact_rectangle",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "0be770cc979729e857f7b8fbec828d3a5e72cbeb7108eb9be453864295961595",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "rv_outside_rdl",
+      "profile": "main",
+      "expected_categories": [
+        "pad.rv.cover.rdl"
+      ],
+      "gds_sha256": "8413d84ca509383c04d73b4a322b6417b135887eff3d1f5918e5dbf57ffeaac6",
+      "categories": [
+        "pad.rv.cover.rdl"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "cover_outside_alpa",
+      "profile": "main",
+      "expected_categories": [
+        "pad.cover.alpa_full"
+      ],
+      "gds_sha256": "1ed11a5f75ae7be9dc58b8ffb4edde44399f0abdc437e4223ea3c3d23b465b15",
+      "categories": [
+        "pad.cover.alpa_full"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "cb_outside_alpad",
+      "profile": "main",
+      "expected_categories": [
+        "pad.cb.alpad_full"
+      ],
+      "gds_sha256": "f1865049ac573e02a5e24e2f15653d596245e4113e18ee7ba1030367283b1e1b",
+      "categories": [
+        "pad.cb.alpad_full"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "act_dummy_valid",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "1e53f1afe7dde690a79c617f0f2392dc07b98ceac05a0c46f90509b8e1edf160",
+      "categories": [
+        "AADUM_W_1"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "unexpected categories present: ['AADUM_W_1']"
+      ]
+    },
+    {
+      "fixture": "act_dummy_invalid",
+      "profile": "main",
+      "expected_categories": [
+        "AADUM_W_1"
+      ],
+      "gds_sha256": "ea1a6d4af1265fbebd3603f9fbf85a7d78959123f3c565c7c4101d42bc571963",
+      "categories": [
+        "AADUM_W_1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "act_dummy_ct_overlap",
+      "profile": "main",
+      "expected_categories": [
+        "AADUM_R_1"
+      ],
+      "gds_sha256": "d7ff11854874710c2b97ebe48e72d2fd50bc005c4c4c91c98136a461c5dc6b7b",
+      "categories": [
+        "AADUM_R_1",
+        "AADUM_W_1"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "unexpected categories present: ['AADUM_W_1']"
+      ]
+    },
+    {
+      "fixture": "poly_dummy_valid",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "2e000f59434344dbd0327e845f79101144b8e72e064d2089a5ec7992ea2f642b",
+      "categories": [
+        "PODUM_W_1"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "unexpected categories present: ['PODUM_W_1']"
+      ]
+    },
+    {
+      "fixture": "poly_dummy_invalid",
+      "profile": "main",
+      "expected_categories": [
+        "PODUM_W_1"
+      ],
+      "gds_sha256": "ed97dca07ba3b1ee9a8170321f8276920ff09b84bef88dd9a20346970dfb4193",
+      "categories": [
+        "PODUM_W_1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "m1_dummy_invalid",
+      "profile": "main",
+      "expected_categories": [
+        "M1DUM_W_1"
+      ],
+      "gds_sha256": "d7dc47257222b9c6c7fb29d8688a1e7aead14a75fe5b811b9c7d4374212d04fe",
+      "categories": [
+        "M1DUM_W_1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "t4m2_dummy_valid_rotated",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "106a460509f8cbd97fe78c608eef03396471969727ba71c48fd1b9797c7ae3e2",
+      "categories": [
+        "T4M2DUM_W_1"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "unexpected categories present: ['T4M2DUM_W_1']"
+      ]
+    },
+    {
+      "fixture": "slot_cb_overlap",
+      "profile": "main",
+      "expected_categories": [
+        "SL_R_1"
+      ],
+      "gds_sha256": "2957730e4c4d81db9f56265a21815ced64241e678eaa061a63906b54b896b717",
+      "categories": [
+        "SL_R_1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "efu_fuse_without_efuse",
+      "profile": "main",
+      "expected_categories": [
+        "EFU_1b_G"
+      ],
+      "gds_sha256": "436c525cd557d50714a120b74676e37adbd00f78fa863a89e22610c47f961404",
+      "categories": [
+        "EFU_1b_G"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "efu_efuse_uncovered_by_fuse",
+      "profile": "main",
+      "expected_categories": [
+        "EFU_1c_G",
+        "EFU_2b_G"
+      ],
+      "gds_sha256": "861ab4dad808fc4dd1b1347a8bd31e11f3afc4c0ba655aea0bd414b636f5a87c",
+      "categories": [
+        "EFU_1c_G",
+        "EFU_2b_G"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "efu_po_block_uncovered",
+      "profile": "main",
+      "expected_categories": [
+        "EFU_2c_G"
+      ],
+      "gds_sha256": "841b87fcc82766b65ca3f014cefd6c8d625f3e404cc0f09d67366ce6efaeff19",
+      "categories": [
+        "EFU_2c_G"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "efu_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "0f76e32bdb995a69ded1b6b6f56e57e0291d3c39c9e9f96014cbdbc88fafc99c",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "deupad_r2",
+      "profile": "main",
+      "expected_categories": [
+        "DEUPAD_R_2"
+      ],
+      "gds_sha256": "16a8337ae8d02a959a6c8a34adb2c6ab29797d805f51cfb046415b5aa844dece",
+      "categories": [
+        "DEUPAD_R_2"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "deupad_r2_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "9db6c59b18262e2f95cd774701a32011b5ab3bd0ba2a1e3e7c9f1a9b843714a6",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "deupad_r5",
+      "profile": "main",
+      "expected_categories": [
+        "DEUPAD_R_5"
+      ],
+      "gds_sha256": "1e633043543dc87df26446e37d83a8df065f5ce13272e2fe9c578b312c2e7f0c",
+      "categories": [
+        "DEUPAD_R_5"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "deupad_r6_v4bar",
+      "profile": "main",
+      "expected_categories": [
+        "DEUPAD_R_6"
+      ],
+      "gds_sha256": "fd1c16b00bbfc76934d9756b70e8e52ed7f411ca2c7e29e047e1eaf677db75ba",
+      "categories": [
+        "DEUPAD_R_6"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "esd_area",
+      "profile": "main",
+      "expected_categories": [
+        "ESD_A_1"
+      ],
+      "gds_sha256": "a2c0b6572c8eb25b957e3a82c9d1903bdbae841c4ccd9a628ddddb2ff58383fc",
+      "categories": [
+        "ESD_A_1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "esd_area_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "f135bd792dec042c53ceff0bff6843ea968a5a9f5e74d9be05427c6223d39da7",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "esd_area_nodrc_waived",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "5de47daf92bc289487e82d93eab3559018620671c99cde1c5cd4c4347249795e",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "esd_hole",
+      "profile": "main",
+      "expected_categories": [
+        "ESD_A_2"
+      ],
+      "gds_sha256": "8a8891b9fbf3cfe216b56efd47d175553d0fc8fe860cc46994093a26147f3ee8",
+      "categories": [
+        "ESD_A_2"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "esd_hole_at_limit",
+      "profile": "main",
+      "expected_categories": [],
+      "gds_sha256": "a3bc23267492706d47bffd042d44892d1a3b51559f9ae0fe7568719564b2fa4f",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "density_act_low",
+      "profile": "density",
+      "expected_categories": [
+        "ACT_D_1_min",
+        "ACT_D_4_min"
+      ],
+      "gds_sha256": "b944578a6ca822fa3426d5c1961387537a9a7f051b1148c29a5f287136f1eca0",
+      "categories": [
+        "ACT_D_4_min"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "expected categories absent: ['ACT_D_1_min']"
+      ]
+    },
+    {
+      "fixture": "density_act_exact_min",
+      "profile": "density",
+      "expected_categories": [
+        "ACT_D_4_min"
+      ],
+      "gds_sha256": "86fae7b5868794e4481ec657c656bac4b4f5afac88888700e8ca577e775406a1",
+      "categories": [
+        "ACT_D_4_min"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "density_act_exact_max",
+      "profile": "density",
+      "expected_categories": [
+        "ACT_D_4_max"
+      ],
+      "gds_sha256": "5ebb68de1f0012ccb8932daebac10b2f528a3c891d1155a6edeb1343bec132c8",
+      "categories": [
+        "ACT_D_4_max"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "density_backup_min",
+      "profile": "density",
+      "expected_categories": [
+        "ACT_D_1_min"
+      ],
+      "gds_sha256": "199ab09f088920915fd37631b30d38ce83013e623e051326765d1777e2dff91b",
+      "categories": [],
+      "status": "FAIL",
+      "issues": [
+        "expected categories absent: ['ACT_D_1_min']"
+      ]
+    },
+    {
+      "fixture": "density_nodrc_waived",
+      "profile": "density",
+      "expected_categories": [],
+      "gds_sha256": "eebb6d6c945c333bfe27e5c44f42dd4bfc9187fd09193ee34a0b465bab659df3",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "density_act_dummy_low",
+      "profile": "density",
+      "expected_categories": [
+        "ACT_D_1_min",
+        "ACT_D_2",
+        "ACT_D_4_min"
+      ],
+      "gds_sha256": "c265fb099212abb87bfcc545a1d9d7fc2dbf58c98d6748cda5c7fe102ff019bd",
+      "categories": [
+        "ACT_D_1_min",
+        "ACT_D_4_min"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "expected categories absent: ['ACT_D_2']"
+      ]
+    },
+    {
+      "fixture": "density_m1_dummy_low",
+      "profile": "density",
+      "expected_categories": [
+        "MET1_D_1_min",
+        "MET1_D_2"
+      ],
+      "gds_sha256": "a8fc7c33920a7d7b0632cbdf5e48a5e14bb14aea720568efcd2027e6dc5cae43",
+      "categories": [
+        "MET1_D_2"
+      ],
+      "status": "FAIL",
+      "issues": [
+        "expected categories absent: ['MET1_D_1_min']"
+      ]
+    },
+    {
+      "fixture": "density_t4m2_dummy_low",
+      "profile": "density",
+      "expected_categories": [
+        "T4M2_D_1_min",
+        "T4M2_D_2"
+      ],
+      "gds_sha256": "281c8b67f7f859e686d37d4742048f78e04720e383c3539edfc4672e1487590c",
+      "categories": [],
+      "status": "FAIL",
+      "issues": [
+        "expected categories absent: ['T4M2_D_1_min', 'T4M2_D_2']"
+      ]
+    },
+    {
+      "fixture": "mom_v1_m1mom",
+      "profile": "mom",
+      "expected_categories": [
+        "mom.MOM_R_1.V1.MET1MOM"
+      ],
+      "gds_sha256": "cf7f3130a8fd5232030d3291b1eee37c4ba1810f4a5f2cb264ebe6527701627b",
+      "categories": [
+        "mom.MOM_R_1.V1.MET1MOM"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "mom_v1bar_m1mom",
+      "profile": "mom",
+      "expected_categories": [
+        "mom.MOM_R_1.V1.MET1MOM"
+      ],
+      "gds_sha256": "757557f738f6d9cff2a862af84cb4207faa85031f53776d34a318ba8e8d88d75",
+      "categories": [
+        "mom.MOM_R_1.V1.MET1MOM"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "mom_v1_nodrc_waived",
+      "profile": "mom",
+      "expected_categories": [],
+      "gds_sha256": "0faef52dce30f6bd220eda464bdfdc25f4513c00a2ce4dab6d36ceea4f5a2d2e",
+      "categories": [],
+      "status": "PASS"
+    },
+    {
+      "fixture": "mom_forbidden_m1_cap23",
+      "profile": "mom",
+      "expected_categories": [
+        "mom.MOM_R_2.forbidden_stack.MET1MOM.23"
+      ],
+      "gds_sha256": "3d495d2e96a79a4c19c65e63f5e01abfecfa99132d3eef9b80bfa3e5de16ae68",
+      "categories": [
+        "mom.MOM_R_2.forbidden_stack.MET1MOM.23"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "mom_cap12_missing_label",
+      "profile": "mom",
+      "expected_categories": [
+        "mom.MOM_R_2.label_stack.12"
+      ],
+      "gds_sha256": "4866823bb33d14b23512876df2602dc671889090045f50cd395ea75cd5d394ea",
+      "categories": [
+        "mom.MOM_R_2.label_stack.12"
+      ],
+      "status": "PASS"
+    },
+    {
+      "fixture": "mom_cap12_valid_label",
+      "profile": "mom",
+      "expected_categories": [],
+      "gds_sha256": "70a9d63769ad5b3ea71186f4df7e2f9eaff97098e6422d741a0c5b367c28201b",
+      "categories": [],
       "status": "PASS"
     }
   ],
-  "deck_sha256": "fa4321bdbdb1573d4c8e87d2592fa2c5bb416d586fe7066e960730afdc3f98c2",
-  "fixtures_sha256": "10015f1a08b00c0d4a25abd7609c27fafa5bcd1b37c4ce3d9ac7cc12354d12cd"
+  "deck_sha256": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
+  "fixture_generator_sha256": "4652621e149f46ddab4eacdf444b9e3ea8a27e05194bfc4ed0d1ce945a48ca06",
+  "fixture_runner_sha256": "303df325a2d5c9a8df87360b82705eeadd93fccdc8ad238a9553b3426f3620ff"
 }

@@ -22,17 +22,20 @@
 #
 # Conductor stack: NSD/PSD/POLY -> CT -> M1 -> V1 -> M2 ... M5 -> TV2 -> TM2.
 # Implants (NP/PP/ESD/LVTN/...) are masks and carry no connectivity.
-# Pins: M1..M5 labels (81/6..85/6) and TM2 labels (103/6) name the nets.
-# Bulk: PSUB globally tied to VSS, NW to VDD (std-cell convention) unless
-# -rd no_well_ties=true.
+# Net labels: M1..M5 (81/6..85/6) and TM2 (103/6) name the nets. Top-level
+# ports come only from direct top-cell text, selected by PORT DEPTH 0 in ics55.lvs.
+# Default std-cell mode globally ties PSUB/NW to VSS/VDD; -rd no_well_ties=true
+# uses CT-qualified physical taps and preserves isolated well islands.
 #=========================================================================================
 
 # --- source/drain and poly to contacts ---------------------------------------------
 
-connect(NSD, CT)
-connect(PSD, CT)
-connect(NIOSD, CT)
-connect(PIOSD, CT)
+connect(N_SD, CT)
+connect(P_SD, CT)
+connect(CT, N_TAP)
+connect(CT, P_TAP)
+connect(NIO_SD, CT)
+connect(PIO_SD, CT)
 connect(POLY_CON, CT)
 
 # --- gate terminal layers into the poly net ----------------------------------------
@@ -81,9 +84,21 @@ connect(M4, M4LBL)
 connect(M5, M5LBL)
 connect(TM2, TM2LBL)
 
-# --- bulk ties (std-cell convention: CDL bulk terminals are VDD/VSS) ---------------
+# Device bulk annotations are separate from physical body regions, avoiding
+# direct soft-connects on a MOS device terminal.
+connect(MOS_BULK_ANNOTATION, PSUB)
+connect(MOS_BULK_ANNOTATION, NW)
 
 if WELL_TIES
+  # Standard-cell GDS has no local taps; model its body convention explicitly.
   connect_global(PSUB, "VSS")
   connect_global(NW, "VDD")
+else
+  # Macro/analog mode follows contacted physical taps; isolated well islands
+  # remain distinct and an uncontacted body is not silently tied to a rail.
+  soft_connect_global(PSUB, "SUBSTRATE")
+  connect(NW, NW)
+  connect(PSUB, PSUB)
+  soft_connect(N_TAP, NW)
+  soft_connect(P_TAP, PSUB)
 end

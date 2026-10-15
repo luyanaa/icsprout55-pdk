@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>active.act.area</name>
+   <description>ACT_A_1: AA minimum area 0.0384 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.area</name>
+   <description>PO_A_1: POLY minimum area 0.04 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.enclosed_area</name>
+   <description>PO_A_2: POLY enclosed area minimum 0.09 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.area</name>
+   <description>NP_A_1: NP minimum area 0.12 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.enclosed_area</name>
+   <description>NP_A_2: NP enclosed area minimum 0.12 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.area</name>
+   <description>PP_A_1: PP minimum area 0.12 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.enclosed_area</name>
+   <description>PP_A_2: PP enclosed area minimum 0.12 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.inside</name>
+   <description>CT_EN_1: CT must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.area</name>
+   <description>MET1_A_1: M1 area must be at least 0.042 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.min_hole</name>
+   <description>MET1_A_2: M1 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.area</name>
+   <description>M2_A_1: M2 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.min_hole</name>
+   <description>M2_A_2: M2 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.area</name>
+   <description>M3_A_1: M3 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.min_hole</name>
+   <description>M3_A_2: M3 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.area</name>
+   <description>M4_A_1: M4 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.min_hole</name>
+   <description>M4_A_2: M4 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.area</name>
+   <description>M5_A_1: M5 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.min_hole</name>
+   <description>M5_A_2: M5 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.area</name>
+   <description>T4M2_A_1: T4M2 area must be at least 0.4 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.min_hole</name>
+   <description>T4M2_A_2: T4M2 enclosed area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.width</name>
+   <description>V1_W_1: V1 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.rotated</name>
+   <description>V1_R_5: 45-degree V1 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.lower</name>
+   <description>V1_EN_2a_2b_2c: V1 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.width</name>
+   <description>V2_W_1: V2 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.rotated</name>
+   <description>V2_R_5: 45-degree V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.lower</name>
+   <description>V2_EN_2a_2b_2c: V2 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.width</name>
+   <description>V3_W_1: V3 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.rotated</name>
+   <description>V3_R_5: 45-degree V3 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.lower</name>
+   <description>V3_EN_2a_2b_2c: V3 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.width</name>
+   <description>V4_W_1: V4 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.rotated</name>
+   <description>V4_R_5: 45-degree V4 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.cover.lower</name>
+   <description>V4_EN_2a_2b_2c: V4 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.rotated</name>
+   <description>T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 must be covered by M5 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.width</name>
+   <description>RV_W_1: RV must be a 3x3 um rectangle after source fuse/grid exclusions [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cover.rdl</name>
+   <description>RV_EN_3_4: RV must be covered by RDL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.alpa_full</name>
+   <description>RDL_EN_1: COVER must be fully covered by ALPA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.alpad_full</name>
+   <description>RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_W_1</name>
+   <description>AADUM_W_1: ACTDUM must be a source-defined 3.0x3.0, 1.0x1.0, or 0.467x0.467 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_R_1</name>
+   <description>AADUM_R_1: ACTDUM must not overlap CT</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_W_1</name>
+   <description>PODUM_W_1: POLYDUM must be a source-defined 2.4x2.4, 0.92x0.92, or 0.381x0.381 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_R_1</name>
+   <description>PODUM_R_1: POLYDUM must not overlap CT</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_W_1</name>
+   <description>M1DUM_W_1: M1 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_W_1</name>
+   <description>M2DUM_W_1: M2 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_W_1</name>
+   <description>M3DUM_W_1: M3 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_W_1</name>
+   <description>M4DUM_W_1: M4 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M5DUM_W_1</name>
+   <description>M5DUM_W_1: M5 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_W_1</name>
+   <description>T4M2DUM_W_1: T4M2 dummy must be a source-defined 2x2, 1x1, or 0.6x1.2 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_R_1</name>
+   <description>SL_R_1: T4M2 slot must not overlap CB</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1b_G</name>
+   <description>EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1c_G</name>
+   <description>EFU_1c_G: FUSEALL (292/12) must fully cover EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2b_G</name>
+   <description>EFU_2b_G: EFUSEALL (293/12) must interact with POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2c_G</name>
+   <description>EFU_2c_G: EFUSEALL (293/12) must fully cover POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_2</name>
+   <description>DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_5</name>
+   <description>DEUPAD_R_5: ALPADres, MOMLVS1, INDALL and M5/T4M2 resistors must be outside the DEUPAD area [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_6</name>
+   <description>DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_1</name>
+   <description>ESD_A_1: ESD1 area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_2</name>
+   <description>ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>DEUPAD_R_5</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0.2,0.2;0.2,0.8;0.8,0.8;0.8,0.2)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>mom.MOM_R_1.V1.MET1MOM</name>
+   <description>MOM_R_1: V1 intersects MET1MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V1.MET2MOM</name>
+   <description>MOM_R_1: V1 intersects MET2MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V2.MET2MOM</name>
+   <description>MOM_R_1: V2 intersects MET2MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V2.MET3MOM</name>
+   <description>MOM_R_1: V2 intersects MET3MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V3.MET3MOM</name>
+   <description>MOM_R_1: V3 intersects MET3MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V3.MET4MOM</name>
+   <description>MOM_R_1: V3 intersects MET4MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V4.MET4MOM</name>
+   <description>MOM_R_1: V4 intersects MET4MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.V4.MET5MOM</name>
+   <description>MOM_R_1: V4 intersects MET5MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_1.T4V2.MET5MOM</name>
+   <description>MOM_R_1: T4V2 intersects MET5MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.12</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.12</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.12</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.12</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.12</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.12</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.13</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.13</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.13</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.13</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.13</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.14</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.14</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.14</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.14</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.15</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap15 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.15</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap15 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.15</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap15 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.16</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap16 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.16</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap16 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.17</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap17 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.23</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.23</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.23</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.23</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.23</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.23</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.24</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.24</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.24</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.24</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.24</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.25</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.25</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.25</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.25</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.26</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap26 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.26</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap26 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.27</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap27 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.27</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap27 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.28</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap28 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.34</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.34</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.34</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.34</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.34</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.34</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.35</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.35</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.35</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.35</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.35</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.36</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.36</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.36</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.36</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.37</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap37 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.37</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap37 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.37</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap37 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.38</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap38 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.38</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap38 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.45</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.45</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.45</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.45</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.45</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.45</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.46</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.46</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.46</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.46</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.46</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.47</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.47</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.47</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.47</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.48</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap48 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.48</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap48 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.48</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap48 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.56</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.56</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.56</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.56</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.56</name>
+   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.56</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.57</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.57</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.57</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.57</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.57</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.58</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.58</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.58</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.58</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.67</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.67</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.67</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.67</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.67</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.67</name>
+   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.68</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.68</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.68</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.68</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.68</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.78</name>
+   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.78</name>
+   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.78</name>
+   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.78</name>
+   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.78</name>
+   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.78</name>
+   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.12</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap12 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.13</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap13 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.14</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap14 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.15</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap15 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.16</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap16 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.17</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap17 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.18</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap18 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.23</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap23 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.24</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap24 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.25</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap25 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.26</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap26 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.27</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap27 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.28</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap28 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.34</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap34 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.35</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap35 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.36</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap36 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.37</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap37 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.38</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap38 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.45</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap45 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.46</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap46 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.47</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap47 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.48</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap48 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.56</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap56 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.57</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap57 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.58</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap58 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.67</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap67 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.68</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap68 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.label_stack.78</name>
+   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap78 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>'mom.MOM_R_2.label_stack.12'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0,0;0,1;1,1;1,0)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

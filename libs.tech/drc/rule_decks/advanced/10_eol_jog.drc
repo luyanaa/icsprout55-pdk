@@ -34,10 +34,10 @@
 # Rule values: provenance `derived` in ics55_rules.json - the released
 # libraries bound them from above (measured drawn minima: poly gate overhang
 # 0.110 um, active gate overhang 0.140 um, drawn steps >= 5nm) but they are
-# NOT foundry rule values.  Disable with -rd no_advanced=true.
+# NOT foundry rule values. Enable with -rd advanced=true or tables=advanced.
 #=========================================================================================
 
-if TABLES.include?('advanced') || ADVANCED
+if ADVANCED
 
   # cleaned input: snap to the 1nm manufacturing grid, remove jog artifacts,
   # clean (removes the small steps introduced by grid snapping/binarization)

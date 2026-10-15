@@ -1,6 +1,6 @@
 {
  "schema": "ics55-pv-rule-map/1.0",
- "note": "Explicit Calibre<->KLayout rule/device equivalence map. Entries absent from this map are NOT claimed equivalent. Populated as alignment phases land.",
+ "note": "Explicit Calibre<->KLayout LVS device/recognition crosswalk. Entries absent from this map are NOT claimed equivalent; this is not DRC coverage or blanket equivalence.",
  "lvs": {
   "core_mos_1p2": {
    "official": {

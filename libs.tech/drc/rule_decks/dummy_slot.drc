@@ -1,0 +1,87 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Exact geometry-only dummy/slot checks from the supplied Calibre source.
+# Spacing predicates using ABUT<90, SINGULAR, REGION, Mn_2c_DUM, or dynamic
+# NOT RECTANGLE qualifiers are omitted rather than approximated with KLayout
+# space/bounding-box checks.
+if DUMMY_SLOT
+  exact_rectangle = lambda do |layer, width, height|
+    area = (width * height).um2
+    layer.with_bbox_width(width.um).with_bbox_height(height.um).with_area(area)
+  end
+  act_dummy_3 = rval('act_dummy_3')
+  act_dummy_1 = rval('act_dummy_1')
+  act_dummy_0467 = rval('act_dummy_0467')
+  poly_dummy_24 = rval('poly_dummy_24')
+  poly_dummy_092 = rval('poly_dummy_092')
+  poly_dummy_0381 = rval('poly_dummy_0381')
+  metal_dummy_2 = rval('metal_dummy_2')
+  metal_dummy_1 = rval('metal_dummy_1')
+  metal_dummy_rect_width = rval('metal_dummy_rect_width')
+  metal_dummy_rect_length = rval('metal_dummy_rect_length')
+  t4m2_dummy_rect_width = rval('t4m2_dummy_rect_width')
+  t4m2_dummy_rect_length = rval('t4m2_dummy_rect_length')
+
+  # AADUM shape whitelist and overlap rules.
+  aadum_allowed = exact_rectangle.call(ACTDUM, act_dummy_3, act_dummy_3)
+    .or(exact_rectangle.call(ACTDUM, act_dummy_1, act_dummy_1))
+    .or(exact_rectangle.call(ACTDUM, act_dummy_0467, act_dummy_0467))
+  ACTDUM.not(aadum_allowed).output('AADUM_W_1',
+    "AADUM_W_1: ACTDUM must be a source-defined #{act_dummy_3}x#{act_dummy_3}, #{act_dummy_1}x#{act_dummy_1}, or #{act_dummy_0467}x#{act_dummy_0467} um rectangle")
+  ACTDUM.and(CT).output('AADUM_R_1', 'AADUM_R_1: ACTDUM must not overlap CT')
+
+  # PODUM shape whitelist and overlap rules.
+  podum_allowed = exact_rectangle.call(POLYDUM, poly_dummy_24, poly_dummy_24)
+    .or(exact_rectangle.call(POLYDUM, poly_dummy_092, poly_dummy_092))
+    .or(exact_rectangle.call(POLYDUM, poly_dummy_0381, poly_dummy_0381))
+  POLYDUM.not(podum_allowed).output('PODUM_W_1',
+    "PODUM_W_1: POLYDUM must be a source-defined #{poly_dummy_24}x#{poly_dummy_24}, #{poly_dummy_092}x#{poly_dummy_092}, or #{poly_dummy_0381}x#{poly_dummy_0381} um rectangle")
+  POLYDUM.and(CT).output('PODUM_R_1', 'PODUM_R_1: POLYDUM must not overlap CT')
+
+  # M1-M5 and the selected T4M2 top-metal dummy shape whitelists. Source
+  # spacing checks are omitted because their qualifiers and layer-specific
+  # source macros differ from KLayout's generic spacing result.
+  metal_dummies = [
+    ['M1', MET1DUM], ['M2', MET2DUM], ['M3', MET3DUM],
+    ['M4', MET4DUM], ['M5', MET5DUM], ['T4M2', T4M2DUM]
+  ]
+  metal_dummies.each do |name, dummy|
+    if name == 'T4M2'
+      special = exact_rectangle.call(dummy, t4m2_dummy_rect_width, t4m2_dummy_rect_length)
+        .or(exact_rectangle.call(dummy, t4m2_dummy_rect_length, t4m2_dummy_rect_width))
+      special_size = "#{t4m2_dummy_rect_width}x#{t4m2_dummy_rect_length}"
+    else
+      special = exact_rectangle.call(dummy, metal_dummy_rect_width, metal_dummy_rect_length)
+        .or(exact_rectangle.call(dummy, metal_dummy_rect_length, metal_dummy_rect_width))
+      special_size = "#{metal_dummy_rect_width}x#{metal_dummy_rect_length}"
+    end
+    allowed = exact_rectangle.call(dummy, metal_dummy_2, metal_dummy_2)
+      .or(exact_rectangle.call(dummy, metal_dummy_1, metal_dummy_1))
+      .or(special)
+    rule_id = name == 'T4M2' ? 'T4M2DUM_W_1' : "#{name}DUM_W_1"
+    dummy.not(allowed).output(rule_id,
+      "#{rule_id}: #{name} dummy must be a source-defined 2x2, 1x1, or #{special_size} um rectangle")
+  end
+
+  # Slot-to-CB overlap is an exact Boolean check. SL_W_1_L_1 and SL_S_1 are
+  # omitted: the former requires Calibre's dynamic NOT RECTANGLE predicate;
+  # the latter uses ABUT<90 SINGULAR REGION.
+  [
+    ['M1', MET1SLOT], ['M2', MET2SLOT], ['M3', MET3SLOT],
+    ['M4', MET4SLOT], ['M5', MET5SLOT], ['T4M2', T4M2SLOT]
+  ].each do |name, slot|
+    slot.and(CB).output('SL_R_1', "SL_R_1: #{name} slot must not overlap CB")
+  end
+end

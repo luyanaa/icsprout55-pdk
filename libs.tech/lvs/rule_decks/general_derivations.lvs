@@ -15,10 +15,16 @@
 #=========================================================================================
 # ICsprout55 LVS general derivations
 #
-# Substrate region for MOS bulk terminals.
-#   - p-substrate: active outside the n-well (NMOS bodies; std-cell design style).
-#   - n-well: drawn NW (globally tied to VDD unless -rd no_well_ties=true).
-#=========================================================================================
-
-# p-substrate = active outside the n-well (NMOS bodies; std-cell design style)
-PSUB = ACT.not(NW).not(TGOX)
+# Substrate is the layout extent (expanded like Calibre's BULK = SIZE(EXTENT)
+# BY 0.1) with n-well holes removed. The source extent lets a body in a leaf
+# meet a real substrate tap in its wrapper; the fallback supports layer-only
+# runs with no layout source.
+SUBSTRATE_EXTENT = if defined?(src) && src
+                     src.extent.sized(0.1)
+                   else
+                     ACT.extents(0.1)
+                   end
+PSUB = SUBSTRATE_EXTENT.not(NW)
+# Keep each MOS body annotation separate from physical body layers until the
+# explicit tap/global-tie rules below connect it.
+MOS_BULK_ANNOTATION = make_layer

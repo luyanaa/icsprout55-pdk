@@ -1,9 +1,9 @@
 {
  "drc_rules": {
   "manufacturing_grid": 0.001,
-  "act_width": 0.081,
+  "act_width": 0.08,
   "act_space": 0.11,
-  "act_area": 0.0555,
+  "act_area": 0.0384,
   "nw_width": 0.47,
   "nw_space": 0.47,
   "nw_act_enc": 0.15,
@@ -14,16 +14,17 @@
   "nw_iowell_sep": 0.4,
   "poly_width": 0.06,
   "poly_space": 0.12,
-  "poly_area": 0.0388,
+  "poly_area": 0.04,
   "poly_gate_width": 0.06,
   "poly_act_sep": 0.05,
-  "np_width": 0.4,
-  "np_space": 0.361,
-  "pp_width": 0.181,
-  "pp_space": 0.4,
+  "np_width": 0.18,
+  "np_space": 0.18,
+  "pp_width": 0.18,
+  "pp_space": 0.18,
   "esd_width": 0.4,
   "esd_space": 0.47,
   "nw_esd_enc": 0.4,
+  "esd_area_min": 0.6,
   "ioact_width": 0.4,
   "ioact_space": 0.4,
   "ioact_area": 0.4,
@@ -55,26 +56,30 @@
   "v1_width": 0.09,
   "v1_space": 0.11,
   "v1_enc_lower": 0.04,
-  "v1_enc_upper": 0.04,
+  "v1_enc_upper": 0.02,
+  "via_lower_side": 0.0,
+  "via_lower_all": 0.03,
+  "via_upper_side": 0.005,
   "v1_array_space": 0.13,
   "v2_width": 0.09,
   "v2_space": 0.11,
   "v2_enc_lower": 0.04,
-  "v2_enc_upper": 0.04,
+  "v2_enc_upper": 0.02,
   "v2_array_space": 0.13,
   "v3_width": 0.09,
   "v3_space": 0.11,
   "v3_enc_lower": 0.04,
-  "v3_enc_upper": 0.04,
+  "v3_enc_upper": 0.02,
   "v3_array_space": 0.13,
   "v4_width": 0.09,
   "v4_space": 0.11,
   "v4_enc_lower": 0.04,
-  "v4_enc_upper": 0.04,
+  "v4_enc_upper": 0.02,
   "v4_array_space": 0.13,
   "tm2_width": 0.4,
   "tm2_space": 0.4,
   "tm2_area": 0.4,
+  "tm2_min_hole": 0.6,
   "tv2_width": 0.36,
   "tv2_space": 0.34,
   "tv2_enc_m5": 0.02,
@@ -115,7 +120,6 @@
   "poly_eol_space": 0.1,
   "poly_min_step": 0.03,
   "poly_bent_width": 0.06,
-  "antenna_ratio": 300.0,
   "act_min_step": 0.03,
   "poly_eol_width": 0.04,
   "m1_eol_width": 0.04,
@@ -128,34 +132,42 @@
   "poly_gate_overhang": 0.06,
   "act_gate_overhang": 0.14,
   "act_eol_len": 0.1,
-  "poly_density_min": 0.12,
-  "poly_density_max": 0.55,
-  "poly_density_tile": 10,
-  "act_density_min": 0.2,
-  "act_density_max": 0.65,
-  "act_density_tile": 20,
-  "m1_density_min": 0.2,
-  "m1_density_max": 0.7,
-  "m1_density_tile": 20,
-  "m2_density_min": 0.004,
-  "m2_density_max": 0.829,
-  "m2_density_tile": 20,
-  "m3_density_min": 0.004,
-  "m3_density_max": 0.77,
-  "m3_density_tile": 20,
-  "m4_density_min": 0.004,
-  "m4_density_max": 0.77,
-  "m4_density_tile": 20,
-  "m5_density_min": 0.004,
-  "m5_density_max": 0.77,
-  "m5_density_tile": 20,
+  "density_window": 100,
+  "density_step": 50,
+  "density_act_min": 0.20,
+  "density_act_max": 0.80,
+  "density_act_global_min": 0.25,
+  "density_act_global_max": 0.75,
+  "density_act_dummy_window": 20,
+  "density_act_dummy_step": 10,
+  "density_dummy_min": 0.10,
+  "density_gradient": 0.20,
+  "density_bulk_margin": 1.0,
+  "density_poly_window_min": 0.20,
+  "density_poly_window_max": 0.65,
+  "density_poly_global_min": 0.14,
+  "density_poly_global_max": 0.40,
+  "density_metal_min": 0.10,
+  "density_metal_max": 0.80,
+  "density_t4m2_min": 0.20,
+  "density_t4m2_max": 0.85,
+  "density_dummy_margin": 2.5,
+  "density_metal_dummy_halo": 12.5,
+  "act_dummy_3": 3.0,
+  "act_dummy_1": 1.0,
+  "act_dummy_0467": 0.467,
+  "poly_dummy_24": 2.4,
+  "poly_dummy_092": 0.92,
+  "poly_dummy_0381": 0.381,
+  "metal_dummy_2": 2.0,
+  "metal_dummy_1": 1.0,
+  "metal_dummy_rect_width": 0.22,
+  "metal_dummy_rect_length": 0.89,
+  "t4m2_dummy_rect_width": 0.6,
+  "t4m2_dummy_rect_length": 1.2,
   "min_corner": 0.03,
   "min_adj": 0.05,
-  "wide_metal_width": 20.0,
-  "em_via_width": 10.0,
-  "mom_dummy_margin": 1.0,
-  "cell_excl_margin": 0.1,
-  "well_width_smoothing": 0.03
+  "cell_excl_margin": 0.1
  },
  "meta": {
   "manufacturing_grid": {
@@ -163,8 +175,9 @@
    "note": "MANUFACTURINGGRID 0.001 (N551P6M.lef)"
   },
   "act_width": {
-   "provenance": "gds",
-   "note": "measured H7C libraries, cell SDFFQX3H7R"
+   "provenance": "official",
+   "rule_id": "ACT_W_1",
+   "note": "Body: INT AA < 0.08 ABUT<90 SINGULAR REGION. Port retains provisional edge-pair qualifier differences."
   },
   "act_space": {
    "provenance": "official",
@@ -172,8 +185,9 @@
    "note": "space between two AAs >= 0.11um. Corrected from measured placeholder 0.11 (official: ACT_S_1: space between two AAs >= 0.11um. Was measured placeholder 0.101 (gds: measured H7C libraries, cell OA21X0P5H7R).)."
   },
   "act_area": {
-   "provenance": "gds",
-   "note": "measured H7C libraries"
+   "provenance": "official",
+   "rule_id": "ACT_A_1",
+   "note": "Body: AREA AA < 0.0384, NOT INSIDE SRAMALL and NODRC. No generated-cell waiver; marker exclusions are not yet implemented."
   },
   "nw_width": {
    "provenance": "official",
@@ -220,8 +234,9 @@
    "note": "poly space >= 0.12um. Corrected from measured placeholder 0.12 (official: PO_S_1: poly space >= 0.12um. Was measured placeholder 0.11 (gds: measured min 0.112; gate pitch 0.25 minus L 0.06).)."
   },
   "poly_area": {
-   "provenance": "gds",
-   "note": "measured H7C libraries"
+   "provenance": "official",
+   "rule_id": "PO_A_1",
+   "note": "Source body: AREA PO < 0.04, then NOT INSIDE SRAMALL and NODRC. The released-GDS measurement remains 0.0388 um^2; KLayout uses the source threshold and full-containment marker waivers. Calibre differential is unverified."
   },
   "poly_gate_width": {
    "provenance": "gds",
@@ -232,20 +247,24 @@
    "note": "field poly to ACT separation, measured 0.051"
   },
   "np_width": {
-   "provenance": "gds",
-   "note": "measured H7C libraries; 0.4 cap on dense cells"
+   "provenance": "official",
+   "rule_id": "NP_W_1",
+   "note": "Body: INT SDN < 0.18 ABUT<90 REGION; SDN = COPY NPi. Single-point interactions allowed; port edge qualifiers provisional."
   },
   "np_space": {
-   "provenance": "gds",
-   "note": "measured H7C libraries"
+   "provenance": "official",
+   "rule_id": "NP_S_1",
+   "note": "Body: EXT SDN < 0.18 ABUT<90 OPPOSITE REGION; port edge qualifiers provisional."
   },
   "pp_width": {
-   "provenance": "gds",
-   "note": "measured H7C libraries"
+   "provenance": "official",
+   "rule_id": "PP_W_1",
+   "note": "Body: INT SDP < 0.18 ABUT<90 REGION; SDP = COPY PPi. Single-point interactions allowed; port edge qualifiers provisional."
   },
   "pp_space": {
-   "provenance": "gds",
-   "note": "measured H7C libraries; 0.4 cap on XNOR3X0P7H7R"
+   "provenance": "official",
+   "rule_id": "PP_S_1",
+   "note": "Body: EXT SDP < 0.18 ABUT<90 OPPOSITE REGION; port edge qualifiers provisional."
   },
   "esd_width": {
    "provenance": "gds",
@@ -255,6 +274,11 @@
    "provenance": "official",
    "rule_id": "ESD_S_1",
    "note": "space between two ESD1s >= 0.47um. Corrected from measured placeholder 0.47 (official: ESD_S_1: space between two ESD1s >= 0.47um. Was measured placeholder 0.4 (gds: IO library; at 0.4 search cap (>= 0.4)).)."
+  },
+  "esd_area_min": {
+   "provenance": "official",
+   "rule_id": "ESD_A_1, ESD_A_2",
+   "note": "ESD1 polygon and enclosed-area minimum 0.6 um^2"
   },
   "nw_esd_enc": {
    "provenance": "gds",
@@ -306,8 +330,9 @@
    "note": "N551P6M.lef AREA 0.042"
   },
   "m1_min_hole": {
-   "provenance": "lef",
-   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+   "provenance": "official",
+   "rule_id": "MET1_A_2",
+   "note": "M1 enclosed dielectric area minimum 0.18 um^2"
   },
   "m2_width": {
    "provenance": "lef",
@@ -322,8 +347,9 @@
    "note": "N551P6M.lef AREA 0.052"
   },
   "m2_min_hole": {
-   "provenance": "lef",
-   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+   "provenance": "official",
+   "rule_id": "M2_A_2",
+   "note": "M2 enclosed dielectric area minimum 0.18 um^2"
   },
   "m3_width": {
    "provenance": "lef",
@@ -338,8 +364,9 @@
    "note": "N551P6M.lef AREA 0.052"
   },
   "m3_min_hole": {
-   "provenance": "lef",
-   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+   "provenance": "official",
+   "rule_id": "M3_A_2",
+   "note": "M3 enclosed dielectric area minimum 0.18 um^2"
   },
   "m4_width": {
    "provenance": "lef",
@@ -354,8 +381,9 @@
    "note": "N551P6M.lef AREA 0.052"
   },
   "m4_min_hole": {
-   "provenance": "lef",
-   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+   "provenance": "official",
+   "rule_id": "M4_A_2",
+   "note": "M4 enclosed dielectric area minimum 0.18 um^2"
   },
   "m5_width": {
    "provenance": "lef",
@@ -370,8 +398,9 @@
    "note": "N551P6M.lef AREA 0.052"
   },
   "m5_min_hole": {
-   "provenance": "lef",
-   "note": "N551P6M.lef MINENCLOSEDAREA 0.18"
+   "provenance": "official",
+   "rule_id": "M5_A_2",
+   "note": "M5 enclosed dielectric area minimum 0.18 um^2"
   },
   "v1_width": {
    "provenance": "lef",
@@ -382,12 +411,14 @@
    "note": "N551P6M.lef VIA1 SPACING 0.11"
   },
   "v1_enc_lower": {
-   "provenance": "lef",
-   "note": "VIARULE MET2_MET1 MET1 ENCLOSURE 0.04 0"
+   "provenance": "official",
+   "rule_id": "V1_EN_2a_2b_2c",
+   "note": "GOOD 0/0.04 on opposite pairs OR 0.03 all sides; plus V1 NOT M1. Polygon containment implements both rotations; marker exclusions provisional."
   },
   "v1_enc_upper": {
-   "provenance": "lef",
-   "note": "VIARULE MET2_MET1 MET2 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V1_EN_5a_5b",
+   "note": "GOOD 0.005/0.02 on opposite pairs; ENC/INT and outside clauses. Polygon containment implements rectangular cuts, complex cut edge semantics provisional."
   },
   "v1_array_space": {
    "provenance": "lef",
@@ -402,12 +433,14 @@
    "note": "N551P6M.lef VIA2 SPACING 0.11"
   },
   "v2_enc_lower": {
-   "provenance": "lef",
-   "note": "VIARULE MET3_MET2 MET2 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V2_EN_2a_2b_2c",
+   "note": "Directional 0/0.04 opposite pairs OR 0.03 all sides; see V1 metadata."
   },
   "v2_enc_upper": {
-   "provenance": "lef",
-   "note": "VIARULE MET3_MET2 MET3 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V2_EN_5a_5b",
+   "note": "Directional 0.005/0.02 opposite pairs; see V1 metadata."
   },
   "v2_array_space": {
    "provenance": "lef",
@@ -422,12 +455,14 @@
    "note": "N551P6M.lef VIA3 SPACING 0.11"
   },
   "v3_enc_lower": {
-   "provenance": "lef",
-   "note": "VIARULE MET4_MET3 MET3 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V3_EN_2a_2b_2c",
+   "note": "Directional 0/0.04 opposite pairs OR 0.03 all sides; see V1 metadata."
   },
   "v3_enc_upper": {
-   "provenance": "lef",
-   "note": "VIARULE MET4_MET3 MET4 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V3_EN_5a_5b",
+   "note": "Directional 0.005/0.02 opposite pairs; see V1 metadata."
   },
   "v3_array_space": {
    "provenance": "lef",
@@ -442,12 +477,14 @@
    "note": "N551P6M.lef VIA4 SPACING 0.11"
   },
   "v4_enc_lower": {
-   "provenance": "lef",
-   "note": "VIARULE MET5_MET4 MET4 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V4_EN_2a_2b_2c",
+   "note": "Directional 0/0.04 opposite pairs OR 0.03 all sides; see V1 metadata."
   },
   "v4_enc_upper": {
-   "provenance": "lef",
-   "note": "VIARULE MET5_MET4 MET5 ENCLOSURE 0.04 0.005"
+   "provenance": "official",
+   "rule_id": "V4_EN_5a_5b",
+   "note": "Directional 0.005/0.02 opposite pairs; see V1 metadata."
   },
   "v4_array_space": {
    "provenance": "lef",
@@ -462,8 +499,14 @@
    "note": "N551P6M.lef T4M2 SPACING 0.4; measured 0.4"
   },
   "tm2_area": {
-   "provenance": "lef",
-   "note": "N551P6M.lef T4M2 AREA 0.4"
+   "provenance": "official",
+   "rule_id": "T4M2_A_1",
+   "note": "T4M2 minimum polygon area 0.40 um^2"
+  },
+  "tm2_min_hole": {
+   "provenance": "official",
+   "rule_id": "T4M2_A_2",
+   "note": "T4M2 enclosed area minimum 0.60 um^2"
   },
   "tv2_width": {
    "provenance": "lef",
@@ -625,10 +668,6 @@
    "provenance": "derived",
    "note": "= base width; not foundry data"
   },
-  "antenna_ratio": {
-   "provenance": "derived",
-   "note": "FreePDK45-style placeholder 300:1; NOT an ICS55 value - checks disabled by default"
-  },
   "act_min_step": {
    "provenance": "derived",
    "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
@@ -677,89 +716,170 @@
    "provenance": "derived",
    "note": "placeholder 0.1 um line-end length; not foundry data"
   },
-  "poly_density_min": {
-   "provenance": "derived",
-   "note": "user-specified min 12% on 10um tile; not foundry data"
+  "density_window": {
+   "provenance": "official",
+   "rule_id": "ACT_D_1_min, PO_D_2_min, MET1_D_1_min",
+   "note": "100 um local-density window in supplied Calibre source"
   },
-  "poly_density_max": {
-   "provenance": "derived",
-   "note": "user-specified max 55% on 10um tile; not foundry data"
+  "density_step": {
+   "provenance": "official",
+   "rule_id": "ACT_D_1_min, PO_D_2_min, MET1_D_1_min",
+   "note": "50 um local-density step in supplied Calibre source"
   },
-  "poly_density_tile": {
-   "provenance": "derived",
-   "note": "10um tile"
+  "density_act_min": {
+   "provenance": "official",
+   "rule_id": "ACT_D_1_min",
+   "note": "AA_all minimum local density 20%"
   },
-  "act_density_min": {
-   "provenance": "derived",
-   "note": "user-specified min 20% on 20um tile; not foundry data"
+  "density_act_max": {
+   "provenance": "official",
+   "rule_id": "ACT_D_1_max",
+   "note": "AA_all maximum local density 80%"
   },
-  "act_density_max": {
-   "provenance": "derived",
-   "note": "user-specified max 65% on 20um tile; not foundry data"
+  "density_act_global_min": {
+   "provenance": "official",
+   "rule_id": "ACT_D_4_min",
+   "note": "AA_all minimum whole-chip density 25%"
   },
-  "act_density_tile": {
-   "provenance": "derived",
-   "note": "20um tile"
+  "density_act_global_max": {
+   "provenance": "official",
+   "rule_id": "ACT_D_4_max",
+   "note": "AA_all maximum whole-chip density 75%"
   },
-  "m1_density_min": {
-   "provenance": "derived",
-   "note": "user-specified min 20% on 20um tile; not foundry data"
+  "density_act_dummy_window": {
+   "provenance": "official",
+   "rule_id": "ACT_D_2",
+   "note": "20 um AA dummy-block density window"
   },
-  "m1_density_max": {
-   "provenance": "derived",
-   "note": "user-specified max 70% on 20um tile; not foundry data"
+  "density_act_dummy_step": {
+   "provenance": "official",
+   "rule_id": "ACT_D_2",
+   "note": "10 um AA dummy-block density step"
   },
-  "m1_density_tile": {
-   "provenance": "derived",
-   "note": "20um tile"
+  "density_dummy_min": {
+   "provenance": "official",
+   "rule_id": "ACT_D_2, MET1_D_2, Mn_D_2, T4M2_D_2",
+   "note": "Minimum local dummy-block density 10%"
   },
-  "m2_density_min": {
-   "provenance": "gds",
-   "note": "measured IO cell min density 0.4% (filler cells)"
+  "density_gradient": {
+   "provenance": "official",
+   "rule_id": "ACT_D_3, PO_D_3, Mn_D_3",
+   "note": "Maximum absolute density gradient 20%; Calibre source omits STEP"
   },
-  "m2_density_max": {
-   "provenance": "gds",
-   "note": "measured IO cell max density 82.9%"
+  "density_bulk_margin": {
+   "provenance": "official",
+   "rule_id": "ACT_D_3, PO_D_3",
+   "note": "BULK = SIZE DRC:1 BY 1.0 um in supplied Calibre source"
   },
-  "m2_density_tile": {
-   "provenance": "derived",
-   "note": "20um tile"
+  "density_poly_window_min": {
+   "provenance": "official",
+   "rule_id": "PO_D_2_min",
+   "note": "PO_all minimum local density 20%"
   },
-  "m3_density_min": {
-   "provenance": "gds",
-   "note": "measured IO cell min density 0.4% (filler cells)"
+  "density_poly_window_max": {
+   "provenance": "official",
+   "rule_id": "PO_D_2_max",
+   "note": "PO_all maximum local density 65%"
   },
-  "m3_density_max": {
-   "provenance": "gds",
-   "note": "measured IO cell max density 77.0%"
+  "density_poly_global_min": {
+   "provenance": "official",
+   "rule_id": "PO_D_1_min",
+   "note": "PO_all minimum whole-chip density 14%"
   },
-  "m3_density_tile": {
-   "provenance": "derived",
-   "note": "20um tile"
+  "density_poly_global_max": {
+   "provenance": "official",
+   "rule_id": "PO_D_1_max",
+   "note": "PO_all maximum whole-chip density 40%"
   },
-  "m4_density_min": {
-   "provenance": "gds",
-   "note": "measured IO cell min density 0.4% (filler cells)"
+  "density_metal_min": {
+   "provenance": "official",
+   "rule_id": "MET1_D_1_min, Mn_D_1_min",
+   "note": "M1-M8 minimum local density 10%"
   },
-  "m4_density_max": {
-   "provenance": "gds",
-   "note": "measured IO cell max density 77.0%"
+  "density_metal_max": {
+   "provenance": "official",
+   "rule_id": "MET1_D_1_max, Mn_D_1_max",
+   "note": "M1-M8 maximum local density 80%"
   },
-  "m4_density_tile": {
-   "provenance": "derived",
-   "note": "20um tile"
+  "density_t4m2_min": {
+   "provenance": "official",
+   "rule_id": "T4M2_D_1_min",
+   "note": "T4M2 minimum local density 20%"
   },
-  "m5_density_min": {
-   "provenance": "gds",
-   "note": "measured IO cell min density 0.4% (filler cells)"
+  "density_t4m2_max": {
+   "provenance": "official",
+   "rule_id": "T4M2_D_1_max",
+   "note": "T4M2 maximum local density 85%"
   },
-  "m5_density_max": {
-   "provenance": "gds",
-   "note": "measured IO cell max density 77.0%"
+  "density_dummy_margin": {
+   "provenance": "official",
+   "rule_id": "ACT_D_2, MET1_D_2, Mn_D_2, T4M2_D_2",
+   "note": "Dummy block is sized outward by 2.5 um"
   },
-  "m5_density_tile": {
-   "provenance": "derived",
-   "note": "20um tile"
+  "density_metal_dummy_halo": {
+   "provenance": "official",
+   "rule_id": "MET1_D_2, Mn_D_2",
+   "note": "Second M1/Mn dummy-region sizing uses 12.5 um UNDEROVER"
+  },
+  "act_dummy_3": {
+   "provenance": "official",
+   "rule_id": "AADUM_W_1",
+   "note": "AADUM permitted rectangle dimensions include 3x3 um"
+  },
+  "act_dummy_1": {
+   "provenance": "official",
+   "rule_id": "AADUM_W_1",
+   "note": "AADUM permitted rectangle dimensions include 1x1 um"
+  },
+  "act_dummy_0467": {
+   "provenance": "official",
+   "rule_id": "AADUM_W_1",
+   "note": "AADUM permitted rectangle dimensions include 0.467x0.467 um"
+  },
+  "poly_dummy_24": {
+   "provenance": "official",
+   "rule_id": "PODUM_W_1",
+   "note": "PODUM permitted rectangle dimensions include 2.4x2.4 um"
+  },
+  "poly_dummy_092": {
+   "provenance": "official",
+   "rule_id": "PODUM_W_1",
+   "note": "PODUM permitted rectangle dimensions include 0.92x0.92 um"
+  },
+  "poly_dummy_0381": {
+   "provenance": "official",
+   "rule_id": "PODUM_W_1",
+   "note": "PODUM permitted rectangle dimensions include 0.381x0.381 um"
+  },
+  "metal_dummy_2": {
+   "provenance": "official",
+   "rule_id": "M1DUM_W_1 through M8DUM_W_1",
+   "note": "MET1-MET8 permitted dummy rectangle size 2x2 um"
+  },
+  "metal_dummy_1": {
+   "provenance": "official",
+   "rule_id": "M1DUM_W_1 through M8DUM_W_1",
+   "note": "MET1-MET8 permitted dummy rectangle size 1x1 um"
+  },
+  "metal_dummy_rect_width": {
+   "provenance": "official",
+   "rule_id": "M1DUM_W_1 through M8DUM_W_1",
+   "note": "MET1-MET8 permitted dummy rectangle short dimension 0.22 um"
+  },
+  "metal_dummy_rect_length": {
+   "provenance": "official",
+   "rule_id": "M1DUM_W_1 through M8DUM_W_1",
+   "note": "MET1-MET8 permitted dummy rectangle long dimension 0.89 um"
+  },
+  "t4m2_dummy_rect_width": {
+   "provenance": "official",
+   "rule_id": "T4M2DUM_W_1",
+   "note": "T4M2 permitted dummy rectangle short dimension 0.6 um"
+  },
+  "t4m2_dummy_rect_length": {
+   "provenance": "official",
+   "rule_id": "T4M2DUM_W_1",
+   "note": "T4M2 permitted dummy rectangle long dimension 1.2 um"
   },
   "min_corner": {
    "provenance": "derived",
@@ -769,25 +889,9 @@
    "provenance": "derived",
    "note": "empirical placeholder (user); not foundry data"
   },
-  "wide_metal_width": {
-   "provenance": "derived",
-   "note": "placeholder 20 um; not foundry data"
-  },
-  "em_via_width": {
-   "provenance": "derived",
-   "note": "placeholder 10 um; not foundry data"
-  },
-  "mom_dummy_margin": {
-   "provenance": "derived",
-   "note": "placeholder 1 um exclusion margin; not foundry data"
-  },
   "cell_excl_margin": {
    "provenance": "derived",
    "note": "placeholder 0.1 um cell-frame margin for the -rd cell_exclusion=true mode"
-  },
-  "well_width_smoothing": {
-   "provenance": "derived",
-   "note": "ABUT<90 analog for well.nw.width: the official NW1_W_1 waives the 90-degree notch widths; the released cells draw 25nm well-tap notch steps at the well bottom, so the width check runs on the layer smoothed by 0.03 um. Genuine narrow wells still flag."
   }
  }
 }

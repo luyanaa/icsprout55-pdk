@@ -13,85 +13,61 @@
 # limitations under the License.
 
 #=========================================================================================
-# BEOL 07 - Vias (V1..V4, T4V2, RV)
+# BEOL 07 - Vias (V1..V4, T4V2)
 #
-# Port of iDRC cut-layer checks (min width, min spacing, via enclosure by the
-# upper/lower metal).  All values are exact tech-LEF values (N551P6M.lef,
-# LAYER VIAx + VIARULE METx_METy enclosure/array spacing).
+# Only exact source geometry predicates and their source waivers are emitted.
+# Qualifier, width-metric, and array checks without direct KLayout equivalents
+# are intentionally omitted.
 #=========================================================================================
 
-if TABLES.include?('beol') || BEOL
+if BEOL
+  square_exclusions = GRID_SRC.or(SRINGBLK_SRC).or(NODRC)
+
   [
-    ['V1', V1, 'v1', M1, M2], ['V2', V2, 'v2', M2, M3],
-    ['V3', V3, 'v3', M3, M4], ['V4', V4, 'v4', M4, M5]
-  ].each do |name, via, key, lower, upper|
-    via.width(rval("#{key}_width").um, euclidian).output("via.#{key}.width",
-      "via.#{key}.width: #{name} min width #{rval("#{key}_width")} um [lef]")
-    via.space(rval("#{key}_space").um, euclidian).output("via.#{key}.space",
-      "via.#{key}.space: #{name} min spacing #{rval("#{key}_space")} um [lef]")
-    # VIARULE METx_METy: lower enclosure 0.04 / upper enclosure 0.04 (0.005 cut enc)
-    lower.enclosing(via, rval("#{key}_enc_lower").um).output("via.#{key}.enc.lower",
-      "via.#{key}.enc.lower: #{name} enclosure by #{name == 'V1' ? 'M1' : name.sub('V', 'M')} #{rval("#{key}_enc_lower")} um [lef]")
-    upper.enclosing(via, rval("#{key}_enc_upper").um).output("via.#{key}.enc.upper",
-      "via.#{key}.enc.upper: #{name} enclosure by #{name.sub('V', 'M')} #{rval("#{key}_enc_upper")} um [lef]")
-    # VIARULE array spacing (SPACING 0.13 BY 0.13)
-    via.space(rval("#{key}_array_space").um, euclidian).output("via.#{key}.array_space",
-      "via.#{key}.array_space: #{name} array spacing #{rval("#{key}_array_space")} um [lef]")
+    ['V1', V1, 'v1', M1.not(MET1SLOT)],
+    ['V2', V2, 'v2', M2.not(MET2SLOT)],
+    ['V3', V3, 'v3', M3.not(MET3SLOT)],
+    ['V4', V4, 'v4', M4.not(MET4SLOT)]
+  ].each do |name, via, key, lower_metal|
+    source_via = via
+
+    # VIAn_W_1 checks exact square geometry and waives the union of GRID,
+    # SRINGBLK, and NODRC.
+    square_size = rval("#{key}_width")
+    rectangles = source_via.rectangles
+    wrong_rectangles = rectangles.without_bbox_width(square_size.um)
+      .or(rectangles.without_bbox_height(square_size.um))
+    non_squares = source_via.non_rectangles.or(wrong_rectangles)
+    non_squares.not_inside(square_exclusions).output("via.#{key}.width",
+      "#{name}_W_1: #{name} must be a #{square_size}x#{square_size} um square outside GRID/SRINGBLK/NODRC [Calibre source]")
+
+    # VIAn_R_5 selects via polygons containing a 45-degree edge; exclusions
+    # are applied in the same order as the source rule.
+    rotated = source_via.interacting(source_via.edges.with_angle(45, absolute))
+    rotated.not_inside(SRINGBLK_SRC).not_inside(NODRC).output("via.#{key}.rotated",
+      "#{name}_R_5: 45-degree #{name} edges are not allowed outside SRINGBLK/NODRC [Calibre source]")
+
+    # The separate OUTLAYER in VIAn_EN_2a_2b_2c flags via geometry outside
+    # its lower metal; this clause has only the NODRC waiver.
+    source_via.not(lower_metal).not_inside(NODRC).output("via.#{key}.cover.lower",
+      "#{name}_EN_2a_2b_2c: #{name} must be covered by its lower metal outside NODRC [Calibre source]")
   end
 
-  #--- T4V2 (LEF WIDTH 0.36 SPACING 0.34; M5/T4M2 enclosure 0.02; array 1.0) ---------
-  TV2.width(rval('tv2_width').um, euclidian).output('via.tv2.width',
-    "via.tv2.width: T4V2 min width #{rval('tv2_width')} um [lef]")
-  TV2.space(rval('tv2_space').um, euclidian).output('via.tv2.space',
-    "via.tv2.space: T4V2 min spacing #{rval('tv2_space')} um [lef]")
-  M5.enclosing(TV2, rval('tv2_enc_m5').um).output('via.tv2.enc.m5',
-    "via.tv2.enc.m5: T4V2 enclosure by M5 #{rval('tv2_enc_m5')} um [lef]")
-  TM2.enclosing(TV2, rval('tv2_enc_tm2').um).output('via.tv2.enc.tm2',
-    "via.tv2.enc.tm2: T4V2 enclosure by T4M2 #{rval('tv2_enc_tm2')} um [lef]")
-  TV2.space(rval('tv2_array_space').um, euclidian).output('via.tv2.array_space',
-    "via.tv2.array_space: T4V2 array spacing #{rval('tv2_array_space')} um [lef]")
+  tv2_source = TV2.or(TV2BAR)
+  rotated_tv2 = tv2_source.interacting(tv2_source.edges.with_angle(45, absolute))
+  rotated_tv2.not_inside(SRINGBLK_SRC).not_inside(NODRC).output('via.tv2.rotated',
+    'T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]')
 
-  #--- EM via ports -----------------------------------------------------------------
-  # Metal wider than em_via_width (10 um placeholder) requires via arrays
-  # (2x2/3x3); isolated vias on the wide metal are flagged.  The wide-metal
-  # probe uses the via's enclosing metal via the metal bbox filter; EM limits
-  # themselves are post-layout simulation, not DRC (derived).
-  # convert a DRC polygon (micron coordinates) to an integer-DBU polygon for
-  # building a region; the released libraries use a 1nm DBU
-  scale_db = (1.0 / rval('manufacturing_grid')).round
-  to_db_poly = lambda do |p|
-    poly = RBA::Polygon.new
-    poly.assign_hull(p.each_point_hull.map { |pt| RBA::Point.new((pt.x * scale_db).round, (pt.y * scale_db).round) })
-    poly
-  end
-  # a via layer sits between two metal layers; either side may be the wide
-  # metal that requires the 2x2/3x3 array
-  [
-    ['v1', V1, [M1, M2]], ['v2', V2, [M2, M3]],
-    ['v3', V3, [M3, M4]], ['v4', V4, [M4, M5]]
-  ].each do |key, via, metals|
-    wide = RBA::Region.new
-    metals.each do |metal|
-      metal.each do |p|
-        b = p.bbox
-        wide.insert(to_db_poly.call(p)) if [b.width, b.height].min > rval('em_via_width')
-      end
-    end
-    next if wide.size.zero?
-    wl = DRCLayer::new(self, wide)
-    vias_on_wide = via.and(wl)
-    # isolated vias: vias with no neighbor within the array pitch
-    neighbors = via.sized(rval("#{key}_array_space").um).not(via)
-    singles = vias_on_wide.not(vias_on_wide.and(neighbors))
-    singles.output("via.#{key}.em_port",
-      "via.#{key}.em_port: isolated via on metal wider than #{rval('em_via_width')} um (needs 2x2/3x3 array) [derived]")
-  end
+  # For total_metal=6/top_metal=1, T4V2_EN_2_EN_3 selects M5 as its
+  # bottom metal. This separate OUTLAYER has only the NODRC waiver.
+  tv2_source.not(M5.not(MET5SLOT)).not_inside(NODRC).output('via.tv2.cover.lower',
+    'T4V2_EN_2_EN_3: T4V2 must be covered by M5 outside NODRC [Calibre source]')
 
-  #--- RV (LEF WIDTH 3 SPACING 3 ENCLOSURE 1.5; array 6) ------------------------------
-  RV.width(rval('rv_width').um, euclidian).output('via.rv.width',
-    "via.rv.width: RV min width #{rval('rv_width')} um [lef]")
-  RV.space(rval('rv_space').um, euclidian).output('via.rv.space',
-    "via.rv.space: RV min spacing #{rval('rv_space')} um [lef]")
-  RV.space(rval('rv_array_space').um, euclidian).output('via.rv.array_space',
-    "via.rv.array_space: RV array spacing #{rval('rv_array_space')} um [lef]")
+  # Omitted active rules: V1-V4_W_2 (WITH WIDTH bar predicates), V1-V4_S_1
+  # through _S_3 (ABUT/SINGULAR, array-neighbor, OPPOSITE/NOT CONNECTED),
+  # the directional GOOD enclosure clauses in V1-V4_EN_2a_2b_2c and
+  # V1-V4_EN_5a_5b, and V1-V4_R_3 (H-shaped metal arrays); T4V2_W_1/_W_2,
+  # T4V2_S_1, the directional GOOD clause in T4V2_EN_2_EN_3, and
+  # T4V2_EN_5_EN_6. T4V2_W_1 also uses Calibre's GT4V2 rule-result group.
+  # Recommended rules are inactive for OPEN_RECOMMENDED_ON=NO.
 end

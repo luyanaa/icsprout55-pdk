@@ -27,13 +27,13 @@ Vt flavors: LVT via 17/18, HVT via 21/22 (SVT = no marker).
 
 ## How it works
 
-- Connectivity: NSD/PSD/POLY -> CT -> M1 -> V1 -> ... -> M5 -> TV2 -> TM2.
+- Connectivity: source/drain, contact-qualified tap regions and POLY -> CT -> M1
+  -> V1 -> ... -> M5 -> TV2 -> TM2.
   The raw ACT regions are intentionally NOT connected (they span gate +
   source + drain; connecting them would short the terminals).
-- Bulk: p-substrate (ACT outside NW) is globally tied to VSS, NW to VDD
-  (std-cell convention: the CDL declares bulk = VDD/VSS and the released
-  cells contain no in-cell well taps).  Disable with `-rd no_well_ties=true`
-  for analog blocks with isolated wells.
+- Bulk: default standard-cell mode globally ties PSUB to VSS and NW to VDD.
+  `-rd no_well_ties=true` instead connects MOS bodies through CT-qualified
+  physical taps and keeps separate n-well islands distinct.
 - The released CDL is preprocessed before reading: duplicate leaf subckts
   (e.g. TG) are dropped, the `X <nets> / <subckt>` call syntax is converted
   to plain SPICE, and symbolic `W=nw` parameters get `.PARAM` declarations so
@@ -54,12 +54,16 @@ klayout -b -r ics55.lvs -rd input=<lib>.gds -rd top=ADDFX1H7R \
 ```
 
 Compare is topology-based; L and all non-geometric device parameters are
-compared exactly, W with a 5% relative tolerance (tight MOS width check).
-Cell-internal nets are matched by connectivity, not names.  `max_res(1e9)` /
-`min_caps(1e-18)` eliminate open resistors / tiny caps.  The compare depth
-is unlimited (`max_depth(0)`): the default 500-step backtracking limit fails
-on some feedback-latch cells (e.g. SDFFNRX2H7R, DFFRQX0P5H7R) whose
-netlists are provably equivalent.
+compared exactly, W with the official 10% relative tolerance (`mos_err 0.1`).
+W deviations over 5% warn; deviations over 10% fail.
+KLayout uppercases parsed SPICE root circuit names; the deck normalizes only a
+case-equivalent top-circuit spelling to the GDS primary name. No net, pin, or
+device labels are rewritten by that normalization.
+`max_res(1e9)` / `min_caps(1e-18)` filter high-value resistors and tiny caps.
+The compare search is bounded at `max_depth(8)` and
+`max_branch_complexity(1024)`. A smaller 50-unit branch limit reported
+`needs at least 992` for the 2RW macro, so limit-exhausted reports are not proof
+of a topology mismatch.
 
 ## Known limitations
 
@@ -68,8 +72,9 @@ netlists are provably equivalent.
   wide multi-finger transistors (e.g. W=160U ESD devices); comparison against
   the IO CDL needs multi-finger combining and ESD-diode equivalence tuning
   (`--combine-devices` is a start) — in progress.
-- Cells with floating well regions need `-rd no_well_ties=true` and manual
-  bulk handling.
+- Use `-rd no_well_ties=true` for isolated-well macros. Body islands connect
+  only through CT-qualified physical taps; uncontacted regions remain floating
+  and must be modeled explicitly in the source netlist.
 - Not signoff-quality: no foundry LVS rule deck is released; device
   recognition is derived from the released GDS/CDL.
 - The released std cells draw multi-finger transistors (e.g. W=300n = 2x150n

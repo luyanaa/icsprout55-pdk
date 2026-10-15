@@ -13,34 +13,41 @@
 # limitations under the License.
 
 #=========================================================================================
-# BEOL 08 - Pad / IO top layers (official RV/CB/ALPAD/RDL/COVER)
-#
-# Values measured from the released IO library GDS (provenance: gds).  The
-# official pad stack: RV 120/1 (redistribution via), CB 121/1, ALPAD 122/1
-# (aluminium pad), RDL 123/1, COVER 124/1.
+# Exact, unqualified source predicates are emitted; checks with unsupported
+# Calibre edge/width qualifiers or rectangle-enclosure predicates are omitted.
 #=========================================================================================
 
-if TABLES.include?('beol') || BEOL
-  # official pad stack: 120/1 RV (redistribution via), 121/1 CB, 122/1 ALPAD
-  # (aluminium pad), 123/1 RDL, 124/1 COVER (was misaliased PADM/ALPAD on 120/121)
-  RV.width(rval('padm_width').um, euclidian).output('pad.rv.width',
-    "pad.rv.width: RV min width #{rval('padm_width')} um [gds]")
-  RV.space(rval('padm_space').um, euclidian).output('pad.rv.space',
-    "pad.rv.space: RV min spacing #{rval('padm_space')} um [gds]")
-  RV.not(RV.with_area(rval('padm_area').um2, 1e9.um2)).output('pad.rv.area',
-    "pad.rv.area: RV min area #{rval('padm_area')} um^2 [gds]")
+if BEOL
+  # RV_W_1: derive the source fuse-ring exclusions before testing exact 3x3
+  # rectangle geometry. The source rule has no NODRC waiver.
+  hrdl = RDL.holes.interacting(FUTR)
+  grdl = RDL.interacting(hrdl).and(GRID_SRC)
+  rdv_fuse = RV.inside(hrdl).or(RV.interacting(grdl))
+  rv_width_scope = RV.not(rdv_fuse).not(GRID_SRC)
+  rv_rectangles = rv_width_scope.rectangles
+  wrong_rv_rectangles = rv_rectangles.without_bbox_width(3.um)
+    .or(rv_rectangles.without_bbox_height(3.um))
+  rv_width_scope.non_rectangles.or(wrong_rv_rectangles).output('pad.rv.width',
+    'RV_W_1: RV must be a 3x3 um rectangle after source fuse/grid exclusions [Calibre source]')
 
-  ALPAD.width(rval('alpad_width').um, euclidian).output('pad.alpad.width',
-    "pad.alpad.width: ALPAD min width #{rval('alpad_width')} um [gds]")
-  ALPAD.space(rval('alpad_space').um, euclidian).output('pad.alpad.space',
-    "pad.alpad.space: ALPAD min spacing #{rval('alpad_space')} um [gds]")
+  # RV_EN_3_4 has a separate, unqualified OUTLAYER for via portions outside
+  # RDL. It does not inherit the enclosure clause's marker waivers.
+  RV.not(RDL).output('pad.rv.cover.rdl',
+    'RV_EN_3_4: RV must be covered by RDL [Calibre source]')
 
-  RDL.width(rval('alpad_width').um, euclidian).output('pad.rdl.width',
-    "pad.rdl.width: RDL min width #{rval('alpad_width')} um [gds]")
-  COVER.width(rval('alpad_width').um, euclidian).output('pad.cover.width',
-    "pad.cover.width: COVER min width #{rval('alpad_width')} um [gds]")
+  # RDL_EN_1: ALPA is (CB sized by PA_su=1.5um) OR RDL OR ALPAD.
+  alpa = CB.sized(1.5.um).or(RDL).or(ALPAD)
+  COVER.not(alpa).output('pad.cover.alpa_full',
+    'RDL_EN_1: COVER must be fully covered by ALPA [Calibre source]')
 
-  # ALPAD pad metal must enclose the RV via
-  ALPAD.enclosing(RV, rval('padm_alpad_enc').um).output('pad.rv.alpad_enc',
-    "pad.rv.alpad_enc: ALPAD enclosure of RV #{rval('padm_alpad_enc')} um [gds]")
+  # RDL_EN_2: the source reports the part of CB outside ALPAD.
+  CB.not(ALPAD).output('pad.cb.alpad_full',
+    'RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]')
+
+  # Omitted active checks: RV_S_1/S_2, RV_EN_1_2 and the qualified enclosure
+  # clause in RV_EN_3_4; CB_W_1/S_1/EN_1_EN_2; RDL_W_1/S_1/S_2/S_3;
+  # COVER_W_1/S_1/S_2/EN_1 require unrepresented edge qualifiers, width
+  # selection, or derived pad-metal predicates. COVER_L_1's arbitrary-polygon
+  # ENCLOSE RECTANGLE 40x65 test has no exact selector here.
+  # Recommended RV_R_1 is inactive for OPEN_RECOMMENDED_ON=NO.
 end

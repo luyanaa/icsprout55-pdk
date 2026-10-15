@@ -1,0 +1,3 @@
+
+Checking parameters for BSIM 4.5 model xsram.xbank0.xbitcell_array.xreplica_bitcell_array.xbitcell_array.xbit_r0_c0.xinverter_pmos_left:pm1p2_svt_lp_core
+Warning: Dvt0 = -0.57 is negative.

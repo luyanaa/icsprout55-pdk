@@ -13,34 +13,21 @@
 # limitations under the License.
 
 #=========================================================================================
-# FEOL 02 - Active (ACT, IOACT)
+# FEOL 02 - Active
 #
-# Port of iDRC minimum-width / minimum-spacing / minimum-area checks.
-# Values: measured from released std-cell/IO GDS (provenance: gds).
+# Port only source geometry representable without changing Calibre qualifiers.
+# ACT_A_1 is an area test with exact SRAMALL/NODRC waivers.  Width, spacing,
+# directional enclosure, and topology rules need Calibre-specific operators.
 #=========================================================================================
 
-if TABLES.include?('feol') || FEOL
-  #--- ACT: minimum width ------------------------------------------------------------
-  ACT.width(rval('act_width').um, euclidian).output('active.act.width',
-    "active.act.width: ACT min width #{rval('act_width')} um [gds]")
+if FEOL
+  ACT.not(ACT.with_area(0.0384.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('active.act.area',
+    "ACT_A_1: AA minimum area 0.0384 um^2; waived inside SRAMALL and NODRC")
 
-  #--- ACT: minimum spacing ----------------------------------------------------------
-  ACT.space(rval('act_space').um, euclidian).output('active.act.space',
-    "active.act.space: ACT min spacing #{rval('act_space')} um [gds]")
-
-  #--- ACT: minimum area -------------------------------------------------------------
-  ACT.not(ACT.with_area(rval('act_area').um2, 1e9.um2)).output('active.act.area',
-    "active.act.area: ACT min area #{rval('act_area')} um^2 [gds]")
-
-  #--- ACT must be covered by NP or PP (no un-implanted active) ----------------------
-  ACT.not(NP.or(PP)).output('active.act.implant',
-    "active.act.implant: ACT must be inside NP or PP [gds]")
-
-  #--- IOACT (derived ACT under TGOX; was misaliased 71/1=SAB) ----------------------
-  IOACT.width(rval('ioact_width').um, euclidian).output('active.ioact.width',
-    "active.ioact.width: IOACT (ACT in TGOX) min width #{rval('ioact_width')} um [gds]")
-  IOACT.space(rval('ioact_space').um, euclidian).output('active.ioact.space',
-    "active.ioact.space: IOACT (ACT in TGOX) min spacing #{rval('ioact_space')} um [gds]")
-  IOACT.not(IOACT.with_area(rval('ioact_area').um2, 1e9.um2)).output('active.ioact.area',
-    "active.ioact.area: IOACT (ACT in TGOX) min area #{rval('ioact_area')} um^2 [gds]")
+  # Unsupported source rules: ACT_W_1, ACT_W_2, ACT_W_3a, ACT_W_3b,
+  # ACT_L_1, ACT_L_2, ACT_S_1, ACT_S_1a, ACT_S_2, ACT_S_3, ACT_S_4,
+  # ACT_S_5 through ACT_S_8, ACT_EN_1, ACT_EN_2, ACT_EN_2a, ACT_A_2,
+  # ACT_R_1, ACT_R_3.  Recommended ACT_S_1_R / ACT_S_2a_R and ACT_W_3a_R
+  # remain disabled (OPEN_RECOMMENDED_ON=NO).
+  # ACT_D_* require density windows/gradient support; not implemented here.
 end

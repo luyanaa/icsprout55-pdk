@@ -38,7 +38,7 @@ the released std/IO libraries).  The official deck additionally recognizes
 | series/parallel reduction | LVS REDUCE PARALLEL/SERIES YES (MOS, R, D) | netlist compare with reduction | equivalent |
 | max resistance | (implied) | max_res(1e9) | port explicit |
 | min capacitance | (implied) | min_caps(1e-18) | port explicit |
-| compare depth | default backtracking | max_depth(0) unlimited | required for latch feedback (SDFFNRX2, DFFRQX0P5) |
+| matcher limits | no Calibre counterpart | max_depth(8), max_branch_complexity(1024) | KLayout-only search budget; the 2RW macro report under a 50-unit branch limit required at least 992 |
 | gate recognition | LVS RECOGNIZE GATES NONE | gate = poly & active (per class) | equivalent for the cell libraries |
 
 The W compare now matches the official `mos_err 0.1` (10%); the L compare is
@@ -48,7 +48,15 @@ band (e.g. TBUFX8H7* -8%) while >10% deviations still fail: INVX16H7* +27%,
 OAI33X0P5H7* +33%, INVX7H7* +14-15%, NAND3BBX0P7H7* -14% (the latter also
 carries the topology waiver).
 
-## 3. Verified on the released libraries (2026-09-25)
+## 3. Ports and body connectivity
+
+| Rule | Official Calibre | KLayout port | Status |
+|---|---|---|---|
+| Top-level ports | `PORT DEPTH 0` | Direct top-cell text on M1-M5/TM2 conductors | Internal child labels remain nets, not ports; disconnected duplicate top labels fail |
+| Body ties | Soft substrate/well connections through physical taps | Standard-cell mode globally ties PSUB/NW; `no_well_ties=true` uses CT-qualified taps | OpenRAM macro path selects physical-tap mode |
+| Primary circuit case | `CASE_SENSITIVITY TRUE`, source/layout/compare case YES | Normalize only a case-equivalent parsed root circuit name | No net, pin, or device label is rewritten |
+
+## 4. Verified on the released libraries (2026-09-25)
 
 - 2307/2313 std cells PASS across the 771-cell x 3-lib sweep (H7CR/H7CL/H7CH).
 - 6 failures = NAND3BBX0P5/X0P7H7* (all 3 libs): the layout draws the NMOS
@@ -58,7 +66,7 @@ carries the topology waiver).
 - Spot anchors on the final state: INVX1, AND2X8, SDFFNRX2, AOI2BB2X2,
   ADDFX1 all PASS (re-run 2026-09-25).
 
-## 4. Open gaps (documented, not blocking the released libraries)
+## 5. Open gaps (documented, not blocking the released libraries)
 
 - 2.5V / native / overdrive MOS, resistors, MOS caps, BJTs, diodes: layer
   recognition + device classes not ported; explicit unsupported-device

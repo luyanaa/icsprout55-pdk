@@ -1,10 +1,13 @@
 {
  "summary": {
   "total": 466,
-  "covered": 85,
-  "value_mismatch": 0,
-  "missing": 381
+  "threshold_or_name_mapped": 85,
+  "unmapped": 381,
+  "stale_value_rows": 26,
+  "semantically_equivalent": 0,
+  "differential_status": "BLOCKED (no local Calibre run/report)"
  },
+ "summary_semantics": "Legacy per-rule status 'covered' means name/threshold mapping only. The 26 stale mapped rows have stored klayout_values that differ from current ics55_rules.json; no row gets semantic-equivalence credit from this static crosswalk.",
  "rules": [
   {
    "official": "AADUM_R_1",
@@ -1667,7 +1670,7 @@
    "status": "covered",
    "klayout": "poly.poly.area",
    "klayout_values": {
-    "poly_area": 0.0388,
+    "poly_area": 0.04,
     "poly_space": 0.12,
     "poly_width": 0.06
    }
@@ -1682,7 +1685,7 @@
    "status": "covered",
    "klayout": "poly.poly.area",
    "klayout_values": {
-    "poly_area": 0.0388,
+    "poly_area": 0.04,
     "poly_space": 0.12,
     "poly_width": 0.06
    }
@@ -1697,7 +1700,7 @@
    "status": "covered",
    "klayout": "poly.poly.area",
    "klayout_values": {
-    "poly_area": 0.0388,
+    "poly_area": 0.04,
     "poly_space": 0.12,
     "poly_width": 0.06
    }

@@ -12,34 +12,74 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#=========================================================================================
-# MOM capacitor checks
-#
-# MOM caps are not extracted (see the LVS README); the DRC checks assume the
-# analog layout marks the MOM regions with the MOM_MARKER layer (60/1) and the
-# dummy fill with DUMMY (60/2) - these layers are not present in the released
-# std-cell GDS, so the checks are vacuous there and activate only when the
-# markers are drawn.
-#
-#   m2_in_mom  = M2 inside the MOM marker: min width / spacing (LEF values)
-#   dummy      : no dummy fill inside the MOM marker enlarged by
-#                mom_dummy_margin (1 um placeholder)
-#
-# Disable with -rd no_mom=true.
-#=========================================================================================
-
+# MOM_CHECK / MOM_R_1 and MOM_R_2 for the configured 6-metal, T4M2-top profile.
+# MOM_R_1 forbids a via intersecting the MOM finger marker on either adjacent
+# metal; its violations are waived inside NODRC. Source via aliases include
+# both the interior-cut and bar layers.
+# The profile's active pairs are V1..V4 across MET1..MET5 and top via T4V2 on MET5.
 if MOM
-  m2_in_mom = M2.and(MOM_MARKER)
-  m2_in_mom.width(rval('m2_width').um, euclidian).output('mom.m2.width',
-    "mom.m2.width: M2 min width inside MOM #{rval('m2_width')} um [lef]")
-  m2_in_mom.space(rval('m2_space').um, euclidian).output('mom.m2.space',
-    "mom.m2.space: M2 min spacing inside MOM #{rval('m2_space')} um [lef]")
-
-  DUMMY.and(MOM_MARKER.sized(rval('mom_dummy_margin').um)).output('mom.dummy',
-    "mom.dummy: dummy fill inside MOM exclusion (marker + #{rval('mom_dummy_margin')} um) [derived]")
-
-  # DFM exclusion zone: NO_FILL / DM_EXCEL must cover the sensitive regions
-  # (MOM, inductor, paired resistor / differential MOS markers when drawn)
-  MOM_MARKER.sized(rval('mom_dummy_margin').um).not(NO_FILL + DM_EXCEL).output('mom.no_fill',
-    "mom.no_fill: MOM exclusion zone (marker + #{rval('mom_dummy_margin')} um) not covered by NO_FILL/DM_EXCEL [derived]")
-end
+   [
+     ['V1', V1.or(V1BAR), MET1MOM, 'MET1MOM'], ['V1', V1.or(V1BAR), MET2MOM, 'MET2MOM'],
+     ['V2', V2.or(V2BAR), MET2MOM, 'MET2MOM'], ['V2', V2.or(V2BAR), MET3MOM, 'MET3MOM'],
+     ['V3', V3.or(V3BAR), MET3MOM, 'MET3MOM'], ['V3', V3.or(V3BAR), MET4MOM, 'MET4MOM'],
+     ['V4', V4.or(V4BAR), MET4MOM, 'MET4MOM'], ['V4', V4.or(V4BAR), MET5MOM, 'MET5MOM'],
+     ['T4V2', TV2.or(TV2BAR), MET5MOM, 'MET5MOM']
+   ].each do |via_name, via, mom_marker, marker_name|
+     via.and(mom_marker).not_inside(NODRC).output("mom.MOM_R_1.#{via_name}.#{marker_name}",
+       "MOM_R_1: #{via_name} intersects #{marker_name} outside NODRC [ICsprout Calibre]")
+   end
+ 
+   # MOM_S_1 requires Calibre EXT with ABUT<90, SINGULAR, REGION qualifiers.
+   # KLayout's Region separation API cannot express those qualifiers; an
+   # unqualified separation result would be an approximation, so MOM_S_1 is
+   # deliberately not emitted.
+   #
+   # MOM_R_2 has active clauses for forbidden per-layer stack assignments and
+   # missing labels on complete, otherwise valid MOM stacks. The source's
+   # complementary "required marker" Y12..Y78 bodies are commented out and are
+   # not emitted.
+   mom_layers = [MET1MOM, MET2MOM, MET3MOM, MET4MOM, MET5MOM, MET6MOM, MET7MOM, MET8MOM]
+   mom_layer_names = %w[MET1MOM MET2MOM MET3MOM MET4MOM MET5MOM MET6MOM MET7MOM MET8MOM]
+   mom_texts = labels(323, 12)
+   mom_caps = %w[12 13 14 15 16 17 18 23 24 25 26 27 28 34 35 36 37 38 45 46 47 48 56 57 58 67 68 78]
+   forbidden_caps = [
+     %w[23 24 25 26 27 28 34 35 36 37 38 45 46 47 48 56 57 58 67 68 78],
+     %w[34 35 36 37 38 45 46 47 48 56 57 58 67 68 78],
+     %w[12 45 46 47 48 56 57 58 67 68 78],
+     %w[12 13 23 56 57 58 67 68 78],
+     %w[12 13 14 23 24 34 67 68 78],
+     %w[12 13 14 15 23 24 25 34 35 45 78],
+     %w[12 13 14 15 16 23 24 25 34 35 36 45 46 56],
+     %w[12 13 14 15 16 17 23 24 25 26 27 34 35 36 37 45 46 47 56 57 67]
+   ]
+ 
+   mom_caps.each do |cap|
+     cap_text = mom_texts.texts("momcap#{cap}")
+     cap_region = MOMLVS1.interacting(cap_text)
+ 
+     forbidden_caps.each_with_index do |caps, metal_index|
+       next unless caps.include?(cap)
+       marker = mom_layers[metal_index]
+       marker.interacting(cap_region).not(SRINGBLK_SRC).output("mom.MOM_R_2.forbidden_stack.#{mom_layer_names[metal_index]}.#{cap}",
+         "MOM_R_2: #{mom_layer_names[metal_index]} is forbidden for MOMLVS1 momcap#{cap} [ICsprout Calibre]")
+     end
+   end
+ 
+   # A geometrically correct stack without its matching MOMLVS1 text label is
+   # also a MOM_R_2 error. Extra MOM markers on any non-stack metal invalidate
+   # the candidate, matching the source's Z12..Z78 construction.
+   mom_caps.each do |cap|
+     first_metal = cap[0].to_i
+     last_metal = cap[1].to_i
+     candidate = MOMLVS1
+     (first_metal..last_metal).each do |metal_index|
+       candidate = candidate.interacting(mom_layers[metal_index - 1])
+     end
+     other_markers = mom_layers.each_with_index.reject { |_, index| (first_metal - 1..last_metal - 1).include?(index) }.map(&:first)
+     unless other_markers.empty?
+       candidate = candidate.not_interacting(other_markers.reduce(:+))
+     end
+     candidate.not_interacting(mom_texts.texts("momcap#{cap}")).not(SRINGBLK_SRC).output("mom.MOM_R_2.label_stack.#{cap}",
+       "MOM_R_2: MOMLVS1 stack must carry matching momcap#{cap} label [ICsprout Calibre]")
+   end
+ end

@@ -1,106 +1,85 @@
-# Rule-to-rule comparison: official Calibre DRC vs KLayout port
+# Calibre DRC ↔ KLayout semantic comparison
 
-Generated 2026-09-25 (final signoff sanity, refreshed 2026-09-25 evening).
-Source of truth: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc`
-(545 RULECHECK tokens, 466 unique IDs). KLayout side: `libs.tech/drc/`
-(152 checks registered; 11 checks disabled by user call - see section 4).
-Method: family-level crosswalk + value extraction from the official `@` comments
-vs `ics55_rules.json`. The official deck is an 8-metal-capable deck
-(T2/T4/T8 top-metal options); the KLayout port targets the released 6-metal
-profile (TOTALMETAL=6, top_metal=1).
+## Source and frozen profile
 
-## 1. Coverage matrix
+- Calibre sources: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and
+  `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant`.
+- Frozen released profile: `total_metal=6`, `top_metal=1`, T4V2/T4M2 selected,
+  `OPEN_RECOMMENDED_ON=NO`. Active metal rules select M1–M5 and T4M2.
+  `Density_rules`, `LATCH_UP_CHECK`, `DUP_CHECK`, `Metal_Slot_CHECK`,
+  `MOM_CHECK`, `ESD_CHECK`, and `Poly_EFuse_CHECK` are enabled by source
+  `#DEFINE` values; nearby comments for ESD/poly-EFuse are contradictory.
+- The main `.drc` uses `DRC MAXIMUM RESULTS ALL`; the separate `.ant` deck has
+  different report caps and semantics. The KLayout port does not include an
+  antenna module.
+- There are 466 unique `RULECHECK` IDs in the source, including conditional
+  top-stack variants and recommended rules. This total is not the active-rule
+  count for the frozen profile.
 
-| Official family | # rules | KLayout port | Notes |
-|---|---|---|---|
-| ACT (AA width/space/area) | 31 | `active.act.*` width/space/area | EN (well enclosure), L (max AA length), R (AA-implant rules), D (density) NOT ported |
-| PO (poly) | 45 | `poly.poly.*` width/space/area, gate overhang | PO_EX_2 ported EXACT; PO_EX_1, PO_EN, PO_L, PO_D NOT ported |
-| NW1 (N-well) | 9 | `well.nw.*` width/space | values MISMATCH official (see below) |
-| MET1 (M1) | 15 | `metal.m1.*` width/space/area | wide-metal cap 12um NOT ported (20um placeholder) |
-| M2..M5 / T2M1 / T4M1 / T8M1 | ~70 | `metal.m2..tm2.*` width/space/area | measured values; density/dummy variants NOT ported |
-| Vias (V1-V4 / TV2) | T2Vn/T4Vn/T8Vn (11/9/7 each) | `via.v1..tv2.*` width/space/enc/area | official via rules are parameterized by the metal-count option; the port covers the 6-metal-profile subset. Via-bar rules (SRCK_11d: TVn bar width 0.36, enc 0.375/0.5) and redundant-via rules (T2V1_R_*) NOT ported |
-| CT (contacts) | inside ESDN/ESDP + SRCK | `cont.ct.*` width/space/enc/area | official CT rules are the ESD source/drain extension & space rules (ESDN_1_SEDP_1: ACT ext of CT on SOURCE >= 0.15, ESDN_2_ESDP_2: CT-to-poly space >= 0.15, ESDN_6_ESDP_6: SAB-to-CT-on-Drain >= 0.21) and the seal-ring bar rules; the port's ct.* are generic checks without direct official IDs |
-| MOM | 3 | `mom.m2.*` width/space | space 0.11 official vs 0.1 ported (measured) |
-| TGOX / DGOX / SAB / IOACT | (inside ACT/PO) | `well.tgox.*`, `well.dgox.*`, `impl.sab.*`, `active.ioact.*` | derived IOACT = ACT & TGOX |
-| DNW | 11 | — | NOT implemented (logged in README, deferred) |
-| PSUB | 16 | — | NOT implemented (logged, deferred) |
-| ESD / ESDN / ESDP | 22 | `impl.esd.space` (1 check) | mostly NOT implemented |
-| LU (latch-up) | 12 | — | NOT implemented (logged, deferred) |
-| SRCK (seal ring) | 50 | — | NOT implemented (seal-ring geometry, RDL/RV clearances, ring widths) |
-| CB / COVER / DEUPAD | 12 | `pad.alpad/rdl/cover.*` (partial) | DEUPAD NOT ported; CB checks NOT ported |
-| CHIPEDGE / SL (seal) | 6 | — | NOT implemented |
-| AADUM / PODUM / T*DUM (dummy fill) | 189 | — | NOT implemented (fill generation is a Phase-4 item) |
-| `_R` recommended rules | ~40 | — | design-for-yield; NOT implemented by design |
+## Static crosswalk summary
 
-## 2. Value-level comparison (directly ported rules)
+`drc_rule_comparison.json` is a legacy name/threshold inventory, not a
+semantic-equivalence report. The current runner recomputes these values:
 
-| Official rule | Official value | KLayout value | Status |
-|---|---|---|---|
-| ACT_W_1 (AA width) | >= 0.08 um | 0.081 | match |
-| ACT_S_1 (AA space) | >= 0.11 um | 0.101 | **looser by 8%** |
-| ACT_A_1 (AA area) | >= 0.0384 um2 | 0.0555 | tighter by 31% (conservative) |
-| PO_W_1 (poly width) | >= 0.06 um | 0.06 | match |
-| PO_S_1 (poly space) | >= 0.12 um | 0.11 | **looser by 8%** |
-| PO_A_1 (poly area) | >= 0.04 um2 | 0.0388 | match |
-| PO_EX_2 (gate overhang) | >= 0.14 um | 0.14 | **exact** |
-| NW1_W_1 (N-well width) | >= 0.47 um | 0.47 | corrected 2026-09-25 (was 0.361) |
-| NW1_S_1 (N-well space) | >= 0.47 um | 0.47 | corrected 2026-09-25 (was 0.4) |
-| ESD_S_1 (ESD space) | >= 0.47 um | 0.47 | corrected 2026-09-25 (was 0.4) |
-| MOM_S_1 (MOM space) | >= 0.11 um | 0.1 | NOT a pairing: the official rule is the MOM-metal-to-via space, not the M2 spacing; m2_space stays LEF 0.1 |
-| MET1_W_1 (M1 wide cap) | <= 12.0 um | 20 (placeholder) | not ported |
-| PO_D_1 (poly density) | 14% .. 40% | 12% .. 55% | user-specified window |
-| ACT_D_4 (AA density) | <= 75% (window) | 20% .. 65% | user-specified window |
+| Measure | Value | Meaning |
+|---|---:|---|
+| Source IDs | 466 | Unique source `RULECHECK` names |
+| Legacy mapped rows | 85 | Name/threshold rows labeled `covered` |
+| Unmapped rows | 381 | Rows labeled `missing` |
+| Stale stored-value rows | 26 | Mapped rows whose stored values differ from the current JSON values |
+| Semantic-equivalence passes | 0 | No rule-level equivalence credit is assigned |
+| Calibre differential | BLOCKED | No matched Calibre run/report is available |
 
-Per-voltage channel lengths (PO_W_2a..2f: 0.06/0.20/0.28/0.38/0.40 um for
-0.9/1.2/1.8/2.5/3.3V) exist in the official deck; the port uses a single
-`poly_width` 0.06 and does not distinguish IO/LDMOS channel lengths.
+`covered` means only that a name/value mapping was recorded. It does not imply
+equal geometry, qualifiers, exclusions, connectivity, windows, hierarchy, or
+marker results.
 
-## 3b. Final-state verification (2026-09-25)
+## Source behavior and KLayout state
 
-All checked std cells run CLEAN with the current deck (INVX1, ADDFX1,
-SDFFNRX2, AND2X8, NAND2X1, AOI2BB2X2 - zero flags).  The well.nw.width check
-uses the ABUT<90 analog (smoothed by well_width_smoothing 0.03); the
-poly.poly_act.sep check uses the 0.001 um floor; cont.ct.enc.m1, the
-adv.*.eol/notch families and adv.gate.act_overhang are disabled per the user
-call (documented in libs.tech/drc/README.md "Disabled checks").
+| Family | Source behavior | KLayout state |
+|---|---|---|
+| ACT / POLY / NP / PP / CT | Source-specific area, hole, coverage, width/space, voltage, topology, and marker rules | Direct area/hole checks and CT coverage predicate are emitted with represented waivers. Width/space, directional enclosure, voltage, and connectivity semantics are omitted. |
+| M1–M5 / T4M2 | Profile-selected area/hole, width/space, slots, dummy, density, exclusion, and geometry rules | Area/hole predicates use source thresholds and represented SRAMALL/NODRC waivers. Width/space selectors with ABUT/SINGULAR/angle/array semantics are omitted. Density and geometry checks are separate KLayout translations. |
+| V1–V4 / T4V2 | Exact cut/bar geometry, directional enclosure, array/neighborhood, edge angle, and source-specific waivers | V1–V4 square checks use the source via layer; top T4V2 rules use interior-cut plus bar geometry. Representable 45-degree and separate lower-metal OUTLAYER checks are emitted. Directional enclosure and array/neighborhood rules are omitted. |
+| RV / RDL / COVER / CB | Fixed RV rectangle after fuse/GRID exclusions; qualified spacing/enclosure; direct outside-layer and coverage results | RV_W_1, the separate RV-outside-RDL result, and direct RDL/ALPAD/COVER coverage predicates are represented. Qualified enclosure/spacing rules are omitted. |
+| Density | 100×100 µm windows, 50 µm step, backup windows, per-layer dummy construction, global bounds, gradients, and NODRC/INDALL/GRID/SRINGBLK handling | Source-derived window/global checks are translated for ACT, POLY, M1–M5, and T4M2. Dummy regions and represented exclusions are retained. D_3 gradient outputs are omitted because the source omits `STEP` and the exact neighboring-window selection is not established. No cross-tool verification has been run. |
+| Dummy / slot | Exact dummy-size masks, overlaps, and qualified layer-specific spacing rules | Active-profile ACT/POLY/M1–M5/T4M2 whitelists and direct dummy/CT and slot/CB overlaps are emitted. Qualified spacing rules are omitted. |
+| MOM | MOM_R_1 via/MOM-marker prohibitions; MOM_R_2 text-qualified stack prohibitions and missing-label outputs; MOM_S_1 qualified spacing | MOM_R_1 and active MOM_R_2 clauses are translated. MOM_S_1 is omitted due ABUT<90 SINGULAR REGION semantics. Source Y12–Y78 required-marker bodies are commented out and are not treated as active checks. |
+| Special | EFUSE marker Boolean rules, DEUPAD rules, ESD geometry/device rules, and latch-up checks | EFUSE predicates, DEUPAD_R_2/R_5/R_6, and ESD_A_1/A_2 are emitted. DEUPAD_R_3 is omitted because its ENCLOSE marker differs; ESD_W_1/S_1 and device/connectivity/latch-up rules are omitted rather than approximated. |
+| Antenna | Separate `.ant` accumulated net-area ratios, diode credit, oxide classes, and process-stage connectivity | Not implemented. No antenna diagnostic or fallback is emitted. |
 
-## 4. Disabled checks (user call 2026-09-25)
+## Representative source values
 
-| Check | Reason |
-|---|---|
-| cont.ct.enc.m1 | LEF ENCLOSURE ABOVE 0.04 vs the cells' uniform 0.025; no official rule |
-| adv.<layer>.eol (all) | placeholder approximation; no official line-end rule ported |
-| adv.m1/m2.notch | placeholder jog/notch approximation |
-| adv.gate.act_overhang | gate definition includes 0.32 um straps; official applies to channel gates only |
+| Rule | Source value | KLayout state | Known boundary |
+|---|---:|---|---|
+| ACT_A_1 | 0.0384 µm² | Same threshold; SRAMALL/NODRC waivers | KLayout execution only; no Calibre differential |
+| PO_A_1 / PO_A_2 | 0.04 / 0.09 µm² | Same area/hole thresholds; PO_A_1 SRAMALL/NODRC and PO_A_2 NODRC waivers | Marker/report comparison not run against Calibre |
+| NP_A_1 / PP_A_1 | 0.12 µm² each | Source area predicates with represented SRAMALL/NODRC waivers | Other implant rules omitted |
+| MET1_A_1 / MET1_A_2 | 0.042 / 0.18 µm² | Same strict area/hole thresholds with source NODRC and MET1 SRAMALL behavior | Other metal qualifiers omitted |
+| M2–M5_A_1 / A_2 | 0.052 / 0.18 µm² | Same source area/hole thresholds and NODRC waiver | Other metal rules omitted |
+| T4M2_A_1 / A_2 | 0.40 / 0.60 µm² | Same source area/hole thresholds with NODRC waiver | Profile-specific KLayout translation only |
+| V1–V4_W_1 | Exact 0.09×0.09 µm rectangle | Exact-square check on source via geometry; GRID/SRINGBLK/NODRC waiver | Vn bar-width rules are separate and omitted |
+| RV_W_1 | Exact 3×3 µm rectangle | Source fuse/GRID exclusions retained | Calibre rectangle selector not differentially verified |
+| ESD_A_1 / A_2 | 0.6 µm² | ESD polygon/hole area checks with NODRC waiver | ESD width/space qualifiers and devices omitted |
 
-## 5. Caution items
+Values and IDs are taken from the supplied source and
+`libs.tech/drc/rule_decks/ics55_rules.json`. A matching threshold does not
+close semantic gaps.
 
-1. Five loose values were corrected to the official numbers on 2026-09-25:
-   NW1_W_1/NW1_S_1/ESD_S_1 0.47, ACT_S_1 0.11, PO_S_1 0.12 (also nw_act_enc ->
-   ACT_EN_1 0.15, which was 1nm tighter than the official and flagged every
-   cell's exactly-0.15 enclosure).  MOM_S_1 was a false pairing (metal-to-via
-   rule).  Provenance in `ics55_rules.json` now says `official` with the rule
-   IDs.
-2. `ACT_A_1` (0.0555 vs official 0.0384) is conservative, not wrong.
-3. Wide-metal cap: official 12 um vs 20 um placeholder - not ported.
-4. Density windows are user-specified, not official (14-40% poly, <=75% AA
-   window per the official deck).
-5. Seal-ring (SRCK), latch-up (LU), DNW, PSUB, dummy-fill (DUM), ESDN/ESDP,
-   DEUPAD, CHIPEDGE, SL families have NO ported counterpart.
-6. ABUT<90 qualifier difference (verified on SDFFNRX2H7R): the official
-   INT/EXT ... ABUT<90 SINGULAR REGION waives 90-degree notch and colocated
-   edge pairs; the KLayout plain width/space/sep flag them (well-tap notch
-   0.36um well width, poly-strap ACT extension 0.065).  KLayout's angle_limit
-   goes the wrong direction (more flags), so no clean replication in 0.30.9 -
-   documented in the DRC README; the ported checks are stricter than the
-   official in these configurations.
-7. CT-to-M1 enclosure: the LEF-derived cont.ct.enc.m1 (0.04) flags every std
-   cell (cells draw 0.025); the official deck has no such rule.  Kept as the
-   LEF router constraint; documented.
+## Regression and evidence policy
 
-## 4. Artifacts
-
-- Machine-readable per-rule records: `drc_rule_comparison.json` (name-matched,
-  raw; use this table for semantics).
-- Official RULECHECK IDs: `drc_rule_ids.json` (466 unique).
-- Layer crosswalk: `layer_crosswalk.json`.
+- `drc_fixture_check.py` asserts exact KLayout report-category sets on
+  deterministic source-behavior fixtures for FEOL/BEOL/dummy/special, density,
+  and MOM profiles. Fixtures include strict/near-threshold density boundaries,
+  hole areas, marker waivers, via-bar/orientation behavior, backup windows,
+  small-layout padding, dummy halos, MOM labels, and pad/special relationships.
+  They verify the KLayout implementation only.
+- `run_alignment.py --drc` runs the fixture suite and KLayout DRC on each
+  selected GDS/top. It retains KLayout categories and hashes source decks,
+  layer maps, profiles, modules, and fixture inputs. The cross-tool field remains
+  `BLOCKED`.
+- A Calibre differential PASS requires identical GDS hash, top cell, source
+  deck/options/profile, report caps, and retained Calibre results. Compare rule
+  IDs and marker geometry, not aggregate counts alone.
+- No Calibre differential is available. The current status remains `BLOCKED`;
+  static review and KLayout fixtures do not establish formal equivalence.

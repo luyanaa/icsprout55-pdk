@@ -15,32 +15,18 @@
 #=========================================================================================
 # FEOL 05 - Contact (CT)
 #
-# Port of iDRC cut-layer checks.  CT values are exact tech-LEF values
-# (WIDTH 0.09, SPACING 0.11, ENCLOSURE ABOVE 0.04); separation/enclosure to
-# POLY/ACT are measured (provenance: gds).
+# Port CT_EN_1 directly from the source coverage expression.  Tech-LEF cut
+# dimensions are routing constraints, not substitutes for the Calibre CT rules.
 #=========================================================================================
 
-if TABLES.include?('feol') || FEOL
-  #--- CT: minimum width / spacing (LEF) ----------------------------------------------
-  CT.width(rval('ct_width').um, euclidian).output('cont.ct.width',
-    "cont.ct.width: CT min width #{rval('ct_width')} um [lef]")
-  CT.space(rval('ct_space').um, euclidian).output('cont.ct.space',
-    "cont.ct.space: CT min spacing #{rval('ct_space')} um [lef]")
+if FEOL
+  CT.not(M1.and(POLY.or(ACT))).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.inside',
+    "CT_EN_1: CT must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC")
 
-  #--- CT enclosure by M1 / POLY / ACT (LEF ENCLOSURE ABOVE 0.04) ---------------------
-  # DISABLED 2026-09-25 (user call): the LEF ENCLOSURE ABOVE 0.04 flags every
-  # released std cell (cells draw a uniform 0.025 um CT-to-M1 top enclosure); the
-  # official Calibre deck has no plain CT-to-M1 enclosure rule (only the seal-ring
-  # CT bar SRCK_14a_CT 0.375).  Value stays in ics55_rules.json as the LEF router
-  # constraint.  Re-enable by uncommenting.
-  # M1.enclosing(CT, rval('ct_enc_m1').um).output('cont.ct.enc.m1',
-  #   "cont.ct.enc.m1: CT enclosure by M1 #{rval('ct_enc_m1')} um [lef]")
-  POLY.enclosing(CT, rval('ct_enc_poly').um).output('cont.ct.enc.poly',
-    "cont.ct.enc.poly: CT enclosure by POLY #{rval('ct_enc_poly')} um [lef]")
-  ACT.enclosing(CT, rval('ct_enc_act').um).output('cont.ct.enc.act',
-    "cont.ct.enc.act: CT enclosure by ACT #{rval('ct_enc_act')} um [lef]")
-
-  #--- CT must be inside POLY, ACT or M1 (foundry "contact on poly/active/metal") -----
-  CT.not(POLY.or(ACT).or(M1)).output('cont.ct.inside',
-    "cont.ct.inside: CT must be inside POLY, ACT or M1 [derived]")
+  # Unsupported source rules: CT_W_1, CT_W_2, CT_S_1, CT_S_1a, CT_S_2,
+  # CT_S_3 through CT_S_6, CT_EN_2a, CT_EN_2b, CT_EN_3a_3b_3c,
+  # CT_EN_4a_4b_4c, CT_EN_4d, CT_R_1 through CT_R_3, CT_R_5.
+  # These require fixed-shape/CTbar treatment, connectivity, directional
+  # enclosure, or source-only exclusion layers. Recommended CT_S_4_R,
+  # CT_EN_2_R, CT_EN_3_R, CT_EN_4a_R_4b_R remain disabled by default.
 end

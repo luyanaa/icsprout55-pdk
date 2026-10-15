@@ -22,27 +22,26 @@
       "layermap_not_in_drc_deck": []
     },
     "klayout_map_vs_official": {
+      "documented_exceptions": [
+        "GRID_MANUAL 179/40",
+        "SRINGBLK_SRC 354/13"
+      ],
       "unresolved": [],
       "wrong_numbers": [],
       "ambiguous": []
     },
     "deck_usage_vs_map": {
       "drc": {
-        "inputs": 38,
-        "documented_local_aux": [
-          "60/1 (MOM_MARKER)",
-          "60/2 (DUMMY)",
-          "60/3 (NO_FILL)",
-          "60/4 (DM_EXCEL)"
-        ],
+        "inputs": 108,
+        "documented_local_aux": [],
         "unmapped": [],
-        "layers_def_sha256": "6af89b1a79ee028b1e0d60ae2cff63ffd698b129ef737f22a74d6ebfe5095e22"
+        "layers_def_sha256": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a"
       },
       "lvs": {
         "inputs": 40,
         "documented_local_aux": [],
         "unmapped": [],
-        "layers_def_sha256": "a5542678e9a64a7c22f12c9cfba6ba46af06855e033b4217faa323cc434b9f92"
+        "layers_def_sha256": "adfa1b6fbe127ad8751a9cf67e59bda28edbbd6e842f5420ac43f7524cfc004b"
       }
     },
     "profile_coverage": {
@@ -87,9 +86,9 @@
     "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc": "e979fded0bef271f4635736163b03b7db2071569a88feb7cab211413feb7f1db",
     "ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs": "da10271332e64f12b0da845eaa9807f503c6279dd955e63727b53d8731ea7748",
     "icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
-    "ics55.map": "16eba2bbbd771f45483d5be753e87fce588ff93cae859d65416b422cf3e6f928",
-    "layers_def.drc": "6af89b1a79ee028b1e0d60ae2cff63ffd698b129ef737f22a74d6ebfe5095e22",
-    "layers_definitions.lvs": "a5542678e9a64a7c22f12c9cfba6ba46af06855e033b4217faa323cc434b9f92"
+    "ics55.map": "26a90887ffb7d750fb55fd5a7dc8c366bf4c8557b318241ca3f7f8719e4777f1",
+    "layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
+    "layers_definitions.lvs": "adfa1b6fbe127ad8751a9cf67e59bda28edbbd6e842f5420ac43f7524cfc004b"
   },
   "issues": []
 }

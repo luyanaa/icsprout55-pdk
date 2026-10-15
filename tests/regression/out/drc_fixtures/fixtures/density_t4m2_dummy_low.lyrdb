@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>ACT_D_1_min</name>
+   <description>ACT_D_1_min: AA_all density &lt; 20.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ACT_D_1_max</name>
+   <description>ACT_D_1_max: AA_all density &gt; 80.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ACT_D_2</name>
+   <description>ACT_D_2: AA_all density &lt; 10.0% in 20.0um windows, 10.0um step, inside ACTDUMB sized by 2.5um [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PO_D_2_min</name>
+   <description>PO_D_2_min: PO_all density &lt; 20.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PO_D_2_max</name>
+   <description>PO_D_2_max: PO_all density &gt; 65.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MET1_D_1_min</name>
+   <description>MET1_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MET1_D_1_max</name>
+   <description>MET1_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MET1_D_2</name>
+   <description>MET1_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2_D_1_min</name>
+   <description>M2_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2_D_1_max</name>
+   <description>M2_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2_D_2</name>
+   <description>M2_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3_D_1_min</name>
+   <description>M3_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3_D_1_max</name>
+   <description>M3_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3_D_2</name>
+   <description>M3_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4_D_1_min</name>
+   <description>M4_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4_D_1_max</name>
+   <description>M4_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4_D_2</name>
+   <description>M4_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M5_D_1_min</name>
+   <description>M5_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M5_D_1_max</name>
+   <description>M5_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M5_D_2</name>
+   <description>M5_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2_D_1_min</name>
+   <description>T4M2_D_1_min: T4M2ALLi density &lt; 20.0% in 100.0um windows, 50.0um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2_D_1_max</name>
+   <description>T4M2_D_1_max: T4M2ALLi density &gt; 85.0% in 100.0um windows, 50.0um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2_D_2</name>
+   <description>T4M2_D_2: T4M2ALLi density &lt; 10.0% in 100.0um windows, 50.0um step, inside T4M2DUMB sized by 2.5um [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>T4M2_D_1_min</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0,0;0,150;150,150;150,0)</value>
+   </values>
+  </item>
+  <item>
+   <tags/>
+   <category>T4M2_D_2</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0,0;0,150;150,150;150,0)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

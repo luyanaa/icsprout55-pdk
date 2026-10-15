@@ -13,47 +13,18 @@
 # limitations under the License.
 
 #=========================================================================================
-# FEOL 01 - Wells (NW, TGOX/DGOX)
+# FEOL 01 - Wells
 #
-# Port of iDRC minimum-width / minimum-spacing / enclosure checks.
-# Values: measured from released std-cell/IO GDS (provenance: gds) - see
-# rule_decks/ics55_rules.json.  NW is a masterslice layer in the tech LEF, so
-# no LEF values exist for it.
+# DNW is mapped from the Calibre source layer (7/1), but its source checks use
+# ABUT<90/SINGULAR, directional enclosure, voltage and net-class semantics not
+# represented by this module API; keep them disabled rather than approximating.
+# NW1 source checks likewise depend on voltage/net classes and ABUT<90 /
+# SINGULAR REGION semantics not represented by the current module API.
 #=========================================================================================
 
-if TABLES.include?('feol') || FEOL
-  #--- NW: minimum width -----------------------------------------------------------
-  # NW1_W_1 official body uses ABUT<90 SINGULAR REGION (waives the 90-degree notch
-  # widths); the KLayout angle_limit goes the wrong direction, so the check runs on
-  # the layer smoothed by well_width_smoothing (removes the sub-30nm well-tap notch
-  # walls - the released cells draw 25nm steps at the well bottom).  The genuine
-  # narrow wells (long regions < 0.47) still flag.
-  NW.smoothed(rval('well_width_smoothing').um).width(rval('nw_width').um, euclidian).output('well.nw.width',
-    "well.nw.width: NW min width #{rval('nw_width')} um, smoothed by #{rval('well_width_smoothing')} um (ABUT<90 analog) [gds+official]")
-
-  #--- NW: minimum spacing (same-potential wells) -----------------------------------
-  NW.space(rval('nw_space').um, euclidian).output('well.nw.space',
-    "well.nw.space: NW min spacing #{rval('nw_space')} um [gds]")
-
-  #--- NW: minimum enclosure of ACT (well-to-active overlap) ------------------------
-  NW.enclosing(ACT, rval('nw_act_enc').um).output('well.nw.act_enc',
-    "well.nw.act_enc: NW enclosure of ACT #{rval('nw_act_enc')} um [gds]")
-
-  #--- NW vs NP: NP is the NMOS implant in p-substrate - no spacing rule ------------
-  # (gates and diffusions cross implant/well boundaries by design; PP reaches the
-  #  well edge, so well-to-implant spacing/enclosure is not a rule)
-
-  #--- TGOX (official 28/1, 3.3V IO gate oxide; was misaliased IOWELL) --------------
-  TGOX.width(rval('iowell_width').um, euclidian).output('well.tgox.width',
-    "well.tgox.width: TGOX min width #{rval('iowell_width')} um [gds]")
-  TGOX.space(rval('iowell_space').um, euclidian).output('well.tgox.space',
-    "well.tgox.space: TGOX min spacing #{rval('iowell_space')} um [gds]")
-  TGOX.enclosing(ACT, rval('iowell_act_enc').um).output('well.tgox.act_enc',
-    "well.tgox.act_enc: TGOX enclosure of ACT #{rval('iowell_act_enc')} um [gds]")
-  TGOX.enclosing(IOACT, rval('iowell_ioact_enc').um).output('well.tgox.ioact_enc',
-    "well.tgox.ioact_enc: TGOX enclosure of IOACT #{rval('iowell_ioact_enc')} um [gds]")
-
-  #--- NW vs TGOX separation (core/IO boundary) -------------------------------------
-  NW.sep(TGOX, rval('nw_iowell_sep').um, euclidian).output('well.nw_tgox.sep',
-    "well.nw_tgox.sep: NW to TGOX min separation #{rval('nw_iowell_sep')} um [gds]")
+if FEOL
+  # Unsupported source rules: DNW_W_1, DNW_S_1, DNW_S_2a, DNW_S_3,
+  # DNW_S_4, DNW_S_5, DNW_EN_1, DNW_EN_2, DNW_O_1, DNW_R_1,
+  # DNW_R_3; NW1_W_1, NW1_S_1 through NW1_S_5, NW1_A_1.
+  # TGOX/DGOX checks also require source-specific layers/qualifiers.
 end

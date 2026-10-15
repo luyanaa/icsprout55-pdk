@@ -1,5 +1,5 @@
 {
-  "schema": "ics55-pv-alignment-manifest/1.0",
+  "schema": "ics55-pv-alignment-manifest/1.1",
   "official_profile": {
     "source": "pv/LVS/ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs",
     "frozen": true,
@@ -23,10 +23,40 @@
       "WELL_PIN": "YES"
     }
   },
+  "official_drc_profile": {
+    "source": "pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc",
+    "antenna_source": "pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant",
+    "frozen": true,
+    "options": {
+      "total_metal": 6,
+      "top_metal": 1,
+      "T2V1_T2M1": 0,
+      "T2V2_T2M2": 0,
+      "T4V1_T4M1": 0,
+      "T4V2_T4M2": 1,
+      "T8V1_T8M1": 0,
+      "T8V2_T8M2": 0,
+      "OPEN_RECOMMENDED_ON": "NO",
+      "Density_rules": "YES",
+      "LATCH_UP_CHECK": "YES",
+      "DUP_CHECK": "YES",
+      "Metal_Slot_CHECK": "YES",
+      "MOM_CHECK": "YES",
+      "ESD_CHECK": "YES",
+      "Poly_EFuse_CHECK": "YES"
+    },
+    "report_options": {
+      "main_drc_maximum_results": "ALL",
+      "antenna_maximum_results": 1000,
+      "antenna_maximum_vertices": 199
+    }
+  },
   "oracle": {
     "calibre_binary": "UNAVAILABLE",
     "official_reports": "UNAVAILABLE",
-    "policy": "cross-tool equivalence stays BLOCKED until external Calibre reports with provenance hashes are registered",
+    "drc_calibre_binary": "UNAVAILABLE",
+    "drc_official_reports": "UNAVAILABLE",
+    "policy": "DRC cross-tool equivalence stays BLOCKED until same-GDS/top/profile Calibre results with retained provenance are registered",
     "quickstart_doc": "docs/quick-start_on_ICsprout_calibrelvs.pdf (GUI-only; no CLI invocation)"
   },
   "core_lvs_matrix": [
@@ -172,70 +202,145 @@
     "TBUFX8H7H"
   ],
   "drc_rule_families": {
-    "ported_high_confidence": [],
+    "ported_high_confidence": [
+      "ACT_A_1",
+      "PO_A_1/PO_A_2",
+      "NP_A_1/NP_A_2",
+      "PP_A_1/PP_A_2",
+      "CT_EN_1",
+      "M1-M5_A_1/A_2",
+      "T4M2_A_1/A_2",
+      "V1-V4_W_1/R_5/EN_2_OUTLAYER",
+      "T4V2_R_3/EN_2_OUTLAYER",
+      "RV_W_1/RV_EN_3_4_OUTLAYER",
+      "RDL_EN_1/RDL_EN_2",
+      "AADUM/PODUM/M1-M5/T4M2DUM_W_1",
+      "AADUM_R_1/PODUM_R_1/SL_R_1",
+      "ACT/POLY/M1-M5/T4M2 density D_1/D_2/D_4",
+      "MOM_R_1/active MOM_R_2 clauses",
+      "EFU_1b_G/EFU_1c_G/EFU_2b_G/EFU_2c_G",
+      "DEUPAD_R_2/DEUPAD_R_5/DEUPAD_R_6",
+      "ESD_A_1/ESD_A_2"
+    ],
     "deferred_gap": [
-      "DNW",
-      "ACT",
-      "NW1",
-      "PSUB",
-      "NVT3/PVT3",
-      "NVT1/PVT1",
-      "ULLD",
-      "DG",
-      "TG",
-      "PO",
-      "NP",
-      "PP",
-      "SAB",
-      "CT",
-      "MET1",
-      "T2V/T2M",
-      "T4V/T4M",
-      "T8V/T8M",
-      "CB",
-      "RV",
-      "RDL",
-      "COVER",
-      "CHIPEDGE",
-      "AAres",
-      "NWresAA",
-      "NWresSTI",
-      "POLYres",
-      "EFU",
-      "HRP",
-      "DEUPAD",
-      "SRCK",
-      "SL",
-      "AADUM",
-      "PODUM",
-      "ESDN/ESDP/ESD",
-      "LU",
-      "MOM",
-      "AR antenna"
+      "DNW/NW1 voltage, net-class, and qualified geometry",
+      "ACT width/space/enclosure/topology and gradient rules",
+      "POLY width/space/enclosure and gradient rules",
+      "NP/PP width/space/enclosure/topology rules",
+      "CT width/space and directional enclosure rules",
+      "M1-M5/T4M2 width/space and qualified array/edge rules",
+      "V1-V4/T4V2 directional enclosure and array/neighborhood rules",
+      "T2/T8/T4M1 top-stack rules inactive in the frozen profile",
+      "CB/RV/RDL/COVER qualified width/space/enclosure rules",
+      "CHIPEDGE and resistor/device-derived rules",
+      "density D_3 gradients",
+      "dummy/slot qualified spacing and dynamic NOT RECTANGLE rules",
+      "MOM_S_1 qualified spacing",
+      "DEUPAD_R_3 and DEUPAD_R_7",
+      "ESD_W_1/ESD_S_1 and ESD device/connectivity rules",
+      "latch-up net/device/topology rules",
+      "antenna accumulation, diode-credit, oxide, and staged-connectivity rules"
     ]
   },
   "provenance": {
     "tool": "KLayout via nix-shell ~/Documents/librelane",
     "klayout_version": "0.30.7",
     "lvs_runner": "libs.tech/lvs/run_lvs.py",
+    "lvs_deck": "libs.tech/lvs/ics55.lvs",
     "drc_runner": "libs.tech/drc/ics55_drc.drc",
     "hashes_expected": "frozen_hashes section; drift fails the run unless regenerated deliberately with run_alignment.py --update-hashes"
   },
   "frozen_hashes": {
-    "lvs_runner": "a2ddaecf935d82465f053545e43e166838699bd262bf0f71ace94cd765f4488f",
+    "lvs_runner": "099ec0095e32cbc3b9ea817c00839906b75c96b85d808c37356de0edff10b89e",
     "normalizer": "4be775277d78f0f74d1f8efe9140517e753924ce33bd912325ef028d4de5db29",
-    "harness": "a4adeaaeb437cbe0e8a1666bae07851ab1db389fbe4b7aa05f53aafb529273af",
+    "harness": "23daa9f45fd447117d0d99932eec9d9c1a82f47b6a57f20322adb626286d37b4",
     "lvs_rule_decks": {
+      "ics55.lvs": "90d317e546d8bb1688c072fdfd689ce6d6a5b687ddb315d176291ad4a68d2997",
       "combine_fingers.lvs": "fe15f3071820702bc00c6b400213d1e6d7e9cf209445e5b2ac8d421cba618df3",
-      "devices_connections.lvs": "97c3d166cb2de49eaed43ec3373fd4675f7a63c718a1fb55a938277ef489d9d8",
-      "general_derivations.lvs": "24eabd808dae25574d74a44fc058fa396281a780aa827acc0a037a93360fea88",
-      "layers_definitions.lvs": "a5542678e9a64a7c22f12c9cfba6ba46af06855e033b4217faa323cc434b9f92",
+      "devices_connections.lvs": "ebda4a65a220d960139c9c706fc84292d1e0cbbe756535e6894b93e9c6735685",
+      "general_derivations.lvs": "1e5800bd11557b5ed4a4e245bc90990e66283c3fe04b6a1a6b9c7b935374f7c2",
+      "layers_definitions.lvs": "adfa1b6fbe127ad8751a9cf67e59bda28edbbd6e842f5420ac43f7524cfc004b",
       "min_conn.lvs": "5a76cd2af1bd41634e9a3e63a38cf12f1eb6efcb3c07bac812c4af84e6904349",
       "mos_derivations.lvs": "cc4719455caff79cb6eba7bc227e31b3b718e8529943cc0fa1b12bc7448b3dc6",
-      "mos_extraction.lvs": "adbbb9d5e8ce252e34dc302dc9cae15280d00cb294b2a2a8cb858db45ba295b9",
+      "mos_extraction.lvs": "371222262ba23a509217992e2d82939737c60e810e6841ebd8966cf612745542",
       "mos_extraction_svtonly.lvs": "e3039a6da8c653f3b9d09758e8e3686beb8f5e8dc3ec832877a3985d37345221",
       "res_diode_derivations.lvs": "c6339ef3005c2336252c9776a9b0b1c0cc824e9625fd25465031c665ca1633d5",
       "res_diode_extraction.lvs": "295ec365c6a7785f6c006894370395dded6d5593e34df56116055d2555ebdc4b"
+    },
+    "official_drc_profile": {
+      "source": "pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc",
+      "antenna_source": "pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant",
+      "frozen": true,
+      "options": {
+        "total_metal": 6,
+        "top_metal": 1,
+        "T2V1_T2M1": 0,
+        "T2V2_T2M2": 0,
+        "T4V1_T4M1": 0,
+        "T4V2_T4M2": 1,
+        "T8V1_T8M1": 0,
+        "T8V2_T8M2": 0,
+        "OPEN_RECOMMENDED_ON": "NO",
+        "Density_rules": "YES",
+        "LATCH_UP_CHECK": "YES",
+        "DUP_CHECK": "YES",
+        "Metal_Slot_CHECK": "YES",
+        "MOM_CHECK": "YES",
+        "ESD_CHECK": "YES",
+        "Poly_EFuse_CHECK": "YES"
+      },
+      "report_options": {
+        "main_drc_maximum_results": "ALL",
+        "antenna_maximum_results": 1000,
+        "antenna_maximum_vertices": 199
+      }
+    },
+    "drc_profile": {
+      "tables": "main",
+      "no_feol": false,
+      "no_beol": false,
+      "check_grid": false,
+      "advanced": false,
+      "no_density": false,
+      "no_mom": false,
+      "cell_exclusion": false,
+      "run_mode": "deep"
+    },
+    "drc_profile_sha256": "50cb0be9de01348f1c820827e6935154bb02bdc4920ddc92e403c6b2598fe0f7",
+    "drc_rule_decks": {
+      "libs.tech/drc/ics55_drc.drc": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
+      "libs.tech/drc/rule_decks/advanced/10_eol_jog.drc": "d86b151f0e587210230d76a40f6146c9c6a0a5c3a06d09e0876f0559891e4630",
+      "libs.tech/drc/rule_decks/beol/06_metal.drc": "e7df782b456fa7e5f51721904bbb1f687a2eb1aa9adaef96390cecf90731753b",
+      "libs.tech/drc/rule_decks/beol/07_via.drc": "5768814db026906efc0a2b7e31f41d9170a50c76a417557c0b59370bd4185833",
+      "libs.tech/drc/rule_decks/beol/08_pad.drc": "7c5cd80efab74dc3acf7bea82af1cbf59cec08d39b8b5141e91ef8d60d6c4a17",
+      "libs.tech/drc/rule_decks/density.drc": "6658c65cc2b3f962ab35ddd07635accf12a5d86b5f2959fd8ce1159116ea414a",
+      "libs.tech/drc/rule_decks/dummy_slot.drc": "3ebad809814f05f722d129e222b29c027901d48b478fb078ee045052a7a1ad0c",
+      "libs.tech/drc/rule_decks/feol/01_wells.drc": "9c713e70421c40ff7f6a2b136f6bb22ca7fa79916cb4426b995e687ac811e168",
+      "libs.tech/drc/rule_decks/feol/02_active.drc": "5792bb281a41c1ab140766288dda4fa9340b81e2eb0b5f562d4e273c89fe74e6",
+      "libs.tech/drc/rule_decks/feol/03_poly.drc": "f474b046dfeb2c43f5d0ac7827f7dd0d26bd3471ddba94294934ce4885b7eab3",
+      "libs.tech/drc/rule_decks/feol/04_implant.drc": "b90514f2d4672b58ff81aeb6d41dc767652d68e6f4ee911af8c11c6072dc56e0",
+      "libs.tech/drc/rule_decks/feol/05_cont.drc": "c97447c5b301bc2dfe233f464908a046bdb887395a5af61d9f5da530713c7969",
+      "libs.tech/drc/rule_decks/geometry/09_grid.drc": "abbaede9dfe7bb6fcf8995560775edd3d123a2dee6dcfcd6b9ba6d9c7cc94383",
+      "libs.tech/drc/rule_decks/layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
+      "libs.tech/drc/rule_decks/mom.drc": "918d1fbe9c93527087268ace3e7677ffc10f20038d7d9a581661fd3138bfa3e8",
+      "libs.tech/drc/rule_decks/special.drc": "bbbf4c024b1beca75c693aa1720c7fb113b6b9983bff404f2c98d4b06536e4ae",
+      "libs.tech/drc/rule_decks/ics55_rules.json": "2a3d7fd6ecd9ff2a0eda1c45e9c1b8470e3948050c134089eff6d463ff166367"
+    },
+    "drc_layer_maps": {
+      "techfile/icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
+      "libs.tech/klayout/tech/ics55.map": "26a90887ffb7d750fb55fd5a7dc8c366bf4c8557b318241ca3f7f8719e4777f1"
+    },
+    "drc_harnesses": {
+      "tests/regression/drc_fixture_check.py": "6c15f47237cadbf0ec194a23b4a18c1f580977dfe5402043a805d9669025b303",
+      "tests/regression/make_fixtures.rb": "6aac955e6eec4d556bfa97f0982fdd0356be573e2bb7c8275a1b14f32102d42c"
+    },
+    "calibre_drc_sources": {
+      "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc": "e979fded0bef271f4635736163b03b7db2071569a88feb7cab211413feb7f1db",
+      "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant": "fc9f95aca4d9b81b99b1aba5b9789afd2f3a96e8435880c5158c177cc47f1f44"
+    },
+    "drc_crosswalk": {
+      "tests/regression/official/drc_rule_comparison.json": "a9c24397f0727a6778e1e663ed78fff0fdc4dd086078675861af1bf874da6a66",
+      "tests/regression/official/drc_rule_comparison.md": "f626996491ef07fea3ac448656204c158cdb5fa6100bfe9f7523f5e5028e5973"
     }
   }
 }

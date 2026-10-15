@@ -27,7 +27,7 @@ Options:
   --top CELL           top cell name (required)
   --report PATH        LVS report database (.lvsdb); default: <top>.lvsdb
   --target-netlist P   extracted layout netlist; default: <top>_extracted.cir
-  --no-well-ties       do not tie p-substrate to VSS / n-well to VDD
+  --no-well-ties       use CT-qualified physical taps, not global VSS/VDD body ties
   --combine-devices    combine parallel/series devices before comparison
   --purge              purge unused nets/devices before comparison
   --run-mode MODE      deep (default) | flat
@@ -50,7 +50,8 @@ def main() -> int:
     ap.add_argument("--netlist")
     ap.add_argument("--report")
     ap.add_argument("--target-netlist")
-    ap.add_argument("--no-well-ties", action="store_true")
+    ap.add_argument("--no-well-ties", action="store_true",
+                    help="use CT-qualified physical taps instead of global VSS/VDD ties")
     ap.add_argument("--combine-devices", action="store_true")
     ap.add_argument("--purge", action="store_true")
     ap.add_argument("--run-mode", default="deep", choices=["deep", "flat"])
