@@ -233,3 +233,14 @@ __marimo__/
 # by `make`; keep them out of git.
 libs.ref/*/gds/
 libs.ref/ics55_LLSC_H7C*/liberty/
+
+# Temporary release-asset staging is removed after each run.
+libs.ref/.ecos-macros.*
+
+# Canonically named ECOS Factory macro libraries.
+libs.ref/icsprout55_fd_rom__*/
+libs.ref/icsprout55_fd_sram__*/
+
+# Legacy names are ignored while existing local packages are migrated.
+libs.ref/ics55_ecos_rom_*/
+libs.ref/ics55_ecos_sram_*/

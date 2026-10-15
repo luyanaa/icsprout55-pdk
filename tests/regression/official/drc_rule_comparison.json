@@ -1,8 +1,8 @@
 {
  "summary": {
   "total": 466,
-  "threshold_or_name_mapped": 85,
-  "unmapped": 381,
+  "threshold_or_name_mapped": 90,
+  "unmapped": 376,
   "stale_value_rows": 26,
   "semantically_equivalent": 0,
   "differential_status": "BLOCKED (no local Calibre run/report)"
@@ -1249,9 +1249,9 @@
    "num": "1",
    "comment": "Space between two M1s, DRC don\\BFt flag 89 to 90 degree spaces in the INDALL region. >= 0.09um",
    "expr": "X = EXT M1 < 0.09 ABUT<90 SINGULAR REGION ((X NOT INDALL) NOT INSIDE SRAMALL) NOT INSIDE NODRC Y = EXT M1 < 0.09 ABUT<89 SINGULAR REGION ((Y AND INDALL) NOT INSIDE SRAMALL) NOT INSIDE NODRC ",
-   "status": "missing",
-   "klayout": null,
-   "klayout_values": null
+   "status": "covered",
+   "klayout": "metal.m1.spacing",
+   "klayout_values": {"m1_space": 0.09}
   },
   {
    "official": "MET1_S_1_R",
@@ -4609,9 +4609,9 @@
    "num": "2",
    "comment": "Min $bottom_metal enclosure of T4V2 when T4M1 enclosure on one or both perpendicular directions < 0.05um. >= 0.05",
    "expr": "X = RECTANGLE ENC T4V2 $bottom_metal ABUT<90 OUTSIDE ALSO \\ (ENC X $bottom_metal < 0.01 ABUT<90 SINGULAR REGION OVERLAP OUTSIDE ALSO) NOT INSIDE NODRC Y = ENC \\[X\\] $bottom_metal < 0.05 OPPOSITE (INT ",
-   "status": "missing",
-   "klayout": null,
-   "klayout_values": null
+   "status": "covered",
+   "klayout": "via.tv2.enclosure.lower",
+   "klayout_values": {"tv2_drc_enc_m5": 0.01}
   },
   {
    "official": "T4V2_EN_5_EN_6",
@@ -4620,9 +4620,9 @@
    "num": "5",
    "comment": "Min T4V2 fully enclosure by T4M2  >= 0.02",
    "expr": "(ENC T4V2 T4M2 < 0.02 ABUT < 90 SINGULAR REGION OUTSIDE ALSO) NOT INSIDE NODRC ",
-   "status": "missing",
-   "klayout": null,
-   "klayout_values": null
+   "status": "covered",
+   "klayout": "via.tv2.enclosure.upper",
+   "klayout_values": {"tv2_drc_enc_tm2": 0.02}
   },
   {
    "official": "T4V2_R_1_R",
@@ -4664,9 +4664,9 @@
    "num": "1",
    "comment": "Space between two T4V2s >= 0.34",
    "expr": "(EXT T4V2 < 0.34 ABUT<90 SINGULAR REGION) NOT INSIDE NODRC ",
-   "status": "missing",
-   "klayout": null,
-   "klayout_values": null
+   "status": "covered",
+   "klayout": "via.tv2.spacing",
+   "klayout_values": {"tv2_space": 0.34}
   },
   {
    "official": "T4V2_S_2",
@@ -4697,9 +4697,9 @@
    "num": "2",
    "comment": "Fixed T4V2bar width  = 0.36,",
    "expr": "T4V2bar WITH WIDTH < 0.36 T4V2bar WITH WIDTH > 0.36 ",
-   "status": "missing",
-   "klayout": null,
-   "klayout_values": null
+   "status": "covered",
+   "klayout": "via.tv2.bar.width",
+   "klayout_values": {"tv2_bar_width": 0.36}
   },
   {
    "official": "T8M1DUM_S_1",

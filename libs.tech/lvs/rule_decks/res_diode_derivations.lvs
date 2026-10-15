@@ -16,9 +16,13 @@
 # ICsprout55 LVS resistor / diode derivations
 #=========================================================================================
 
-# Poly resistor re_ppo_sab_2t: POLY covered by the PPO marker (41/4), two CT straps
-RES_POLY = POLY.and(PPO)
+# Poly resistor re_ppo_sab_2t:
+# rpposab_2T = (((resPOLY AND PP) AND SAB) NOT RES3TPOLY) NOT HRP.
+RES_POLY = POLY_RES
+RES_PPO_SAB_2T = RES_POLY.and(PP).and(SAB).not(RES3TPOLY).not(HRP)
 
-# ESD diode dio_3p3_pp_nw_lp: ESD region (55/1) inside NW, P+ (PP) anode
-DIO_ANODE = ACT.and(PP).and(ESD)
+# dio_3p3_pp_nw_lp follows pDioJunc + TGOX, not the ESD diode marker:
+# pJunc is P+ active inside NW, excluding poly and ACTres; TGOX excludes DGOX.
+P_DIO_JUNC = PACT.not(PO).not(ACTRES).and(NW).and(DIODE)
+DIO_ANODE = P_DIO_JUNC.and(TGOX).not(DGOX).not(PSUB_MARKER).not(NON_SVT_ESD)
 DIO_CATHODE = NW

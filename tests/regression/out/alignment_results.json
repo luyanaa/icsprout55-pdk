@@ -6,8 +6,8 @@
       "status": "PASS",
       "counts": {
         "total": 466,
-        "threshold_or_name_mapped": 85,
-        "unmapped": 381,
+        "threshold_or_name_mapped": 90,
+        "unmapped": 376,
         "stale_value_rows": 26
       },
       "issues": []
@@ -16,8 +16,8 @@
       "fixture": "drc_fixture_suite",
       "status": "PASS",
       "runner_rc": 0,
-      "report": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/drc_fixtures/drc_fixture_check.json",
-      "report_sha256": "2d2d55975dd1726a99d0b37ae16669ee0cc6fe5b2cb5d7fc23300b8cb90829fb",
+      "report": "tests/regression/out/drc_fixtures/drc_fixture_check.json",
+      "report_sha256": "34a252a2a87a014b91d4b6b875f27a3923a1016b2d02a5fb4564b8e958fa8cf6",
       "result": {
         "schema": "ics55-drc-fixture-check/1.3",
         "status": "PASS",
@@ -57,38 +57,38 @@
           }
         },
         "klayout": {
-          "kind": "bin",
-          "executable": "/nix/store/rslb2hkgqa3fxvq4f0l5b65m79nnfg4d-klayout-0.30.12/Applications/klayout.app/Contents/MacOS/klayout",
-          "version": "KLayout 0.30.12"
+          "kind": "nix",
+          "executable": "/Users/yanlu/Documents/librelane",
+          "version": "KLayout 0.30.7"
         },
         "profile_sha256": "7682a0184b2456a32930e0da3f2253aa3c205e31bb52fe6c8e53027c4d4c9472",
         "rule_inputs_sha256": {
           "libs.tech/drc/ics55_drc.drc": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
           "libs.tech/drc/rule_decks/advanced/10_eol_jog.drc": "d86b151f0e587210230d76a40f6146c9c6a0a5c3a06d09e0876f0559891e4630",
-          "libs.tech/drc/rule_decks/beol/06_metal.drc": "e7df782b456fa7e5f51721904bbb1f687a2eb1aa9adaef96390cecf90731753b",
-          "libs.tech/drc/rule_decks/beol/07_via.drc": "5768814db026906efc0a2b7e31f41d9170a50c76a417557c0b59370bd4185833",
+          "libs.tech/drc/rule_decks/beol/06_metal.drc": "6f7cd55d6155eccc1c7785f7ce2ba44a03e10c89144d1162f617cc0fdaacd040",
+          "libs.tech/drc/rule_decks/beol/07_via.drc": "d83ad8ce4fbb15b767bef1daa0380c70514ec4a3ba132ed2bb8d6a150e1bad1b",
           "libs.tech/drc/rule_decks/beol/08_pad.drc": "7c5cd80efab74dc3acf7bea82af1cbf59cec08d39b8b5141e91ef8d60d6c4a17",
           "libs.tech/drc/rule_decks/density.drc": "6658c65cc2b3f962ab35ddd07635accf12a5d86b5f2959fd8ce1159116ea414a",
           "libs.tech/drc/rule_decks/dummy_slot.drc": "3ebad809814f05f722d129e222b29c027901d48b478fb078ee045052a7a1ad0c",
           "libs.tech/drc/rule_decks/feol/01_wells.drc": "9c713e70421c40ff7f6a2b136f6bb22ca7fa79916cb4426b995e687ac811e168",
           "libs.tech/drc/rule_decks/feol/02_active.drc": "5792bb281a41c1ab140766288dda4fa9340b81e2eb0b5f562d4e273c89fe74e6",
-          "libs.tech/drc/rule_decks/feol/03_poly.drc": "f474b046dfeb2c43f5d0ac7827f7dd0d26bd3471ddba94294934ce4885b7eab3",
+          "libs.tech/drc/rule_decks/feol/03_poly.drc": "8f8dc738ccb0c55afbd66167694efba5fead6bcfd29e8e43ea4c923a117efd3b",
           "libs.tech/drc/rule_decks/feol/04_implant.drc": "b90514f2d4672b58ff81aeb6d41dc767652d68e6f4ee911af8c11c6072dc56e0",
-          "libs.tech/drc/rule_decks/feol/05_cont.drc": "c97447c5b301bc2dfe233f464908a046bdb887395a5af61d9f5da530713c7969",
+          "libs.tech/drc/rule_decks/feol/05_cont.drc": "b3674b0887781aa30dff71d9dce0440567c7bea99045efaa875697847ec6190f",
           "libs.tech/drc/rule_decks/geometry/09_grid.drc": "abbaede9dfe7bb6fcf8995560775edd3d123a2dee6dcfcd6b9ba6d9c7cc94383",
           "libs.tech/drc/rule_decks/layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
           "libs.tech/drc/rule_decks/mom.drc": "918d1fbe9c93527087268ace3e7677ffc10f20038d7d9a581661fd3138bfa3e8",
           "libs.tech/drc/rule_decks/special.drc": "bbbf4c024b1beca75c693aa1720c7fb113b6b9983bff404f2c98d4b06536e4ae",
-          "libs.tech/drc/rule_decks/ics55_rules.json": "2a3d7fd6ecd9ff2a0eda1c45e9c1b8470e3948050c134089eff6d463ff166367",
+          "libs.tech/drc/rule_decks/ics55_rules.json": "82bce7b96bc7f8b3107d19f4922512d0edcb0affcdf28f1cef4f4ef76bb1481b",
           "techfile/icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
-          "libs.tech/klayout/tech/ics55.map": "26a90887ffb7d750fb55fd5a7dc8c366bf4c8557b318241ca3f7f8719e4777f1"
+          "libs.tech/klayout/tech/ics55.map": "8e89d6f45583d5c95e3f5241b9d07843102e1c99c1db1f72e7dddc1fae310187"
         },
         "results": [
           {
             "fixture": "clean",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "d150a19eb527efa1414a29236faa6572a36713dbedad35437cbc1e685ac38b57",
+            "gds_sha256": "7d72340b8076d7423d4e0294b3b5866b770f5f1357a7120966748a39b2d1e915",
             "categories": [],
             "status": "PASS"
           },
@@ -98,7 +98,7 @@
             "expected_categories": [
               "active.act.area"
             ],
-            "gds_sha256": "6fe28bfe803cd0a6f718ac73e9e3a5240d5c8ee976f9f1ecf497864af121f7d1",
+            "gds_sha256": "af06444d5752eb83fe4886c40864702757da7ae3b5b0fc0e5678ead307dc7d41",
             "categories": [
               "active.act.area"
             ],
@@ -108,7 +108,7 @@
             "fixture": "act_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "a32812861c35c138256f2f65df8b31665f0bd99a4e9387d13378becc35e99631",
+            "gds_sha256": "aff4eaa2443963f62fae885caca990315b5d9fe451b5aa17c36e375d31535375",
             "categories": [],
             "status": "PASS"
           },
@@ -116,7 +116,7 @@
             "fixture": "act_area_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "a14013e1caca1dc9d1aec6c2bb021a8cc8c141969801abcff3dfcdb3ab48c7a6",
+            "gds_sha256": "e3f4e80391500a623dd18f1172375716adf95d0b0a98f11c09f568f0d9cdcc98",
             "categories": [],
             "status": "PASS"
           },
@@ -126,7 +126,7 @@
             "expected_categories": [
               "poly.poly.area"
             ],
-            "gds_sha256": "362a9899741a6fa4ee7de95be087dc7f84a39755a6951b45926a2c6b043e63ab",
+            "gds_sha256": "83a60c137462d0c613a374ce66a9b8dae553213ff381dc828e1dbb8d3de9d43a",
             "categories": [
               "poly.poly.area"
             ],
@@ -136,7 +136,7 @@
             "fixture": "poly_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "07e4f550a5d15b4180cad483f06d3d076b8d19247d96b1b423a40499872d62d5",
+            "gds_sha256": "387c4948852b5da097b87600525aa7958a670b8f6dfe1fd962cf7bb8402ec1bb",
             "categories": [],
             "status": "PASS"
           },
@@ -144,7 +144,7 @@
             "fixture": "poly_area_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "416a26d094a5ac96c1b7af791d58310e0e8e7456f584c015b3ca94a5d5569af3",
+            "gds_sha256": "64a7b9c318e6b9f1e2bca63876380575556215616ac9ed6f73b0f4bdd1cc5a8f",
             "categories": [],
             "status": "PASS"
           },
@@ -154,10 +154,50 @@
             "expected_categories": [
               "poly.poly.area"
             ],
-            "gds_sha256": "30d030164256dde3ab3e8a2d2e515e303e524cd7367e37deb8be12cc39548c4a",
+            "gds_sha256": "ae7cde24e8fcc1392548481bdb3ad44d0bfb85d87961d8f5cd8c0d09223d0076",
             "categories": [
               "poly.poly.area"
             ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "poly_width_bad",
+            "profile": "main",
+            "expected_categories": [
+              "poly.poly.width"
+            ],
+            "gds_sha256": "3360f54212c5de53a612f7488125423157abbbbce6a74305d054dfdf892e69a2",
+            "categories": [
+              "poly.poly.width"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "poly_width_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "b66782c7dc7beea8dc3f083ec71c5272373934d55f62bb62284891816b8bb950",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "poly_spacing_bad",
+            "profile": "main",
+            "expected_categories": [
+              "poly.poly.spacing"
+            ],
+            "gds_sha256": "12254a888f14ddf4566e927e848940f32669fabadb165716d6f473399db16845",
+            "categories": [
+              "poly.poly.spacing"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "poly_spacing_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "0674e1635973e00a236fdb89098f6f652320efa3d018859c8f9979e857bd541b",
+            "categories": [],
             "status": "PASS"
           },
           {
@@ -166,7 +206,7 @@
             "expected_categories": [
               "poly.poly.enclosed_area"
             ],
-            "gds_sha256": "e0f731d8786337dda225720be8f08d0499d294e3593d67aafb35392c77307992",
+            "gds_sha256": "4ee10785ff4b653074320f2deaf15729c08892165feedf98f76602069165cedc",
             "categories": [
               "poly.poly.enclosed_area"
             ],
@@ -176,7 +216,7 @@
             "fixture": "poly_hole_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "007110eee5ef2162c0766f9dc45883c8cc2518a8b27a2e145f93ce196a218896",
+            "gds_sha256": "78d96a6c5200f52786c28e69df0c37b61e90859e4ee4ebbf99661d06e7bc286c",
             "categories": [],
             "status": "PASS"
           },
@@ -186,7 +226,7 @@
             "expected_categories": [
               "implant.np.area"
             ],
-            "gds_sha256": "58113e157929634a2f9eec2f4e3b9a9694d6137ce085915e7edee51167ecde2c",
+            "gds_sha256": "4f0f7899268664c1d73cac168b333398bc9dc8c8470135f5ae66da5be060a4a5",
             "categories": [
               "implant.np.area"
             ],
@@ -196,7 +236,7 @@
             "fixture": "np_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "e23ec37de57803cd5327f1a773fae32953aa9558b21ae6c85ad657f4269fec1c",
+            "gds_sha256": "a6f46aa211b8f48cfe9c0fdf075487420e3b89675f5c942bbb4b4a3f07040131",
             "categories": [],
             "status": "PASS"
           },
@@ -206,7 +246,7 @@
             "expected_categories": [
               "implant.pp.area"
             ],
-            "gds_sha256": "42ccd692b307a5a094b3f1d2379f40e00cdd29cdfcfd43fcb4a118ff6f216fe8",
+            "gds_sha256": "b2f831d7d808468070d542617a79b57849f4961f929d2c339d90eb7930cf25fd",
             "categories": [
               "implant.pp.area"
             ],
@@ -216,7 +256,7 @@
             "fixture": "pp_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "71b364d464707526605a8cce1aee739b515cbc48197a928fe1f99930514e081f",
+            "gds_sha256": "0b0100537594910e1c6548d26b6f186c36fcfd01cc1c8bd9519c5491aa3c1f33",
             "categories": [],
             "status": "PASS"
           },
@@ -226,10 +266,30 @@
             "expected_categories": [
               "cont.ct.inside"
             ],
-            "gds_sha256": "82fe21a75240c934f242b8d72097ca0f955f78525614ea8095fb8d3fd85c7e9e",
+            "gds_sha256": "00c047e1535c2a62bce1e274971ef54e011c4ce82dc8c7b981efbb79487ee8d5",
             "categories": [
               "cont.ct.inside"
             ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "ct_active_enclosure_bad",
+            "profile": "main",
+            "expected_categories": [
+              "cont.ct.active.enclosure"
+            ],
+            "gds_sha256": "18ac2cb4dd8bfcd6a592829b2a442d949c9e41b289f6b23aa9b34802aa97a96f",
+            "categories": [
+              "cont.ct.active.enclosure"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "ct_active_enclosure_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "fc7822438e4a1f5cb0f6ce7d292701971981496f8ff10c2212e8765fb0d29e79",
+            "categories": [],
             "status": "PASS"
           },
           {
@@ -238,7 +298,7 @@
             "expected_categories": [
               "metal.m1.area"
             ],
-            "gds_sha256": "64cb7d4b836d0dbc775dc38b005221ec0578c39c226b44eaf6e29d7a4145cc30",
+            "gds_sha256": "0712879dfde76f90226fe85be1d465b8294195fceec56733e6a41a3f963f6e49",
             "categories": [
               "metal.m1.area"
             ],
@@ -248,7 +308,7 @@
             "fixture": "m1_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "c503d1f727bc08bd5169768f91d2d39d3cc82d640061b8d7188d2caea64adfa5",
+            "gds_sha256": "f5fe04d6a7b2392dcd9dd2ec488df3747e758303e697ea9f30aadb7d8b22bd38",
             "categories": [],
             "status": "PASS"
           },
@@ -256,7 +316,35 @@
             "fixture": "m1_area_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "09ca63e5a2bb57c6b7dadab6f7b0c648e48496054acae30e3bb3b967e5dfc6ee",
+            "gds_sha256": "11044d517a74f1936089fbdecab43ab77acb7f1f4c4886c3c20a403d403fccb7",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "m1_spacing_bad",
+            "profile": "main",
+            "expected_categories": [
+              "metal.m1.spacing"
+            ],
+            "gds_sha256": "38b7aee41adbac596c7f3e03ab09af51387237993e530a9c73f1feff9e3476c2",
+            "categories": [
+              "metal.m1.spacing"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "m1_spacing_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "93b8934a9a84c8be93291c0f0b1158a50c1242ccf6594085d3e17fc1826a650d",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "m1_slot_spacing_ignored",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "09609d4dc3525a71d267872fbbe1525261763a6ac1d0be84edabb8396a8b7dbb",
             "categories": [],
             "status": "PASS"
           },
@@ -266,7 +354,7 @@
             "expected_categories": [
               "metal.m1.min_hole"
             ],
-            "gds_sha256": "c929c7f88956d5164700bea0be0e0bd4b04c91a4fac0c513788f85e5ff26c629",
+            "gds_sha256": "4e964eee60f49f89183e59b7e9cc4be330599cc7cb5d7c8d6941625e10a562b2",
             "categories": [
               "metal.m1.min_hole"
             ],
@@ -276,7 +364,7 @@
             "fixture": "m1_hole_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "10a800a3d316e70af8da3d74e98b2b7800f003beed6d2d469221e0059fef55df",
+            "gds_sha256": "923a8e6aa04109dc8590eb265076d72ab5132500afb547ae6a7572126b5ac3a8",
             "categories": [],
             "status": "PASS"
           },
@@ -286,7 +374,7 @@
             "expected_categories": [
               "metal.tm2.area"
             ],
-            "gds_sha256": "4b5c1883753c341a51a841763c1c58f5f51a782f8af39cd7b3524582fb8f76f9",
+            "gds_sha256": "808a5d0091b5f7e47803ab0d122c9c4831edec11436d362c424f2e364f8a3c98",
             "categories": [
               "metal.tm2.area"
             ],
@@ -296,7 +384,7 @@
             "fixture": "t4m2_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "a61d292cdb33084c706132aaaa741883bcc60b5512c01645eef55806fa769f79",
+            "gds_sha256": "47a14540585ce034c3410d765272678d815efff0f838f1cf44a70ac825bc4fd4",
             "categories": [],
             "status": "PASS"
           },
@@ -306,7 +394,7 @@
             "expected_categories": [
               "metal.tm2.min_hole"
             ],
-            "gds_sha256": "244414debdaf82a506880f511c374e3b11b81c9804813af17c1b9ccde7ad3e57",
+            "gds_sha256": "a5a06ea034ca447cc17e9dbef0f6f1f3dc3ac6e30b5e5e7cccdec16eda4f6e18",
             "categories": [
               "metal.tm2.min_hole"
             ],
@@ -316,7 +404,7 @@
             "fixture": "t4m2_hole_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "802bb46dd2d133c7b068ff317a381776f0685e242b303f84d6babb4ec54b5f28",
+            "gds_sha256": "241ca9eb02121863af376d8b0029e8253f8ea0baa5a37a3933fd17390506c8af",
             "categories": [],
             "status": "PASS"
           },
@@ -326,7 +414,7 @@
             "expected_categories": [
               "via.v1.width"
             ],
-            "gds_sha256": "58416caabbc026d8dc012f104da647c064110f649b751089ff3ff6c4eb81f250",
+            "gds_sha256": "ca975c3bc0f5e805225a12b96dd07ea638424f394081ae1aa7c6d5754d6c8299",
             "categories": [
               "via.v1.width"
             ],
@@ -336,16 +424,24 @@
             "fixture": "v1_square_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "74cb746a8420d99c7268776cef5d6b9de341bffab1e51e36effeb77a49280ae5",
+            "gds_sha256": "316b0c722d910a1d27304bf3353e0cd7ac9a2b62b8c8fc58c4536ff67ea198b9",
             "categories": [],
             "status": "PASS"
           },
           {
-            "fixture": "v1_bar_not_used_by_w1",
+            "fixture": "v1_bar_in_w1_union",
             "profile": "main",
-            "expected_categories": [],
-            "gds_sha256": "d7d2d83e609afb00519642fe11d690e9530d7e3a6d280da91574d2cec92c232e",
-            "categories": [],
+            "expected_categories": [
+              "via.v1.cover.lower",
+              "via.v1.cover.upper",
+              "via.v1.width"
+            ],
+            "gds_sha256": "b679a0bd8b16fa90363d63c2c4ece9d67dac2b0ece73f420029ecbcb1a469261",
+            "categories": [
+              "via.v1.cover.lower",
+              "via.v1.cover.upper",
+              "via.v1.width"
+            ],
             "status": "PASS"
           },
           {
@@ -354,7 +450,7 @@
             "expected_categories": [
               "via.v1.cover.lower"
             ],
-            "gds_sha256": "72a799b00389317bffc4a29dc4de49ddc7440dcd5b9e5e471fd9c45aae5332f3",
+            "gds_sha256": "06cf2995cecad136ff1637d0a015f32ea0837b0b3162ad9aa0a6119fe6f28213",
             "categories": [
               "via.v1.cover.lower"
             ],
@@ -364,7 +460,7 @@
             "fixture": "v1_uncovered_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "faad5ead54e42c2582763ded9c00eb70cc47fad034d755b427bbaa62f632225f",
+            "gds_sha256": "65526afe5f5b4369fa895e73e1b4167116c09ea2f9535fd35a059495490fbc8a",
             "categories": [],
             "status": "PASS"
           },
@@ -375,7 +471,7 @@
               "via.v1.rotated",
               "via.v1.width"
             ],
-            "gds_sha256": "f422a36d2463c97b9f00be7e858c111c53ed56ca49bd449916ba616e80392062",
+            "gds_sha256": "5aa482ebe6de8d8658d559886b28dc11dcf04e76398c1397a2b70ae675ab715b",
             "categories": [
               "via.v1.rotated",
               "via.v1.width"
@@ -386,7 +482,7 @@
             "fixture": "v1_diagonal_sringblk_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "a44bd554aa79cc6dd392d15e1dcbbe6ee9bf3976b3b65c85c8a1cedb000a4bf1",
+            "gds_sha256": "f7667565d83f06e6ac80d0d8f2bb3d07039bc097a3d593edbdb7ba8fdb5e7f43",
             "categories": [],
             "status": "PASS"
           },
@@ -394,7 +490,127 @@
             "fixture": "v1_grid_exclusion",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "6b53feda660318a024240024f672de9279846fcd28ba091c9b3962c24f3a0c8a",
+            "gds_sha256": "a7924bcc050256eafe68741257b815c6b9f3f62e22807843ecc2bf52a89cdfc8",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "v1_spacing_bad",
+            "profile": "main",
+            "expected_categories": [
+              "via.v1.spacing"
+            ],
+            "gds_sha256": "290926ceeaa7d7bed4ec89bf12282863c4680cd55faa650cf45e6bc2163cdf5c",
+            "categories": [
+              "via.v1.spacing"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "v1_spacing_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "49144ed47057d65f555824c11b1bef12bef1f62dc3dc3bc0feed180f455572ab",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "v1_upper_enclosure_bad",
+            "profile": "main",
+            "expected_categories": [
+              "via.v1.enclosure.upper"
+            ],
+            "gds_sha256": "ca4f50c6a69d3d080dbf9449905b0732d96baf9538a4dce4ef9ad67a65ba609e",
+            "categories": [
+              "via.v1.enclosure.upper"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "v1_upper_enclosure_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "a29024b161d7f29fabb26665095dfc99d20f3740a613aed1969cf7169e705aef",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_spacing_bad",
+            "profile": "main",
+            "expected_categories": [
+              "via.tv2.spacing"
+            ],
+            "gds_sha256": "c522f68b61351fdadf086528ab9012c6804116d72ed07b8bea780d78a91e77d6",
+            "categories": [
+              "via.tv2.spacing"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_spacing_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "acf525cf143009e1437e612194569ca6bb9418b2c1d5e2d7e6b1397e1bd050de",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_bar_width_bad",
+            "profile": "main",
+            "expected_categories": [
+              "via.tv2.bar.width"
+            ],
+            "gds_sha256": "3ee4381fd81e756c698427fdaee1b595ed5cbc1bb8e6bf10774ad351cf11bd78",
+            "categories": [
+              "via.tv2.bar.width"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_bar_width_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "42191209ce6014e41a4aa8a1bd6f8f9c2a45539ec055aa9585094912f734ea34",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_lower_enclosure_bad",
+            "profile": "main",
+            "expected_categories": [
+              "via.tv2.enclosure.lower"
+            ],
+            "gds_sha256": "772edf0370eea7292080e7f4de3e05cea707305d29c6364a0eed6f627ddd95e8",
+            "categories": [
+              "via.tv2.enclosure.lower"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_lower_enclosure_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "cf591d6bb95fe57c070f2bc244e0d721418fbead806d62606b574f370ba219c9",
+            "categories": [],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_upper_enclosure_bad",
+            "profile": "main",
+            "expected_categories": [
+              "via.tv2.enclosure.upper"
+            ],
+            "gds_sha256": "cf46822e520ead3a9f6b9db46d472a3ac66e819bb34ed6b706129e68c29bd4e1",
+            "categories": [
+              "via.tv2.enclosure.upper"
+            ],
+            "status": "PASS"
+          },
+          {
+            "fixture": "t4v2_upper_enclosure_at_limit",
+            "profile": "main",
+            "expected_categories": [],
+            "gds_sha256": "41a13e6bc1bf38de4c518edacfa48d72e36debcd759de663f37192da83de0a2d",
             "categories": [],
             "status": "PASS"
           },
@@ -404,7 +620,7 @@
             "expected_categories": [
               "pad.rv.width"
             ],
-            "gds_sha256": "fa0be6d596baae772d279ff1247707944db766301a6192feb0dec3cba5b900bf",
+            "gds_sha256": "70787d02937116c7fb3d37bdaa0696de6f4bcbe3141455392c69fc5bd6edbfaf",
             "categories": [
               "pad.rv.width"
             ],
@@ -414,7 +630,7 @@
             "fixture": "rv_grid_exclusion",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "a3a1ba42f09fedb8a202ec49b559b4155954b09ef9bb582638e6db25aec33d5b",
+            "gds_sha256": "0bbf724a0d0343cfd654aebf9e73a154ed83685cb5f9f472179f4972837b6907",
             "categories": [],
             "status": "PASS"
           },
@@ -422,7 +638,7 @@
             "fixture": "rv_exact_rectangle",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "a7b74b335323ed425ff93e528ea7507d0e6fd64c211e6f47b418902959dab598",
+            "gds_sha256": "173304eb8e4a4209187601bb84d2d8a69f5ac2d151d9351471e96ebff0e15fa9",
             "categories": [],
             "status": "PASS"
           },
@@ -432,7 +648,7 @@
             "expected_categories": [
               "pad.rv.cover.rdl"
             ],
-            "gds_sha256": "5ff755f30dda65104e0dc57475e0d148703562763e9ef355cc045cabada55352",
+            "gds_sha256": "06f4dbced051b8e8e31fd0188dbdad973ff59350be9091185314551e8adcd192",
             "categories": [
               "pad.rv.cover.rdl"
             ],
@@ -444,7 +660,7 @@
             "expected_categories": [
               "pad.cover.alpa_full"
             ],
-            "gds_sha256": "48619cac12eee2f7257f568dee90337fa04263c113d98ea31b206d2726c8b9b2",
+            "gds_sha256": "9ccda9e6b94295d674547b40d9a45ac8dd5683feae61c2d3cbf56559ba66ce07",
             "categories": [
               "pad.cover.alpa_full"
             ],
@@ -456,7 +672,7 @@
             "expected_categories": [
               "pad.cb.alpad_full"
             ],
-            "gds_sha256": "f9faf75bb642378cf8e781baacde0c3e516a0245ebfe8516d761f32f16174a9c",
+            "gds_sha256": "35473d07aa30efa17fe856b70e3c6b0e429c5b5b129b77127461de6f925f363d",
             "categories": [
               "pad.cb.alpad_full"
             ],
@@ -466,7 +682,7 @@
             "fixture": "act_dummy_valid",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "ffeb65313f247b11a35040cea2e02322507ca7bcdc4d40ad7349f93c43361821",
+            "gds_sha256": "45258e781dd69190599a8d2c72634ec7d8be1ae2a15d2ff0de75fc2309c674d9",
             "categories": [],
             "status": "PASS"
           },
@@ -476,7 +692,7 @@
             "expected_categories": [
               "AADUM_W_1"
             ],
-            "gds_sha256": "277fe847fd47bbd891f7fd6c6d1bbfccc5ed1098671d3ca0c110c4029be58bc3",
+            "gds_sha256": "b77c7770e4ac435842ce9c73c48d569662acb47450f75364a7a767731fa3a217",
             "categories": [
               "AADUM_W_1"
             ],
@@ -488,7 +704,7 @@
             "expected_categories": [
               "AADUM_R_1"
             ],
-            "gds_sha256": "cf5358c345a394be4ce8765f02a01682bc505602f621b1080d9b34742cd8edec",
+            "gds_sha256": "df6b3ca33bf12248322984ac23a4b908bc2b491abc0c4dcf72e174e9d318165b",
             "categories": [
               "AADUM_R_1"
             ],
@@ -498,7 +714,7 @@
             "fixture": "poly_dummy_valid",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "28f4bba167662463af82984469dc4fa0cb6061581d7bc3f7e07f6cb9ff2038ac",
+            "gds_sha256": "cd72c0ebd425ad1475c754dba82d68ccbde27cd7ac8c5db5b75b2396c2cce42d",
             "categories": [],
             "status": "PASS"
           },
@@ -508,7 +724,7 @@
             "expected_categories": [
               "PODUM_W_1"
             ],
-            "gds_sha256": "5dcf0ce8c27819712581a3f2f8ad49b6f45c8186de4f6cc82e25827fbbd07998",
+            "gds_sha256": "cf7144d5264da4d9da85796cf29229b0e5cb1a9940a447f23d9b8b52619ac226",
             "categories": [
               "PODUM_W_1"
             ],
@@ -520,7 +736,7 @@
             "expected_categories": [
               "M1DUM_W_1"
             ],
-            "gds_sha256": "46bdb884c7e4951c7c0ac3f6e80afec5098f5a537e89208b6132c2c630950dbb",
+            "gds_sha256": "b2435ba5ad8c854fded4848468c37f052af79dcc4f03bfaad329b1953ef4ec13",
             "categories": [
               "M1DUM_W_1"
             ],
@@ -530,7 +746,7 @@
             "fixture": "t4m2_dummy_valid_rotated",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "82117e00ef02c484b936d4a59d5ed151e3695d8f0b1ca31d75e99334a5942b9a",
+            "gds_sha256": "47adc6f3363dc0b457843a7d462eb1d3f6bae58d9ac92a2ab8c7716183cdc71a",
             "categories": [],
             "status": "PASS"
           },
@@ -540,7 +756,7 @@
             "expected_categories": [
               "SL_R_1"
             ],
-            "gds_sha256": "47f0f0386ec2ba85be428de4b697e10224764eb703250a3e896c73fd5055e222",
+            "gds_sha256": "d282e0ef9d42803f2ff3cb01ec9aff34e5adaa589aa1695a287b23383cd0ed88",
             "categories": [
               "SL_R_1"
             ],
@@ -552,7 +768,7 @@
             "expected_categories": [
               "EFU_1b_G"
             ],
-            "gds_sha256": "4686c2161bb3bc6858075871140be791b55076b3b50937037dfc208823a118b6",
+            "gds_sha256": "e8ce070b710a2cb8edf2b65fadd1dd57e8518aa61d5d30cd620ad65e5ca97a85",
             "categories": [
               "EFU_1b_G"
             ],
@@ -565,7 +781,7 @@
               "EFU_1c_G",
               "EFU_2b_G"
             ],
-            "gds_sha256": "5ff1f7e252dbe24fbe1326ae0a3f6b64d1d112bf8903f0818653917945e1f738",
+            "gds_sha256": "5a5326378f13e59554774efa70b1e51805d440796a22978ebb48bbf075706f90",
             "categories": [
               "EFU_1c_G",
               "EFU_2b_G"
@@ -578,7 +794,7 @@
             "expected_categories": [
               "EFU_2c_G"
             ],
-            "gds_sha256": "b853fa21f4dab7d373f2d21ef2978304255d39c18b0a5bde3099303806f6a886",
+            "gds_sha256": "8c4bbe2098ecb2dd5680ec41f2a6c3ae571bccec365e991518bcfa67b46dfa9a",
             "categories": [
               "EFU_2c_G"
             ],
@@ -588,7 +804,7 @@
             "fixture": "efu_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "4c65d5b62cf8ef9bec82fd283d21a665428bf758205436eb8fa3d28792d704e3",
+            "gds_sha256": "e2ef425d34ef4b0da5862e432371f1399231cb1a4f3507867d9539b8ef90f7f0",
             "categories": [],
             "status": "PASS"
           },
@@ -598,7 +814,7 @@
             "expected_categories": [
               "DEUPAD_R_2"
             ],
-            "gds_sha256": "a6c7f4272e2ef87d0f339460fffccd18bdf905ac627ac185713faa5c084edbde",
+            "gds_sha256": "7ebcff5b3390e4d4b43ea508e4d85700bc90e414b13103f7dc4c2e8bafb8619e",
             "categories": [
               "DEUPAD_R_2"
             ],
@@ -608,7 +824,7 @@
             "fixture": "deupad_r2_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "7e09beab7aaf6ce294a0cefcd1b221abe059d51542be81e5fcfc7ce816434431",
+            "gds_sha256": "a565acfdbe1b2322ad8cc551ff187af65a209f749270e8a8b0be5165f1b939d7",
             "categories": [],
             "status": "PASS"
           },
@@ -618,7 +834,7 @@
             "expected_categories": [
               "DEUPAD_R_5"
             ],
-            "gds_sha256": "f5670727e5410d82303f99ba7284c1c0c0bb9e4ab0f82a5df8d295357709c609",
+            "gds_sha256": "0d737ec26864ce3367dcf82e8aee9317b17e42bbdda7adb27ec7452e2c64af20",
             "categories": [
               "DEUPAD_R_5"
             ],
@@ -628,11 +844,13 @@
             "fixture": "deupad_r6_v4bar",
             "profile": "main",
             "expected_categories": [
-              "DEUPAD_R_6"
+              "DEUPAD_R_6",
+              "via.v4.width"
             ],
-            "gds_sha256": "1bed879b7d5b3a67fcdbdafb32aabc35a89306a8bbfcacf962fbebec8eb1266b",
+            "gds_sha256": "23f7e8525cc86a9bdee9be6efb3bf1b0af100ed06319bf1e46f8dd939cb59c40",
             "categories": [
-              "DEUPAD_R_6"
+              "DEUPAD_R_6",
+              "via.v4.width"
             ],
             "status": "PASS"
           },
@@ -642,7 +860,7 @@
             "expected_categories": [
               "ESD_A_1"
             ],
-            "gds_sha256": "d6f73af63846d8573bbda868decc7b69c73e153c6ea540537934c568bb637ede",
+            "gds_sha256": "99a85700c9ce15202f7266f1258074a4a6a4130d8ce93ab02c7815465e195979",
             "categories": [
               "ESD_A_1"
             ],
@@ -652,7 +870,7 @@
             "fixture": "esd_area_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "433983487dbf07089250a93d1adc102923ad98987d68b2c6856e13e5d89065d6",
+            "gds_sha256": "884f40c5de0f22d1495c836ba705318842dd0db2aeba187bef1edec6da47e7ac",
             "categories": [],
             "status": "PASS"
           },
@@ -660,7 +878,7 @@
             "fixture": "esd_area_nodrc_waived",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "70c626f099ae58a1b925d570fcf1e38d4c230c9a314979ef6251cf671b3f19d3",
+            "gds_sha256": "a969b04fbd808601f8b463f47c22d27b869a47c730e486ea71e79ef0562b9151",
             "categories": [],
             "status": "PASS"
           },
@@ -670,7 +888,7 @@
             "expected_categories": [
               "ESD_A_2"
             ],
-            "gds_sha256": "8cbe11eda98a9bea4712935eea6fcd44a1db3c44f68760cebe76d816acfa5e64",
+            "gds_sha256": "71ae154f7bafc238bbe4654b2f462f9564fed9e64bf209806b34d1381b78a1d0",
             "categories": [
               "ESD_A_2"
             ],
@@ -680,7 +898,7 @@
             "fixture": "esd_hole_at_limit",
             "profile": "main",
             "expected_categories": [],
-            "gds_sha256": "6b014c58f48ca9d6a27b1cc49655ea1c1a1e175061f6abaa3dca0c47cf5d4f00",
+            "gds_sha256": "039e89c9773ae17263593062055a08c7211617b48f53e947577888251d0faed1",
             "categories": [],
             "status": "PASS"
           },
@@ -691,7 +909,7 @@
               "ACT_D_1_min",
               "ACT_D_4_min"
             ],
-            "gds_sha256": "340df1eb4b1cdd47b77168674fd8522b0c98a6432662f4c732c773870b36e6f1",
+            "gds_sha256": "06d95b379c1b8bc41e3c18c9f52489fd71d2ce1b36afbc26d254b6379d64150b",
             "categories": [
               "ACT_D_1_min",
               "ACT_D_4_min"
@@ -705,7 +923,7 @@
               "ACT_D_1_min",
               "ACT_D_4_min"
             ],
-            "gds_sha256": "f19edf2734068fea281634341ac71ca07724926edf8d855c84e134739562c94b",
+            "gds_sha256": "f35a1e813b8d12ff5023eb1f66860799ece38145e7d47019da535385ee02838f",
             "categories": [
               "ACT_D_1_min",
               "ACT_D_4_min"
@@ -718,7 +936,7 @@
             "expected_categories": [
               "ACT_D_4_min"
             ],
-            "gds_sha256": "76d87fd1b74cbc34b4e2157a8adc61a05c835f31dc386a0c1575590686ef9121",
+            "gds_sha256": "c2ca3b789f5d11dd5ae1374bca353153941ff2db80271b2bdcd6ffd85dc308ca",
             "categories": [
               "ACT_D_4_min"
             ],
@@ -730,7 +948,7 @@
             "expected_categories": [
               "ACT_D_4_max"
             ],
-            "gds_sha256": "45fa8cb3fdf6d3d56c18e9abc2a0a803ad020a1dfb1cd75417acc6e87ec32c67",
+            "gds_sha256": "303b7e28441d80948062c3badcc106037a48a6b6af1934d568f7bf2018da8ff1",
             "categories": [
               "ACT_D_4_max"
             ],
@@ -743,7 +961,7 @@
               "ACT_D_1_min",
               "ACT_D_4_min"
             ],
-            "gds_sha256": "21f2eb5a427ccd02ac2aa4d55a7ab6435d1893d55113f997e188b5abaa7dc0ca",
+            "gds_sha256": "8a523e8cf5db06fcdbeee902ae28fa7ce315cd52a7cc08bbdb524989a78fb85f",
             "categories": [
               "ACT_D_1_min",
               "ACT_D_4_min"
@@ -757,7 +975,7 @@
               "ACT_D_1_max",
               "ACT_D_4_max"
             ],
-            "gds_sha256": "517b720084f67675115ea0519f19cc99df67bc8bff414e3eb79e6fa323bc152c",
+            "gds_sha256": "60bdd03149c7b4b230f70f692a042f370043f4f4108acbc0d46cfbd5a2d33863",
             "categories": [
               "ACT_D_1_max",
               "ACT_D_4_max"
@@ -770,7 +988,7 @@
             "expected_categories": [
               "ACT_D_1_min"
             ],
-            "gds_sha256": "7d1c8c6e358e8c8368413f26faad4e785121b4e454dc8e15156336363a71a36d",
+            "gds_sha256": "b24cf7e6801601212deaa6becb4e9a97f4114049da8ac6190aee4489f06b3c85",
             "categories": [
               "ACT_D_1_min"
             ],
@@ -780,7 +998,7 @@
             "fixture": "density_nodrc_waived",
             "profile": "density",
             "expected_categories": [],
-            "gds_sha256": "4f6f4f8c2902f1214df5a5f9b717156c6ab6ea75782a8089fdfd2300ae143a52",
+            "gds_sha256": "652a6f48ffd382ecc2b160d26df47cc76b52412805afe138412429e7271bf43c",
             "categories": [],
             "status": "PASS"
           },
@@ -792,7 +1010,7 @@
               "ACT_D_2",
               "ACT_D_4_min"
             ],
-            "gds_sha256": "6477227fdddee33c17db49f9933cfcede8af1c367b6a9e7e817c3546c72bb286",
+            "gds_sha256": "13aad480480c92b024b25f0d9ae703141a4bb93a81f2636c53a832b3efc017d6",
             "categories": [
               "ACT_D_1_min",
               "ACT_D_2",
@@ -807,7 +1025,7 @@
               "MET1_D_1_min",
               "MET1_D_2"
             ],
-            "gds_sha256": "6be55e8c38d118cccd681fcf3fc81f91fa3a8d38fce6d30d6bb95c0bb8c9bcc7",
+            "gds_sha256": "be0636b238cd9ea8767e8a2d72cec0531883b0778d199ba9c13ed7934da1e118",
             "categories": [
               "MET1_D_1_min",
               "MET1_D_2"
@@ -821,7 +1039,7 @@
               "T4M2_D_1_min",
               "T4M2_D_2"
             ],
-            "gds_sha256": "1a87b5c86a2dc4e78e1d42b3ba6ee84164c0afd1366590cda57e5dd523efc157",
+            "gds_sha256": "b4579a288927b14d259f72923941da83738ba26b9374381b01eb4a92bee3c87a",
             "categories": [
               "T4M2_D_1_min",
               "T4M2_D_2"
@@ -834,7 +1052,7 @@
             "expected_categories": [
               "mom.MOM_R_1.V1.MET1MOM"
             ],
-            "gds_sha256": "04ed208337694511b75d4d593bbfc3dda0fd98572db1c53b54cb2a4c0bcee319",
+            "gds_sha256": "461c2939f8316aa1254accd67c559b0241853b2f0f78b440b8672e476cefc74e",
             "categories": [
               "mom.MOM_R_1.V1.MET1MOM"
             ],
@@ -846,7 +1064,7 @@
             "expected_categories": [
               "mom.MOM_R_1.V1.MET1MOM"
             ],
-            "gds_sha256": "5266f7f5d5a2ed32668c7685faa153769ddef4da4acf4bac2e096b4202f9e3f9",
+            "gds_sha256": "add5dc53081fade92cbcf9d63e5ddb6b9d96a5b40efd18f99280cb14587dfef8",
             "categories": [
               "mom.MOM_R_1.V1.MET1MOM"
             ],
@@ -856,7 +1074,7 @@
             "fixture": "mom_v1_nodrc_waived",
             "profile": "mom",
             "expected_categories": [],
-            "gds_sha256": "b9feeec8673a589ac0c4f148ad8cc67cd356b5590ae706ab50ee97d3f9df681a",
+            "gds_sha256": "5bda499c77f41f5d860f348b98fe17f7c4dfbb443beacdf517d169bf3dc24568",
             "categories": [],
             "status": "PASS"
           },
@@ -866,7 +1084,7 @@
             "expected_categories": [
               "mom.MOM_R_2.forbidden_stack.MET1MOM.23"
             ],
-            "gds_sha256": "c1c4301415f05653d58657a69d6cb90b3e3195c7e77cb73898ed1bf1ef1ec183",
+            "gds_sha256": "e435dff99422b0c24d6bef15a97ec46befb1c55793061275b2842b1cceec44c1",
             "categories": [
               "mom.MOM_R_2.forbidden_stack.MET1MOM.23"
             ],
@@ -878,7 +1096,7 @@
             "expected_categories": [
               "mom.MOM_R_2.label_stack.12"
             ],
-            "gds_sha256": "62a65b4df5b67bf30b1626f378e378e2afa6e428336b49bbec3787b625aaf3a9",
+            "gds_sha256": "f88ca95ce5b697850bb7c69b98df9e866606123d695939ce29e5ef734e53c383",
             "categories": [
               "mom.MOM_R_2.label_stack.12"
             ],
@@ -888,14 +1106,14 @@
             "fixture": "mom_cap12_valid_label",
             "profile": "mom",
             "expected_categories": [],
-            "gds_sha256": "1f92a9ff18afd1131a5d328273f23709a1e102216b4798bcb8fe1fac4d5aa9d4",
+            "gds_sha256": "8f192c6727058f890d1352499014cae802902fc95adb90ae4e9f86cfb59cd9e3",
             "categories": [],
             "status": "PASS"
           }
         ],
         "deck_sha256": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
-        "fixture_generator_sha256": "6aac955e6eec4d556bfa97f0982fdd0356be573e2bb7c8275a1b14f32102d42c",
-        "fixture_runner_sha256": "6c15f47237cadbf0ec194a23b4a18c1f580977dfe5402043a805d9669025b303"
+        "fixture_generator_sha256": "6366c8abccddf1577a628419e86b51dcf09ba46a16c75c91b8a978be1de090c3",
+        "fixture_runner_sha256": "7acd2cc4925a91933d529896a792888b54ba1c642cf81b8358dbc120d00ef346"
       }
     }
   ]

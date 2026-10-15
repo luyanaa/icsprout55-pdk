@@ -15,31 +15,47 @@
 #=========================================================================================
 # BEOL 07 - Vias (V1..V4, T4V2)
 #
-# Only exact source geometry predicates and their source waivers are emitted.
-# Qualifier, width-metric, and array checks without direct KLayout equivalents
-# are intentionally omitted.
+# VIAn W_1 predicates follow the official ordinary/bar union at ALLOW_V01=NO;
+# datatype-7 bar W_2 checks remain separate from those square predicates.
 #=========================================================================================
 
 if BEOL
   square_exclusions = GRID_SRC.or(SRINGBLK_SRC).or(NODRC)
+  # Literal source mask for VIAn_W_2 is INSIDE this marker union. (The source
+  # prose calls these areas exclusions, but the predicates say INSIDE.)
+  via_bar_mask = SRAMALL.or(EFUSEALL).or(FUSEALL)
+  via_bar_width = 0.09.um
+  via_upper_min_enclosure = rval('via_drc_enc_upper')
+
 
   [
-    ['V1', V1, 'v1', M1.not(MET1SLOT)],
-    ['V2', V2, 'v2', M2.not(MET2SLOT)],
-    ['V3', V3, 'v3', M3.not(MET3SLOT)],
-    ['V4', V4, 'v4', M4.not(MET4SLOT)]
-  ].each do |name, via, key, lower_metal|
-    source_via = via
-
-    # VIAn_W_1 checks exact square geometry and waives the union of GRID,
-    # SRINGBLK, and NODRC.
-    square_size = rval("#{key}_width")
+    ['V1', V1.or(V1BAR), V1BAR, 'v1', M1.not(MET1SLOT), M2.not(MET2SLOT)],
+    ['V2', V2.or(V2BAR), V2BAR, 'v2', M2.not(MET2SLOT), M3.not(MET3SLOT)],
+    ['V3', V3.or(V3BAR), V3BAR, 'v3', M3.not(MET3SLOT), M4.not(MET4SLOT)],
+    ['V4', V4.or(V4BAR), V4BAR, 'v4', M4.not(MET4SLOT), M5.not(MET5SLOT)]
+  ].each do |name, source_via, via_bar, key, lower_metal, upper_metal|
+    # VIAn_W_1 checks the source union Vn_org = ordinary Vn OR datatype-7
+    # VnBAR (ALLOW_V01=NO), with the source GRID/SRINGBLK/NODRC waiver.
+    square_size = 0.09
     rectangles = source_via.rectangles
     wrong_rectangles = rectangles.without_bbox_width(square_size.um)
       .or(rectangles.without_bbox_height(square_size.um))
     non_squares = source_via.non_rectangles.or(wrong_rectangles)
     non_squares.not_inside(square_exclusions).output("via.#{key}.width",
-      "#{name}_W_1: #{name} must be a #{square_size}x#{square_size} um square outside GRID/SRINGBLK/NODRC [Calibre source]")
+      "#{name}_W_1: #{name} source union must be a #{square_size}x#{square_size} um square outside GRID/SRINGBLK/NODRC [Calibre source]")
+    # VIAn_S_1 minimum gap; generic KLayout space checks omit source
+    # ABUT<90/SINGULAR qualifiers.
+    min_space = rval("#{key}_space")
+    source_via.drc(space < min_space.um).not_inside(NODRC).output("via.#{key}.spacing",
+      "#{name}_S_1: #{name} spacing must be at least #{min_space} um outside NODRC [Calibre source]")
+
+
+    # VIAn_W_2 separately checks datatype-7 bar width < or > 0.09 um.
+    # Keep the literal source INSIDE mask and do not apply the square test to
+    # bar geometry as a substitute for this width predicate.
+    bar_width_errors = via_bar.drc(width < via_bar_width) + via_bar.drc(width > via_bar_width)
+    bar_width_errors.inside(via_bar_mask).output("via.#{key}.bar.width",
+      "#{name}_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]")
 
     # VIAn_R_5 selects via polygons containing a 45-degree edge; exclusions
     # are applied in the same order as the source rule.
@@ -51,23 +67,53 @@ if BEOL
     # its lower metal; this clause has only the NODRC waiver.
     source_via.not(lower_metal).not_inside(NODRC).output("via.#{key}.cover.lower",
       "#{name}_EN_2a_2b_2c: #{name} must be covered by its lower metal outside NODRC [Calibre source]")
+    source_via.not(upper_metal).not_inside(NODRC).output("via.#{key}.cover.upper",
+      "#{name}_EN_5a_5b: #{name} must be covered by its upper metal outside NODRC [Calibre source]")
+    source_via.drc(enclosed(upper_metal) < via_upper_min_enclosure.um).not_inside(NODRC).output("via.#{key}.enclosure.upper",
+      "#{name}_EN_5a_5b: #{name} upper-metal enclosure must be at least #{via_upper_min_enclosure} um [Calibre source]")
   end
 
   tv2_source = TV2.or(TV2BAR)
+  tv2_min_space = rval('tv2_space')
+  tv2_source.drc(space < tv2_min_space.um).not_inside(NODRC).output('via.tv2.spacing',
+    "T4V2_S_1: T4V2 spacing must be at least #{tv2_min_space} um outside NODRC [Calibre source]")
+
+  # T4V2_W_2 has no source waiver: datatype-7 T4V2bar width must equal its official threshold.
+  tv2_bar_width = rval('tv2_bar_width')
+  tv2_bar_width_errors = TV2BAR.drc(width < tv2_bar_width.um) + TV2BAR.drc(width > tv2_bar_width.um)
+  tv2_bar_width_errors.output('via.tv2.bar.width',
+    "T4V2_W_2: datatype-7 T4V2bar width must equal #{tv2_bar_width} um [Calibre source]")
+
   rotated_tv2 = tv2_source.interacting(tv2_source.edges.with_angle(45, absolute))
   rotated_tv2.not_inside(SRINGBLK_SRC).not_inside(NODRC).output('via.tv2.rotated',
     'T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]')
 
-  # For total_metal=6/top_metal=1, T4V2_EN_2_EN_3 selects M5 as its
-  # bottom metal. This separate OUTLAYER has only the NODRC waiver.
-  tv2_source.not(M5.not(MET5SLOT)).not_inside(NODRC).output('via.tv2.cover.lower',
-    'T4V2_EN_2_EN_3: T4V2 must be covered by M5 outside NODRC [Calibre source]')
+  # The source chooses $bottom_metal by scanning
+  # {T2M1, T4M1, M8, M7, M6, M5, M4, M3} for the first enabled CHECK_* layer.
+  # For the official 6-metal, top_metal=1, T4V2_T4M2=1 stack this selects M5.
+  # Existing DRC definitions do not represent T2M1, T4M1, or M6-M8.
+  tv2_bottom_metal = M5.not(MET5SLOT)
+  tv2_source.not(tv2_bottom_metal).not_inside(NODRC).output('via.tv2.cover.lower',
+    'T4V2_EN_2_EN_3: T4V2 must be covered by source-selected M5 outside NODRC [Calibre source]')
+  # Generic full-enclosure predicates retain the source minima; Calibre's
+  # directional GOOD clauses are not represented by KLayout's space model.
+  tv2_lower_min_enclosure = rval('tv2_drc_enc_m5')
+  tv2_source.drc(enclosed(tv2_bottom_metal) < tv2_lower_min_enclosure.um).not_inside(NODRC).output('via.tv2.enclosure.lower',
+    "T4V2_EN_2_EN_3: T4V2 lower-metal enclosure must be at least #{tv2_lower_min_enclosure} um [Calibre source]")
+  tv2_top_metal = TM2.not(T4M2SLOT)
+  tv2_source.not(tv2_top_metal).not_inside(NODRC).output('via.tv2.cover.upper',
+    'T4V2_EN_5_EN_6: T4V2 must be covered by T4M2 outside NODRC [Calibre source]')
+  tv2_upper_min_enclosure = rval('tv2_drc_enc_tm2')
+  tv2_source.drc(enclosed(tv2_top_metal) < tv2_upper_min_enclosure.um).not_inside(NODRC).output('via.tv2.enclosure.upper',
+    "T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least #{tv2_upper_min_enclosure} um [Calibre source]")
 
-  # Omitted active rules: V1-V4_W_2 (WITH WIDTH bar predicates), V1-V4_S_1
-  # through _S_3 (ABUT/SINGULAR, array-neighbor, OPPOSITE/NOT CONNECTED),
-  # the directional GOOD enclosure clauses in V1-V4_EN_2a_2b_2c and
-  # V1-V4_EN_5a_5b, and V1-V4_R_3 (H-shaped metal arrays); T4V2_W_1/_W_2,
-  # T4V2_S_1, the directional GOOD clause in T4V2_EN_2_EN_3, and
-  # T4V2_EN_5_EN_6. T4V2_W_1 also uses Calibre's GT4V2 rule-result group.
+
+  # Omitted active rules: T4V2_W_1 (its source predicate subtracts the
+  # Calibre GT4V2 rule-result group), V1-V4_S_2/_S_3 (array-neighbor,
+  # OPPOSITE/NOT CONNECTED), V1-V4_R_3 (H-shaped arrays), and the conditional
+  # opposite-side enclosure clauses in V1-V4_EN_2a_2b_2c / EN_5a_5b and
+  # T4V2_EN_2_EN_3. Generic spacing/enclosure operators do not preserve
+  # Calibre's ABUT<90/SINGULAR or directional GOOD qualifiers; conditional
+  # 0.02um upper and 0.05um lower via margins remain omitted.
   # Recommended rules are inactive for OPEN_RECOMMENDED_ON=NO.
 end

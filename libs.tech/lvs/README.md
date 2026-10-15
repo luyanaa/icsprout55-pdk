@@ -8,57 +8,78 @@ well/implant split (nact/pact, ngate/pgate, nsd/psd).
 
 ## Status
 
-**Working** — verified LVS-clean on a random sample of std cells across
-H7CR / H7CL / H7CH (INV, NAND2, ADDF, DFF, XOR, ...) against the released CDL.
+**Provisional KLayout port** — deterministic source-behavior fixtures and
+selected released-CDL checks are local evidence only. No same-input Calibre
+differential is available; this is not an LVS signoff result.
 
 ## Devices
 
-| Device | CDL model | Recognition |
+| Device | CDL model / class | Recognition |
 |---|---|---|
-| core NMOS 1.2V | `nm1p2_{svt,lvt,hvt}_lp` | POLY x ACT in NP; bulk = p-substrate (VSS) |
-| core PMOS 1.2V | `pm1p2_{svt,lvt,hvt}_lp` | POLY x ACT in PP inside NW; bulk = NW (VDD) |
-| IO NMOS 3.3V | `nm3p3_lp` | POLY x IOACT in NP |
-| IO PMOS 3.3V | `pm3p3_lp` | POLY x IOACT in PP inside NW |
-| poly resistor | `re_ppo_sab_2t` | POLY with PPO marker (41/4), CT straps (Rsq 850, derived) |
-| ESD diode | `dio_3p3_pp_nw_lp` | ESD region (55/1) inside NW, P+ anode |
-| MOM cap | — | **not extracted yet** (interdigitated M2..M5; needs a custom extractor) |
+| core NMOS/PMOS 1.2V | `nm1p2_{svt,lvt,hvt}_lp` / `pm1p2_{svt,lvt,hvt}_lp` | POLY × ACT in NP/PP; source-specific SVT/LVT/HVT selectors |
+| IO NMOS/PMOS 3.3V | `nm3p3_lp` / `pm3p3_lp` | POLY × TGOX IO active in NP/PP |
+| PPO/SAB poly resistor | `re_ppo_sab_2t` | POLY/PPO/SAB selector, with CT terminal straps; Calibre `rsh_rppo=10.252 Ω/□` |
+| Metal resistors | `RE_M1..RE_M5_{2T,3T}` or `RE_TM1/TM2_{2T,3T}` | Stack-selected resistor marker and conductor; source sheet resistances |
+| ALPAD/RDL resistors | `RE_ALPA_{2T,3T}` | RDL/ALPAD resistor markers with AP terminals |
+| 3.3V P+/NW diode | `dio_3p3_pp_nw_lp` | P+ junction with DIODE marker (191/12) and TGOX in NW; ESD marker (55/1) is unrelated |
+| MOM capacitor | — | not extracted |
 
-Vt flavors: LVT via 17/18, HVT via 21/22 (SVT = no marker).
+LVT uses markers 17/18; HVT uses 21/22. Core MOS selectors exclude both TGOX
+and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
 
 ## How it works
 
-- Connectivity: source/drain, contact-qualified tap regions and POLY -> CT -> M1
-  -> V1 -> ... -> M5 -> TV2 -> TM2.
-  The raw ACT regions are intentionally NOT connected (they span gate +
-  source + drain; connecting them would short the terminals).
-- Bulk: default standard-cell mode globally ties PSUB to VSS and NW to VDD.
-  `-rd no_well_ties=true` instead connects MOS bodies through CT-qualified
-  physical taps and keeps separate n-well islands distinct.
+- Connectivity: source/drain, CT-qualified tap regions and POLY feed the
+  conductor stack. `metal_stack=auto` selects M1-M5 or M4-T4M1-T4M2 from the
+  top hierarchy; `--metal-stack` can force either stack. Raw ACT is not
+  connected because it spans gate, source and drain regions.
+- Resistor bodies are extracted as resistor path layers with CT/AP terminal
+  conductors; they are not shorted into the ordinary connectivity graph.
+- Ports follow Calibre `PORT DEPTH 0`: only direct top-cell text on selected
+  conductors becomes a pin. Child-cell labels remain internal nets.
+- Bulk: standard-cell mode globally ties PSUB/NW to the top CDL ground/power
+  pins (falling back to VSS/VDD). `--no-well-ties` instead uses CT-qualified
+  physical taps and preserves isolated well islands; use this for macros with
+  physical body ties.
 - The released CDL is preprocessed before reading: duplicate leaf subckts
-  (e.g. TG) are dropped, the `X <nets> / <subckt>` call syntax is converted
-  to plain SPICE, and symbolic `W=nw` parameters get `.PARAM` declarations so
-  instance parameters propagate during flattening.
-- The schematic is flattened before comparison (the CDL is hierarchical, the
-  library GDS is flat).
+  are dropped, `X <nets> / <subckt>` calls are converted to plain SPICE, and
+  symbolic parameters are declared so instance values propagate on flatten.
+- The schematic is flattened before comparison (the CDL is hierarchical; the
+  released standard-cell GDS is flat).
 
 ## Usage
 
 ```sh
-# CLI wrapper
+# Standard cell: standard-cell bulk rails are globally tied.
 python3 run_lvs.py --layout <lib>.gds --top ADDFX1H7R --netlist <lib>.cdl
 
-# or directly
+# Macro with physical taps and isolated wells:
+python3 run_lvs.py --layout macro.gds --top MACRO --netlist macro.cdl \
+    --no-well-ties --metal-stack auto
+
+# Direct KLayout invocation
 klayout -b -r ics55.lvs -rd input=<lib>.gds -rd top=ADDFX1H7R \
     -rd schematic=<lib>.cdl -rd report=addf.lvsdb \
-    -rd target_netlist=addf_extracted.cir -z
+    -rd target_netlist=addf_extracted.cir -rd metal_stack=auto -z
 ```
 
-Compare is topology-based; L and all non-geometric device parameters are
-compared exactly, W with the official 10% relative tolerance (`mos_err 0.1`).
-W deviations over 5% warn; deviations over 10% fail.
-KLayout uppercases parsed SPICE root circuit names; the deck normalizes only a
-case-equivalent top-circuit spelling to the GDS primary name. No net, pin, or
-device labels are rewritten by that normalization.
+`run_lvs.py` resolves relative paths from the caller's working directory,
+creates output directories, and removes prior report/netlist outputs before
+running KLayout. It returns 0 only when KLayout exits successfully, writes
+both outputs, and emits an explicit compare-pass marker; 1 means an explicit
+mismatch; 2 means a missing tool/input/output, colliding paths, or absent
+compare verdict. KLayout tool errors retain their nonzero status. Direct
+KLayout invocation prints the `ICS55_LVS_COMPARE=PASS|FAIL` marker but does
+not use this wrapper's exit-code handling.
+
+Compare is topology-based. MOS L and non-geometric parameters compare exactly;
+MOS W uses the official 10% relative tolerance (`mos_err 0.1`). W deviations
+over 5% warn; deviations over 10% fail. KLayout uppercases parsed SPICE root
+names, so the deck normalizes only a case-equivalent root spelling; it does
+not rewrite net, pin, or device labels. Built-in series/parallel reduction is
+opt-in via `--combine-devices`; the default does not reproduce Calibre's
+`REDUCE ... YES` behavior.
+
 `max_res(1e9)` / `min_caps(1e-18)` filter high-value resistors and tiny caps.
 The compare search is bounded at `max_depth(8)` and
 `max_branch_complexity(1024)`. A smaller 50-unit branch limit reported
@@ -67,16 +88,17 @@ of a topology mismatch.
 
 ## Known limitations
 
-- MOM capacitors are not extracted (documented above).
-- The IO library (P65_1233_*) extracts 213+ devices per cell including
-  wide multi-finger transistors (e.g. W=160U ESD devices); comparison against
-  the IO CDL needs multi-finger combining and ESD-diode equivalence tuning
-  (`--combine-devices` is a start) — in progress.
-- Use `-rd no_well_ties=true` for isolated-well macros. Body islands connect
-  only through CT-qualified physical taps; uncontacted regions remain floating
-  and must be modeled explicitly in the source netlist.
-- Not signoff-quality: no foundry LVS rule deck is released; device
-  recognition is derived from the released GDS/CDL.
+- MOM capacitors, 2.5V/native MOS families, BJTs, and additional diode classes
+  are not extracted.
+- The IO library (P65_1233_*) comparison is not validated. Its wide
+  multi-finger/ESD devices need further model and topology checks;
+  `--combine-devices` is optional and is not a proven equivalence fix.
+- For macros with physical body taps, use `--no-well-ties`. Body islands then
+  connect only through CT-qualified taps; uncontacted regions remain floating
+  and must be represented in the source netlist.
+- The official Calibre LVS source is released under `pv/LVS`, but this
+  KLayout translation has no same-input Calibre differential in this
+  environment. It is not foundry signoff.
 - The released std cells draw multi-finger transistors (e.g. W=300n = 2x150n
   fingers) where some fingers' outer source/drain island is floating (a
   diffusion island without any contact), and large-drive cells (e.g.

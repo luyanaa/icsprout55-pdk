@@ -26,11 +26,20 @@ if FEOL
   POLY.holes.not(POLY.holes.with_area(0.09.um2, 1e9.um2)).not_inside(NODRC).output('poly.poly.enclosed_area',
     "PO_A_2: POLY enclosed area minimum 0.09 um^2; waived inside NODRC")
 
-  # Unsupported source rules: PO_W_1, PO_W_2a through PO_W_2f, PO_W_3,
-  # PO_S_1 through PO_S_3, PO_S_5 through PO_S_7, PO_S_9, PO_S_11,
-  # PO_S_12, PO_S_14, PO_S_15, PO_S_16, PO_EX_1, PO_EX_2, PO_L_1,
-  # PO_R_1, PO_R_2.  PO_S_4_R, PO_S_7a_R, PO_S_8_R, PO_S_13_R,
-  # PO_S_14a_R, PO_EN_1_R through PO_EN_3_R, PO_EX_1_R, PO_EX_3_R,
-  # PO_L_2_R, and PO_A_1_R remain disabled (OPEN_RECOMMENDED_ON=NO).
-  # PO_D_* are disabled because density-window/gradient operators are absent.
+  poly_min_width = rval('poly_width')
+  POLY.drc(width < poly_min_width.um).not_inside(NODRC).output('poly.poly.width',
+    "PO_W_1: POLY width must be at least #{poly_min_width} um outside NODRC [Calibre source]")
+
+  poly_min_space = rval('poly_space')
+  POLY.drc(space < poly_min_space.um).not_inside(INDALL).not_inside(NODRC).output('poly.poly.spacing',
+    "PO_S_1: POLY spacing must be at least #{poly_min_space} um outside INDALL/NODRC [Calibre source]")
+  # KLayout space checks do not reproduce the source ABUT/SINGULAR qualifiers;
+  # PO_S_1's separate ABUT<89 clause inside INDALL is omitted.
+  # Unsupported source rules: PO_W_2a through PO_W_2f, PO_W_3, PO_S_2,
+  # PO_S_3, PO_S_5 through PO_S_7, PO_S_9, PO_S_11, PO_S_12,
+  # PO_S_14 through PO_S_16, PO_EX_1, PO_EX_2, PO_L_1, PO_R_1, PO_R_2.
+  # PO_S_4_R, PO_S_7a_R, PO_S_8_R, PO_S_13_R, PO_S_14a_R,
+  # PO_EN_1_R through PO_EN_3_R, PO_EX_1_R, PO_EX_3_R, PO_L_2_R,
+  # and PO_A_1_R remain disabled (OPEN_RECOMMENDED_ON=NO).
+  # PO_D_* require density-window/gradient operators not represented here.
 end

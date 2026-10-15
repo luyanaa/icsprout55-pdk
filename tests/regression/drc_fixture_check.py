@@ -19,13 +19,13 @@ Exit codes: 0 exact fixture match, 1 category mismatch, 2 blocked/harness error.
 import argparse
 import hashlib
 import json
-import shlex
 import shutil
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
+from nix_shell import command as nix_shell_command
 
 ROOT = Path(__file__).resolve().parents[2]
 DRC_DECK = ROOT / "libs.tech" / "drc" / "ics55_drc.drc"
@@ -63,6 +63,10 @@ FIXTURES: dict[str, frozenset[str]] = {
     "poly_area_at_limit": frozenset(),
     "poly_area_nodrc_waived": frozenset(),
     "poly_area_partial_marker": frozenset({"poly.poly.area"}),
+    "poly_width_bad": frozenset({"poly.poly.width"}),
+    "poly_width_at_limit": frozenset(),
+    "poly_spacing_bad": frozenset({"poly.poly.spacing"}),
+    "poly_spacing_at_limit": frozenset(),
     "poly_hole": frozenset({"poly.poly.enclosed_area"}),
     "poly_hole_at_limit": frozenset(),
     "np_area": frozenset({"implant.np.area"}),
@@ -70,9 +74,14 @@ FIXTURES: dict[str, frozenset[str]] = {
     "pp_area": frozenset({"implant.pp.area"}),
     "pp_area_at_limit": frozenset(),
     "ct_outside_required_layers": frozenset({"cont.ct.inside"}),
+    "ct_active_enclosure_bad": frozenset({"cont.ct.active.enclosure"}),
+    "ct_active_enclosure_at_limit": frozenset(),
     "m1_area": frozenset({"metal.m1.area"}),
     "m1_area_at_limit": frozenset(),
     "m1_area_nodrc_waived": frozenset(),
+    "m1_spacing_bad": frozenset({"metal.m1.spacing"}),
+    "m1_spacing_at_limit": frozenset(),
+    "m1_slot_spacing_ignored": frozenset(),
     "m1_hole": frozenset({"metal.m1.min_hole"}),
     "m1_hole_at_limit": frozenset(),
     "t4m2_area": frozenset({"metal.tm2.area"}),
@@ -81,12 +90,27 @@ FIXTURES: dict[str, frozenset[str]] = {
     "t4m2_hole_at_limit": frozenset(),
     "v1_wrong_square": frozenset({"via.v1.width"}),
     "v1_square_at_limit": frozenset(),
-    "v1_bar_not_used_by_w1": frozenset(),
+    "v1_bar_in_w1_union": frozenset({
+        "via.v1.width", "via.v1.cover.lower", "via.v1.cover.upper",
+    }),
     "v1_uncovered_lower_metal": frozenset({"via.v1.cover.lower"}),
     "v1_uncovered_nodrc_waived": frozenset(),
     "v1_diagonal_edges": frozenset({"via.v1.width", "via.v1.rotated"}),
     "v1_diagonal_sringblk_waived": frozenset(),
     "v1_grid_exclusion": frozenset(),
+    "v1_spacing_bad": frozenset({"via.v1.spacing"}),
+    "v1_spacing_at_limit": frozenset(),
+    "v1_upper_enclosure_bad": frozenset({"via.v1.enclosure.upper"}),
+    "v1_upper_enclosure_at_limit": frozenset(),
+    "t4v2_spacing_bad": frozenset({"via.tv2.spacing"}),
+    "t4v2_spacing_at_limit": frozenset(),
+    "t4v2_bar_width_bad": frozenset({"via.tv2.bar.width"}),
+    "t4v2_bar_width_at_limit": frozenset(),
+    "t4v2_lower_enclosure_bad": frozenset({"via.tv2.enclosure.lower"}),
+    "t4v2_lower_enclosure_at_limit": frozenset(),
+    "t4v2_upper_enclosure_bad": frozenset({"via.tv2.enclosure.upper"}),
+    "t4v2_upper_enclosure_at_limit": frozenset(),
+
     "rv_wrong_rectangle": frozenset({"pad.rv.width"}),
     "rv_grid_exclusion": frozenset(),
     "rv_exact_rectangle": frozenset(),
@@ -108,7 +132,7 @@ FIXTURES: dict[str, frozenset[str]] = {
     "deupad_r2": frozenset({"DEUPAD_R_2"}),
     "deupad_r2_nodrc_waived": frozenset(),
     "deupad_r5": frozenset({"DEUPAD_R_5"}),
-    "deupad_r6_v4bar": frozenset({"DEUPAD_R_6"}),
+    "deupad_r6_v4bar": frozenset({"DEUPAD_R_6", "via.v4.width"}),
     "esd_area": frozenset({"ESD_A_1"}),
     "esd_area_at_limit": frozenset(),
     "esd_area_nodrc_waived": frozenset(),
@@ -155,15 +179,15 @@ def find_klayout(args) -> tuple[str, str] | None:
     """Return (kind, executable) with kind 'bin' (direct) or 'nix' (nix shell)."""
     if args.klayout:
         return ("bin", args.klayout) if shutil.which(args.klayout) else None
-    if shutil.which("klayout"):
-        return ("bin", "klayout")
     if args.librelane and Path(args.librelane).exists() and shutil.which("nix-shell"):
         return ("nix", str(args.librelane))
+    if shutil.which("klayout"):
+        return ("bin", "klayout")
     return None
 
 def get_klayout_version(kind: str, exe: str) -> str | None:
     if kind == "nix":
-        cmd = ["nix-shell", exe, "--run", shlex.join(["klayout", "-v"])]
+        cmd = nix_shell_command(exe, ["klayout", "-v"])
     else:
         cmd = [exe, "-v"]
     try:
@@ -182,7 +206,7 @@ def get_klayout_version(kind: str, exe: str) -> str | None:
 def run_klayout(kind: str, exe: str, script: Path, extra: list[str]) -> subprocess.CompletedProcess:
     base = ["-b", "-r", str(script)] + extra
     if kind == "nix":
-        cmd = ["nix-shell", exe, "--run", shlex.join(["klayout"] + base)]
+        cmd = nix_shell_command(exe, ["klayout"] + base)
     else:
         cmd = [exe] + base
     return subprocess.run(cmd, capture_output=True, text=True)
@@ -199,7 +223,7 @@ def run_drc(kind: str, exe: str, gds: Path, report: Path, profile: dict[str, Any
     extra = ["-rd", f"input={gds}", "-rd", "top=TOP", "-rd", f"report={report}"] + switches
     base = ["-b", "-r", str(DRC_DECK)] + extra
     if kind == "nix":
-        cmd = ["nix-shell", exe, "--run", shlex.join(["klayout"] + base)]
+        cmd = nix_shell_command(exe, ["klayout"] + base)
     else:
         cmd = [exe] + base
     return subprocess.run(cmd, capture_output=True, text=True)
@@ -219,11 +243,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--librelane", default=Path.home() / "Documents" / "librelane")
     ap.add_argument("--klayout", default=None)
-    ap.add_argument("--out", default=ROOT / "tests" / "regression" / "out")
+    ap.add_argument("--out", default=ROOT / "tests" / "regression" / "out" / "drc_fixtures")
     args = ap.parse_args()
+    args.librelane = str(Path(args.librelane).expanduser()) if args.librelane else None
 
     klayout = find_klayout(args)
-    out_dir = Path(args.out)
+    out_dir = Path(args.out).resolve()
     fx_dir = out_dir / "fixtures"
     fx_dir.mkdir(parents=True, exist_ok=True)
 
@@ -266,6 +291,8 @@ def main() -> int:
         profile = DRC_PROFILES[profile_name]
         gds = fx_dir / f"{name}.gds"
         report = fx_dir / f"{name}.lyrdb"
+        # Do not let a prior run's report mask a failed or incomplete run.
+        report.unlink(missing_ok=True)
         r = run_drc(kind, exe, gds, report, profile)
         rec: dict[str, Any] = {
             "fixture": name,

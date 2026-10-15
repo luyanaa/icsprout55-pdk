@@ -32,6 +32,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, cast
+from nix_shell import command as nix_shell_command
 
 ROOT = Path(__file__).resolve().parents[2]
 LVS_RUNNER = ROOT / "libs.tech" / "lvs" / "run_lvs.py"
@@ -106,19 +107,18 @@ def audit_drc_crosswalk():
         issues.append("cross-tool differential must remain BLOCKED without Calibre results")
     return counts, issues
 
-
 def run_in_librelane(librelane, cmd):
-    full = ["nix-shell", str(librelane), "--run", " ".join(cmd)]
+    full = nix_shell_command(librelane, " && ".join(cmd))
     return subprocess.run(full, capture_output=True, text=True)
 
 
 def find_klayout(args) -> tuple[str, str] | None:
     if args.klayout:
         return ("bin", args.klayout) if shutil.which(args.klayout) else None
-    if shutil.which("klayout"):
-        return ("bin", "klayout")
     if args.librelane and Path(args.librelane).exists() and shutil.which("nix-shell"):
         return ("nix", str(args.librelane))
+    if shutil.which("klayout"):
+        return ("bin", "klayout")
     return None
 
 
@@ -128,7 +128,7 @@ def run_drc(kind, exe, gds, top, report):
     for key, value in DRC_MAIN_PROFILE.items():
         drc_args.extend(["-rd", f"{key}={str(value).lower()}"])
     if kind == "nix":
-        cmd = ["nix-shell", exe, "--run", shlex.join(["klayout"] + drc_args)]
+        cmd = nix_shell_command(exe, ["klayout"] + drc_args)
     else:
         cmd = [exe] + drc_args
     return subprocess.run(cmd, capture_output=True, text=True)
@@ -165,6 +165,7 @@ def main():
     ap.add_argument("--klayout", default=None, help="KLayout executable for --drc")
     ap.add_argument("--librelane", default=Path.home() / "Documents" / "librelane")
     args = ap.parse_args()
+    args.librelane = str(Path(args.librelane).expanduser()) if args.librelane else None
 
     manifest = json.loads(Path(args.manifest).read_text())
     out_dir = Path(args.out)
@@ -197,6 +198,14 @@ def main():
         "lvs_runner": sha256(LVS_RUNNER),
         "normalizer": sha256(NORMALIZER),
         "harness": sha256(Path(__file__).resolve()),
+        "nix_shell_helper": sha256(Path(__file__).resolve().parent / "nix_shell.py"),
+        "lvs_fixture_harnesses": {
+            path.relative_to(ROOT).as_posix(): sha256(path)
+            for path in (
+                Path(__file__).resolve().parent / "lvs_fixture_check.py",
+                Path(__file__).resolve().parent / "make_lvs_fixtures.rb",
+            )
+        },
         "lvs_rule_decks": {p.name: sha256(p) for p in rule_decks},
         "official_drc_profile": manifest.get("official_drc_profile"),
         "drc_profile": DRC_MAIN_PROFILE,
@@ -300,13 +309,31 @@ def main():
         out_db = out_dir / f"{cell}.lvsdb"
         rec: dict[str, Any] = {"fixture": f"{ent['flavor']}/{cell}", "status": "PASS"}
         if not args.no_run:
-            r = run_in_librelane(args.librelane, [
-                "set -e",
-                f"python3 {LVS_RUNNER} --layout {gds} --top {cell} --netlist {cdl} "
-                f"--target-netlist {out_cir} --report {out_db}",
+            lvs_command = shlex.join([
+                "python3", str(LVS_RUNNER), "--layout", str(gds),
+                "--top", cell, "--netlist", str(cdl),
+                "--target-netlist", str(out_cir), "--report", str(out_db),
             ])
+            r = run_in_librelane(args.librelane, ["set -e", lvs_command])
             rec["runner_rc"] = r.returncode
             rec["runner_stderr_tail"] = r.stderr.strip().splitlines()[-3:]
+            if r.returncode != 0:
+                output_tail = (r.stdout + r.stderr).strip().splitlines()[-5:]
+                compare_failed = (
+                    r.returncode == 1
+                    and "ICS55_LVS_COMPARE=FAIL" in r.stdout
+                )
+                rec["status"] = "FAIL" if compare_failed else "BLOCKED"
+                reason = (
+                    "LVS compare reported mismatch"
+                    if compare_failed else f"LVS runner exited {r.returncode}"
+                )
+                rec["reason"] = reason
+                rec["issues"] = [reason]
+                rec["runner_output_tail"] = output_tail
+                results.append(rec)
+                rc = max(rc, 1 if compare_failed else 2)
+                continue
         # provenance hashes
         try:
             rec["provenance"] = {

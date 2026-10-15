@@ -26,6 +26,18 @@
    </categories>
   </category>
   <category>
+   <name>poly.poly.width</name>
+   <description>PO_W_1: POLY width must be at least 0.06 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.spacing</name>
+   <description>PO_S_1: POLY spacing must be at least 0.12 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>implant.np.area</name>
    <description>NP_A_1: NP minimum area 0.12 um^2; waived inside SRAMALL and NODRC</description>
    <categories>
@@ -51,7 +63,13 @@
   </category>
   <category>
    <name>cont.ct.inside</name>
-   <description>CT_EN_1: CT must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC</description>
+   <description>CT_EN_1: CT/CTbar must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.active.enclosure</name>
+   <description>CT_EN_2a: CT/CTbar active enclosure must be at least 0.015 um [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -128,8 +146,50 @@
    </categories>
   </category>
   <category>
+   <name>metal.m1.spacing</name>
+   <description>M1_S_1: M1 spacing must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.spacing</name>
+   <description>M2_S_1: M2 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.spacing</name>
+   <description>M3_S_1: M3 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.spacing</name>
+   <description>M4_S_1: M4 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.spacing</name>
+   <description>M5_S_1: M5 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v1.width</name>
-   <description>V1_W_1: V1 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <description>V1_W_1: V1 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.spacing</name>
+   <description>V1_S_1: V1 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.bar.width</name>
+   <description>V1_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -146,8 +206,32 @@
    </categories>
   </category>
   <category>
+   <name>via.v1.cover.upper</name>
+   <description>V1_EN_5a_5b: V1 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.enclosure.upper</name>
+   <description>V1_EN_5a_5b: V1 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v2.width</name>
-   <description>V2_W_1: V2 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <description>V2_W_1: V2 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.spacing</name>
+   <description>V2_S_1: V2 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.bar.width</name>
+   <description>V2_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -164,8 +248,32 @@
    </categories>
   </category>
   <category>
+   <name>via.v2.cover.upper</name>
+   <description>V2_EN_5a_5b: V2 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.enclosure.upper</name>
+   <description>V2_EN_5a_5b: V2 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v3.width</name>
-   <description>V3_W_1: V3 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <description>V3_W_1: V3 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.spacing</name>
+   <description>V3_S_1: V3 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.bar.width</name>
+   <description>V3_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -182,8 +290,32 @@
    </categories>
   </category>
   <category>
+   <name>via.v3.cover.upper</name>
+   <description>V3_EN_5a_5b: V3 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.enclosure.upper</name>
+   <description>V3_EN_5a_5b: V3 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v4.width</name>
-   <description>V4_W_1: V4 must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <description>V4_W_1: V4 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.spacing</name>
+   <description>V4_S_1: V4 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.bar.width</name>
+   <description>V4_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -200,6 +332,30 @@
    </categories>
   </category>
   <category>
+   <name>via.v4.cover.upper</name>
+   <description>V4_EN_5a_5b: V4 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.enclosure.upper</name>
+   <description>V4_EN_5a_5b: V4 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.spacing</name>
+   <description>T4V2_S_1: T4V2 spacing must be at least 0.34 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.bar.width</name>
+   <description>T4V2_W_2: datatype-7 T4V2bar width must equal 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.tv2.rotated</name>
    <description>T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
    <categories>
@@ -207,7 +363,25 @@
   </category>
   <category>
    <name>via.tv2.cover.lower</name>
-   <description>T4V2_EN_2_EN_3: T4V2 must be covered by M5 outside NODRC [Calibre source]</description>
+   <description>T4V2_EN_2_EN_3: T4V2 must be covered by source-selected M5 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 lower-metal enclosure must be at least 0.01 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 must be covered by T4M2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least 0.02 um [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -366,6 +540,18 @@
   </cell>
  </cells>
  <items>
+  <item>
+   <tags/>
+   <category>'via.v4.width'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0.3,0.3;0.3,0.6;0.6,0.6;0.6,0.3)</value>
+   </values>
+  </item>
   <item>
    <tags/>
    <category>DEUPAD_R_6</category>

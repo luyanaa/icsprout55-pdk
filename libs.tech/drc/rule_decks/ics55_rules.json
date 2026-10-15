@@ -33,6 +33,7 @@
   "ct_enc_m1": 0.04,
   "ct_enc_poly": 0.01,
   "ct_enc_act": 0.01,
+  "ct_drc_enc_act": 0.015,
   "m1_width": 0.09,
   "m1_space": 0.09,
   "m1_area": 0.042,
@@ -60,6 +61,7 @@
   "via_lower_side": 0.0,
   "via_lower_all": 0.03,
   "via_upper_side": 0.005,
+  "via_drc_enc_upper": 0.005,
   "v1_array_space": 0.13,
   "v2_width": 0.09,
   "v2_space": 0.11,
@@ -81,9 +83,12 @@
   "tm2_area": 0.4,
   "tm2_min_hole": 0.6,
   "tv2_width": 0.36,
+  "tv2_bar_width": 0.36,
   "tv2_space": 0.34,
   "tv2_enc_m5": 0.02,
   "tv2_enc_tm2": 0.02,
+  "tv2_drc_enc_m5": 0.01,
+  "tv2_drc_enc_tm2": 0.02,
   "tv2_array_space": 1.0,
   "rv_width": 3.0,
   "rv_space": 3.0,
@@ -317,6 +322,11 @@
    "provenance": "gds",
    "note": "ACT-side CT enclosure not in LEF; measured floor 0.016 (boundary-influenced)"
   },
+  "ct_drc_enc_act": {
+   "provenance": "official",
+   "rule_id": "CT_EN_2a",
+   "note": "CT/CTbar active enclosure minimum 0.015 um from the Calibre source."
+  },
   "m1_width": {
    "provenance": "lef",
    "note": "N551P6M.lef WIDTH 0.09; measured 0.091"
@@ -420,6 +430,11 @@
    "rule_id": "V1_EN_5a_5b",
    "note": "GOOD 0.005/0.02 on opposite pairs; ENC/INT and outside clauses. Polygon containment implements rectangular cuts, complex cut edge semantics provisional."
   },
+  "via_drc_enc_upper": {
+   "provenance": "official",
+   "rule_id": "V1_EN_5a_5b",
+   "note": "V1-V4 generic full upper-metal enclosure minimum 0.005 um. The conditional GOOD opposite-edge 0.02 um branch remains unrepresented."
+  },
   "v1_array_space": {
    "provenance": "lef",
    "note": "VIARULE MET2_MET1 SPACING 0.13 BY 0.13"
@@ -512,6 +527,11 @@
    "provenance": "lef",
    "note": "N551P6M.lef T4V2 WIDTH 0.36; IO measured min 0.28 (pad array edge)"
   },
+  "tv2_bar_width": {
+   "provenance": "official",
+   "rule_id": "T4V2_W_2",
+   "note": "T4V2bar datatype-7 width is fixed at 0.36 um."
+  },
   "tv2_space": {
    "provenance": "lef",
    "note": "N551P6M.lef T4V2 SPACING 0.34"
@@ -523,6 +543,16 @@
   "tv2_enc_tm2": {
    "provenance": "lef",
    "note": "VIARULE T4M2_MET5 T4M2 ENCLOSURE 0.5 0.02"
+  },
+  "tv2_drc_enc_m5": {
+   "provenance": "official",
+   "rule_id": "T4V2_EN_2_EN_3",
+   "note": "Source-selected M5 lower-enclosure minimum 0.01 um; directional GOOD 0.05 um branch remains unrepresented."
+  },
+  "tv2_drc_enc_tm2": {
+   "provenance": "official",
+   "rule_id": "T4V2_EN_5_EN_6",
+   "note": "T4M2 upper enclosure minimum 0.02 um; generic full-enclosure predicate omits source qualifiers."
   },
   "tv2_array_space": {
    "provenance": "lef",

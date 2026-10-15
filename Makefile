@@ -117,4 +117,121 @@ stage-libs-ref:
 	done
 	@echo "RCX configs regenerated for $(STD_CELL_VARIANTS)."
 
+# Memory IPs are release assets. ROM is small enough to fetch as a catalog;
+# SRAM packages are selected explicitly because the catalog is much larger.
+MACRO_API_ROOT := https://api.github.com/repos/openecos-projects
+MACRO_FORCE ?= false
+SRAM_ASSETS ?=
+
+.PHONY: unzip-macros unzip-sram list-sram-assets _fetch-memory-macros
+unzip-macros:
+	@$(MAKE) --no-print-directory _fetch-memory-macros MACRO_MODE=rom SRAM_ASSETS='$(SRAM_ASSETS)'
+
+unzip-sram:
+	@$(MAKE) --no-print-directory _fetch-memory-macros MACRO_MODE=sram SRAM_ASSETS='$(SRAM_ASSETS)'
+
+list-sram-assets:
+	@$(MAKE) --no-print-directory _fetch-memory-macros MACRO_MODE=list-sram
+
+_fetch-memory-macros:
+	@set -eu; set -f; \
+	  stage=$$(mktemp -d "$(LIBS_REF)/.ecos-macros.XXXXXX"); \
+	  trap 'rm -rf "$$stage"' EXIT HUP INT TERM; \
+	  mode='$(MACRO_MODE)'; \
+	  sram_assets='$(SRAM_ASSETS)'; \
+	  case "$$mode" in \
+	    rom) repos=ics55_ecos_rom; if [ -n "$$sram_assets" ]; then repos="$$repos ics55_ecos_sram"; fi ;; \
+	    sram|list-sram) repos=ics55_ecos_sram ;; \
+	    *) echo "[macros] unknown mode: $$mode" >&2; exit 1 ;; \
+	  esac; \
+	  if [ "$$mode" = sram ] && [ -z "$$sram_assets" ]; then \
+	    echo '[macros] select one or more packages: make unzip-sram SRAM_ASSETS="asset.tar.gz ..."'; \
+	    exit 2; \
+	  fi; \
+	  for repo in $$repos; do \
+	    case "$$repo" in \
+	      ics55_ecos_rom) kind=rom; tag_prefix=rom-v1-; package_prefix=ics55_ecos_rom_ ;; \
+	      ics55_ecos_sram) kind=sram; tag_prefix=sram-v1-; package_prefix=ics55_ecos_sram_ ;; \
+	    esac; \
+	    catalog="$$stage/$$repo-catalog.tsv"; \
+	    : > "$$catalog"; \
+	    page=1; \
+	    while :; do \
+	      response="$$stage/$$repo-page-$$page.json"; \
+	      if [ -n "$${GITHUB_TOKEN:-}" ]; then \
+	        saved_umask=$$(umask); umask 077; \
+	        printf 'header = "Authorization: Bearer %s"\n' "$$GITHUB_TOKEN" > "$$stage/github-auth.curl"; \
+	        umask "$$saved_umask"; \
+	        http_code=$$(curl -sS -L --config "$$stage/github-auth.curl" -o "$$response" -w '%{http_code}' "$(MACRO_API_ROOT)/$$repo/releases?per_page=100&page=$$page"); \
+	      else \
+	        http_code=$$(curl -sS -L -o "$$response" -w '%{http_code}' "$(MACRO_API_ROOT)/$$repo/releases?per_page=100&page=$$page"); \
+	      fi; \
+	      if [ "$$http_code" != 200 ]; then \
+	        echo "[macros] release catalog lookup for $$repo page $$page failed (HTTP $$http_code)" >&2; \
+	        cat "$$response" >&2; \
+	        exit 1; \
+	      fi; \
+	      page_count=$$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1], encoding="utf-8"))))' "$$response"); \
+	      if [ "$$page_count" -eq 0 ]; then break; fi; \
+	      python3 -c 'import json,sys; rs=json.load(open(sys.argv[1], encoding="utf-8")); p=sys.argv[2]; [print("\t".join((r["tag_name"], r.get("published_at", ""), a["name"], a["browser_download_url"], a.get("digest") or "-", str(a["size"])))) for r in rs if not r.get("draft", False) and r.get("tag_name", "").startswith(p) for a in r.get("assets", []) if a.get("name", "").endswith(".tar.gz")]' "$$response" "$$tag_prefix" >> "$$catalog"; \
+	      page=$$((page + 1)); \
+	    done; \
+	    if [ ! -s "$$catalog" ]; then \
+	      echo "[macros] no $$tag_prefix release assets found for $$repo" >&2; \
+	      exit 1; \
+	    fi; \
+	    if [ "$$mode" = list-sram ]; then \
+	      python3 -c 'import sys; rows=[x.rstrip("\n").split("\t") for x in open(sys.argv[1], encoding="utf-8")]; rows.sort(key=lambda r:r[1], reverse=True); latest={}; [latest.setdefault(r[2], r) for r in rows]; print("ASSET\tLATEST_RELEASE\tCOMPRESSED_BYTES"); [print("\t".join((n, r[0], r[5]))) for n,r in sorted(latest.items())]' "$$catalog"; \
+	      continue; \
+	    fi; \
+	    selected="$$stage/$$repo-selected.tsv"; \
+	    if [ "$$repo" = ics55_ecos_sram ]; then \
+	      python3 -c 'import sys; rows=[x.rstrip("\n").split("\t") for x in open(sys.argv[1], encoding="utf-8")]; req=set(sys.argv[2].split()); rows.sort(key=lambda r:r[1], reverse=True); latest={}; [latest.setdefault(r[2], r) for r in rows]; missing=req-set(latest); assert not missing, "unknown SRAM asset(s): "+", ".join(sorted(missing)); [print("\t".join(r)) for n,r in sorted(latest.items()) if n in req]' "$$catalog" "$$sram_assets" > "$$selected"; \
+	    else \
+	      cp "$$catalog" "$$selected"; \
+	    fi; \
+	    mkdir -p "$$stage/download/$$repo" "$$stage/extract/$$repo"; \
+	    while IFS="$$(printf '\t')" read -r tag published asset url digest size; do \
+	      case "$$asset" in *[!A-Za-z0-9._-]*|'') echo "[macros] unsafe asset name: $$asset" >&2; exit 1 ;; esac; \
+	      case "$$tag" in "$$tag_prefix"*) version=$${tag#"$$tag_prefix"} ;; *) echo "[macros] unexpected release tag: $$tag" >&2; exit 1 ;; esac; \
+	      case "$$version" in *[!A-Fa-f0-9]*|'') echo "[macros] unsafe release id: $$version" >&2; exit 1 ;; esac; \
+	      archive="$$stage/download/$$repo/$$asset-$$version.tar.gz"; \
+	      curl -fLsS "$$url" -o "$$archive"; \
+	      case "$$digest" in \
+	        sha256:*) printf '%s  %s\n' "$${digest#sha256:}" "$$archive" | shasum -a 256 -c - ;; \
+	        -) echo "[macros] warning: GitHub provides no SHA-256 digest for $$asset" >&2 ;; \
+	        *) echo "[macros] unsupported digest for $$asset: $$digest" >&2; exit 1 ;; \
+	      esac; \
+	      root=$$(python3 -c 'import pathlib,sys,tarfile; t=tarfile.open(sys.argv[1], "r:gz"); ms=t.getmembers(); p=pathlib.PurePosixPath; assert all((m.isfile() or m.isdir()) and not p(m.name).is_absolute() and ".." not in p(m.name).parts for m in ms), "unsafe archive member"; roots={p(m.name).parts[0] for m in ms if p(m.name).parts}; assert len(roots)==1, "archive must contain one top-level directory"; print(next(iter(roots)))' "$$archive"); \
+	      case "$$root" in *[!A-Za-z0-9._-]*|'') echo "[macros] unsafe package directory: $$root" >&2; exit 1 ;; esac; \
+	      [ "$$root" = "$${asset%.tar.gz}" ] || { echo "[macros] archive root $$root does not match $$asset" >&2; exit 1; }; \
+	      case "$$root" in "$$package_prefix"*) ;; *) echo "[macros] package root $$root does not match $$repo" >&2; exit 1 ;; esac; \
+	      config=$${root#"$$package_prefix"}; \
+	      [ -n "$$config" ] || { echo "[macros] empty IP configuration in $$root" >&2; exit 1; }; \
+	      tar -xzf "$$archive" -C "$$stage/extract/$$repo"; \
+	      package="$$stage/extract/$$repo/$$root"; \
+	      for view in doc lef lib power verilog; do \
+	        if [ ! -d "$$package/$$view" ]; then echo "[macros] missing $$view/ in $$asset" >&2; exit 1; fi; \
+	      done; \
+	      destination="$(LIBS_REF)/icsprout55_fd_$${kind}__$${config}__$${version}"; \
+	      if [ -e "$$destination" ]; then \
+	        if [ "$(MACRO_FORCE)" = true ]; then rm -rf "$$destination"; \
+	        else echo "[macros] keeping existing $$destination (use MACRO_FORCE=true to replace)"; continue; fi; \
+	      fi; \
+	      legacy="$(LIBS_REF)/$$root"; \
+	      if [ -d "$$legacy" ] && [ "$(MACRO_FORCE)" != true ]; then \
+	        mv "$$legacy" "$$destination"; \
+	        echo "[macros] migrated $$legacy to $$destination"; \
+	      else \
+	        mv "$$package" "$$destination"; \
+	        echo "[macros] installed $$destination"; \
+	      fi; \
+	      if [ ! -e "$$destination/UPSTREAM.txt" ]; then \
+	        printf 'Repository: https://github.com/openecos-projects/%s\nRelease: %s\nPublished: %s\nAsset: %s\nSHA-256: %s\n' "$$repo" "$$tag" "$$published" "$$asset" "$$digest" > "$$destination/UPSTREAM.txt"; \
+	      fi; \
+	    done < "$$selected"; \
+	  done
+
+
+
 .DEFAULT_GOAL := all

@@ -15,18 +15,27 @@
 #=========================================================================================
 # FEOL 05 - Contact (CT)
 #
-# Port CT_EN_1 directly from the source coverage expression.  Tech-LEF cut
-# dimensions are routing constraints, not substitutes for the Calibre CT rules.
+# CT_EN_1 uses the official CT alias, CT = CTi OR CTbar (Calibre source
+# lines 865-866, 3965-3967). Tech-LEF cut dimensions are not substitutes for
+# the Calibre CT width rules.
 #=========================================================================================
 
 if FEOL
-  CT.not(M1.and(POLY.or(ACT))).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.inside',
-    "CT_EN_1: CT must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC")
+  cts = CT.or(CTbar)
+  cts.not(M1.and(POLY.or(ACT))).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.inside',
+    "CT_EN_1: CT/CTbar must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC [Calibre source]")
 
-  # Unsupported source rules: CT_W_1, CT_W_2, CT_S_1, CT_S_1a, CT_S_2,
-  # CT_S_3 through CT_S_6, CT_EN_2a, CT_EN_2b, CT_EN_3a_3b_3c,
-  # CT_EN_4a_4b_4c, CT_EN_4d, CT_R_1 through CT_R_3, CT_R_5.
-  # These require fixed-shape/CTbar treatment, connectivity, directional
-  # enclosure, or source-only exclusion layers. Recommended CT_S_4_R,
-  # CT_EN_2_R, CT_EN_3_R, CT_EN_4a_R_4b_R remain disabled by default.
+  # CT_EN_2a requires its source threshold for CTs that interact ACT.
+  ct_min_active_enclosure = rval('ct_drc_enc_act')
+  ct_active = cts.interacting(ACT)
+  ct_active.drc(enclosed(ACT) < ct_min_active_enclosure.um).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.active.enclosure',
+    "CT_EN_2a: CT/CTbar active enclosure must be at least #{ct_min_active_enclosure} um [Calibre source]")
+
+  # CT_W_1 is omitted: source lines 3895-3902 use RCT/GCT geometry and
+  # region-specific rectangular checks not represented by existing DRC layers.
+  # The KLayout CT_EN_2a enclosure operator preserves the 0.015um threshold,
+  # but not Calibre's ABUT<90/SINGULAR/OUTSIDE ALSO qualifiers.
+  # CT_W_2, CT_S_1 through CT_S_6, CT_EN_2b through CT_EN_4d, and CT_R_1
+  # through CT_R_5 remain omitted because they need connectivity, directional
+  # enclosure, or source-only exclusion semantics.
 end

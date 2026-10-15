@@ -21,11 +21,10 @@
 #
 # Devices:
 #   core MOS 1.2V : nm1p2_{svt,lvt,hvt}_lp / pm1p2_{svt,lvt,hvt}_lp
-#                   (POLY x ACT in NP/PP; LVT/HVT via 17/18/21/22 markers)
-#   IO MOS 3.3V   : nm3p3_lp / pm3p3_lp (POLY x IOACT in NP/PP)
-#   poly resistor : re_ppo_sab_2t (POLY with PPO marker 41/4, CT straps)
-#   ESD diode     : dio_3p3_pp_nw_lp (ESD 55/1 in NW, P+ anode)
-#   MOM cap       : not extracted yet (interdigitated M2..M5) - see README
+#   IO MOS 3.3V   : nm3p3_lp / pm3p3_lp (TGOX selectors)
+#   resistors     : PPO/SAB poly, stack-selected M1-M5 or T4M1/T4M2, ALPAD
+#   diode         : dio_3p3_pp_nw_lp (DIODE marker 191/12; TGOX junction)
+#   MOM cap       : not extracted
 #
 # Bulk connectivity (std-cell convention, CDL bulk = VDD/VSS):
 #   - p-substrate (layout extent minus NW) is globally tied to VSS;
@@ -147,9 +146,11 @@ def dedup_spice(path)
   tmp
 end
 
+schematic_source = $schematic
 unless NET_ONLY
   if $schematic
-    schematic(dedup_spice($schematic))
+    schematic_source = $schematic
+    schematic(dedup_spice(schematic_source))
   else
     exts = %w[cdl spice sp cir]
     candidates = exts.map { |ext| "#{src.cell_name}.#{ext}" }
@@ -157,16 +158,87 @@ unless NET_ONLY
     if netlists.empty?
       error("Netlist not found, tried: #{candidates}")
     else
-      schematic(dedup_spice(netlists[0]))
+      schematic_source = netlists[0]
+      schematic(dedup_spice(schematic_source))
     end
   end
 end
+def source_top_pins(path, top_name)
+  return [] unless path && File.file?(path.to_s)
 
-if $target_netlist
-  target_netlist($target_netlist)
+  lines = File.readlines(path.to_s)
+  start = lines.index do |line|
+    match = line.match(/^\s*\.SUBCKT\s+(\S+)/i)
+    match && match[1].casecmp(top_name.to_s).zero?
+  end
+  return [] unless start
+
+  header = [lines[start]]
+  index = start + 1
+  while index < lines.length && lines[index].match?(/^\s*\+/)
+    header << lines[index]
+    index += 1
+  end
+  header.join(" ").split(/\s+/).drop(2).take_while do |name|
+    !name.match?(/\A(?:PARAMS:|PARAMS)\z/i)
+  end
+end
+def selected_bulk_net(override, pins, candidates, fallback)
+  return override.to_s unless override.nil? || override.to_s.empty?
+
+  candidates.each do |candidate|
+    pin = pins.find { |name| name.casecmp(candidate).zero? }
+    return pin if pin
+  end
+  fallback
+end
+def layout_has_layer?(layout, layer, datatype, root_cell)
+  index = layout.find_layer(layer, datatype)
+  return false if index.nil? || index < 0
+
+  found = false
+  visited = {}
+  visit = lambda do |cell|
+    unless found || visited[cell.cell_index]
+      visited[cell.cell_index] = true
+      cell.shapes(index).each do |shape|
+        next if shape.is_text?
+        found = true
+        break
+      end
+      cell.each_inst { |instance| visit.call(layout.cell(instance.cell_index)) } unless found
+    end
+  end
+  visit.call(root_cell)
+  found
+end
+metal_stack_request = ($metal_stack || "auto").to_s.downcase
+unless %w[auto m1_m5 t4].include?(metal_stack_request)
+  raise "metal_stack must be auto, m1_m5, or t4; got #{metal_stack_request.inspect}"
+end
+if metal_stack_request == "auto"
+  source_top = src && src.cell_obj
+  source_layout = source_top && source_top.layout
+  has_t4_stack = source_top &&
+    (layout_has_layer?(source_layout, 102, 1, source_top) || layout_has_layer?(source_layout, 103, 1, source_top))
+  METAL_STACK = has_t4_stack ? "t4" : "m1_m5"
 else
-  target_netlist("#{src.cell_name}_extracted.cir", write_spice(SPICE_WITH_NET_NAMES, SPICE_WITH_COMMENTS),
-                 "Extracted by KLayout with the ICsprout55 LVS runset")
+  METAL_STACK = metal_stack_request
+end
+puts "Metal stack: #{METAL_STACK} (requested #{metal_stack_request})"
+top_ports = source_top_pins(schematic_source, src.cell_name)
+BULK_GROUND_NET = selected_bulk_net($bulk_ground_net, top_ports, %w[gnd GND VSS], "VSS")
+BULK_POWER_NET = selected_bulk_net($bulk_power_net, top_ports, %w[vdd VDD], "VDD")
+puts "Bulk aliases: ground=#{BULK_GROUND_NET} power=#{BULK_POWER_NET}"
+
+unless NET_ONLY
+  if $target_netlist
+    target_netlist($target_netlist, write_spice(SPICE_WITH_NET_NAMES, SPICE_WITH_COMMENTS),
+                   "Extracted by KLayout with the ICsprout55 LVS runset")
+  else
+    target_netlist("#{src.cell_name}_extracted.cir", write_spice(SPICE_WITH_NET_NAMES, SPICE_WITH_COMMENTS),
+                   "Extracted by KLayout with the ICsprout55 LVS runset")
+  end
 end
 
 #-----------------------------------------------------------------------------------------
@@ -201,30 +273,26 @@ eval(lvs_assembled, binding, 'ics55_assembled_lvs')
 # library GDS is flat; flatten the schematic so flat-vs-flat comparison works.
 schematic.flatten unless NET_ONLY
 
-# The released std cells have no in-cell well/substrate taps, so the extracted
-# bulk nets (global VSS for p-sub, VDD/VNW for n-well) are separate from the
-# power rails.  The CDL declares bulk=VDD/VSS; merge the bulk nets into the
-# rails per circuit (std-cell well-tie convention; disable with -rd
-# no_well_ties=true for analog blocks with isolated wells).
+# The released std cells have no in-cell well/substrate taps.  Tie physical
+# bulk regions to the selected top-level rail names; choose those from the top
+# CDL pins when present, falling back to the standard-cell VSS/VDD convention.
 if WELL_TIES
   netlist.each_circuit do |c|
     by_name = Hash.new { |h, k| h[k] = [] }
     c.each_net { |n| by_name[n.name] << n unless n.name.empty? }
-    # join duplicate-named nets (bulk global + rail)
     by_name.each_value do |nets|
       next if nets.size < 2
       first = nets.shift
       nets.each { |n| c.join_nets(first, n) }
     end
-    # n-well carries the foundry label VNW; the CDL bulk is VDD
-    vdd = by_name["VDD"]&.first
-    vnw = by_name["VNW"]&.first
-    c.join_nets(vdd, vnw) if vdd && vnw
+    power_net = by_name[BULK_POWER_NET]&.first
+    well_net = by_name.find { |name, _nets| name.casecmp("VNW").zero? }&.last&.first
+    c.join_nets(power_net, well_net) if power_net && well_net
   end
 end
 
 # multi-finger combine pass (rule_decks/combine_fingers.lvs)
-align
+align unless NET_ONLY
 
 # The SPICE reader canonicalizes the reference root name to upper case, while
 # the GDS primary cell retains its spelling. Normalize only a case-equivalent
@@ -242,13 +310,21 @@ top_cell = src.cell_obj
 layout = top_cell.layout
 top_circuit = netlist.circuit_by_name(top_cell.name)
 raise "Missing extracted top circuit #{top_cell.name.inspect}" unless top_circuit
-port_layers = {81 => M1, 82 => M2, 83 => M3, 84 => M4, 85 => M5, 103 => TM2}
+port_layers = {81 => M1s, 82 => M2s, 83 => M3s, 84 => M4s}
+if METAL_STACK == "t4"
+  port_layers[102] = T4M1s
+  port_layers[103] = T4M2s
+else
+  port_layers[85] = M5s
+end
+port_layers[122] = APs
+port_layers[123] = APs
 ports = Hash.new { |h, label| h[label] = {} }
 direct_text_count = 0
 port_layers.each do |number, conductor|
   [1, 6].each do |datatype|
     index = layout.find_layer(number, datatype)
-    next unless index
+    next if index.nil? || index < 0
     top_cell.each_shape(index) do |shape|
       next unless shape.is_text?
       direct_text_count += 1
@@ -280,9 +356,17 @@ puts "PORT DEPTH 0: direct_texts=#{direct_text_count} ports=#{ports.size} previo
 netlist.simplify if SIMPLIFY
 netlist.combine_devices if COMBINE_DEVICES
 netlist.purge if PURGE
-schematic.simplify if SIMPLIFY
-schematic.combine_devices if COMBINE_DEVICES
-schematic.purge if PURGE
+if NET_ONLY && $target_netlist
+  spice_writer = RBA::NetlistSpiceWriter.new
+  spice_writer.use_net_names = true
+  spice_writer.with_comments = true
+  netlist.write($target_netlist, spice_writer, "Extracted by KLayout with the ICsprout55 LVS runset")
+end
+unless NET_ONLY
+  schematic.simplify if SIMPLIFY
+  schematic.combine_devices if COMBINE_DEVICES
+  schematic.purge if PURGE
+end
 
 max_res(1e9)
 min_caps(1e-18)
@@ -303,7 +387,7 @@ max_branch_complexity(1024)
     eq = RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_L, 0.0, 0.0)
     eq += RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_W, 0.0, 0.10)
     dc.equal_parameters = eq
-    sc = schematic.device_class_by_name(cls)
+    sc = schematic.device_class_by_name(cls) unless NET_ONLY
     sc.equal_parameters = eq if sc
   rescue StandardError
   end
@@ -348,9 +432,13 @@ def audit_w(lnet, rnet, warn_thr = 0.05, tol = 0.10)
   end
 end
 
-if compare
+if NET_ONLY
+  puts "NET_ONLY: extraction complete."
+elsif compare
+  puts "ICS55_LVS_COMPARE=PASS"
   puts "CONGRATULATIONS! Netlists match."
   audit_w(netlist, schematic)
 else
+  puts "ICS55_LVS_COMPARE=FAIL"
   puts "ERROR: netlists do not match."
 end

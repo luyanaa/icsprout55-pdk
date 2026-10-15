@@ -1,33 +1,31 @@
 # Rule-to-rule comparison: official Calibre LVS vs KLayout port
 
-Generated 2026-09-25 (final signoff sanity).  Source of truth:
+Updated 2026-09-27. Source of truth:
 `pv/LVS/ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs` (277 LAYER MAP entries).
 KLayout side: `libs.tech/lvs/ics55.lvs` + `rule_decks/`.
 
-## 1. MOS device-class coverage
+## 1. Device class coverage
 
-Official `DEVICE MN/MP(<model>)` families vs the KLayout extraction classes
-(`mos_extraction.lvs`):
+Official Calibre `DEVICE` families and derivation rules vs the supported
+KLayout extraction classes (`mos_extraction.lvs` and `res_diode_*`):
 
-| Official model | KLayout class | Status |
+| Official device/model | KLayout class or selector | Status |
 |---|---|---|
-| nm1p2_svt_lp / pm1p2_svt_lp | NM1P2_SVT_LP / PM1P2_SVT_LP | ported |
-| nm1p2_lvt_lp / pm1p2_lvt_lp | NM1P2_LVT_LP / PM1P2_LVT_LP | ported (H7CL, NVT1/PVT1) |
-| nm1p2_hvt_lp / pm1p2_hvt_lp | NM1P2_HVT_LP / PM1P2_HVT_LP | ported (H7CH, NVT3/PVT3) |
-| nm3p3_lp / pm3p3_lp | NM3P3_LP / PM3P3_LP | ported (ACT & TGOX) |
-| nm2p5_lp / pm2p5_lp (2.5V) | — | NOT ported |
-| nmod3p3_lp / pmod3p3_lp (3.3V OD) | — | NOT ported |
-| nnat1p2/2p5/3p3/od3p3_lp (native) | — | NOT ported (fail-closed diagnostics pending) |
-| M resistors (STNP*/STPPU*) | — | NOT ported |
-| MD MOS caps (DPNP*) | — | NOT ported |
-| Q BJTs (vnpn/vpnp x 1.2/2.5/3.3 x 2x/5x/10x) | — | NOT ported |
-| D diodes (dio_* + parasitic dnwd/nwd/rwd) | — | NOT ported (191/12 DIODE layer exists, unused for devices) |
+| nm1p2_svt/lvt/hvt_lp / pm1p2_svt/lvt/hvt_lp | `NM1P2_*_LP` / `PM1P2_*_LP` | 6 core MOS classes; source marker selectors |
+| nm3p3_lp / pm3p3_lp | `NM3P3_LP` / `PM3P3_LP` | 2 TGOX IO MOS classes |
+| `re_ppo_sab_2t` | `RE_PPO_SAB_2T` | ported; Calibre `rsh_rppo=10.252 Ω/□` |
+| metal resistors (`STNP*`/`STPPU*`) | `RE_M1..M5_{2T,3T}` or `RE_TM1/TM2_{2T,3T}` | ported by selected stack |
+| ALPAD/RDL resistors | `RE_ALPA_{2T,3T}` | ported |
+| `dio_3p3_pp_nw_lp` | `DIO_3P3_PP_NW_LP` | ported with DIODE 191/12 and TGOX selectors |
+| 2.5V, native, overdrive-3.3V MOS | — | not extracted |
+| MOM capacitors (DPNP*) | — | not extracted |
+| Q BJTs (30 official flavors) | — | not extracted |
+| additional diode flavors (including parasitics) | — | not extracted |
 
-Ported classes: 8 of 6 official MOS families (all 1.2V core + 3.3V IO used by
-the released std/IO libraries).  The official deck additionally recognizes
-2.5V, native, overdrive-3.3V MOS, resistors, MOS caps, 30 BJT flavors and
-20 diode flavors - all absent from the released cell libraries and NOT ported
-(fail-closed: unknown structures are not silently mis-extracted).
+The deck currently exposes 8 MOS classes, 1 diode class, and 13 resistor
+classes on the M1-M5 stack or 15 on the T4 stack. MOM capacitors, the other MOS
+families, BJTs, and additional diode flavors remain unsupported; unknown
+structures are not silently assigned to a supported class.
 
 ## 2. Compare parameters
 
@@ -35,7 +33,7 @@ the released std/IO libraries).  The official deck additionally recognizes
 |---|---|---|---|
 | L compare | PROPERTY ... L L mos_err (10%) | exact (0.0, 0.0) | port stricter |
 | W compare | PROPERTY ... W W mos_err (10%) | 10% relative (0.0, 0.10) | aligned to official; 5-10% band warns (audit_w) |
-| series/parallel reduction | LVS REDUCE PARALLEL/SERIES YES (MOS, R, D) | netlist compare with reduction | equivalent |
+| series/parallel reduction | Calibre `REDUCE PARALLEL/SERIES YES` (MOS, R, D) | KLayout built-in reduction is opt-in (`--combine-devices`) | Not equivalent by default |
 | max resistance | (implied) | max_res(1e9) | port explicit |
 | min capacitance | (implied) | min_caps(1e-18) | port explicit |
 | matcher limits | no Calibre counterpart | max_depth(8), max_branch_complexity(1024) | KLayout-only search budget; the 2RW macro report under a 50-unit branch limit required at least 992 |
@@ -52,26 +50,32 @@ carries the topology waiver).
 
 | Rule | Official Calibre | KLayout port | Status |
 |---|---|---|---|
-| Top-level ports | `PORT DEPTH 0` | Direct top-cell text on M1-M5/TM2 conductors | Internal child labels remain nets, not ports; disconnected duplicate top labels fail |
-| Body ties | Soft substrate/well connections through physical taps | Standard-cell mode globally ties PSUB/NW; `no_well_ties=true` uses CT-qualified taps | OpenRAM macro path selects physical-tap mode |
+| Top-level ports | `PORT DEPTH 0` | Direct top-cell text on selected M1-M5 or T4 conductors and AP layers | Child labels remain nets; disconnected duplicate top labels fail |
+| Body ties | Soft substrate/well connections through physical taps | Standard-cell mode globally ties PSUB/NW; `no_well_ties=true` uses CT-qualified taps | Physical-tap mode is intended for macros |
 | Primary circuit case | `CASE_SENSITIVITY TRUE`, source/layout/compare case YES | Normalize only a case-equivalent parsed root circuit name | No net, pin, or device label is rewritten |
 
-## 4. Verified on the released libraries (2026-09-25)
+## 4. Local regression evidence (2026-09-27)
 
-- 2307/2313 std cells PASS across the 771-cell x 3-lib sweep (H7CR/H7CL/H7CH).
-- 6 failures = NAND3BBX0P5/X0P7H7* (all 3 libs): the layout draws the NMOS
-  series stack reversed vs the CDL (VSS-A1N-A2N-C-Y vs Y-A1N-A2N-C-VSS).
-  Boolean-identical (series AND is commutative), topology not equivalent -
-  documented waiver, agreed by the user.
-- Spot anchors on the final state: INVX1, AND2X8, SDFFNRX2, AOI2BB2X2,
-  ADDFX1 all PASS (re-run 2026-09-25).
+- KLayout LVS fixture suite: 15/15 extraction cases PASS, including core/IO
+  MOS selectors, CT-bar handling, resistor terminal separation, DIODE-marker
+  selection, both metal stacks, direct top-level ports, and CDL-derived bulk
+  aliases. This is extraction self-consistency, not Calibre parity.
+- Historical standard-cell sweep (2026-09-25): 2307/2313 cells PASS across
+  771 cells × 3 libraries (H7CR/H7CL/H7CH). Six NAND3BBX0P5/X0P7H7* cases
+  have the NMOS stack reversed vs CDL (layout VSS-A1N-A2N-C-Y vs CDL
+  Y-A1N-A2N-C-VSS); topology mismatch remains documented.
+- Historical spot anchors: INVX1, AND2X8, SDFFNRX2, AOI2BB2X2, and ADDFX1
+  passed on 2026-09-25; not rerun in this selector audit.
 
-## 5. Open gaps (documented, not blocking the released libraries)
+## 5. Open gaps
 
-- 2.5V / native / overdrive MOS, resistors, MOS caps, BJTs, diodes: layer
-  recognition + device classes not ported; explicit unsupported-device
-  diagnostics are a pending item (fail-closed).
-- IO-cell LVS comparison (multi-finger combining + IO CDL) still blocked -
-  documented in `libs.tech/lvs/README.md`.
-- LVS layer aliases resolved 2026-09-25 (TGOX/SAB/DIODE/RV/CB/ALPAD/RDL/COVER,
-  IOACT = ACT & TGOX); PSUB marker 261/12 still unused in the LVS.
+- 2.5V/native/overdrive MOS, MOM capacitors, BJTs, and additional diode
+  flavors are not extracted.
+- IO-cell LVS comparison (multi-finger topology plus IO CDL) remains
+  unvalidated; see `libs.tech/lvs/README.md`.
+- The deck now uses CT/via-bar unions, official TGOX/DGOX selectors, DIODE
+  191/12, stack-specific T4/ALPAD/RDL connectivity, and PSUB marker 261/12
+  selector exclusions. The local fixtures do not establish equivalence for
+  every source rule.
+- No same-input Calibre run/report is available. Cross-tool equivalence stays
+  `BLOCKED`; this KLayout deck is not foundry signoff.

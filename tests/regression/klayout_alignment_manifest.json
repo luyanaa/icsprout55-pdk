@@ -251,21 +251,26 @@
     "hashes_expected": "frozen_hashes section; drift fails the run unless regenerated deliberately with run_alignment.py --update-hashes"
   },
   "frozen_hashes": {
-    "lvs_runner": "099ec0095e32cbc3b9ea817c00839906b75c96b85d808c37356de0edff10b89e",
+    "lvs_runner": "c2e34ffdbf58dcb4b838b06ae62a217b364e4e3b09559ee24e8b66502da596f3",
     "normalizer": "4be775277d78f0f74d1f8efe9140517e753924ce33bd912325ef028d4de5db29",
-    "harness": "23daa9f45fd447117d0d99932eec9d9c1a82f47b6a57f20322adb626286d37b4",
+    "harness": "36129730b63d75fc2d571c8b5673384df94d60dd3c7878c6a28ff9135bee224a",
+    "nix_shell_helper": "620b4bde416f5045cd3ec3a1f02c2751d4893fa4b89c855de7f5cce0823280fd",
+    "lvs_fixture_harnesses": {
+      "tests/regression/lvs_fixture_check.py": "085fd607f471f8b049945eaae567b225d4597760337c3eb208a9f8711c0e9c12",
+      "tests/regression/make_lvs_fixtures.rb": "0653e4192f3e43e5e55af3d3bb7b628913c82ca4683003b6b3c9f700d6812006"
+    },
     "lvs_rule_decks": {
-      "ics55.lvs": "90d317e546d8bb1688c072fdfd689ce6d6a5b687ddb315d176291ad4a68d2997",
+      "ics55.lvs": "f888db9c8dae9c1ec694f46e4ef884c130afd163200eca6fb981839fee480c6c",
       "combine_fingers.lvs": "fe15f3071820702bc00c6b400213d1e6d7e9cf209445e5b2ac8d421cba618df3",
-      "devices_connections.lvs": "ebda4a65a220d960139c9c706fc84292d1e0cbbe756535e6894b93e9c6735685",
+      "devices_connections.lvs": "668be4dcd61f9dcc5930dec991ad5dc7907df2c033a602c5caed4b13438ceaea",
       "general_derivations.lvs": "1e5800bd11557b5ed4a4e245bc90990e66283c3fe04b6a1a6b9c7b935374f7c2",
-      "layers_definitions.lvs": "adfa1b6fbe127ad8751a9cf67e59bda28edbbd6e842f5420ac43f7524cfc004b",
+      "layers_definitions.lvs": "e0347a7d0cba186d7e93267d3bb3e727f1971738a4405ea73c1c8f5041ff5f95",
       "min_conn.lvs": "5a76cd2af1bd41634e9a3e63a38cf12f1eb6efcb3c07bac812c4af84e6904349",
-      "mos_derivations.lvs": "cc4719455caff79cb6eba7bc227e31b3b718e8529943cc0fa1b12bc7448b3dc6",
+      "mos_derivations.lvs": "258bcddf0aae09111a281093f7af5d0bc3083a8981c814b6167b4b917d199bef",
       "mos_extraction.lvs": "371222262ba23a509217992e2d82939737c60e810e6841ebd8966cf612745542",
       "mos_extraction_svtonly.lvs": "e3039a6da8c653f3b9d09758e8e3686beb8f5e8dc3ec832877a3985d37345221",
-      "res_diode_derivations.lvs": "c6339ef3005c2336252c9776a9b0b1c0cc824e9625fd25465031c665ca1633d5",
-      "res_diode_extraction.lvs": "295ec365c6a7785f6c006894370395dded6d5593e34df56116055d2555ebdc4b"
+      "res_diode_derivations.lvs": "9c5d81df7fd84a89ec68d7cbcca0c1e16810461d142b9495fb76f37e74b38734",
+      "res_diode_extraction.lvs": "657a9763bbdc435ea9fad1ca9d8bdb0e5c3593aeb247b472393559ef7be76dde"
     },
     "official_drc_profile": {
       "source": "pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc",
@@ -310,37 +315,37 @@
     "drc_rule_decks": {
       "libs.tech/drc/ics55_drc.drc": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
       "libs.tech/drc/rule_decks/advanced/10_eol_jog.drc": "d86b151f0e587210230d76a40f6146c9c6a0a5c3a06d09e0876f0559891e4630",
-      "libs.tech/drc/rule_decks/beol/06_metal.drc": "e7df782b456fa7e5f51721904bbb1f687a2eb1aa9adaef96390cecf90731753b",
-      "libs.tech/drc/rule_decks/beol/07_via.drc": "5768814db026906efc0a2b7e31f41d9170a50c76a417557c0b59370bd4185833",
+      "libs.tech/drc/rule_decks/beol/06_metal.drc": "6f7cd55d6155eccc1c7785f7ce2ba44a03e10c89144d1162f617cc0fdaacd040",
+      "libs.tech/drc/rule_decks/beol/07_via.drc": "d83ad8ce4fbb15b767bef1daa0380c70514ec4a3ba132ed2bb8d6a150e1bad1b",
       "libs.tech/drc/rule_decks/beol/08_pad.drc": "7c5cd80efab74dc3acf7bea82af1cbf59cec08d39b8b5141e91ef8d60d6c4a17",
       "libs.tech/drc/rule_decks/density.drc": "6658c65cc2b3f962ab35ddd07635accf12a5d86b5f2959fd8ce1159116ea414a",
       "libs.tech/drc/rule_decks/dummy_slot.drc": "3ebad809814f05f722d129e222b29c027901d48b478fb078ee045052a7a1ad0c",
       "libs.tech/drc/rule_decks/feol/01_wells.drc": "9c713e70421c40ff7f6a2b136f6bb22ca7fa79916cb4426b995e687ac811e168",
       "libs.tech/drc/rule_decks/feol/02_active.drc": "5792bb281a41c1ab140766288dda4fa9340b81e2eb0b5f562d4e273c89fe74e6",
-      "libs.tech/drc/rule_decks/feol/03_poly.drc": "f474b046dfeb2c43f5d0ac7827f7dd0d26bd3471ddba94294934ce4885b7eab3",
+      "libs.tech/drc/rule_decks/feol/03_poly.drc": "8f8dc738ccb0c55afbd66167694efba5fead6bcfd29e8e43ea4c923a117efd3b",
       "libs.tech/drc/rule_decks/feol/04_implant.drc": "b90514f2d4672b58ff81aeb6d41dc767652d68e6f4ee911af8c11c6072dc56e0",
-      "libs.tech/drc/rule_decks/feol/05_cont.drc": "c97447c5b301bc2dfe233f464908a046bdb887395a5af61d9f5da530713c7969",
+      "libs.tech/drc/rule_decks/feol/05_cont.drc": "b3674b0887781aa30dff71d9dce0440567c7bea99045efaa875697847ec6190f",
       "libs.tech/drc/rule_decks/geometry/09_grid.drc": "abbaede9dfe7bb6fcf8995560775edd3d123a2dee6dcfcd6b9ba6d9c7cc94383",
       "libs.tech/drc/rule_decks/layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
       "libs.tech/drc/rule_decks/mom.drc": "918d1fbe9c93527087268ace3e7677ffc10f20038d7d9a581661fd3138bfa3e8",
       "libs.tech/drc/rule_decks/special.drc": "bbbf4c024b1beca75c693aa1720c7fb113b6b9983bff404f2c98d4b06536e4ae",
-      "libs.tech/drc/rule_decks/ics55_rules.json": "2a3d7fd6ecd9ff2a0eda1c45e9c1b8470e3948050c134089eff6d463ff166367"
+      "libs.tech/drc/rule_decks/ics55_rules.json": "82bce7b96bc7f8b3107d19f4922512d0edcb0affcdf28f1cef4f4ef76bb1481b"
     },
     "drc_layer_maps": {
       "techfile/icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
-      "libs.tech/klayout/tech/ics55.map": "26a90887ffb7d750fb55fd5a7dc8c366bf4c8557b318241ca3f7f8719e4777f1"
+      "libs.tech/klayout/tech/ics55.map": "8e89d6f45583d5c95e3f5241b9d07843102e1c99c1db1f72e7dddc1fae310187"
     },
     "drc_harnesses": {
-      "tests/regression/drc_fixture_check.py": "6c15f47237cadbf0ec194a23b4a18c1f580977dfe5402043a805d9669025b303",
-      "tests/regression/make_fixtures.rb": "6aac955e6eec4d556bfa97f0982fdd0356be573e2bb7c8275a1b14f32102d42c"
+      "tests/regression/drc_fixture_check.py": "7acd2cc4925a91933d529896a792888b54ba1c642cf81b8358dbc120d00ef346",
+      "tests/regression/make_fixtures.rb": "6366c8abccddf1577a628419e86b51dcf09ba46a16c75c91b8a978be1de090c3"
     },
     "calibre_drc_sources": {
       "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc": "e979fded0bef271f4635736163b03b7db2071569a88feb7cab211413feb7f1db",
       "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant": "fc9f95aca4d9b81b99b1aba5b9789afd2f3a96e8435880c5158c177cc47f1f44"
     },
     "drc_crosswalk": {
-      "tests/regression/official/drc_rule_comparison.json": "a9c24397f0727a6778e1e663ed78fff0fdc4dd086078675861af1bf874da6a66",
-      "tests/regression/official/drc_rule_comparison.md": "f626996491ef07fea3ac448656204c158cdb5fa6100bfe9f7523f5e5028e5973"
+      "tests/regression/official/drc_rule_comparison.json": "d5c8cf7ba9468bdeb63367e0f23c45578a973e57ce03c0752709461ee226b5c6",
+      "tests/regression/official/drc_rule_comparison.md": "4930b230aa3ae27891e32a3be79c7c85a0c54bd6a0141f91ed1fd315e99ad3d1"
     }
   }
 }

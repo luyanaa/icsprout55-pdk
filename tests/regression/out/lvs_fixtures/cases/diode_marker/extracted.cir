@@ -1,0 +1,8 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+* cell TOP
+* pin VDD
+.SUBCKT TOP VDD
+* device instance $1 r0 *1 0.5,0.3 DIO_3P3_PP_NW_LP
+D$1 \$1 VDD DIO_3P3_PP_NW_LP A=0.6P P=3.2U
+.ENDS TOP

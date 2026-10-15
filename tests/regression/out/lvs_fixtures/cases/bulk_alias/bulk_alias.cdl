@@ -1,0 +1,2 @@
+.SUBCKT TOP vdd gnd A
+.ENDS TOP

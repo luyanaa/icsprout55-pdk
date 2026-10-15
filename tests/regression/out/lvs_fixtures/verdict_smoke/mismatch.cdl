@@ -1,0 +1,2 @@
+.SUBCKT TOP X Y Z
+.ENDS TOP

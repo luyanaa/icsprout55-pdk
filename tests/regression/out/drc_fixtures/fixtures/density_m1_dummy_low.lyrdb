@@ -189,7 +189,7 @@
    <comment/>
    <image/>
    <values>
-    <value>polygon: (50,50;50,150;150,150;150,50)</value>
+    <value>polygon: (0,0;0,100;100,100;100,0)</value>
    </values>
   </item>
   <item>
@@ -213,7 +213,7 @@
    <comment/>
    <image/>
    <values>
-    <value>polygon: (0,0;0,100;100,100;100,0)</value>
+    <value>polygon: (50,50;50,150;150,150;150,50)</value>
    </values>
   </item>
  </items>

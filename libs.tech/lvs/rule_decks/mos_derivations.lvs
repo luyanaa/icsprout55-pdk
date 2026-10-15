@@ -15,26 +15,25 @@
 #=========================================================================================
 # ICsprout55 LVS MOS derivations
 #
-# Exclusions keep the RF/ESD/pad-specific poly out of the regular MOS extraction
-# (IHP-style); the ICS55 release contains only the layers below, so the
-# exclusion set is minimal but kept as a hook for the IO library.
-#=========================================================================================
+# Gate selectors for the released Calibre TGOX_33 profile.
+#
+# The core oxide excludes both IO oxides.  Core SVT and IO selectors use the
+# distinct source-defined nonSVT / nonSVT_esd marker sets; ESDIOE is excluded
+# from core SVT but intentionally retained by the TGOX IO selector.
+CORE_NGATE = NGATE.not(DGOX).not(TGOX)
+CORE_PGATE = PGATE.not(DGOX).not(TGOX)
 
-# Poly used for resistors (PPO-marked) must not extract as a gate
-POLY_RES = POLY.and(PPO)
-POLY_CON = POLY.not(POLY_RES)
+NON_SVT = LVTN.or(LVTP).or(HVTN).or(HVTP).or(SRAMALL).or(BJT).or(ACTRES).or(VARAM).or(ULLD).or(ESDIOE)
+NON_SVT_ESD = LVTN.or(LVTP).or(HVTN).or(HVTP).or(SRAMALL).or(BJT).or(ACTRES).or(VARAM).or(ULLD)
 
-# ESD-diode anode poly is inside the ESD region - exclude from regular gates
-ESD_GATE = POLY.and(ESD)
+NGATE_SVT = CORE_NGATE.not(PSUB_MARKER).not(OD).not(UD).not(NON_SVT)
+PGATE_SVT = CORE_PGATE.not(PSUB_MARKER).not(OD).not(UD).not(NON_SVT)
 
-# Regular gates (excluding resistor / ESD poly)
-NGATE_SVT = NGATE.not(LVTN).not(HVTN).not(POLY_RES).not(ESD_GATE)
-NGATE_LVT = NGATE.and(LVTN).not(POLY_RES).not(ESD_GATE)
-NGATE_HVT = NGATE.and(HVTN).not(POLY_RES).not(ESD_GATE)
-PGATE_SVT = PGATE.not(LVTP).not(HVTP).not(POLY_RES).not(ESD_GATE)
-PGATE_LVT = PGATE.and(LVTP).not(POLY_RES).not(ESD_GATE)
-PGATE_HVT = PGATE.and(HVTP).not(POLY_RES).not(ESD_GATE)
+NGATE_LVT = CORE_NGATE.and(LVTN).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD)
+PGATE_LVT = CORE_PGATE.and(LVTP).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD)
+NGATE_HVT = CORE_NGATE.and(HVTN).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD).not(ULLD)
+PGATE_HVT = CORE_PGATE.and(HVTP).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD).not(ULLD)
 
-# IO gates (3.3V devices are SVT-only per the released CDL)
-NIOGATE_REG = NIOGATE.not(POLY_RES)
-PIOGATE_REG = PIOGATE.not(POLY_RES)
+# The official TGOX IO nonSVT_esd selector does not exclude ESDIOE.
+NIOGATE_REG = NIOGATE.not(PSUB_MARKER).not(OD).not(UD).not(NON_SVT_ESD)
+PIOGATE_REG = PIOGATE.not(PSUB_MARKER).not(OD).not(UD).not(NON_SVT_ESD)

@@ -28,15 +28,15 @@
 # uses CT-qualified physical taps and preserves isolated well islands.
 #=========================================================================================
 
-# --- source/drain and poly to contacts ---------------------------------------------
+# --- source/drain and poly to contact union ----------------------------------------
 
-connect(N_SD, CT)
-connect(P_SD, CT)
-connect(CT, N_TAP)
-connect(CT, P_TAP)
-connect(NIO_SD, CT)
-connect(PIO_SD, CT)
-connect(POLY_CON, CT)
+connect(N_SD, CTs)
+connect(P_SD, CTs)
+connect(CTs, N_TAP)
+connect(CTs, P_TAP)
+connect(NIO_SD, CTs)
+connect(PIO_SD, CTs)
+connect(POLY_CON, CTs)
 
 # --- gate terminal layers into the poly net ----------------------------------------
 
@@ -53,36 +53,49 @@ connect(PGATE_HVT, PGATE)
 connect(NIOGATE_REG, NIOGATE)
 connect(PIOGATE_REG, PIOGATE)
 
-# --- resistor body (PPO-marked poly; kept off the gate poly net) -------------------
+# Junction active connects to contacts.  Resistor bodies stay outside the
+# conductive connect graph; their extractors expose only endpoint terminals.
+connect(DIO_ANODE, CTs)
 
-connect(RES_POLY, CT)
+# --- shared lower-metal stack ------------------------------------------------------
 
-# --- diode anode (ESD region; gate-free by construction) ---------------------------
+connect(CTs, M1s)
+connect(M1s, VA1)
+connect(VA1, M2s)
+connect(M2s, VA2)
+connect(VA2, M3s)
+connect(M3s, VA3)
+connect(VA3, M4s)
 
-connect(DIO_ANODE, CT)
+# The OpenRAM technology uses ordinary M1-M5.  The released Calibre profile
+# uses M4-T4M1-T4M2; select exactly one stack to avoid cross-profile shorts.
+if METAL_STACK == "t4"
+  connect(M4s, T4V1s)
+  connect(T4V1s, T4M1s)
+  connect(T4M1s, T4V2s)
+  connect(T4V2s, T4M2s)
+  connect(T4M2s, PAS)
+else
+  connect(M4s, VA4)
+  connect(VA4, M5s)
+  connect(M5s, PAS)
+end
+connect(PAS, APs)
 
-# --- metal stack -------------------------------------------------------------------
+# --- pin labels --------------------------------------------------------------------
 
-connect(CT, M1)
-connect(M1, V1)
-connect(V1, M2)
-connect(M2, V2)
-connect(V2, M3)
-connect(M3, V3)
-connect(V3, M4)
-connect(M4, V4)
-connect(V4, M5)
-connect(M5, TV2)
-connect(TV2, TM2)
-
-# --- pin labels -------------------------------------------------------------------
-
-connect(M1, M1LBL)
-connect(M2, M2LBL)
-connect(M3, M3LBL)
-connect(M4, M4LBL)
-connect(M5, M5LBL)
-connect(TM2, TM2LBL)
+connect(M1s, M1LBL)
+connect(M2s, M2LBL)
+connect(M3s, M3LBL)
+connect(M4s, M4LBL)
+if METAL_STACK == "t4"
+  connect(T4M1s, T4M1LBL)
+  connect(T4M2s, T4M2LBL)
+else
+  connect(M5s, M5LBL)
+end
+connect(APs, ALPADLBL)
+connect(APs, RDLLBL)
 
 # Device bulk annotations are separate from physical body regions, avoiding
 # direct soft-connects on a MOS device terminal.
@@ -90,9 +103,9 @@ connect(MOS_BULK_ANNOTATION, PSUB)
 connect(MOS_BULK_ANNOTATION, NW)
 
 if WELL_TIES
-  # Standard-cell GDS has no local taps; model its body convention explicitly.
-  connect_global(PSUB, "VSS")
-  connect_global(NW, "VDD")
+  # Standard-cell GDS has no local taps; the deck selects aliases from top CDL pins.
+  connect_global(PSUB, BULK_GROUND_NET)
+  connect_global(NW, BULK_POWER_NET)
 else
   # Macro/analog mode follows contacted physical taps; isolated well islands
   # remain distinct and an uncontacted body is not silently tied to a rail.

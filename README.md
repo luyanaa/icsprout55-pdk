@@ -40,6 +40,46 @@ make unzip PROXY_USE=true
 make unzip PROXY_USE=true TOOL=wget
 ```
 
+### Optional SRAM and ROM macros
+
+`make unzip-macros` downloads all published `rom-v1-*` `.tar.gz` assets from
+the `ics55_ecos_rom` releases. Every package is kept as a separate,
+release-addressed library under
+`libs.ref/icsprout55_fd_rom__<configuration>__<release-id>/`; this retains
+revisions whose upstream asset names are identical. Each library includes an
+`UPSTREAM.txt` record.
+
+SRAM has a much larger catalog and is not bulk-downloaded. Run
+`make list-sram-assets` to see the latest release and compressed size for each
+asset name, then fetch only the selected configuration(s):
+
+```bash
+make unzip-sram SRAM_ASSETS="ics55_ecos_sram_64x98_m4.tar.gz"
+```
+
+The same selection can be combined with all ROM packages:
+`make unzip-macros SRAM_ASSETS="ics55_ecos_sram_64x98_m4.tar.gz"`. SRAM assets
+are selected by exact archive name; if the name was released more than once,
+the newest `sram-v1-*` release is used. They are installed under
+`libs.ref/icsprout55_fd_sram__<configuration>__<release-id>/`. Neither macro
+target runs as part of the default `make`.
+GitHub API catalog requests are anonymous by default. Set `GITHUB_TOKEN` in the
+environment to authenticate catalog requests if the anonymous rate limit is
+exhausted.
+
+Existing installed libraries and local edits are preserved on reruns. Use
+`MACRO_FORCE=true` only to replace an existing release-addressed library;
+this overwrites local changes, including ROM `.romcode` simulation contents.
+
+The packages provide LEF, Liberty, Verilog, CPF, and documentation, but do not
+include GDS or CDL/SPICE views. Obtain matching physical deliverables before
+tapeout. Editing the ROM `.romcode` changes simulation only; a real tapeout
+requires a ROM content replacement request and matching layout generation
+recorded with the ECOS Factory order.
+
+Downloaded assets remain subject to the applicable ICS55 PDK and IP terms;
+confirm those terms before redistribution.
+
 ## Introduction
 
 The **ICsprout 55nm Open Source PDK** (hereinafter referred to as ICS55) is an open source [Process Design Kit](https://en.wikipedia.org/wiki/Process_design_kit) independently developed by ICsprout Integrated Circuit Co., Ltd. (hereinafter referred to as ICsprout) and College of Integrated Circuits Zhejiang University (hereinafter referred to as IC, ZJU), maintained and released (first released in October 2025) by **ECOS Team, Institute of Computing Technology, Chinese Academy of Sciences (hereinafter referred to as ECOS Team).** A significant breakthrough in the global open source chip ecosystem, **ICS55 represents the industry's most advanced open source process node at the time of its release**. Built on mature 55nm CMOS process technology, it provides a complete and production-proven design rule files, device models, standard cell libraries, and parameterized cells. It fully supports the backend physical design flow of digital integrated circuits, including key steps such as logic synthesis, place and route, and physical verification, etc. Ultimately, it can be taped out on ICsprout's own production lines.

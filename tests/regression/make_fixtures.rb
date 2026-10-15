@@ -19,7 +19,7 @@ LAYERS = {
   'ACT' => [2, 1], 'ACTDUM' => [2, 2], 'ACTDUMB' => [2, 3],
   'POLY' => [41, 1], 'POLYDUM' => [41, 2],
   'NP' => [52, 1], 'PP' => [53, 1], 'ESD' => [55, 1],
-  'CT' => [72, 1],
+  'CT' => [72, 1], 'CTBAR' => [72, 7],
   'M1' => [81, 1], 'M1DUM' => [81, 2], 'M1DUMB' => [81, 3], 'M1SLOT' => [81, 8],
   'M2' => [82, 1], 'M2DUM' => [82, 2], 'M2DUMB' => [82, 3],
   'M3' => [83, 1], 'M3DUM' => [83, 2], 'M3DUMB' => [83, 3],
@@ -27,12 +27,14 @@ LAYERS = {
   'M5' => [85, 1], 'M5DUM' => [85, 2], 'M5DUMB' => [85, 3],
   'V1' => [91, 1], 'V1BAR' => [91, 7], 'V4BAR' => [94, 7],
   'T4M2' => [103, 1], 'T4M2DUM' => [103, 2], 'T4M2DUMB' => [103, 3], 'T4M2SLOT' => [103, 8],
+  'TV2' => [113, 1], 'TV2BAR' => [113, 7],
   'RV' => [120, 1], 'CB' => [121, 1], 'ALPAD' => [122, 1], 'ALPADRES' => [122, 4],
   'RDL' => [123, 1], 'COVER' => [124, 1],
   'M1MOM' => [81, 10], 'M2MOM' => [82, 10], 'M3MOM' => [83, 10],
   'M4MOM' => [84, 10], 'M5MOM' => [85, 10], 'MOMLVS1' => [323, 12],
   'FUSEALL' => [292, 12], 'EFUSEALL' => [293, 12], 'POEFUSEBLK' => [294, 12],
   'GRBLK' => [353, 12], 'SRINGBLK_SRC' => [354, 13], 'NODRC' => [357, 12],
+  'INDALL' => [302, 12],
   'CHIPBLK' => [351, 12], 'DEUPAD' => [381, 12],
 }
 
@@ -117,14 +119,58 @@ def density_base(width, height, act: :half, omit_metal: nil, top_metal: :half, d
   shapes
 end
 
+def v1_pair(gap)
+  second_x = 0.09 + gap
+  right = second_x + 0.09
+  [
+    box('M1', -0.1, -0.1, right + 0.1, 0.2),
+    box('M2', -0.1, -0.1, right + 0.1, 0.2),
+    box('V1', 0, 0, 0.09, 0.09),
+    box('V1', second_x, 0, right, 0.09),
+  ]
+end
+
+def v1_upper_enclosure(enclosure)
+  [
+    box('M1', 0.05, 0.05, 0.5, 0.5),
+    box('M2', 0.1 - enclosure, 0.1 - enclosure, 0.5, 0.5),
+    box('V1', 0.1, 0.1, 0.19, 0.19),
+  ]
+end
+
+def tv2_pair(gap)
+  second_x = 0.2 + 0.36 + gap
+  [
+    box('M5', 0.1, 0.1, 2, 1.5),
+    box('T4M2', 0.1, 0.1, 2, 1.5),
+    box('TV2', 0.2, 0.2, 0.56, 0.56),
+    box('TV2', second_x, 0.2, second_x + 0.36, 0.56),
+  ]
+end
+
+def tv2_enclosure(lower, upper)
+  [
+    box('M5', 0.2 - lower, 0.2 - lower, 2, 1.5),
+    box('T4M2', 0.2 - upper, 0.2 - upper, 2, 1.5),
+    box('TV2', 0.2, 0.2, 0.56, 0.56),
+  ]
+end
+
+
+
 FIXTURES = {
   # FEOL area predicates, inclusive threshold boundaries, and full/partial waivers.
   'clean' => [box('M1', 0, 0, 2, 1), box('M2', 0, 0, 2, 1), box('V1', 0.955, 0.455, 1.045, 0.545)],
   'act_area' => [area_box('ACT', RULES['act_area'], 0.16, 0.5)],
   'act_area_at_limit' => [area_box('ACT', RULES['act_area'], 0.16)],
   'act_area_nodrc_waived' => [area_box('ACT', RULES['act_area'], 0.16, 0.5), box('NODRC', 0, 0, 0.16, 0.12)],
+  'poly_width_bad' => [box('POLY', 0, 0, 1, 0.05)],
+  'poly_width_at_limit' => [box('POLY', 0, 0, 1, RULES['poly_width'])],
+  'poly_spacing_bad' => [box('POLY', 0, 0, 1, 0.1), box('POLY', 0, 0.21, 1, 0.31)],
+  'poly_spacing_at_limit' => [box('POLY', 0, 0, 1, 0.1), box('POLY', 0, 0.22, 1, 0.32)],
   'poly_area' => [area_box('POLY', RULES['poly_area'], 0.2, 0.5)],
   'poly_area_at_limit' => [area_box('POLY', RULES['poly_area'], 0.2)],
+
   'poly_area_nodrc_waived' => [area_box('POLY', RULES['poly_area'], 0.2, 0.5), box('NODRC', 0, 0, 0.2, 0.1)],
   'poly_area_partial_marker' => [area_box('POLY', RULES['poly_area'], 0.2, 0.5), box('NODRC', 0, 0, 0.1, 0.1)],
   'poly_hole' => ring('POLY', 1, 1, 0.2, 0.3),
@@ -135,24 +181,59 @@ FIXTURES = {
   'pp_area_at_limit' => [area_box('PP', 0.12, 0.3)],
   'ct_outside_required_layers' => [box('CT', 0, 0, 0.09, 0.09)],
 
+  'ct_active_enclosure_bad' => [
+    box('CTBAR', 0, 0, 0.09, 0.09), box('ACT', -(RULES['ct_drc_enc_act'] - 0.001), -(RULES['ct_drc_enc_act'] - 0.001), 1, 1),
+    box('M1', -0.02, -0.02, 1, 1),
+  ],
+  'ct_active_enclosure_at_limit' => [
+    box('CTBAR', 0, 0, 0.09, 0.09), box('ACT', -RULES['ct_drc_enc_act'], -RULES['ct_drc_enc_act'], 1, 1),
+    box('M1', -0.02, -0.02, 1, 1),
+  ],
+
   # BEOL area/hole rules, exact-area boundaries, and source-specific via qualifiers.
   'm1_area' => [area_box('M1', RULES['m1_area'], 0.21, 0.5)],
   'm1_area_at_limit' => [area_box('M1', RULES['m1_area'], 0.21)],
   'm1_area_nodrc_waived' => [area_box('M1', RULES['m1_area'], 0.21, 0.5), box('NODRC', 0, 0, 0.21, 0.1)],
+  'm1_spacing_bad' => [box('M1', 0, 0, 0.3, 0.3), box('M1', 0.3 + RULES['m1_space'] - 0.01, 0, 0.6 + RULES['m1_space'] - 0.01, 0.3)],
+  'm1_spacing_at_limit' => [box('M1', 0, 0, 0.3, 0.3), box('M1', 0.3 + RULES['m1_space'], 0, 0.6 + RULES['m1_space'], 0.3)],
+  'm1_slot_spacing_ignored' => [
+    box('M1', 0, 0, 0.3, 0.3), box('M1', 0.38, 0, 0.68, 0.3),
+    box('M1SLOT', 0.38, 0, 0.68, 0.3),
+  ],
+
   'm1_hole' => ring('M1', 1, 1, 0.3, 0.3),
   'm1_hole_at_limit' => ring('M1', 1, 1, 0.6, 0.3),
   't4m2_area' => [area_box('T4M2', RULES['tm2_area'], 0.4, 0.5)],
   't4m2_area_at_limit' => [area_box('T4M2', RULES['tm2_area'], 0.4)],
   't4m2_hole' => ring('T4M2', 2, 2, 0.5, 0.5),
   't4m2_hole_at_limit' => ring('T4M2', 2, 2, 0.6, 1.0),
-  'v1_wrong_square' => [box('M1', 0, 0, 1, 1), box('V1', 0.4, 0.4, 0.5, 0.5)],
-  'v1_square_at_limit' => [box('M1', 0, 0, 1, 1), box('V1', 0.455, 0.455, 0.545, 0.545)],
-  'v1_bar_not_used_by_w1' => [box('V1BAR', 0, 0, 0.2, 0.2)],
-  'v1_uncovered_lower_metal' => [box('V1', 0, 0, 0.09, 0.09)],
+  'v1_wrong_square' => [box('M1', 0, 0, 1, 1), box('M2', 0, 0, 1, 1), box('V1', 0.4, 0.4, 0.5, 0.5)],
+  'v1_square_at_limit' => [box('M1', 0, 0, 1, 1), box('M2', 0, 0, 1, 1), box('V1', 0.455, 0.455, 0.545, 0.545)],
+  'v1_bar_in_w1_union' => [box('V1BAR', 0, 0, 0.2, 0.2)],
+  'v1_uncovered_lower_metal' => [box('M2', -0.1, -0.1, 0.2, 0.2), box('V1', 0, 0, 0.09, 0.09)],
   'v1_uncovered_nodrc_waived' => [box('V1', 0, 0, 0.09, 0.09), box('NODRC', 0, 0, 0.09, 0.09)],
-  'v1_diagonal_edges' => [box('M1', 0, 0, 1, 1), diamond('V1', 0.5, 0.5, 0.05)],
-  'v1_diagonal_sringblk_waived' => [box('M1', 0, 0, 1, 1), diamond('V1', 0.5, 0.5, 0.05), diamond('SRINGBLK_SRC', 0.5, 0.5, 0.05)],
-  'v1_grid_exclusion' => [box('M1', 0, 0, 1, 1), box('V1', 0.4, 0.4, 0.5, 0.6), box('GRBLK', 0.4, 0.4, 0.5, 0.6)],
+  'v1_diagonal_edges' => [box('M1', 0, 0, 1, 1), box('M2', 0, 0, 1, 1), diamond('V1', 0.5, 0.5, 0.05)],
+  'v1_spacing_bad' => v1_pair(RULES['v1_space'] - 0.01),
+  'v1_spacing_at_limit' => v1_pair(RULES['v1_space']),
+  'v1_upper_enclosure_bad' => v1_upper_enclosure(RULES['via_drc_enc_upper'] - 0.003),
+  'v1_upper_enclosure_at_limit' => v1_upper_enclosure(RULES['via_drc_enc_upper']),
+  't4v2_spacing_bad' => tv2_pair(RULES['tv2_space'] - 0.01),
+  't4v2_spacing_at_limit' => tv2_pair(RULES['tv2_space']),
+  't4v2_bar_width_bad' => [
+    box('TV2BAR', 0, 0, RULES['tv2_bar_width'] - 0.05, 0.5),
+    box('M5', -1, -1, 1, 1), box('T4M2', -1, -1, 1, 1),
+  ],
+  't4v2_bar_width_at_limit' => [
+    box('TV2BAR', 0, 0, RULES['tv2_bar_width'], 0.5),
+    box('M5', -1, -1, 1, 1), box('T4M2', -1, -1, 1, 1),
+  ],
+  't4v2_lower_enclosure_bad' => tv2_enclosure(RULES['tv2_drc_enc_m5'] - 0.005, 0.03),
+  't4v2_lower_enclosure_at_limit' => tv2_enclosure(RULES['tv2_drc_enc_m5'], 0.03),
+  't4v2_upper_enclosure_bad' => tv2_enclosure(0.03, RULES['tv2_drc_enc_tm2'] - 0.005),
+  't4v2_upper_enclosure_at_limit' => tv2_enclosure(0.03, RULES['tv2_drc_enc_tm2']),
+
+  'v1_diagonal_sringblk_waived' => [box('M1', 0, 0, 1, 1), box('M2', 0, 0, 1, 1), diamond('V1', 0.5, 0.5, 0.05), diamond('SRINGBLK_SRC', 0.5, 0.5, 0.05)],
+  'v1_grid_exclusion' => [box('M1', 0, 0, 1, 1), box('M2', 0, 0, 1, 1), box('V1', 0.4, 0.4, 0.5, 0.6), box('GRBLK', 0.4, 0.4, 0.5, 0.6)],
 
   # Pad and redistribution-layer source predicates.
   'rv_wrong_rectangle' => [box('RV', 0, 0, 2, 2), box('RDL', 0, 0, 2, 2)],
@@ -180,7 +261,7 @@ FIXTURES = {
   'deupad_r2' => [box('DEUPAD', 0, 0, 1, 1), box('CB', 0.5, 0.2, 1.5, 0.8), box('ALPAD', 0.5, 0.2, 1.5, 0.8)],
   'deupad_r2_nodrc_waived' => [box('DEUPAD', 0, 0, 1, 1), box('CB', 0.5, 0.2, 1.5, 0.8), box('ALPAD', 0.5, 0.2, 1.5, 0.8), box('NODRC', 1, 0.2, 1.5, 0.8)],
   'deupad_r5' => [box('DEUPAD', 0, 0, 1, 1), box('CB', 0, 0, 1, 1), box('ALPAD', 0, 0, 1, 1), box('ALPADRES', 0.2, 0.2, 0.8, 0.8)],
-  'deupad_r6_v4bar' => [box('DEUPAD', 0, 0, 1, 1), box('CB', 0, 0, 1, 1), box('ALPAD', 0, 0, 1, 1), box('V4BAR', 0.3, 0.3, 0.6, 0.6)],
+  'deupad_r6_v4bar' => [box('DEUPAD', 0, 0, 1, 1), box('CB', 0, 0, 1, 1), box('ALPAD', 0, 0, 1, 1), box('M4', 0, 0, 1, 1), box('M5', 0, 0, 1, 1), box('V4BAR', 0.3, 0.3, 0.6, 0.6)],
   'esd_area' => [area_box('ESD', RULES['esd_area_min'], 0.5, 0.5)],
   'esd_area_at_limit' => [area_box('ESD', RULES['esd_area_min'], 0.6)],
   'esd_area_nodrc_waived' => [area_box('ESD', RULES['esd_area_min'], 0.5, 0.5), box('NODRC', 0, 0, 0.5, 0.6)],

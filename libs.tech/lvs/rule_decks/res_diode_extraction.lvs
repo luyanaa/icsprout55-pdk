@@ -15,20 +15,52 @@
 #=========================================================================================
 # ICsprout55 LVS resistor / diode extraction
 #
-# re_ppo_sab_2t: poly resistor - POLY + PPO marker, terminals = the CT straps at
-# the resistor ends (two CT regions on the poly).
-#   Rsq ~ 850 ohm/sq (derived, libs.tech/README.md) - schematic resistance
-#   comparison is disabled via max_res() in the main deck.
+# re_ppo_sab_2t uses the released Calibre sheet resistance rsh_rppo=10.252;
+# CT straps form its two terminals.
 #
-# dio_3p3_pp_nw_lp: ESD diode - P+ anode in NW.
-#=========================================================================================
+# Metal- and ALPAD-marked resistors use stack-selected conductor layers and
+# the released model sheet resistances.
+#
+# dio_3p3_pp_nw_lp uses the official DIODE marker (191/12) and TGOX junction
+# selectors; ESD (55/1) is not this diode marker.
 
-extract_devices(resistor('RE_PPO_SAB_2T', 850.0),
-                { 'R' => RES_POLY,
-                  'A' => RES_POLY, 'B' => RES_POLY,
-                  'tA' => CT, 'tB' => CT,
-                  'C' => PSUB })
+# KLayout's resistor extractor expects the resistor path (R) and the
+# terminal/contact layer (C); its tA/tB terminals are written on CTs.
+extract_devices(resistor('RE_PPO_SAB_2T', 10.252),
+                { 'R' => RES_PPO_SAB_2T, 'C' => CTs })
 
+# Source metal-resistor markers are excluded from M*s above, then extracted
+# with the Calibre sheet resistance for the active stack.
+metal_resistor_types = [
+  ['M1', 0.1122, rm1_2t, rm1_3t, M1s],
+  ['M2', 0.0914, rm2_2t, rm2_3t, M2s],
+  ['M3', 0.0914, rm3_2t, rm3_3t, M3s],
+  ['M4', 0.0914, rm4_2t, rm4_3t, M4s]
+]
+if METAL_STACK == "t4"
+  metal_resistor_types += [
+    ['TM1', 0.0239, rtm1_2t, rtm1_3t, T4M1s],
+    ['TM2', 0.0177, rtm2_2t, rtm2_3t, T4M2s]
+  ]
+else
+  metal_resistor_types << ['M5', 0.0914, rm5_2t, rm5_3t, M5s]
+end
+metal_resistor_types.each do |name, sheet_rho, resistor_2t, resistor_3t, conductor|
+  extract_devices(resistor("RE_#{name}_2T", sheet_rho),
+                  { 'R' => resistor_2t, 'C' => conductor })
+  extract_devices(resistor_with_bulk("RE_#{name}_3T", sheet_rho),
+                  { 'R' => resistor_3t, 'C' => conductor, 'W' => PSUB })
+end
+
+# ALPAD/RDL marked resistor segments are not part of APs; their contacts are
+# the remaining APs conductor.  RESCKTLVS selects the 3-terminal variant.
+extract_devices(resistor('RE_ALPA_2T', 0.0151),
+                { 'R' => RDL_R_2T, 'C' => APs })
+extract_devices(resistor_with_bulk('RE_ALPA_3T', 0.0151),
+                { 'R' => RDL_R_3T, 'C' => APs, 'W' => PSUB })
+
+# DIO_3P3_PP_NW_LP uses the DIODE marker and TGOX junction selector; ESD is
+# unrelated.  KLayout's diode terminal outputs are tA/tC.
 extract_devices(diode('DIO_3P3_PP_NW_LP'),
                 { 'P' => DIO_ANODE, 'N' => DIO_CATHODE,
-                  'tP' => CT, 'tN' => NW })
+                  'tA' => CTs, 'tC' => NW })

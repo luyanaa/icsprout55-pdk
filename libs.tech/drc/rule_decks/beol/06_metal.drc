@@ -15,9 +15,9 @@
 #=========================================================================================
 # BEOL 06 - Metals (M1..M5, T4M2)
 #
-# Emits only area and enclosed-hole checks whose source predicates and
-# profile-specific exclusions are represented here. Edge/width and spacing
-# rules with unrepresented Calibre qualifiers are omitted.
+# Area/hole predicates and baseline M1-M5 S_1 thresholds use source values
+# with represented masks. Generic KLayout spacing omits source
+# ABUT/SINGULAR and marker-specific qualifiers; width rules remain omitted.
 #=========================================================================================
 
 if BEOL
@@ -56,10 +56,29 @@ if BEOL
     .not_inside(NODRC).output('metal.tm2.min_hole',
       "T4M2_A_2: T4M2 enclosed area must be at least #{min_hole_area} um^2 [Calibre source]")
 
-  # Omitted active rules: MET1_W_1/W_2/W_3, MET1_S_1/S_2/S_3/S_4/S_5;
-  # M2-M5_W_1a/W_1b/W_2/W_3 and M2-M5_S_1/S_2/S_3/S_4/S_5; T4M2_W_1,
-  # T4M2_S_1/S_2. Their Calibre width, ABUT/SINGULAR, angle, run-length,
-  # array, and marker-specific predicates are not represented exactly here.
+  metal_spacing_rules = [
+    ['M1', M1.not(MET1SLOT), 'm1', true, true],
+    ['M2', M2.not(MET2SLOT), 'm2', true, false],
+    ['M3', M3.not(MET3SLOT), 'm3', false, false],
+    ['M4', M4.not(MET4SLOT), 'm4', false, false],
+    ['M5', M5.not(MET5SLOT), 'm5', false, false]
+  ]
+  metal_spacing_rules.each do |name, layer, key, sramall_waiver, indall_waiver|
+    min_space = rval("#{key}_space")
+    spacing_errors = layer.drc(space < min_space.um)
+    spacing_errors = spacing_errors.not_inside(INDALL) if indall_waiver
+    spacing_errors = spacing_errors.not_inside(SRAMALL) if sramall_waiver
+    spacing_errors.not_inside(NODRC).output("metal.#{key}.spacing",
+      "#{name}_S_1: #{name} spacing must be at least #{min_space} um [Calibre source]")
+  end
+
+  # M1_S_1 and M2-M5_S_1 thresholds use generic KLayout space checks, not the
+  # source ABUT<90/SINGULAR qualifiers. M1_S_1's ABUT<89 branch inside INDALL
+  # is omitted.
+  # Omitted active rules: MET1_W_1/W_2/W_3, MET1_S_2/S_3/S_4/S_5;
+  # M2-M5_W_1a/W_1b/W_2/W_3 and M2-M5_S_2/S_3/S_4/S_5; T4M2_W_1,
+  # T4M2_S_1/S_2. Width, angle, run-length, array, and marker-specific
+  # predicates are not represented exactly here.
   # Density checks are defined in density.drc. Recommended rules are inactive
   # for OPEN_RECOMMENDED_ON=NO.
 end

@@ -1,0 +1,194 @@
+{
+  "status": "PASS",
+  "klayout_kind": "nix",
+  "klayout_executable": "../librelane",
+  "official_oracle": "UNAVAILABLE",
+  "cross_tool_equivalence": "BLOCKED",
+  "fixture_generator_sha256": "0653e4192f3e43e5e55af3d3bb7b628913c82ca4683003b6b3c9f700d6812006",
+  "lvs_deck_sha256": "f888db9c8dae9c1ec694f46e4ef884c130afd163200eca6fb981839fee480c6c",
+  "cases": [
+    {
+      "fixture": "core_svt_n",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "1d3af87c6d4740fad8569758f69c0d0184bdad057a44393673be796803757402",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/core_svt_n/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.\n\nwaiting for another Nix process to finish fetching input 'https://github.com/nixos/nixpkgs/archive/b3aad468604d3e488d627c0b43984eb60e75e782.tar.gz'...",
+      "models": {
+        "NM1P2_SVT_LP": 1
+      }
+    },
+    {
+      "fixture": "core_lvt_n_ctbar",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "6ed5f9b8f0d92ed49b39904f969fcf1851fb5d37efcd9c3595465aeaf3a87c82",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/core_lvt_n_ctbar/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "NM1P2_LVT_LP": 1
+      }
+    },
+    {
+      "fixture": "core_hvt_p",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "078559e95a3fb34e9832661e24cb00733ae57b06e33e40e827a5460edeb054ad",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/core_hvt_p/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "PM1P2_HVT_LP": 1
+      }
+    },
+    {
+      "fixture": "io_tgox_n",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "03516d43b94808fb880b599d2340ba2eb8b4815b7c949b1069329a598f917a5b",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/io_tgox_n/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "NM3P3_LP": 1
+      }
+    },
+    {
+      "fixture": "io_tgox_p",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "76677b5ea18a0fb9f8792863d0799b526236d9ae50e23fbb2aa715d4f83d24a3",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/io_tgox_p/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "PM3P3_LP": 1
+      }
+    },
+    {
+      "fixture": "dgo_only_n",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "28ee0b2bbb33cbec0510e16558a1cbb94f2e57953eb2ba0b19fe4eaa1a45dc6c",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/dgo_only_n/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {}
+    },
+    {
+      "fixture": "tgox_dgox_n",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "d12a7ec599b713d6987d93b102ef2045119b164e001c5e8c83c8897fe341aaa0",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/tgox_dgox_n/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {}
+    },
+    {
+      "fixture": "tgox_esdioe_n",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "c2cd4c4bfc3d2d78364ac7a9000aac878f4607bf7eaffc7093c0fb2837fac197",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/tgox_esdioe_n/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "NM3P3_LP": 1
+      }
+    },
+    {
+      "fixture": "poly_resistor",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "c2c2a86a1ec38d107f05425becabdb3f8b997e32c100c0ab75fcabdbb0fb1d37",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/poly_resistor/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=2 ports=2 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "RE_PPO_SAB_2T": 1
+      },
+      "ports": 2,
+      "resistor_lines": [
+        "R$1 A B 51.26 RE_PPO_SAB_2T"
+      ]
+    },
+    {
+      "fixture": "metal_resistor",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "ce097c59b68e9f37eb099f370c11a0ee46239e60699bd4c2cf634c4ba73e49db",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/metal_resistor/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=2 ports=2 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "RE_M1_2T": 1
+      },
+      "ports": 2,
+      "resistor_lines": [
+        "R$1 A B 0.561 RE_M1_2T"
+      ]
+    },
+    {
+      "fixture": "diode_marker",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "ef82ef18a414001ac6ff171ff4ba1e82367d895e9e0dbc7698f4eb1e23f90a36",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/diode_marker/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "DIO_3P3_PP_NW_LP": 1
+      }
+    },
+    {
+      "fixture": "esd_marker_only",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "813202a66bc49c8d66721cb539da39e05b69e03f19943790d87023441ea64ec9",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/esd_marker_only/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {}
+    },
+    {
+      "fixture": "pad_m1_m5_bar",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "fd97bbedd5cf3e86badc5b8b5e44b65585f8e9de3064a37ad3bd1fa8644d84ee",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/pad_m1_m5_bar/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=3 ports=1 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "NM1P2_SVT_LP": 1
+      },
+      "ports": 1,
+      "subckt": ".SUBCKT TOP PAD"
+    },
+    {
+      "fixture": "pad_t4_bar",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "2ccae87a53391855d706aa984eca877cb2bf585725a34ed60b19cd56c510b01a",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/pad_t4_bar/extracted.cir",
+      "output": "Metal stack: t4 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=4 ports=1 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "NM1P2_SVT_LP": 1
+      },
+      "ports": 1,
+      "subckt": ".SUBCKT TOP PAD"
+    },
+    {
+      "fixture": "bulk_alias",
+      "status": "PASS",
+      "returncode": 0,
+      "gds_sha256": "1d3af87c6d4740fad8569758f69c0d0184bdad057a44393673be796803757402",
+      "netlist": "/Users/yanlu/Documents/icsprout55-pdk/tests/regression/out/lvs_fixtures/cases/bulk_alias/extracted.cir",
+      "output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=gnd power=vdd\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nNET_ONLY: extraction complete.",
+      "models": {
+        "NM1P2_SVT_LP": 1
+      }
+    }
+  ],
+  "verdict_smoke": {
+    "fixture": "compare_verdicts",
+    "status": "PASS",
+    "matching_returncode": 0,
+    "mismatch_returncode": 1,
+    "matching_output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nICS55_LVS_COMPARE=PASS\nCONGRATULATIONS! Netlists match.",
+    "mismatch_output": "Metal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nICS55_LVS_COMPARE=FAIL\nERROR: netlists do not match.",
+    "output": "MATCH:\nMetal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nICS55_LVS_COMPARE=PASS\nCONGRATULATIONS! Netlists match.\nMISMATCH:\nMetal stack: m1_m5 (requested auto)\nBulk aliases: ground=VSS power=VDD\nPORT DEPTH 0: direct_texts=0 ports=0 previous_pins=0\nICS55_LVS_COMPARE=FAIL\nERROR: netlists do not match.",
+    "issues": []
+  },
+  "fixture_failed": 0,
+  "failed": 0
+}

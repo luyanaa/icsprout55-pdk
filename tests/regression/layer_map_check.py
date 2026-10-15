@@ -81,6 +81,13 @@ CROSSWALK: dict[str, tuple[str, str]] = {
     "ALPADRES": ("ALPAD", "res"),
     "MET5RES": ("MET5", "res"),
     "T4M2RES": ("T4M2", "res"),
+    "ACTRES": ("ACT", "res"),
+    "ALPADLBL": ("ALPAD", "text"), "RDLLBL": ("RDL", "text"),
+    "MET1RES": ("MET1", "res"), "MET2RES": ("MET2", "res"),
+    "MET3RES": ("MET3", "res"), "MET4RES": ("MET4", "res"),
+    "T4M1LBL": ("T4M1", "text"), "T4M1RES": ("T4M1", "res"),
+    "T4M1DUM": ("T4M1", "dm"), "T4M1DUMB": ("T4M1", "dmblk"),
+    "T4M1SLOT": ("T4M1", "slot"), "T4V1BAR": ("T4V1", "bar"),
 }
 
 for layer in ("ACT", "POLY"):

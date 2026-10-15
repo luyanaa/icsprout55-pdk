@@ -76,6 +76,12 @@ Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
 - `run_alignment.py` — invokes the existing LVS/DRC runners, hashes observed
   inputs/decks/outputs, normalizes MOS graphs, and emits `PASS | FAIL | BLOCKED |
   UNAVAILABLE` records. It recalculates the static DRC crosswalk counts.
+  An explicit compare mismatch is `FAIL`; runner/extraction errors are
+  `BLOCKED`, and failed runs never consume extracted netlists.
+- `nix_shell.py` — supplies LibreLane’s locked nixpkgs revision to `nix-shell`;
+  explicit `--librelane` uses this shell before any host KLayout binary.
+  Alignment and DRC harnesses expand `~` before shell selection, so quoted
+  `--librelane` paths still select the pinned environment.
 - `normalize_lvs.py` — canonical MOS-graph normalizer for extracted netlists
   and CDL-derived expectations (model names case-folded, named-net aliasing,
   units, optional geometry presence vs zero).
@@ -95,26 +101,40 @@ Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
   `make` download) are SKIPPED.  Plain `python3`.
 - `drc_fixture_check.py` + `make_fixtures.rb` — exact-category KLayout
   source-behavior fixtures for FEOL/BEOL, dummy/slot, special, density, and
-  MOM profiles. They cover strict area/hole boundaries, strict and near-threshold
-  density boundaries, NODRC/SRAMALL waivers, source via-bar/rotation behavior,
-  density backup windows, small-layout padding and dummy halos, MOM stack
-  labels, and pad/special marker relations. Reports record profile/version and
-  input hashes. This is not Calibre differential evidence. Missing KLayout is
-  `BLOCKED` (exit 2), not a passing check.
-- `out/` — generated outputs.
+  MOM profiles. Added width/spacing and enclosure checks include strict
+  threshold pairs for POLY width/space, CT active enclosure, M1 spacing,
+  ordinary via spacing/upper enclosure, and T4V2 spacing/lower/upper enclosure
+  plus datatype-7 bar width.
+  Existing cases cover bar-via source unions, metal-slot spacing masks,
+  strict area/hole and density boundaries, marker waivers, backup windows,
+  dummy halos, MOM labels, and special-marker relations. Generic
+  space/enclosure operators do not reproduce every Calibre ABUT/SINGULAR or
+  directional GOOD qualifier; this is not a Calibre differential. Missing
+  KLayout is `BLOCKED` (exit 2).
+  cases assert exact MOS/resistor/diode class counts, distinct resistor
+  terminals, direct top-level ports, stack selection, and schematic-derived
+  bulk aliases. A matching extracted/reference pair and an intentionally wrong
+  schematic verify that the LVS wrapper returns 0 and nonzero, respectively.
+  These validate local extraction/comparison only; Calibre equivalence stays
+  `BLOCKED`.
+- `out/drc_fixtures/` and `out/lvs_fixtures/` — default fixture reports and
+  generated inputs. `drc_fixture_check.py` writes its report to
+  `out/drc_fixtures/drc_fixture_check.json`.
 
-Frozen-input policy: `frozen_hashes` pins both LVS and DRC runners/rule
-modules, the official Calibre DRC sources, DRC layer maps, selected DRC profile,
-crosswalk, and fixture inputs. Any missing or changed hash fails the run.
-Regenerate deliberately after intentional changes with `run_alignment.py --update-hashes`.
+Frozen-input policy: `frozen_hashes` pins LVS/DRC runners and rule modules,
+fixture harnesses and generators, the locked Nix-shell helper, official
+Calibre DRC sources, layer maps, the selected DRC profile, and crosswalk data.
+Any missing or changed hash fails the run. Regenerate deliberately after
+intentional changes with `run_alignment.py --update-hashes`.
 
 ## Usage
 
 ```sh
-nix-shell ~/Documents/librelane --run 'python3 tests/regression/run_alignment.py --cells INVX1H7H,INVX3H7H,INVX4H7H'
+python3 tests/regression/run_alignment.py --librelane ../librelane --cells INVX1H7H,INVX3H7H,INVX4H7H
 python3 tests/regression/layer_map_check.py
 python3 tests/regression/lef_liberty_check.py
-python3 tests/regression/drc_fixture_check.py            # klayout via nix-shell
+python3 tests/regression/drc_fixture_check.py --librelane ../librelane
+python3 tests/regression/lvs_fixture_check.py --librelane ../librelane
 ```
 
 See `run_alignment.py --help` for options (`--drc`, `--klayout`, `--manifest`,
