@@ -30,38 +30,38 @@
 extract_devices(mos4('NM1P2_SVT_LP'),
                 { 'SD' => N_SD, 'G' => NGATE_SVT,
                   'tS' => N_SD, 'tD' => N_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => NMOS_BULK_ANNOTATION })
 extract_devices(mos4('NM1P2_LVT_LP'),
                 { 'SD' => N_SD, 'G' => NGATE_LVT,
                   'tS' => N_SD, 'tD' => N_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => NMOS_BULK_ANNOTATION })
 extract_devices(mos4('NM1P2_HVT_LP'),
                 { 'SD' => N_SD, 'G' => NGATE_HVT,
                   'tS' => N_SD, 'tD' => N_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => NMOS_BULK_ANNOTATION })
 
 # --- core PMOS --------------------------------------------------------------------
 
 extract_devices(mos4('PM1P2_SVT_LP'),
                 { 'SD' => P_SD, 'G' => PGATE_SVT,
                   'tS' => P_SD, 'tD' => P_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => PMOS_BULK_ANNOTATION })
 extract_devices(mos4('PM1P2_LVT_LP'),
                 { 'SD' => P_SD, 'G' => PGATE_LVT,
                   'tS' => P_SD, 'tD' => P_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => PMOS_BULK_ANNOTATION })
 extract_devices(mos4('PM1P2_HVT_LP'),
                 { 'SD' => P_SD, 'G' => PGATE_HVT,
                   'tS' => P_SD, 'tD' => P_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => PMOS_BULK_ANNOTATION })
 
 # --- IO MOS (3.3V) ----------------------------------------------------------------
 
 extract_devices(mos4('NM3P3_LP'),
                 { 'SD' => NIO_SD, 'G' => NIOGATE_REG,
                   'tS' => NIO_SD, 'tD' => NIO_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => NMOS_BULK_ANNOTATION })
 extract_devices(mos4('PM3P3_LP'),
                 { 'SD' => PIO_SD, 'G' => PIOGATE_REG,
                   'tS' => PIO_SD, 'tD' => PIO_SD, 'tG' => POLY_CON,
-                  'W' => MOS_BULK_ANNOTATION })
+                  'W' => PMOS_BULK_ANNOTATION })

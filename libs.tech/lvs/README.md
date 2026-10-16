@@ -41,11 +41,13 @@ and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
   pins (falling back to VSS/VDD). `--no-well-ties` instead uses CT-qualified
   physical taps and preserves isolated well islands; use this for macros with
   physical body ties.
-- The released CDL is preprocessed before reading: duplicate leaf subckts
-  are dropped, `X <nets> / <subckt>` calls are converted to plain SPICE, and
-  symbolic parameters are declared so instance values propagate on flatten.
-- The schematic is flattened before comparison (the CDL is hierarchical; the
-  released standard-cell GDS is flat).
+- The released CDL is preprocessed before reading: repeated definitions are
+  deduplicated, `X <nets> / <subckt>` calls are converted to plain SPICE, and
+  symbolic parameters are declared for instances.
+- The default comparison flattens the schematic (the released standard-cell
+  GDS is flat). Opt-in `strict_hierarchy=true` keeps the schematic hierarchical
+  and requires exact one-to-one circuit-name and named-boundary-pin sets across
+  the extracted GDS and reference netlists.
 
 ## Usage
 
@@ -61,6 +63,11 @@ python3 run_lvs.py --layout macro.gds --top MACRO --netlist macro.cdl \
 klayout -b -r ics55.lvs -rd input=<lib>.gds -rd top=ADDFX1H7R \
     -rd schematic=<lib>.cdl -rd report=addf.lvsdb \
     -rd target_netlist=addf_extracted.cir -rd metal_stack=auto -z
+
+# Strict hierarchy comparison (also requires strict_topology=true and deep extraction)
+klayout -b -r ics55.lvs -rd input=macro.gds -rd top=MACRO \
+    -rd schematic=macro.cdl -rd no_well_ties=true \
+    -rd strict_topology=true -rd strict_hierarchy=true -z
 ```
 
 `run_lvs.py` resolves relative paths from the caller's working directory,
@@ -76,15 +83,53 @@ Compare is topology-based. MOS L and non-geometric parameters compare exactly;
 MOS W uses the official 10% relative tolerance (`mos_err 0.1`). W deviations
 over 5% warn; deviations over 10% fail. KLayout uppercases parsed SPICE root
 names, so the deck normalizes only a case-equivalent root spelling; it does
-not rewrite net, pin, or device labels. Built-in series/parallel reduction is
-opt-in via `--combine-devices`; the default does not reproduce Calibre's
-`REDUCE ... YES` behavior.
+not rewrite net, pin, or device labels. Default simplification includes
+KLayout's built-in electrical reductions. `--combine-devices` requests an
+additional explicit combine stage; it never authorizes joining distinct nets.
 
 `max_res(1e9)` / `min_caps(1e-18)` filter high-value resistors and tiny caps.
 The compare search is bounded at `max_depth(8)` and
 `max_branch_complexity(1024)`. A smaller 50-unit branch limit reported
 `needs at least 992` for the 2RW macro, so limit-exhausted reports are not proof
 of a topology mismatch.
+
+The OpenRAM runner requests `-rd strict_topology=true` for generated macros.
+This mode disables simplification/purge that can remove unused declared pins,
+combines only electrically parallel MOS, uses 1e-9 um absolute and zero relative
+W/L tolerance, and requires identical case-insensitive declared top-pin names.
+Every shared boundary net is a mandatory native comparison correspondence;
+no physical nets are joined. The native `LayoutVsSchematic` database records
+the comparison, and the extracted SPICE is saved before the search begins.
+Default released-standard-cell comparison retains the 10% width convention
+above. Flat strict comparison remains the default and is selected with
+`strict_hierarchy=false` (or by omitting that switch).
+
+`strict_hierarchy=true` is an opt-in no-flatten path, not a name-guessing
+heuristic. It requires deep layout extraction, an exact case-insensitive
+one-to-one set of all extracted/reference circuit names, and an exact set of
+named pins on every paired circuit. Every such pin pair is passed as a
+mandatory `same_nets(..., true)` correspondence; duplicate/unnamed circuits
+or pins, divergent duplicate CDL definitions, missing circuits, and mismatched
+boundaries fail closed as an error or `INCONCLUSIVE`.
+No hierarchy comparison is attempted for these inputs.
+
+The normal `align` step is deliberately skipped: KLayout documents that it
+flattens circuits when it cannot find a correspondence. The explicit mapping
+is instead supplied to `NetlistComparer` without that flattening step.
+If circuit names and pin boundaries match, KLayout's
+native comparison checks the full paired hierarchy and devices with the same
+strict MOS model/W/L settings as flat mode. No circuit renaming, pin deletion,
+power aliasing, net joining, or tolerance change is performed. Different but
+functionally equivalent partitions are intentionally unsupported by this
+mode; use the strict flat fallback instead. A timeout remains inconclusive,
+and no full-macro runtime improvement is claimed until a full run completes.
+
+`openram_strict_capability.json` is the source-controlled OpenRAM macro
+capability contract. It pins the strict comparison settings, adjacent PDK
+revision, KLayout version, and the frozen SHA-256 manifest for this deck and
+its included rule modules. The OpenRAM runner validates this file before a
+strict macro LVS launch; generic standard-cell LVS does not consume it.
+
 
 ## Known limitations
 
@@ -99,18 +144,18 @@ of a topology mismatch.
 - The official Calibre LVS source is released under `pv/LVS`, but this
   KLayout translation has no same-input Calibre differential in this
   environment. It is not foundry signoff.
-- The released std cells draw multi-finger transistors (e.g. W=300n = 2x150n
-  fingers) where some fingers' outer source/drain island is floating (a
-  diffusion island without any contact), and large-drive cells (e.g.
-  AND2X8H7R) split the series node of a gate chain across several floating
-  islands.  The CDL lists one device per gate signal with the summed width,
-  so `rule_decks/combine_fingers.lvs` combines the extracted fingers into one
-  device and merges the split series-node parts.  The combining is
-  CDL-guided: only groups whose summed width matches a single reference
-  device of the same class (same gate net for labeled nets, width-based for
-  internal nodes) are combined, so cells that legitimately split a signal
-  into several devices (e.g. OAI32X3H7L's B1 = 190n + 380n) are left
-  untouched.
+- MOS finger reduction uses KLayout's physical-parallel rule: identical
+  gate, bulk, channel length and unordered source/drain net pair, with summed
+  width. Uncontacted diffusion islands remain separate even if the reference
+  CDL has a single device with their total width.
+- The removed CDL-guided reduction joined distinct S/D nets. Its direct
+  top-cell ACT lookup also returned no component for hierarchical macros,
+  grouping unrelated devices together. On an OpenRAM 2RW macro this produced
+  a synthetic `gnd|vdd` net; the same frozen GDS/reference passed after
+  replacing that pass with physical-parallel reduction. Never restore
+  reference-width-based net joining to make an LVS result pass.
+- NMOS and PMOS body annotations use separate virtual layers connected only
+  to PSUB and NW respectively; an annotation layer must not bridge the two.
 - Foundry data inconsistencies (drawn widths deviate from the CDL; the deck
   reports the geometry truthfully, the compare passes the 5-10% band with a
   WARNING and fails beyond the official 10%):

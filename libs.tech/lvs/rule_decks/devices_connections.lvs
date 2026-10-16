@@ -97,10 +97,10 @@ end
 connect(APs, ALPADLBL)
 connect(APs, RDLLBL)
 
-# Device bulk annotations are separate from physical body regions, avoiding
-# direct soft-connects on a MOS device terminal.
-connect(MOS_BULK_ANNOTATION, PSUB)
-connect(MOS_BULK_ANNOTATION, NW)
+# Device bulk annotations remain polarity-specific; sharing one virtual layer
+# between PSUB and NW would electrically short the physical body networks.
+connect(NMOS_BULK_ANNOTATION, PSUB)
+connect(PMOS_BULK_ANNOTATION, NW)
 
 if WELL_TIES
   # Standard-cell GDS has no local taps; the deck selects aliases from top CDL pins.

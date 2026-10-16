@@ -1,0 +1,18 @@
+{
+  "schema": "ics55-openram-strict-lvs-capability/1",
+  "profile": "openram-macro",
+  "pdk_revision": "9fe82cf0e28269df9c6b50806ade6b5cd3845c4c",
+  "klayout_version": "0.30.7",
+  "strict_topology": true,
+  "strict_hierarchy": "optional",
+  "no_well_ties": true,
+  "comparison": {
+    "mos_w_l_absolute_um": 1e-9,
+    "mos_w_l_relative": 0.0,
+    "declared_top_pins": "case-insensitive-exact",
+    "device_combination": "physical-parallel-only",
+    "net_joining": false
+  },
+  "hash_manifest": "../../tests/regression/klayout_alignment_manifest.json",
+  "hash_scope": "frozen_hashes.lvs_rule_decks"
+}

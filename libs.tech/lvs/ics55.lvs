@@ -35,7 +35,8 @@
 # Usage:
 #   klayout -b -r ics55.lvs -rd input=<layout.gds> [-rd top=<topcell>] \
 #       -rd schematic=<cell.cdl> [-rd target_netlist=<extracted.cir>] \
-#       [-rd report=<out.lvsdb>] [-rd combine_devices=true] [-z]
+#       [-rd report=<out.lvsdb>] [-rd combine_devices=true] \
+#       [-rd strict_topology=true [-rd strict_hierarchy=true]] [-z]
 #
 # Reference netlist lookup: if -rd schematic is omitted, the deck looks for
 # <topcell>.cdl / .spice / .cir next to the input layout (IHP convention).
@@ -72,9 +73,23 @@ end
 SPICE_WITH_NET_NAMES = !bool_check?($no_net_names)
 SPICE_WITH_COMMENTS = bool_check?($spice_comments)
 NET_ONLY = bool_check?($net_only)
-COMBINE_DEVICES = bool_check?($combine_devices)
-PURGE = bool_check?($purge)
-SIMPLIFY = !bool_check?($no_simplify)
+STRICT_TOPOLOGY = bool_check?($strict_topology)
+# Hierarchy is opt-in and valid only with the strict comparison contract.
+STRICT_HIERARCHY = bool_check?($strict_hierarchy)
+if STRICT_HIERARCHY && !STRICT_TOPOLOGY
+  raise "strict_hierarchy requires strict_topology=true"
+end
+if STRICT_HIERARCHY && NET_ONLY
+  raise "strict_hierarchy cannot be used with net_only=true"
+end
+if STRICT_HIERARCHY && $run_mode.to_s == 'flat'
+  raise "strict_hierarchy requires deep physical extraction"
+end
+# Generated macros require the declared boundary, including unused pins.
+# Physical-parallel combination is safe; simplify can remove that boundary.
+COMBINE_DEVICES = STRICT_TOPOLOGY || bool_check?($combine_devices)
+PURGE = !STRICT_TOPOLOGY && bool_check?($purge)
+SIMPLIFY = !STRICT_TOPOLOGY && !bool_check?($no_simplify)
 WELL_TIES = !bool_check?($no_well_ties)
 
 case $run_mode
@@ -98,6 +113,31 @@ require 'tmpdir'
 # parameters which the reader cannot parse; they are replaced with a numeric
 # dummy (real values come from the instantiating cell, so flattening is
 # unaffected).
+def validate_spice_circuit_definitions(path)
+  definitions = {}
+  current_name = nil
+  current_lines = nil
+  File.foreach(path) do |line|
+    if line =~ /^\s*\.SUBCKT\s+(\S+)/i
+      raise "ambiguous nested .SUBCKT definition in #{path}" if current_name
+      current_name = $1.downcase
+      current_lines = [line]
+    elsif current_name
+      current_lines << line
+      if line =~ /^\s*\.ENDS\b/i
+        definition = current_lines.join
+        if definitions.key?(current_name) && definitions[current_name] != definition
+          raise "ambiguous repeated .SUBCKT #{current_name.inspect} in #{path}"
+        end
+        definitions[current_name] = definition
+        current_name = nil
+        current_lines = nil
+      end
+    end
+  end
+  raise "unterminated .SUBCKT #{current_name.inspect} in #{path}" if current_name
+end
+
 def dedup_spice(path)
   seen = {}
   out = []
@@ -150,6 +190,7 @@ schematic_source = $schematic
 unless NET_ONLY
   if $schematic
     schematic_source = $schematic
+    validate_spice_circuit_definitions(schematic_source) if STRICT_HIERARCHY
     schematic(dedup_spice(schematic_source))
   else
     exts = %w[cdl spice sp cir]
@@ -159,6 +200,7 @@ unless NET_ONLY
       error("Netlist not found, tried: #{candidates}")
     else
       schematic_source = netlists[0]
+      validate_spice_circuit_definitions(schematic_source) if STRICT_HIERARCHY
       schematic(dedup_spice(schematic_source))
     end
   end
@@ -269,9 +311,79 @@ eval(lvs_assembled, binding, 'ics55_assembled_lvs')
 # Netlist comparison
 #-----------------------------------------------------------------------------------------
 
-# The std-cell CDL is hierarchical (shared leaf subckts like INV), while the
-# library GDS is flat; flatten the schematic so flat-vs-flat comparison works.
-schematic.flatten unless NET_ONLY
+# A flat, circuit-name-equal mapping is required for hierarchy mode; the default
+# strict mode keeps the historical schematic flattening path.
+
+# Establish a one-to-one correspondence for every extracted/reference circuit
+# and every named circuit boundary. Ambiguity is an inconclusive strict failure;
+# the hierarchy mode never guesses module equivalence or drops a boundary.
+def strict_circuit_index(netlist, side)
+  index = {}
+  netlist.each_circuit do |circuit|
+    key = circuit.name.to_s.downcase
+    if key.empty? || index.key?(key)
+      return [nil, "ambiguous #{side} circuit name #{circuit.name.inspect}"]
+    end
+    index[key] = circuit
+  end
+  [index, nil]
+end
+
+def strict_pin_index(circuit, side)
+  index = {}
+  circuit.each_pin do |pin|
+    key = pin.name.to_s.downcase
+    if key.empty? || index.key?(key)
+      return [nil, "ambiguous #{side} pin name #{pin.name.inspect} in #{circuit.name}"]
+    end
+    index[key] = pin
+  end
+  [index, nil]
+end
+
+
+def strict_hierarchy_pairs(layout_netlist, reference_netlist)
+  layout_index, error = strict_circuit_index(layout_netlist, "layout")
+  return [nil, error] if error
+  reference_index, error = strict_circuit_index(reference_netlist, "reference")
+  return [nil, error] if error
+
+  layout_names = layout_index.keys.sort
+  reference_names = reference_index.keys.sort
+  unless layout_names == reference_names
+    layout_only = layout_names - reference_names
+    reference_only = reference_names - layout_names
+    return [nil, "circuit sets differ (layout-only=#{layout_only.inspect}, reference-only=#{reference_only.inspect})"]
+  end
+  pairs = []
+  layout_names.each do |name|
+    layout_circuit = layout_index[name]
+    reference_circuit = reference_index[name]
+    layout_pins, error = strict_pin_index(layout_circuit, "layout")
+    return [nil, error] if error
+    reference_pins, error = strict_pin_index(reference_circuit, "reference")
+    return [nil, error] if error
+    unless layout_pins.keys.sort == reference_pins.keys.sort
+      return [nil, "boundary pins differ for #{name} (layout=#{layout_pins.keys.sort.inspect}, reference=#{reference_pins.keys.sort.inspect})"]
+    end
+
+    pin_pairs = []
+    layout_pins.keys.sort.each do |pin_name|
+      layout_net = layout_circuit.net_for_pin(layout_pins[pin_name].id)
+      reference_net = reference_circuit.net_for_pin(reference_pins[pin_name].id)
+      unless layout_net && reference_net
+        return [nil, "unconnected boundary pin #{pin_name} in #{name}"]
+      end
+      pin_pairs << [layout_net, reference_net]
+    end
+    pairs << [layout_circuit, reference_circuit, pin_pairs]
+  end
+  [pairs, nil]
+end
+
+# The schematic is flattened in the default strict mode. The opt-in hierarchy
+# path leaves it intact and is allowed only after exact module/boundary mapping.
+schematic.flatten unless NET_ONLY || STRICT_HIERARCHY
 
 # The released std cells have no in-cell well/substrate taps.  Tie physical
 # bulk regions to the selected top-level rail names; choose those from the top
@@ -292,16 +404,16 @@ if WELL_TIES
 end
 
 # multi-finger combine pass (rule_decks/combine_fingers.lvs)
-align unless NET_ONLY
+align unless NET_ONLY || STRICT_TOPOLOGY
 
 # The SPICE reader canonicalizes the reference root name to upper case, while
 # the GDS primary cell retains its spelling. Normalize only a case-equivalent
 # root identifier; it does not rewrite signal, pin, or device labels.
 unless NET_ONLY
-  extracted_top = netlist.top_circuit
-  reference_top = schematic.top_circuit
-  if extracted_top && reference_top &&
-     extracted_top.name.casecmp(reference_top.name).zero?
+  root_name = src.cell_name.to_s
+  extracted_top = netlist.each_circuit.find { |circuit| circuit.name.to_s.casecmp(root_name).zero? }
+  reference_top = schematic.each_circuit.find { |circuit| circuit.name.to_s.casecmp(root_name).zero? }
+  if extracted_top && reference_top
     reference_top.name = extracted_top.name
   end
 end
@@ -356,7 +468,7 @@ puts "PORT DEPTH 0: direct_texts=#{direct_text_count} ports=#{ports.size} previo
 netlist.simplify if SIMPLIFY
 netlist.combine_devices if COMBINE_DEVICES
 netlist.purge if PURGE
-if NET_ONLY && $target_netlist
+if $target_netlist && (NET_ONLY || STRICT_TOPOLOGY)
   spice_writer = RBA::NetlistSpiceWriter.new
   spice_writer.use_net_names = true
   spice_writer.with_comments = true
@@ -384,8 +496,10 @@ max_branch_complexity(1024)
   begin
     dc = netlist.device_class_by_name(cls)
     next unless dc
-    eq = RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_L, 0.0, 0.0)
-    eq += RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_W, 0.0, 0.10)
+    absolute_tolerance = STRICT_TOPOLOGY ? 1e-9 : 0.0
+    width_relative_tolerance = STRICT_TOPOLOGY ? 0.0 : 0.10
+    eq = RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_L, absolute_tolerance, 0.0)
+    eq += RBA::EqualDeviceParameters.new(RBA::DeviceClassMOS4Transistor::PARAM_W, absolute_tolerance, width_relative_tolerance)
     dc.equal_parameters = eq
     sc = schematic.device_class_by_name(cls) unless NET_ONLY
     sc.equal_parameters = eq if sc
@@ -432,9 +546,76 @@ def audit_w(lnet, rnet, warn_thr = 0.05, tol = 0.10)
   end
 end
 
+# Use mandatory boundary-net constraints, not heuristic net-name matching.
+# This also removes top-port permutations from large generated-array searches.
+if STRICT_TOPOLOGY && !NET_ONLY
+  layout_top = top_circuit
+  root_name = src.cell_name.to_s
+  reference_top = schematic.each_circuit.find { |circuit| circuit.name.to_s.casecmp(root_name).zero? }
+  strict_hierarchy_inconclusive = false
+  if reference_top.nil?
+    puts "STRICT_HIERARCHY=INCONCLUSIVE: reference root circuit #{root_name.inspect} is missing"
+    strict_hierarchy_inconclusive = true
+    strict_match = false
+  end
+  layout_pins = layout_top.each_pin.to_a
+  reference_pins = reference_top ? reference_top.each_pin.to_a : []
+  layout_by_name = layout_pins.to_h { |pin| [pin.name.downcase, pin] }
+  reference_by_name = reference_pins.to_h { |pin| [pin.name.downcase, pin] }
+  strict_ports_match = layout_by_name.size == layout_pins.size &&
+                       reference_by_name.size == reference_pins.size &&
+                       layout_by_name.keys.sort == reference_by_name.keys.sort
+  puts "STRICT_TOP_PORTS: layout=#{layout_by_name.keys.sort.inspect} reference=#{reference_by_name.keys.sort.inspect}"
+  comparer = RBA::NetlistComparer.new
+  comparer.max_depth = 8
+  comparer.max_branch_complexity = 1024
+  comparer.max_resistance = 1e9
+  comparer.min_capacitance = 1e-18
+  comparer.dont_consider_net_names = true
+  comparer.with_log = true
+  l2n_data.reference = schematic
+
+  unless strict_hierarchy_inconclusive
+    if STRICT_HIERARCHY
+      circuit_pairs, hierarchy_error = strict_hierarchy_pairs(netlist, schematic)
+      if hierarchy_error
+        puts "STRICT_HIERARCHY=INCONCLUSIVE: #{hierarchy_error}"
+        strict_hierarchy_inconclusive = true
+        strict_match = false
+      else
+        circuit_pairs.each do |layout_circuit, reference_circuit, pin_pairs|
+          comparer.same_circuits(layout_circuit, reference_circuit)
+          pin_pairs.each do |layout_net, reference_net|
+            comparer.same_nets(layout_net, reference_net, true)
+          end
+        end
+        puts "STRICT_HIERARCHY: circuits=#{circuit_pairs.size}, exact named module mapping and all boundary nets constrained"
+        native_match = l2n_data.compare(comparer)
+        strict_match = native_match && strict_ports_match
+      end
+    else
+      comparer.same_circuits(layout_top, reference_top)
+      (layout_by_name.keys & reference_by_name.keys).each do |name|
+        layout_net = layout_top.net_for_pin(layout_by_name[name].id)
+        reference_net = reference_top.net_for_pin(reference_by_name[name].id)
+        if layout_net && reference_net
+          comparer.same_nets(layout_net, reference_net, true)
+        elsif layout_net || reference_net
+          strict_ports_match = false
+        end
+      end
+      native_match = l2n_data.compare(comparer)
+      strict_match = native_match && strict_ports_match
+    end
+  end
+end
+
 if NET_ONLY
   puts "NET_ONLY: extraction complete."
-elsif compare
+elsif STRICT_HIERARCHY && strict_hierarchy_inconclusive
+  puts "ICS55_LVS_COMPARE=INCONCLUSIVE"
+  puts "ERROR: strict hierarchy correspondence was not established."
+elsif (STRICT_TOPOLOGY ? strict_match : compare)
   puts "ICS55_LVS_COMPARE=PASS"
   puts "CONGRATULATIONS! Netlists match."
   audit_w(netlist, schematic)

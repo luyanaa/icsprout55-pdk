@@ -25,6 +25,7 @@ SUBSTRATE_EXTENT = if defined?(src) && src
                      ACT.extents(0.1)
                    end
 PSUB = SUBSTRATE_EXTENT.not(NW)
-# Keep each MOS body annotation separate from physical body layers until the
-# explicit tap/global-tie rules below connect it.
-MOS_BULK_ANNOTATION = make_layer
+# Keep each MOS body annotation separate by polarity.  A single virtual layer
+# connected to both physical body regions bridges p-substrate and n-well.
+NMOS_BULK_ANNOTATION = make_layer
+PMOS_BULK_ANNOTATION = make_layer
