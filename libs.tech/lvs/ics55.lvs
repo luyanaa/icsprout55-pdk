@@ -92,7 +92,13 @@ PURGE = !STRICT_TOPOLOGY && bool_check?($purge)
 SIMPLIFY = !STRICT_TOPOLOGY && !bool_check?($no_simplify)
 WELL_TIES = !bool_check?($no_well_ties)
 
-case $run_mode
+# Strict-flat comparison must flatten physical extraction as well as source.
+# Keep explicit modes and extraction-only/generic/hierarchical defaults intact.
+run_mode = $run_mode
+if run_mode.to_s.empty? && STRICT_TOPOLOGY && !STRICT_HIERARCHY && !NET_ONLY
+  run_mode = 'flat'
+end
+case run_mode
 when 'flat'
   flat
 else

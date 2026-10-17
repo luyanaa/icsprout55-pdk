@@ -52,6 +52,7 @@ FIXTURES: dict[str, dict[str, Any]] = {
     "pad_m1_m5_bar": {"models": {"NM1P2_SVT_LP": 1}, "stack": "m1_m5", "ports": 1, "port_name": "PAD"},
     "pad_t4_bar": {"models": {"NM1P2_SVT_LP": 1}, "stack": "t4", "ports": 1, "port_name": "PAD"},
     "bulk_alias": {"models": {"NM1P2_SVT_LP": 1}, "bulk_aliases": "ground=gnd power=vdd"},
+    "strict_flat_parent": {"models": {"NM1P2_SVT_LP": 1}, "ports": 3},
 }
 
 
@@ -296,6 +297,54 @@ def run_compare_verdict_smoke(
     }
 
 
+def run_strict_flat_mode_smoke(kind: str, exe: str, gds: Path, out: Path) -> dict[str, Any]:
+    """Strict default must compare a child layout against the flat source."""
+    source = ".SUBCKT TOP D G S\nM1 D G S S nm1p2_svt_lp W=0.6u L=0.1u\n.ENDS TOP\n"
+    cases = []
+    for name, mode, reference, expected in (
+        ("default", None, source, True),
+        ("explicit_flat", "flat", source, True),
+        ("explicit_deep", "deep", source, False),
+        ("width_mismatch", None, source.replace("W=0.6u", "W=0.61u"), False),
+    ):
+        directory = out / "strict_flat_modes" / name
+        directory.mkdir(parents=True, exist_ok=True)
+        schematic, target, report = (directory / name for name in ("reference.sp", "extracted.cir", "lvs.lvsdb"))
+        schematic.write_text(reference)
+        target.unlink(missing_ok=True)
+        report.unlink(missing_ok=True)
+        extra = [
+            "-rd", f"input={gds}", "-rd", "top=TOP",
+            "-rd", f"schematic={schematic}", "-rd", f"target_netlist={target}",
+            "-rd", f"report={report}", "-rd", "strict_topology=true",
+            "-rd", "no_well_ties=true",
+        ]
+        if mode is not None:
+            extra.extend(["-rd", f"run_mode={mode}"])
+        try:
+            run = invoke_klayout(kind, exe, DECK, extra)
+            output = (run.stdout + "\n" + run.stderr).strip()
+            artifacts_written = target.is_file() and report.is_file()
+            passed = (run.returncode == 0 and artifacts_written
+                      and "ICS55_LVS_COMPARE=PASS" in output
+                      and "ICS55_LVS_COMPARE=FAIL" not in output)
+            rejected = (artifacts_written and "ICS55_LVS_COMPARE=FAIL" in output
+                        and "ICS55_LVS_COMPARE=PASS" not in output)
+            cases.append({
+                "name": name, "status": "PASS" if (passed if expected else rejected) else "FAIL",
+                "expected_match": expected, "native_matched": passed, "returncode": run.returncode,
+                "gds_sha256": sha256(gds), "reference": str(schematic),
+                "target_netlist": str(target), "report": str(report), "output": output,
+            })
+        except (OSError, subprocess.TimeoutExpired) as error:
+            cases.append({"name": name, "status": "FAIL", "error": str(error)})
+    return {
+        "fixture": "strict_flat_modes",
+        "status": "PASS" if all(case["status"] == "PASS" for case in cases) else "FAIL",
+        "cases": cases,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--klayout", help="KLayout executable; otherwise use PATH or --librelane")
@@ -343,6 +392,11 @@ def main() -> int:
     failed = fixture_failed + (
         [] if verdict_smoke["status"] == "PASS" else [verdict_smoke]
     )
+    strict_modes = run_strict_flat_mode_smoke(
+        kind, exe, fixture_dir / "strict_flat_parent.gds", args.out
+    )
+    if strict_modes["status"] != "PASS":
+        failed.append(strict_modes)
     report = {
         "status": "FAIL" if failed else "PASS",
         "klayout_kind": kind,
@@ -353,6 +407,7 @@ def main() -> int:
         "lvs_deck_sha256": sha256(DECK),
         "cases": cases,
         "verdict_smoke": verdict_smoke,
+        "strict_flat_modes": strict_modes,
         "fixture_failed": len(fixture_failed),
         "failed": len(failed),
     }
@@ -374,6 +429,10 @@ def main() -> int:
         print(f"  - {issue}")
     if verdict_smoke["status"] != "PASS" and verdict_smoke.get("output"):
         print(verdict_smoke["output"])
+    print(f"{strict_modes['status']}: strict physical-flat default and explicit-mode controls")
+    for case in strict_modes["cases"]:
+        if case["status"] != "PASS":
+            print(case.get("output", case.get("error")))
     print(
         f"{report['status']}: {len(cases) - len(fixture_failed)}/{len(cases)} fixtures; "
         f"verdict smoke {verdict_smoke['status']}; {report_path}"

@@ -34,8 +34,8 @@ LAYERS = {
   'COVER' => [124, 1], 'DIODE' => [191, 12]
 }
 
-def box(layer, x1, y1, x2, y2)
-  [layer, :box, x1, y1, x2, y2]
+def box(layer, x1, y1, x2, y2, kind = :box)
+  [layer, kind, x1, y1, x2, y2]
 end
 
 def label(layer, text, x, y)
@@ -100,6 +100,21 @@ pad_t4 = [
   label('T4M2LBL', 'PAD', 0.5, 0.5), label('ALPADLBL', 'PAD', 0.5, 0.5)
 ]
 
+# A child-cell MOS whose source and body meet through a real wrapper tap.
+# Top-level D/G/S text and the physical tap require no global well aliases.
+strict_flat_parent = mos_fixture('NP') + [
+  box('POLY', 0.45, -0.4, 0.55, -0.05),
+  box('CT', 0.46, -0.32, 0.54, -0.24),
+  box('M1', 0.44, -0.34, 0.56, -0.22),
+  box('ACT', -0.65, 0.2, -0.4, 0.45, :top_box),
+  box('PP', -0.65, 0.2, -0.4, 0.45, :top_box),
+  box('CT', -0.6, 0.25, -0.45, 0.4, :top_box),
+  box('M1', -0.63, 0.22, -0.42, 0.43, :top_box),
+  box('M1', -0.52, 0.28, 0.17, 0.34, :top_box),
+  label('M1LBL', 'D', 0.82, 0.3), label('M1LBL', 'S', 0.17, 0.3),
+  label('M1LBL', 'G', 0.5, -0.28)
+]
+
 fixtures = {
   'core_svt_n': mos_fixture('NP'),
   'core_lvt_n_ctbar': mos_fixture('NP', ['LVTN'], 'CTBAR'),
@@ -115,21 +130,27 @@ fixtures = {
   'esd_marker_only': esd_only_fixture,
   'pad_m1_m5_bar': pad_m1_m5 + mos_fixture('NP'),
   'pad_t4_bar': pad_t4 + mos_fixture('NP'),
-  'bulk_alias': mos_fixture('NP')
+  'bulk_alias': mos_fixture('NP'),
+  'strict_flat_parent': strict_flat_parent
 }
 
 fixtures.each do |name, shapes|
   layout = RBA::Layout.new
   layout.dbu = 0.001
   top = layout.create_cell('TOP')
+  geometry_cell = name == :strict_flat_parent ? layout.create_cell('MOS_LEAF') : top
+  if geometry_cell != top
+    top.insert(RBA::CellInstArray.new(geometry_cell.cell_index, RBA::Trans.new))
+  end
   layer_indices = {}
   shapes.each do |shape|
     layer, kind, *geometry = shape
     layer_indices[layer] ||= layout.insert_layer(RBA::LayerInfo.new(*LAYERS.fetch(layer)))
     case kind
-    when :box
+    when :box, :top_box
       x1, y1, x2, y2 = geometry
-      top.shapes(layer_indices[layer]).insert(RBA::Box.new((x1 * 1000).round, (y1 * 1000).round,
+      cell = kind == :top_box ? top : geometry_cell
+      cell.shapes(layer_indices[layer]).insert(RBA::Box.new((x1 * 1000).round, (y1 * 1000).round,
                                                          (x2 * 1000).round, (y2 * 1000).round))
     when :text
       text, x, y = geometry

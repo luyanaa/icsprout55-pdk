@@ -44,10 +44,12 @@ and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
 - The released CDL is preprocessed before reading: repeated definitions are
   deduplicated, `X <nets> / <subckt>` calls are converted to plain SPICE, and
   symbolic parameters are declared for instances.
-- The default comparison flattens the schematic (the released standard-cell
-  GDS is flat). Opt-in `strict_hierarchy=true` keeps the schematic hierarchical
-  and requires exact one-to-one circuit-name and named-boundary-pin sets across
-  the extracted GDS and reference netlists.
+- Comparison normally flattens the schematic. For `strict_topology=true`
+  without `strict_hierarchy=true`, physical extraction also defaults to flat,
+  unless `run_mode` is explicitly supplied. Generic and `net_only=true`
+  extraction retain the deep default. Opt-in `strict_hierarchy=true` requires
+  deep extraction, preserves the schematic hierarchy, and requires exact
+  one-to-one circuit-name and named-boundary-pin sets on both sides.
 
 ## Usage
 
@@ -63,6 +65,10 @@ python3 run_lvs.py --layout macro.gds --top MACRO --netlist macro.cdl \
 klayout -b -r ics55.lvs -rd input=<lib>.gds -rd top=ADDFX1H7R \
     -rd schematic=<lib>.cdl -rd report=addf.lvsdb \
     -rd target_netlist=addf_extracted.cir -rd metal_stack=auto -z
+
+# Strict flat macro comparison: both physical and reference sides default flat.
+klayout -b -r ics55.lvs -rd input=macro.gds -rd top=MACRO \
+    -rd schematic=macro.cdl -rd no_well_ties=true -rd strict_topology=true -z
 
 # Strict hierarchy comparison (also requires strict_topology=true and deep extraction)
 klayout -b -r ics55.lvs -rd input=macro.gds -rd top=MACRO \
@@ -101,8 +107,10 @@ Every shared boundary net is a mandatory native comparison correspondence;
 no physical nets are joined. The native `LayoutVsSchematic` database records
 the comparison, and the extracted SPICE is saved before the search begins.
 Default released-standard-cell comparison retains the 10% width convention
-above. Flat strict comparison remains the default and is selected with
-`strict_hierarchy=false` (or by omitting that switch).
+above. Strict flat comparison is selected with `strict_hierarchy=false` (or
+by omitting that switch), and an omitted `run_mode` selects flat physical
+extraction. Explicit `run_mode=deep` remains available for diagnostics; a
+deep-layout/flat-reference hierarchy mismatch is not a passing comparison.
 
 `strict_hierarchy=true` is an opt-in no-flatten path, not a name-guessing
 heuristic. It requires deep layout extraction, an exact case-insensitive

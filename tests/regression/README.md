@@ -115,6 +115,10 @@ Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
   terminals, direct top-level ports, stack selection, and schematic-derived
   bulk aliases. A matching extracted/reference pair and an intentionally wrong
   schematic verify that the LVS wrapper returns 0 and nonzero, respectively.
+  A MOS child with a physical wrapper tap additionally checks that strict
+  comparison defaults to flat extraction: omitted/explicit-flat modes match,
+  explicit-deep rejects the hierarchy mismatch, and a 0.01 um W error fails
+  the unchanged exact strict W/L contract.
   These validate local extraction/comparison only; Calibre equivalence stays
   `BLOCKED`.
 - `out/drc_fixtures/` and `out/lvs_fixtures/` — default fixture reports and
