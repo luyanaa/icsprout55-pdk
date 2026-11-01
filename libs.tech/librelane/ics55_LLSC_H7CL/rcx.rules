@@ -10,7 +10,7 @@ DensityRate 1  0
 
 Corners 1 :  TYP
 
-COMMENT : ICsprout55 clean-room estimates (LEF-seeded); calibration pending
+COMMENT : source=starrc R=typ C=typ; BASE=LEF seeds, OVERRIDE=StarRC vendor ITF/CAPTAB
 
 DensityModel 0
 

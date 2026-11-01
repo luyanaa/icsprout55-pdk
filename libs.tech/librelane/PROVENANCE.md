@@ -20,6 +20,28 @@ They are integrated here with their original Apache-2.0 headers preserved.
 - `ics55_LLSC_H7{C,R,L,H}/tracks.info` - routing tracks.
 - `N551P6M_ecos.lef` - the released technology LEF (from the PDK itself,
   `prtech/techLEF/N551P6M_ecos.lef`, not an upstream artifact).
+- `librelane_plugin_ics55/` - LibreLane plugin providing the
+  `ICS55.KLayoutLVS` step (upstream `KLayout.LVS` only runs for the IHP
+  PDKs).  Modelled on upstream `icsprout55/libs.tech/librelane/
+  librelane_plugin_ics55/`; this copy also converts the library CDLs with
+  `scripts/cdl_convert.py` before concatenating them with the design CDL
+  (upstream performs the same conversion at install time via `install.sh`,
+  whereas our `libs.ref/` keeps the vendor CDLs verbatim).
+- `scripts/cdl_convert.py` - upstream `hacking/cdl_convert.py`, verbatim
+  except for the relocated header path.  Renames per-library helper
+  subckts (INV/NAND2/TG/TSINV in the std cells; `nand2`/`nor2`/`MUX_PAD`/
+  `inv*` in the IO) so the merged LVS netlist parses cleanly.
+- `examples/counter/` - worked example: RTL-to-GDS through the Classic
+  flow with `ICS55.KLayoutLVS` substituted for `Netgen.LVS` (see its
+  README.md for the exact invocation).
+
+## LEF/GDS pairing gotcha (inherited)
+
+The `_ecos` cell LEF places signal pins on MET2 (+VIA1); the matching
+layout is `gds/<lib>_M2.gds`.  The plain `<lib>.gds` keeps pins on MET1 and
+makes every routed pin open in LVS.  `config.tcl` already pairs
+`CELL_LEFS=<lib>_ecos.lef` with `CELL_GDS=<lib>_M2.gds` for the 7-track
+libraries — keep them in sync if a new SCL is added.
 
 ## What is EXCLUDED (RCX-related, deliberately)
 

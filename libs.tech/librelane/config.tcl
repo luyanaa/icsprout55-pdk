@@ -88,11 +88,15 @@ set ::env(NETGEN_SETUP) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/netgen/ics55.tcl
 # Pattern -> rules file; the first matching pattern wins in LibreLane, so the
 # specific flow corners are listed before the nom_* fallback.  Regenerate after
 # any extraction-config change.
+# One ruleset per STA corner.  Each `nom_*` glob also matches the other
+# corners (e.g. `nom_ss_*` matches `nom_tt_*`), so listing more than the
+# STA_CORNERS here would emit several SPEFs that all satisfy the default
+# corner and break OpenROAD.IRDropReport ("more than one input SPEF file
+# for the default corner").
 set ::env(RCX_RULESETS) [list \
     "nom_tt_*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY)/rcx_typ.rules" \
     "nom_ss_*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY)/rcx_nom_ss_125C_1v08.rules" \
     "nom_ff_*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY)/rcx_nom_ff_n40C_1v32.rules" \
-    "nom_*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY)/rcx_typ.rules" \
 ]
 
 set scl_dir "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/$::env(STD_CELL_LIBRARY)"
@@ -108,7 +112,10 @@ set ::env(SCL_GROUND_PINS) [list "VSS"]
 
 # Standard cells
 set ::env(CELL_LEFS) [list "$scl_dir/lef/$::env(STD_CELL_LIBRARY)_ecos.lef"]
-set ::env(CELL_GDS) [list "$scl_dir/gds/$::env(STD_CELL_LIBRARY).gds"]
+# The _ecos cell LEF places the signal pins on MET2 (+VIA1); the matching
+# layout is the _M2 GDS.  The plain GDS keeps pins on MET1, which would
+# leave every routed pin open in LVS.
+set ::env(CELL_GDS) [list "$scl_dir/gds/$::env(STD_CELL_LIBRARY)_M2.gds"]
 set ::env(CELL_VERILOG_MODELS) [list "$scl_dir/verilog/$::env(STD_CELL_LIBRARY).v"]
 set ::env(CELL_SPICE_MODELS) [list "$scl_dir/cdl/$::env(STD_CELL_LIBRARY).cdl"]
 set ::env(CELL_CDLS) [list "$scl_dir/cdl/$::env(STD_CELL_LIBRARY).cdl"]
