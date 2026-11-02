@@ -167,9 +167,15 @@ end
 
 
 # ---------------------------------------------------------------------------
-# Extraction: units microns, values in aF/um^2 (area), aF/um (perimeter) and
-# mOhm/square (sheet).  All capacitance/resistance values are the released
-# LEF seeds; the coupling model is intentionally absent (not released).
+# Extraction: Magic takes area capacitance in aF/lambda^2 and perimeter
+# capacitance in aF/lambda (tech file manual, "extract" section), NOT per
+# micron.  The released LEF publishes fF/um^2 and fF/um; the values below are
+# those numbers converted for the 5 nm layout grid this PDK is drawn on
+# (1 um^2 = 40000 lambda^2, 1 um = 200 lambda).  Dividing the LEF numbers by
+# those factors is what makes the extracted C match the geometry: a 0.07 um^2
+# VSS rail now extracts as 53 aF instead of 0.87 pF.
+# Resistance values stay in mOhm/square and mOhm/via, which Magic already
+# expects.  The coupling model is intentionally absent (not released).
 # ---------------------------------------------------------------------------
 extract
 	style	ngspice()
@@ -207,24 +213,22 @@ extract
 	resist	v4	2500
 	resist	tv2	2500
 
-	# --- area capacitance to substrate/plane below (aF/um^2) ---
+	# --- area capacitance to substrate/plane below (aF/lambda^2) ---
 	# poly: gate-oxide capacitance NOT released - placeholder (0)
 	areacap	poly	0
-	areacap	m1	763
-	areacap	m2	1107
-	areacap	m3	1107
-	areacap	m4	1107
-	areacap	m5	626
-	areacap	tm2	130
-
-	# --- perimeter (fringe) capacitance (aF/um) ---
-	perimc	m1	space	34
-	perimc	m2	space	39
-	perimc	m3	space	41
-	perimc	m4	space	41
-	perimc	m5	space	34
-	perimc	tm2	space	37
-
+	areacap	m1	0.019075
+	areacap	m2	0.027675
+	areacap	m3	0.027675
+	areacap	m4	0.027675
+	areacap	m5	0.01565
+	areacap	tm2	0.00325
+	# --- perimeter (fringe) capacitance (aF/lambda) ---
+	perimc	m1	space	0.17
+	perimc	m2	space	0.195
+	perimc	m3	space	0.205
+	perimc	m4	space	0.205
+	perimc	m5	space	0.17
+	perimc	tm2	space	0.185
 	# --- MOS devices (official CDL model names; Cox/overlap NOT released) ---
 	# The last two fields (gate cap aF/um^2, overlap aF/um) are placeholders 0:
 	# the gate-oxide capacitance is not in the released data.  The extracted
