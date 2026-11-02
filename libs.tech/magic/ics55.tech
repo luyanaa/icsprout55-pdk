@@ -172,7 +172,8 @@ end
 # LEF seeds; the coupling model is intentionally absent (not released).
 # ---------------------------------------------------------------------------
 extract
-	style	lambda=0.001(ics55)
+	style	ngspice()
+	lambda 1E6
 	units	microns
 	step	1
 	sidehalo	0.2
