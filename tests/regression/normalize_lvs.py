@@ -38,6 +38,16 @@ def _fold_model(name):
     return name.lower()
 
 
+def _canonical_net(net):
+    """Collapse duplicate well-tie aliases such as VDD|VDD or VDD|VNW."""
+    net = net.replace("VNW", "VDD")
+    parts = [part for part in net.split("|") if part]
+    deduped = list(dict.fromkeys(parts))
+    if len(deduped) == 1:
+        return deduped[0]
+    return "|".join(deduped)
+
+
 def parse_cir(path):
     """Return canonical records list for a flat extracted netlist."""
     text = open(path).read()
@@ -65,7 +75,7 @@ def parse_cir(path):
             parts = l[5:].split()
             if len(parts) >= 2:
                 # '* net 1 VDD,VNW'
-                net_map[parts[0]] = parts[1].split(",")[0].replace("VNW", "VDD")
+                net_map[parts[0]] = _canonical_net(parts[1].split(",")[0])
             continue
         if l.startswith("*"):
             continue
@@ -83,12 +93,12 @@ def parse_cir(path):
                 if net.isdigit() and pin_comment:
                     idx = int(net) - 1
                     if 0 <= idx < len(pin_comment):
-                        return pin_comment[idx].replace("VNW", "VDD")
+                        return _canonical_net(pin_comment[idx])
                 if net.isdigit() and pin_names:
                     idx = int(net) - 1
                     if 0 <= idx < len(pin_names):
-                        return pin_names[idx].replace("VNW", "VDD")
-                return net.replace("VNW", "VDD")
+                        return _canonical_net(pin_names[idx])
+                return _canonical_net(net)
             d, g, s, b = resolve(d), resolve(g), resolve(s), resolve(b)
             rec = {
                 "inst": inst,

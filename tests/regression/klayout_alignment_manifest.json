@@ -252,7 +252,7 @@
   },
   "frozen_hashes": {
     "lvs_runner": "c2e34ffdbf58dcb4b838b06ae62a217b364e4e3b09559ee24e8b66502da596f3",
-    "normalizer": "4be775277d78f0f74d1f8efe9140517e753924ce33bd912325ef028d4de5db29",
+    "normalizer": "4fc842477d99a45df6385095f946e5cc7ac217918662ec8fe8be76ba0ff58715",
     "harness": "36129730b63d75fc2d571c8b5673384df94d60dd3c7878c6a28ff9135bee224a",
     "nix_shell_helper": "620b4bde416f5045cd3ec3a1f02c2751d4893fa4b89c855de7f5cce0823280fd",
     "lvs_fixture_harnesses": {
