@@ -17,7 +17,7 @@
 # Geometry follows the Calibre rule deck of the same process family
 # (SMIC_CalDRC_55LLULPGE_0912182533_V1.13_REV1_0, see the constants below for
 # the line references) plus the released std-cell dimensions:
-#   gate L = 0.06 um, poly pitch = 0.25 um (0.05 + CT 0.09 + 0.05),
+#   gate L = 0.06 um, poly pitch = 0.26 um (0.055 + CT 0.09 + 0.055),
 #   CT = 0.09 um square, active enclosure of CT 0.03 um,
 #   active beyond gate 0.17 um (rule 0.115), poly beyond active 0.15 um
 #   (rule 0.14), implant margin 0.2 um.
@@ -50,9 +50,9 @@ L_M1 = db.LayerInfo(81, 1)    # metal 1
 
 # Rules below are taken from the SMIC 55LL ULP RF Calibre deck
 # (SMIC_CalDRC_55LLULPGE_..._V1.13_REV1_0.drc), not guessed:
-#   CT fixed size 0.09 square                      (line 4822)
-#   CT space 0.11 (0.14 different nets)            (4832/4855)
-#   GATE to diffusion contact 0.05 (1.2 V)         (4900)
+#   CT fixed size 0.09 square                      (CT_W_1)
+#   CT space 0.11 (0.14 different nets)            (CT_S_1 / CT_S_2)
+#   GATE to diffusion contact 0.055 (0.9/1.2 V)    (CT_S_4)
 #   CT enclosure by AA 0.015, by poly 0.01/0.04    (4911/4936/4944)
 #   M1 enclosure of CT 0.025                       (4961)
 #   M1 width/space 0.09                            (5058/5063)
@@ -60,8 +60,8 @@ L_M1 = db.LayerInfo(81, 1)    # metal 1
 #   poly extension outside AA 0.14                 (3920)
 CT_SIZE = 0.09       # fixed contact size (um)
 GATE_L = 0.06        # drawn gate length (um)
-PITCH = 0.25         # poly/gate pitch: 0.05 + 0.09 + 0.05 + L
-CT_GATE = 0.05       # contact edge to gate edge (um, rule 0.05)
+CT_GATE = 0.055      # contact edge to gate edge (um, CT_S_4)
+PITCH = GATE_L + 2.0 * CT_GATE + CT_SIZE   # 0.26 um, one shared contact
 ACT_OV = 0.03        # active beyond contact (um, rule 0.015)
 IMPL_M = 0.2         # implant margin around active (um)
 POLY_OV = 0.15       # poly gate overhang beyond active (um, rule 0.14)
