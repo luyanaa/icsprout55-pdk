@@ -20,11 +20,12 @@
 # Usage:
 #   klayout -b -r ics55_pcell_demo.py -z
 #   klayout -b -r ics55_pcell_demo.py -z -rd gds=/tmp/ics55_pcells.gds
+import os
 import sys
 import klayout.lay as lay
 import klayout.db as db
 
-here = "/Users/yanlu/Documents/icsprout55-pdk/libs.tech/klayout/pcells"
+here = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, here)
 
 import ics55_mos_analog  # noqa: F401  (registers lib)
@@ -32,14 +33,8 @@ import ics55_guard_ring  # noqa: F401
 import ics55_res_poly    # noqa: F401
 import ics55_mom         # noqa: F401
 
-out = "/Users/yanlu/Documents/icsprout55-pdk/libs.tech/klayout/pcells/ics55_pcells.gds"
-try:
-    from klayout import config  # not available; kept for clarity
-except Exception:
-    pass
-for a in sys.argv:
-    if a.startswith("gds="):
-        out = a.split("=", 1)[1]
+# `klayout -rd gds=<path>` lands here as a global; default next to the script.
+out = globals().get("gds") or os.path.join(here, "ics55_pcells.gds")
 
 ly = db.Layout()
 ly.dbu = 0.001

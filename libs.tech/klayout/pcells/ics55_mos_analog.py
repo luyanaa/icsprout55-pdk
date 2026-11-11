@@ -12,14 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ICsprout55 - multi-finger analog/RF MOS PCell (provisional template)
+# ICsprout55 - multi-finger analog/RF MOS PCell
 #
-# Geometry derived from std-cell GDS analysis of the released digital PDK:
-#   gate L = 0.06 um, gate (poly) pitch = 0.25 um, CT = 0.09 um,
-#   CT-to-gate edge = 0.06 um, ACT-to-CT overhang = 0.015 um,
-#   NP/PP implant margin ~0.2 um, poly gate overhang >= 0.14 um.
-# These are DRAWN-TEMPLATE values, NOT foundry DRC rules (no DRC released).
-# Always verify against the foundry DRC before tapeout.
+# Geometry follows the Calibre rule deck of the same process family
+# (SMIC_CalDRC_55LLULPGE_0912182533_V1.13_REV1_0, see the constants below for
+# the line references) plus the released std-cell dimensions:
+#   gate L = 0.06 um, poly pitch = 0.25 um (0.05 + CT 0.09 + 0.05),
+#   CT = 0.09 um square, active enclosure of CT 0.03 um,
+#   active beyond gate 0.17 um (rule 0.115), poly beyond active 0.15 um
+#   (rule 0.14), implant margin 0.2 um.
+#
+# The source/drain straps are interdigitated: one M1 island per contact, even
+# contacts to a bus below the active, odd contacts to a bus above, and a
+# separate gate island.  A single M1 rectangle over the active (the previous
+# template) shorts source, drain and gate - the LVS extractor reports
+# M$1 $1 $2 $1 / M$2 $1 $1 $1 for that layout.
+#
+# Validate with:
+#   klayout -b -r ics55.lvs ...   (extracts one W=m*W device, S/G/D separate)
+#   klayout -b -r ics55_drc.drc ...   (partial deck; see docs/ics55_pdk_repair.md)
 #
 # Layer numbers per libs.tech/klayout/tech/ics55.lyp:
 #   ACT 2/1, NW 9/1, POLY 41/1, NP 52/1, PP 53/1, CT 72/1, M1 81/1
@@ -37,14 +48,25 @@ L_PP = db.LayerInfo(53, 1)    # P+ implant
 L_CT = db.LayerInfo(72, 1)    # contact
 L_M1 = db.LayerInfo(81, 1)    # metal 1
 
-CT_SIZE = 0.09       # contact size (um)
+# Rules below are taken from the SMIC 55LL ULP RF Calibre deck
+# (SMIC_CalDRC_55LLULPGE_..._V1.13_REV1_0.drc), not guessed:
+#   CT fixed size 0.09 square                      (line 4822)
+#   CT space 0.11 (0.14 different nets)            (4832/4855)
+#   GATE to diffusion contact 0.05 (1.2 V)         (4900)
+#   CT enclosure by AA 0.015, by poly 0.01/0.04    (4911/4936/4944)
+#   M1 enclosure of CT 0.025                       (4961)
+#   M1 width/space 0.09                            (5058/5063)
+#   AA extension outside GT 0.115                  (3914)
+#   poly extension outside AA 0.14                 (3920)
+CT_SIZE = 0.09       # fixed contact size (um)
 GATE_L = 0.06        # drawn gate length (um)
-PITCH = 0.25         # poly/gate pitch (um)
-CT_GATE = 0.06       # contact edge to gate edge (um)
-ACT_OV = 0.015       # active beyond contact (um)
+PITCH = 0.25         # poly/gate pitch: 0.05 + 0.09 + 0.05 + L
+CT_GATE = 0.05       # contact edge to gate edge (um, rule 0.05)
+ACT_OV = 0.03        # active beyond contact (um, rule 0.015)
 IMPL_M = 0.2         # implant margin around active (um)
-POLY_OV = 0.15       # poly gate overhang beyond active (um)
-CT_M1_OV = 0.05      # M1 overhang around contact (um)
+POLY_OV = 0.15       # poly gate overhang beyond active (um, rule 0.14)
+M1_OV = 0.025        # M1 enclosure of contact (um, rule 0.025)
+GATE_PAD = 0.17      # poly pad for the gate contact (0.09 + 2*0.04)
 
 
 class Ics55MosAnalog(db.PCellDeclarationHelper):
@@ -98,31 +120,43 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         dev_n = (self.dev_type == "n")
         W, L, m = self.w, self.l, self.fingers
 
-        # active: one strip per finger, height = W
-        sd = CT_GATE + CT_SIZE + ACT_OV          # source/drain half
-        act_x = L + 2.0 * sd
-        dev_x = act_x + (m - 1) * PITCH
+        # One shared active strip; the gates cross it.  Half-width per side:
+        # gate edge -> 0.05 -> contact 0.09 -> 0.03 active enclosure.
+        side = L / 2.0 + CT_GATE + CT_SIZE + ACT_OV
+        dev_x = (m - 1) * PITCH + 2.0 * side
         x0 = -dev_x / 2.0
         y0 = -W / 2.0
-        gates = []
+        gate0 = x0 + side                      # first gate centre
+        S(act).insert(db.Box(u(x0), u(y0), u(x0 + dev_x), u(y0 + W)))
+
+        # Gates, plus a poly bus that ties every finger to the same gate net.
+        # The bus sits above the source/drain straps so it does not collide
+        # with them.
         for f in range(m):
-            gx = x0 + f * PITCH
-            gates.append(gx)
-            S(act).insert(db.Box(u(gx - sd), u(y0), u(gx + sd), u(y0 + W)))
+            gx = gate0 + f * PITCH
             S(poly).insert(db.Box(u(gx - L / 2.0), u(y0 - POLY_OV),
-                               u(gx + L / 2.0), u(y0 + W + POLY_OV)))
-            for side in (-1, 1):
-                cx = gx + side * (L / 2.0 + CT_GATE)
-                S(ct).insert(db.Box(u(cx - CT_SIZE / 2.0), u(y0 + W / 2.0 - CT_SIZE / 2.0),
-                                 u(cx + CT_SIZE / 2.0), u(y0 + W / 2.0 + CT_SIZE / 2.0)))
-        # gate contact extension on the middle finger
-        gm = gates[m // 2]
-        poly_gc = db.Box(u(gm - L / 2.0 - 0.12), u(y0 + W / 2.0 + POLY_OV),
-                         u(gm + L / 2.0 + 0.06), u(y0 + W / 2.0 + POLY_OV + 0.12))
-        S(poly).insert(poly_gc)
-        S(ct).insert(db.Box(u(gm + L / 2.0 + 0.03), u(y0 + W / 2.0 + POLY_OV + 0.03),
-                         u(gm + L / 2.0 + 0.03 + CT_SIZE),
-                         u(y0 + W / 2.0 + POLY_OV + 0.03 + CT_SIZE)))
+                               u(gx + L / 2.0), u(y0 + W + 0.33)))
+        bus_y0 = y0 + W + 0.25
+        S(poly).insert(db.Box(u(gate0 - L / 2.0), u(bus_y0),
+                           u(gate0 + (m - 1) * PITCH + L / 2.0),
+                           u(bus_y0 + 0.08)))
+
+        # m+1 shared source/drain contacts, 0.25 apart.
+        # first contact sits ACT_OV from the active edge; the 0.25 pitch then
+        # keeps 0.05 to every gate edge and 0.03 active enclosure at both ends
+        ct_x = [x0 + ACT_OV + CT_SIZE / 2.0 + f * PITCH for f in range(m + 1)]
+        for cx in ct_x:
+            S(ct).insert(db.Box(u(cx - CT_SIZE / 2.0), u(y0 + W / 2.0 - CT_SIZE / 2.0),
+                             u(cx + CT_SIZE / 2.0), u(y0 + W / 2.0 + CT_SIZE / 2.0)))
+
+        # Gate contact on a poly pad over the bus (0.04 poly enclosure).
+        gm = gate0 + (m // 2) * PITCH
+        pad_y = bus_y0 + 0.04
+        S(poly).insert(db.Box(u(gm - GATE_PAD / 2.0), u(pad_y),
+                           u(gm + GATE_PAD / 2.0), u(pad_y + GATE_PAD)))
+        gy = pad_y + GATE_PAD / 2.0
+        S(ct).insert(db.Box(u(gm - CT_SIZE / 2.0), u(gy - CT_SIZE / 2.0),
+                         u(gm + CT_SIZE / 2.0), u(gy + CT_SIZE / 2.0)))
 
         # implant
         imp = db.Region(self.cell.begin_shapes_rec(act)).sized(u(IMPL_M))
@@ -135,9 +169,30 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         if not dev_n:
             S(nw).insert(db.Region(self.cell.begin_shapes_rec(act)).sized(u(IMPL_M + 0.3)))
 
-        # M1 source/drain straps + gate strap
-        S(m1).insert(db.Region(self.cell.begin_shapes_rec(act)).sized(u(CT_M1_OV)))
-        S(m1).insert(db.Region(poly_gc).sized(u(CT_M1_OV)))
+        # M1: one island per source/drain contact and two interdigitated
+        # straps - even contacts to a bus below the active, odd contacts to a
+        # bus above.  Without the straps the fingers are a series chain; the
+        # old code poured one M1 rectangle over the whole active instead,
+        # shorting every terminal.
+        for k, cx in enumerate(ct_x):
+            if k % 2 == 0:
+                S(m1).insert(db.Box(u(cx - CT_SIZE / 2.0 - M1_OV), u(y0 - 0.16),
+                                 u(cx + CT_SIZE / 2.0 + M1_OV), u(y0 + W - 0.07)))
+            else:
+                S(m1).insert(db.Box(u(cx - CT_SIZE / 2.0 - M1_OV), u(y0 + 0.10),
+                                 u(cx + CT_SIZE / 2.0 + M1_OV), u(y0 + W + 0.16)))
+        even = [cx for k, cx in enumerate(ct_x) if k % 2 == 0]
+        odd = [cx for k, cx in enumerate(ct_x) if k % 2 == 1]
+        if len(even) > 1:
+            S(m1).insert(db.Box(u(even[0] - CT_SIZE / 2.0 - M1_OV), u(y0 - 0.16),
+                             u(even[-1] + CT_SIZE / 2.0 + M1_OV), u(y0 - 0.02)))
+        if len(odd) > 1:
+            S(m1).insert(db.Box(u(odd[0] - CT_SIZE / 2.0 - M1_OV), u(y0 + W + 0.02),
+                             u(odd[-1] + CT_SIZE / 2.0 + M1_OV), u(y0 + W + 0.16)))
+        # gate island grows upward only: 0.14 x 0.32 keeps it clear of the
+        # source/drain straps while meeting the tech-LEF M1 AREA 0.042 um^2
+        S(m1).insert(db.Box(u(gm - CT_SIZE / 2.0 - M1_OV), u(gy - CT_SIZE / 2.0 - M1_OV),
+                         u(gm + CT_SIZE / 2.0 + M1_OV), u(gy + 0.25)))
 
         # guard ring
         if self.guard_ring:
@@ -157,7 +212,7 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
                 S(np).insert(ring_act.sized(u(0.05)))   # n+ ring, tie VDD
                 S(nw).insert(db.Region(ring).sized(u(0.3)))
             if self.ring_metal:
-                S(m1).insert(ring_act.sized(u(CT_M1_OV)))
+                S(m1).insert(ring_act.sized(u(M1_OV)))
 
 
 # register library (idempotent: all ICsprout55 PCell modules share one library)
