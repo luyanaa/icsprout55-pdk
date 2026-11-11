@@ -61,7 +61,6 @@ L_M1 = db.LayerInfo(81, 1)    # metal 1
 CT_SIZE = 0.09       # fixed contact size (um)
 GATE_L = 0.06        # drawn gate length (um)
 CT_GATE = 0.055      # contact edge to gate edge (um, CT_S_4)
-PITCH = GATE_L + 2.0 * CT_GATE + CT_SIZE   # 0.26 um, one shared contact
 ACT_OV = 0.03        # active beyond contact (um, rule 0.015)
 IMPL_M = 0.2         # implant margin around active (um)
 POLY_OV = 0.15       # poly gate overhang beyond active (um, rule 0.14)
@@ -120,10 +119,13 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         dev_n = (self.dev_type == "n")
         W, L, m = self.w, self.l, self.fingers
 
-        # One shared active strip; the gates cross it.  Half-width per side:
-        # gate edge -> 0.05 -> contact 0.09 -> 0.03 active enclosure.
+        # One shared active strip; the gates cross it.  The contact pitch
+        # follows the gate length: gate + 0.055 + CT 0.09 + 0.055.  (A fixed
+        # pitch is only correct for L=0.06; for longer gates it puts the
+        # contact inside the gate.)
+        pitch = L + 2.0 * CT_GATE + CT_SIZE
         side = L / 2.0 + CT_GATE + CT_SIZE + ACT_OV
-        dev_x = (m - 1) * PITCH + 2.0 * side
+        dev_x = (m - 1) * pitch + 2.0 * side
         x0 = -dev_x / 2.0
         y0 = -W / 2.0
         gate0 = x0 + side                      # first gate centre
@@ -133,24 +135,24 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         # The bus sits above the source/drain straps so it does not collide
         # with them.
         for f in range(m):
-            gx = gate0 + f * PITCH
+            gx = gate0 + f * pitch
             S(poly).insert(db.Box(u(gx - L / 2.0), u(y0 - POLY_OV),
                                u(gx + L / 2.0), u(y0 + W + 0.33)))
         bus_y0 = y0 + W + 0.25
         S(poly).insert(db.Box(u(gate0 - L / 2.0), u(bus_y0),
-                           u(gate0 + (m - 1) * PITCH + L / 2.0),
+                           u(gate0 + (m - 1) * pitch + L / 2.0),
                            u(bus_y0 + 0.08)))
 
         # m+1 shared source/drain contacts, 0.25 apart.
         # first contact sits ACT_OV from the active edge; the 0.25 pitch then
         # keeps 0.05 to every gate edge and 0.03 active enclosure at both ends
-        ct_x = [x0 + ACT_OV + CT_SIZE / 2.0 + f * PITCH for f in range(m + 1)]
+        ct_x = [x0 + ACT_OV + CT_SIZE / 2.0 + f * pitch for f in range(m + 1)]
         for cx in ct_x:
             S(ct).insert(db.Box(u(cx - CT_SIZE / 2.0), u(y0 + W / 2.0 - CT_SIZE / 2.0),
                              u(cx + CT_SIZE / 2.0), u(y0 + W / 2.0 + CT_SIZE / 2.0)))
 
         # Gate contact on a poly pad over the bus (0.04 poly enclosure).
-        gm = gate0 + (m // 2) * PITCH
+        gm = gate0 + (m // 2) * pitch
         pad_y = bus_y0 + 0.04
         S(poly).insert(db.Box(u(gm - GATE_PAD / 2.0), u(pad_y),
                            u(gm + GATE_PAD / 2.0), u(pad_y + GATE_PAD)))
