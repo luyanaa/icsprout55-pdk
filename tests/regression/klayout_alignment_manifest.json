@@ -253,7 +253,7 @@
   "frozen_hashes": {
     "lvs_runner": "c2e34ffdbf58dcb4b838b06ae62a217b364e4e3b09559ee24e8b66502da596f3",
     "normalizer": "4fc842477d99a45df6385095f946e5cc7ac217918662ec8fe8be76ba0ff58715",
-    "harness": "36129730b63d75fc2d571c8b5673384df94d60dd3c7878c6a28ff9135bee224a",
+    "harness": "15a275ea0c3d112f7450a7631fdac5fec994aa666c022fe28a7c9fe097d751d2",
     "nix_shell_helper": "620b4bde416f5045cd3ec3a1f02c2751d4893fa4b89c855de7f5cce0823280fd",
     "lvs_fixture_harnesses": {
       "tests/regression/lvs_fixture_check.py": "80bd5bc4b676915d39fbf759e4f6478f442559e201c7f7edf800f09e4cef4372",
@@ -313,39 +313,46 @@
     },
     "drc_profile_sha256": "50cb0be9de01348f1c820827e6935154bb02bdc4920ddc92e403c6b2598fe0f7",
     "drc_rule_decks": {
-      "libs.tech/drc/ics55_drc.drc": "b8a45a10332a9635f9ffebedf905cdd39e2f321eda25a30f48d1923833204761",
+      "libs.tech/drc/ics55_drc.drc": "5d47d50f2bcbc9979aa26bf5ca01bf7ceca97f850847e7ea5a9e57b961e3a9bf",
+      "libs.tech/drc/ics55_antenna.drc": "0293e03d8846ec1d2c4c960fa0cc1207fbfd3b6f1304ecf53ea636f30f9b7acb",
       "libs.tech/drc/rule_decks/advanced/10_eol_jog.drc": "d86b151f0e587210230d76a40f6146c9c6a0a5c3a06d09e0876f0559891e4630",
-      "libs.tech/drc/rule_decks/beol/06_metal.drc": "6f7cd55d6155eccc1c7785f7ce2ba44a03e10c89144d1162f617cc0fdaacd040",
-      "libs.tech/drc/rule_decks/beol/07_via.drc": "d83ad8ce4fbb15b767bef1daa0380c70514ec4a3ba132ed2bb8d6a150e1bad1b",
-      "libs.tech/drc/rule_decks/beol/08_pad.drc": "7c5cd80efab74dc3acf7bea82af1cbf59cec08d39b8b5141e91ef8d60d6c4a17",
+      "libs.tech/drc/rule_decks/beol/06_metal.drc": "e891d69380924fc9fd39aa127e9ec019888d34e2fe9f45c484e546e540bf0bfb",
+      "libs.tech/drc/rule_decks/beol/07_via.drc": "e9cae5ebb3515b581eaa90cdd72f180f2b812261ce5c56fcafc7f08dfc9fea94",
+      "libs.tech/drc/rule_decks/beol/08_pad.drc": "5814dfc4921597327682d7ca6e3d5d950497be834d9afe9778d8dc3ce84b66f2",
+      "libs.tech/drc/rule_decks/beol/09_sealring.drc": "8355ef08a1fad075b52dad400b54fbf971c52e9bb3e3d7b97e659e1ecd19a73b",
       "libs.tech/drc/rule_decks/density.drc": "6658c65cc2b3f962ab35ddd07635accf12a5d86b5f2959fd8ce1159116ea414a",
-      "libs.tech/drc/rule_decks/dummy_slot.drc": "3ebad809814f05f722d129e222b29c027901d48b478fb078ee045052a7a1ad0c",
-      "libs.tech/drc/rule_decks/feol/01_wells.drc": "9c713e70421c40ff7f6a2b136f6bb22ca7fa79916cb4426b995e687ac811e168",
-      "libs.tech/drc/rule_decks/feol/02_active.drc": "5792bb281a41c1ab140766288dda4fa9340b81e2eb0b5f562d4e273c89fe74e6",
-      "libs.tech/drc/rule_decks/feol/03_poly.drc": "8f8dc738ccb0c55afbd66167694efba5fead6bcfd29e8e43ea4c923a117efd3b",
-      "libs.tech/drc/rule_decks/feol/04_implant.drc": "b90514f2d4672b58ff81aeb6d41dc767652d68e6f4ee911af8c11c6072dc56e0",
-      "libs.tech/drc/rule_decks/feol/05_cont.drc": "b3674b0887781aa30dff71d9dce0440567c7bea99045efaa875697847ec6190f",
+      "libs.tech/drc/rule_decks/dummy_slot.drc": "bda7311bc9e529b7c31556778903c418e929ef6df7aa0f4796a63b350e6af40e",
+      "libs.tech/drc/rule_decks/feol/01_wells.drc": "dfded51e916dc5716514fc97984b5f7d9311c1b2f0618ce969cc60e681a97579",
+      "libs.tech/drc/rule_decks/feol/02_active.drc": "946b57570388c9832bead3493c442a271ab097b013496804c8e37bda7425e133",
+      "libs.tech/drc/rule_decks/feol/03_poly.drc": "8fe6059da5f1b706db06753f656d36d2675858b98f484131525fd2bcf84b0a2f",
+      "libs.tech/drc/rule_decks/feol/04_implant.drc": "0eac027a63d5c8081df7fee50e6625bae6ec7998eee5483921d03846f5e89d21",
+      "libs.tech/drc/rule_decks/feol/05_cont.drc": "deffbdbebcc02ae54fb66cf670762517ddb7e3ed764352ec153a559fa20438ea",
+      "libs.tech/drc/rule_decks/feol/06_tg_dg.drc": "d22ac102621ed38043bb906edd3ea7d9672d370a14d7c2dd4f48e5a0daeafda0",
+      "libs.tech/drc/rule_decks/feol/07_sab.drc": "b4e51e4af98fbc536b89dde9fe746dd07dfdd31d05395193bbaf7708f02b042c",
+      "libs.tech/drc/rule_decks/feol/08_hrp.drc": "4c853f27eacb6015a5e20ff854b72dd9f2feb6c509f8be6fcd2fb55e21284304",
+      "libs.tech/drc/rule_decks/feol/09_ulld.drc": "839a7485a16d035b83d7f424102e983c4e11aeff3714874cc171048b9ab42f7d",
+      "libs.tech/drc/rule_decks/feol/10_voltage_implants.drc": "e7da813046dd8a9b63825278fc694ba9065620e759a2f9f4bf7c139f773bf261",
       "libs.tech/drc/rule_decks/geometry/09_grid.drc": "abbaede9dfe7bb6fcf8995560775edd3d123a2dee6dcfcd6b9ba6d9c7cc94383",
-      "libs.tech/drc/rule_decks/layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
-      "libs.tech/drc/rule_decks/mom.drc": "918d1fbe9c93527087268ace3e7677ffc10f20038d7d9a581661fd3138bfa3e8",
-      "libs.tech/drc/rule_decks/special.drc": "bbbf4c024b1beca75c693aa1720c7fb113b6b9983bff404f2c98d4b06536e4ae",
-      "libs.tech/drc/rule_decks/ics55_rules.json": "82bce7b96bc7f8b3107d19f4922512d0edcb0affcdf28f1cef4f4ef76bb1481b"
+      "libs.tech/drc/rule_decks/layers_def.drc": "8f15c1d2d82787b34683d81028b7bf57a878ae49823cbaeac8e1d36e9713f64f",
+      "libs.tech/drc/rule_decks/mom.drc": "bfe13a5de18551491bc33617a82802346ac481332cf9aeb0c25c86e76f8d4bab",
+      "libs.tech/drc/rule_decks/special.drc": "9e97753b6774e5b095e2aa130f3c78e935d5354a3ffcadf1f3312184bd93657e",
+      "libs.tech/drc/rule_decks/ics55_rules.json": "d49baabd83621b1d90de27de74aac4378cf13a9f49e14284c49362ec077ddd37"
     },
     "drc_layer_maps": {
       "techfile/icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
       "libs.tech/klayout/tech/ics55.map": "8e89d6f45583d5c95e3f5241b9d07843102e1c99c1db1f72e7dddc1fae310187"
     },
     "drc_harnesses": {
-      "tests/regression/drc_fixture_check.py": "7acd2cc4925a91933d529896a792888b54ba1c642cf81b8358dbc120d00ef346",
-      "tests/regression/make_fixtures.rb": "6366c8abccddf1577a628419e86b51dcf09ba46a16c75c91b8a978be1de090c3"
+      "tests/regression/drc_fixture_check.py": "8f1425bba47a98bda4101fd90dbaf379bec2ff3bebbd43972fbfba8d75b330ea",
+      "tests/regression/make_fixtures.rb": "a03f18af1d89cc9caaf6c8f9aa800c817962df83df56b592cab852d2cb92fb04"
     },
     "calibre_drc_sources": {
       "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc": "e979fded0bef271f4635736163b03b7db2071569a88feb7cab211413feb7f1db",
       "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant": "fc9f95aca4d9b81b99b1aba5b9789afd2f3a96e8435880c5158c177cc47f1f44"
     },
     "drc_crosswalk": {
-      "tests/regression/official/drc_rule_comparison.json": "d5c8cf7ba9468bdeb63367e0f23c45578a973e57ce03c0752709461ee226b5c6",
-      "tests/regression/official/drc_rule_comparison.md": "4930b230aa3ae27891e32a3be79c7c85a0c54bd6a0141f91ed1fd315e99ad3d1"
+      "tests/regression/official/drc_rule_comparison.json": "753e4988ee5168e40ff59911c3bd96c04ef093124f56f7f5fe4505125c1d9248",
+      "tests/regression/official/drc_rule_comparison.md": "90d17f6526d4282171c12fd4e399ee8c3e9b5eb4caf79e33877e855291c9298e"
     }
   }
 }

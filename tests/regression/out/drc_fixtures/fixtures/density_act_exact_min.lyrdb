@@ -2,7 +2,7 @@
 <report-database>
  <description>ICsprout55 DRC</description>
  <original-file/>
- <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
  <top-cell>TOP</top-cell>
  <tags>
  </tags>

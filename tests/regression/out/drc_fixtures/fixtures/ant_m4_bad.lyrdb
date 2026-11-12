@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 Antenna</description>
+ <original-file/>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_antenna.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>antenna.AR_5_10_M4</name>
+   <description>ICsprout55 antenna AR_5_10_M4</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>'antenna.AR_5_10_M4'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (-0.75,0.19;-0.75,10.69;1.25,10.69;1.25,0.19)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

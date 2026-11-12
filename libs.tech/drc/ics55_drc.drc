@@ -132,10 +132,16 @@ MODULE_FILES = [
   'rule_decks/feol/03_poly.drc',
   'rule_decks/feol/04_implant.drc',
   'rule_decks/feol/05_cont.drc',
+  'rule_decks/feol/06_tg_dg.drc',
+  'rule_decks/feol/07_sab.drc',
+  'rule_decks/feol/08_hrp.drc',
+  'rule_decks/feol/09_ulld.drc',
+  'rule_decks/feol/10_voltage_implants.drc',
   # BEOL: only source predicates supported with their active profile/waivers.
   'rule_decks/beol/06_metal.drc',
   'rule_decks/beol/07_via.drc',
   'rule_decks/beol/08_pad.drc',
+  'rule_decks/beol/09_sealring.drc',
   'rule_decks/dummy_slot.drc',
   # Geometry and optional empirical diagnostics.
   'rule_decks/geometry/09_grid.drc',

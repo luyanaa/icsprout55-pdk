@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Exact geometry-only dummy/slot checks from the supplied Calibre source.
-# Spacing predicates using ABUT<90, SINGULAR, REGION, Mn_2c_DUM, or dynamic
-# NOT RECTANGLE qualifiers are omitted rather than approximated with KLayout
-# space/bounding-box checks.
+# Dummy-pattern and metal-slot checks from the supplied Calibre source.
+# The source predicates ABUT<90 SINGULAR REGION are ported as generic KLayout
+# same-layer and cross-layer spacing checks; edge-relation qualifiers are not
+# represented. The Mn_2b_DUM / Mn_2c_DUM wide-run macro used by T4M2DUM_S_7
+# is approximated by shape erosion and marker bbox filtering, the same idiom
+# as the wide-metal spacing rules in 06_metal.drc.
 if DUMMY_SLOT
   exact_rectangle = lambda do |layer, width, height|
     area = (width * height).um2
     layer.with_bbox_width(width.um).with_bbox_height(height.um).with_area(area)
+  end
+  space_to = lambda do |dummy, other, limit|
+    dummy.drc(separation(other, transparent) < limit.um)
+  end
+  enclose_by = lambda do |dummy, other, limit|
+    dummy.edges.inside_part(other).extended_out(limit.um).not(other)
   end
   act_dummy_3 = rval('act_dummy_3')
   act_dummy_1 = rval('act_dummy_1')
@@ -34,54 +42,241 @@ if DUMMY_SLOT
   t4m2_dummy_rect_width = rval('t4m2_dummy_rect_width')
   t4m2_dummy_rect_length = rval('t4m2_dummy_rect_length')
 
-  # AADUM shape whitelist and overlap rules.
-  aadum_allowed = exact_rectangle.call(ACTDUM, act_dummy_3, act_dummy_3)
-    .or(exact_rectangle.call(ACTDUM, act_dummy_1, act_dummy_1))
-    .or(exact_rectangle.call(ACTDUM, act_dummy_0467, act_dummy_0467))
+  # AADUM shape whitelist, overlap rules, and size-class spacing.
+  aadum_3 = exact_rectangle.call(ACTDUM, act_dummy_3, act_dummy_3)
+  aadum_1 = exact_rectangle.call(ACTDUM, act_dummy_1, act_dummy_1)
+  aadum_0467 = exact_rectangle.call(ACTDUM, act_dummy_0467, act_dummy_0467)
+  aadum_allowed = aadum_3.or(aadum_1).or(aadum_0467)
   ACTDUM.not(aadum_allowed).output('AADUM_W_1',
     "AADUM_W_1: ACTDUM must be a source-defined #{act_dummy_3}x#{act_dummy_3}, #{act_dummy_1}x#{act_dummy_1}, or #{act_dummy_0467}x#{act_dummy_0467} um rectangle")
   ACTDUM.and(CT).output('AADUM_R_1', 'AADUM_R_1: ACTDUM must not overlap CT')
 
-  # PODUM shape whitelist and overlap rules.
-  podum_allowed = exact_rectangle.call(POLYDUM, poly_dummy_24, poly_dummy_24)
-    .or(exact_rectangle.call(POLYDUM, poly_dummy_092, poly_dummy_092))
-    .or(exact_rectangle.call(POLYDUM, poly_dummy_0381, poly_dummy_0381))
+  aadum_space_3x3 = rval('aadum_space_3x3')
+  aadum_3.drc(space < aadum_space_3x3.um).output('AADUM_S_1',
+    "AADUM_S_1: 3x3 um ACTDUM spacing must be at least #{aadum_space_3x3} um [Calibre source]")
+  aadum_space_1x1 = rval('aadum_space_1x1')
+  aadum_1.drc(space < aadum_space_1x1.um).output('AADUM_S_2',
+    "AADUM_S_2: 1x1 um ACTDUM spacing must be at least #{aadum_space_1x1} um [Calibre source]")
+  aadum_space_0p467 = rval('aadum_space_0p467')
+  aadum_0467.drc(space < aadum_space_0p467.um).output('AADUM_S_3',
+    "AADUM_S_3: 0.467x0.467 um ACTDUM spacing must be at least #{aadum_space_0p467} um [Calibre source]")
+
+  aadum_aa_space = rval('aadum_aa_space')
+  space_to.call(ACTDUM, ACT, aadum_aa_space).polygons.or(ACTDUM.and(ACT)).output('AADUM_S_4',
+    "AADUM_S_4: ACTDUM to AA spacing must be at least #{aadum_aa_space} um and must not overlap AA [Calibre source]")
+  aadum_po_space = rval('aadum_po_space')
+  space_to.call(ACTDUM, POLY, aadum_po_space).polygons.or(ACTDUM.and(POLY)).output('AADUM_S_5',
+    "AADUM_S_5: ACTDUM to PO spacing must be at least #{aadum_po_space} um and must not overlap PO [Calibre source]")
+
+  aadum_nw_space = rval('aadum_nw_space')
+  space_to.call(ACTDUM, NW, aadum_nw_space).polygons.or(enclose_by.call(ACTDUM, NW, aadum_nw_space))
+    .output('AADUM_S_6',
+      "AADUM_S_6: ACTDUM to NW boundary spacing/enclosure must be at least #{aadum_nw_space} um [Calibre source]")
+  aadum_fuse_space = rval('aadum_fuse_space')
+  space_to.call(ACTDUM, FUSEALL, aadum_fuse_space).output('AADUM_S_7',
+    "AADUM_S_7: ACTDUM to FUSEALL spacing must be at least #{aadum_fuse_space} um [Calibre source]")
+  aadum_nw1res_space = rval('aadum_nw1res_space')
+  space_to.call(ACTDUM, NW1RES, aadum_nw1res_space).output('AADUM_S_8',
+    "AADUM_S_8: ACTDUM to NW1RES spacing must be at least #{aadum_nw1res_space} um [Calibre source]")
+  aadum_logo_space = rval('aadum_logo_space')
+  space_to.call(ACTDUM, LOGO, aadum_logo_space).output('AADUM_S_9',
+    "AADUM_S_9: ACTDUM to LOGO spacing must be at least #{aadum_logo_space} um [Calibre source]")
+  aadum_indall_space = rval('aadum_indall_space')
+  space_to.call(ACTDUM, INDALL, aadum_indall_space).output('AADUM_S_10',
+    "AADUM_S_10: ACTDUM to INDALL spacing must be at least #{aadum_indall_space} um [Calibre source]")
+  aadum_chipblk_space = rval('aadum_chipblk_space')
+  space_to.call(ACTDUM, CHIPBLK, aadum_chipblk_space).polygons
+    .or(enclose_by.call(ACTDUM, CHIPBLK, aadum_chipblk_space)).output('AADUM_S_11',
+      "AADUM_S_11: ACTDUM to chip boundary spacing/enclosure must be at least #{aadum_chipblk_space} um [Calibre source]")
+  aadum_aadumb_space = rval('aadum_aadumb_space')
+  space_to.call(ACTDUM, ACTDUMB, aadum_aadumb_space).output('AADUM_S_12',
+    "AADUM_S_12: ACTDUM to ACTDUMB spacing must be at least #{aadum_aadumb_space} um [Calibre source]")
+  aadum_dmyblk_space = rval('aadum_dmyblk_space')
+  space_to.call(ACTDUM, DMYBLK, aadum_dmyblk_space).output('AADUM_S_13',
+    "AADUM_S_13: ACTDUM to DMYBLK spacing must be at least #{aadum_dmyblk_space} um [Calibre source]")
+
+  # PODUM shape whitelist, overlap rules, and size-class spacing.
+  podum_24 = exact_rectangle.call(POLYDUM, poly_dummy_24, poly_dummy_24)
+  podum_092 = exact_rectangle.call(POLYDUM, poly_dummy_092, poly_dummy_092)
+  podum_0381 = exact_rectangle.call(POLYDUM, poly_dummy_0381, poly_dummy_0381)
+  podum_allowed = podum_24.or(podum_092).or(podum_0381)
   POLYDUM.not(podum_allowed).output('PODUM_W_1',
     "PODUM_W_1: POLYDUM must be a source-defined #{poly_dummy_24}x#{poly_dummy_24}, #{poly_dummy_092}x#{poly_dummy_092}, or #{poly_dummy_0381}x#{poly_dummy_0381} um rectangle")
   POLYDUM.and(CT).output('PODUM_R_1', 'PODUM_R_1: POLYDUM must not overlap CT')
 
-  # M1-M5 and the selected T4M2 top-metal dummy shape whitelists. Source
-  # spacing checks are omitted because their qualifiers and layer-specific
-  # source macros differ from KLayout's generic spacing result.
+  podum_space_2p4 = rval('podum_space_2p4')
+  podum_24.drc(space < podum_space_2p4.um).output('PODUM_S_1',
+    "PODUM_S_1: 2.4x2.4 um POLYDUM spacing must be at least #{podum_space_2p4} um [Calibre source]")
+  podum_space_0p92 = rval('podum_space_0p92')
+  podum_092.drc(space < podum_space_0p92.um).output('PODUM_S_2',
+    "PODUM_S_2: 0.92x0.92 um POLYDUM spacing must be at least #{podum_space_0p92} um [Calibre source]")
+  podum_space_0p381 = rval('podum_space_0p381')
+  podum_0381.drc(space < podum_space_0p381.um).output('PODUM_S_3',
+    "PODUM_S_3: 0.381x0.381 um POLYDUM spacing must be at least #{podum_space_0p381} um [Calibre source]")
+
+  podum_aa_space = rval('podum_aa_space')
+  space_to.call(POLYDUM, ACT, podum_aa_space).polygons.or(POLYDUM.and(ACT)).output('PODUM_S_4',
+    "PODUM_S_4: POLYDUM to AA spacing must be at least #{podum_aa_space} um and must not overlap AA [Calibre source]")
+  podum_po_space = rval('podum_po_space')
+  space_to.call(POLYDUM, POLY, podum_po_space).polygons.or(POLYDUM.and(POLY)).output('PODUM_S_5',
+    "PODUM_S_5: POLYDUM to PO spacing must be at least #{podum_po_space} um and must not overlap PO [Calibre source]")
+
+  podum_nw_space = rval('podum_nw_space')
+  space_to.call(POLYDUM, NW, podum_nw_space).polygons.or(enclose_by.call(POLYDUM, NW, podum_nw_space))
+    .output('PODUM_S_6',
+      "PODUM_S_6: POLYDUM to NW boundary spacing/enclosure must be at least #{podum_nw_space} um [Calibre source]")
+  podum_nw1res_space = rval('podum_nw1res_space')
+  space_to.call(POLYDUM, NW1RES, podum_nw1res_space).output('PODUM_S_7',
+    "PODUM_S_7: POLYDUM to NW1RES spacing must be at least #{podum_nw1res_space} um [Calibre source]")
+  podum_logo_space = rval('podum_logo_space')
+  space_to.call(POLYDUM, LOGO, podum_logo_space).output('PODUM_S_8',
+    "PODUM_S_8: POLYDUM to LOGO spacing must be at least #{podum_logo_space} um [Calibre source]")
+  podum_indall_space = rval('podum_indall_space')
+  space_to.call(POLYDUM, INDALL, podum_indall_space).output('PODUM_S_9',
+    "PODUM_S_9: POLYDUM to INDALL spacing must be at least #{podum_indall_space} um [Calibre source]")
+  podum_chipblk_space = rval('podum_chipblk_space')
+  podum_chipblk_enc = rval('podum_chipblk_enc')
+  space_to.call(POLYDUM, CHIPBLK, podum_chipblk_space).polygons
+    .or(enclose_by.call(POLYDUM, CHIPBLK, podum_chipblk_enc)).output('PODUM_S_10',
+      "PODUM_S_10: POLYDUM to chip boundary spacing must be at least #{podum_chipblk_space} um " \
+      "and enclosure at least #{podum_chipblk_enc} um [Calibre source]")
+  podum_podumb_space = rval('podum_podumb_space')
+  space_to.call(POLYDUM, POLYDUMB, podum_podumb_space).output('PODUM_S_11',
+    "PODUM_S_11: POLYDUM to POLYDUMB spacing must be at least #{podum_podumb_space} um [Calibre source]")
+  podum_dmyblk_space = rval('podum_dmyblk_space')
+  space_to.call(POLYDUM, DMYBLK, podum_dmyblk_space).output('PODUM_S_12',
+    "PODUM_S_12: POLYDUM to DMYBLK spacing must be at least #{podum_dmyblk_space} um [Calibre source]")
+
+  # M1-M5 dummy shape whitelists.
   metal_dummies = [
     ['M1', MET1DUM], ['M2', MET2DUM], ['M3', MET3DUM],
-    ['M4', MET4DUM], ['M5', MET5DUM], ['T4M2', T4M2DUM]
+    ['M4', MET4DUM], ['M5', MET5DUM]
   ]
   metal_dummies.each do |name, dummy|
-    if name == 'T4M2'
-      special = exact_rectangle.call(dummy, t4m2_dummy_rect_width, t4m2_dummy_rect_length)
-        .or(exact_rectangle.call(dummy, t4m2_dummy_rect_length, t4m2_dummy_rect_width))
-      special_size = "#{t4m2_dummy_rect_width}x#{t4m2_dummy_rect_length}"
-    else
-      special = exact_rectangle.call(dummy, metal_dummy_rect_width, metal_dummy_rect_length)
-        .or(exact_rectangle.call(dummy, metal_dummy_rect_length, metal_dummy_rect_width))
-      special_size = "#{metal_dummy_rect_width}x#{metal_dummy_rect_length}"
-    end
+    special = exact_rectangle.call(dummy, metal_dummy_rect_width, metal_dummy_rect_length)
+      .or(exact_rectangle.call(dummy, metal_dummy_rect_length, metal_dummy_rect_width))
     allowed = exact_rectangle.call(dummy, metal_dummy_2, metal_dummy_2)
       .or(exact_rectangle.call(dummy, metal_dummy_1, metal_dummy_1))
       .or(special)
-    rule_id = name == 'T4M2' ? 'T4M2DUM_W_1' : "#{name}DUM_W_1"
+    rule_id = "#{name}DUM_W_1"
     dummy.not(allowed).output(rule_id,
-      "#{rule_id}: #{name} dummy must be a source-defined 2x2, 1x1, or #{special_size} um rectangle")
+      "#{rule_id}: #{name} dummy must be a source-defined 2x2, 1x1, or " \
+      "#{metal_dummy_rect_width}x#{metal_dummy_rect_length} um rectangle")
   end
 
-  # Slot-to-CB overlap is an exact Boolean check. SL_W_1_L_1 and SL_S_1 are
-  # omitted: the former requires Calibre's dynamic NOT RECTANGLE predicate;
-  # the latter uses ABUT<90 SINGULAR REGION.
+  # T4M2 dummy shape whitelist and size-class spacing. The class filters accept
+  # the 0.6x1.2 rectangle in both orientations, matching the whitelist above.
+  t4m2_special = exact_rectangle.call(T4M2DUM, t4m2_dummy_rect_width, t4m2_dummy_rect_length)
+    .or(exact_rectangle.call(T4M2DUM, t4m2_dummy_rect_length, t4m2_dummy_rect_width))
+  t4m2_2 = exact_rectangle.call(T4M2DUM, metal_dummy_2, metal_dummy_2)
+  t4m2_1 = exact_rectangle.call(T4M2DUM, metal_dummy_1, metal_dummy_1)
+  T4M2DUM.not(t4m2_2.or(t4m2_1).or(t4m2_special)).output('T4M2DUM_W_1',
+    "T4M2DUM_W_1: T4M2 dummy must be a source-defined 2x2, 1x1, or " \
+    "#{t4m2_dummy_rect_width}x#{t4m2_dummy_rect_length} um rectangle")
+
+  t4m2dum_space_2x2 = rval('t4m2dum_space_2x2')
+  t4m2_2.drc(space < t4m2dum_space_2x2.um)
+    .not_inside(INDALL).not_inside(NODRC).output('T4M2DUM_S_1',
+      "T4M2DUM_S_1: 2x2 um T4M2 dummy spacing must be at least #{t4m2dum_space_2x2} um [Calibre source]")
+  t4m2dum_metal_space_2x2 = rval('t4m2dum_metal_space_2x2')
+  space_to.call(t4m2_2, TM2, t4m2dum_metal_space_2x2)
+    .not_inside(INDALL).not_inside(NODRC).output('T4M2DUM_S_2',
+      "T4M2DUM_S_2: 2x2 um T4M2 dummy to T4M2 spacing must be at least #{t4m2dum_metal_space_2x2} um [Calibre source]")
+  t4m2dum_space_1x1 = rval('t4m2dum_space_1x1')
+  t4m2_1.drc(space < t4m2dum_space_1x1.um)
+    .not_inside(INDALL).not_inside(NODRC).output('T4M2DUM_S_3',
+      "T4M2DUM_S_3: 1x1 um T4M2 dummy spacing must be at least #{t4m2dum_space_1x1} um [Calibre source]")
+  t4m2dum_metal_space_1x1 = rval('t4m2dum_metal_space_1x1')
+  space_to.call(t4m2_1, TM2, t4m2dum_metal_space_1x1)
+    .not_inside(INDALL).not_inside(NODRC).output('T4M2DUM_S_4',
+      "T4M2DUM_S_4: 1x1 um T4M2 dummy to T4M2 spacing must be at least #{t4m2dum_metal_space_1x1} um [Calibre source]")
+  t4m2dum_space_0p6x1p2 = rval('t4m2dum_space_0p6x1p2')
+  t4m2_special.drc(space < t4m2dum_space_0p6x1p2.um)
+    .not_inside(INDALL).not_inside(NODRC).output('T4M2DUM_S_5',
+      "T4M2DUM_S_5: 0.6x1.2 um T4M2 dummy spacing must be at least #{t4m2dum_space_0p6x1p2} um [Calibre source]")
+  t4m2dum_metal_space_0p6x1p2 = rval('t4m2dum_metal_space_0p6x1p2')
+  space_to.call(t4m2_special, TM2, t4m2dum_metal_space_0p6x1p2)
+    .not_inside(INDALL).not_inside(NODRC).output('T4M2DUM_S_6',
+      "T4M2DUM_S_6: 0.6x1.2 um T4M2 dummy to T4M2 spacing must be at least #{t4m2dum_metal_space_0p6x1p2} um [Calibre source]")
+
+  # T4M2DUM_S_7: Mn_2b_DUM wide-run dummy spacing. The source macro selects
+  # facing edges of shapes that can enclose a 1.5x1.5 um rectangle; this port
+  # erodes T4M2ALL by width/2 (minus one grid step), keeps space markers that
+  # touch a wide shape, and filters markers by bbox run.
+  t4m2_all = TM2.not(T4M2SLOT).or(T4M2DUM)
+  t4m2_region = t4m2_all.data
+  t4m2dum_wide_width = rval('t4m2dum_wide_width')
+  t4m2dum_wide_run = rval('t4m2dum_wide_run')
+  t4m2dum_wide_space = rval('t4m2dum_wide_space')
+  t4m2_wide = t4m2_region.interacting(
+    t4m2_region.sized(-((t4m2dum_wide_width / 2.0 - grid) / grid).round))
+  t4m2_markers = t4m2_region.space_check((t4m2dum_wide_space / grid).round).polygons
+  t4m2_markers = t4m2_markers.interacting(t4m2_wide)
+  t4m2_markers = bbox_longer_than.call(t4m2_markers, (t4m2dum_wide_run / grid).round)
+  t4m2_markers = t4m2_markers.interacting(T4M2DUM.data)
+  wrap_region.call(t4m2_markers).not_inside(NODRC).output('T4M2DUM_S_7',
+    "T4M2DUM_S_7: T4M2 dummy spacing must be at least #{t4m2dum_wide_space} um when width/length " \
+    ">= #{t4m2dum_wide_width} um and run >= #{t4m2dum_wide_run} um [Calibre source]")
+
+  # T4M2DUM_S_8: 45-degree T4M2 to dummy spacing. RBA::Edges#space_check
+  # returns nothing for this configuration, so the region separation pairs are
+  # filtered instead, keeping pairs that involve a 45-degree member edge.
+  t4m2dum_angle_space = rval('t4m2dum_angle_space')
+  t4m2_angle_pairs = TM2.data.separation_check(T4M2DUM.data,
+    (t4m2dum_angle_space / grid).round)
+  t4m2_angle_selected = RBA::EdgePairs.new
+  t4m2_angle_pairs.each do |pair|
+    [pair.first, pair.second].each do |edge|
+      dx = (edge.p2.x - edge.p1.x).abs
+      dy = (edge.p2.y - edge.p1.y).abs
+      if dx != 0 && dx == dy
+        t4m2_angle_selected.insert(pair)
+        break
+      end
+    end
+  end
+  wrap_region.call(t4m2_angle_selected.polygons).not_inside(NODRC).output('T4M2DUM_S_8',
+    "T4M2DUM_S_8: T4M2 dummy to 45-degree T4M2 spacing must be at least #{t4m2dum_angle_space} um [Calibre source]")
+
+  # T4M2DUM_S_9..S_13: EXT plus ENC against neighboring blocking layers.
+  [
+    ['FUSEALL', FUSEALL, 't4m2dum_fuse_space', 'T4M2DUM_S_9'],
+    ['BMIM', BMIM, 't4m2dum_mim_space', 'T4M2DUM_S_10'],
+    ['LOGO', LOGO, 't4m2dum_logo_space', 'T4M2DUM_S_11'],
+    ['INDALL', INDALL, 't4m2dum_indall_space', 'T4M2DUM_S_12'],
+    ['CHIPBLK', CHIPBLK, 't4m2dum_chipblk_space', 'T4M2DUM_S_13']
+  ].each do |name, layer, key, rule_id|
+    limit = rval(key)
+    space_to.call(T4M2DUM, layer, limit).polygons.or(enclose_by.call(T4M2DUM, layer, limit))
+      .output(rule_id,
+        "#{rule_id}: T4M2 dummy to #{name} spacing/enclosure must be at least #{limit} um [Calibre source]")
+  end
+  t4m2dum_dumb_space = rval('t4m2dum_dumb_space')
+  space_to.call(T4M2DUM, T4M2DUMB, t4m2dum_dumb_space).output('T4M2DUM_S_14',
+    "T4M2DUM_S_14: T4M2 dummy to T4M2DUMB spacing must be at least #{t4m2dum_dumb_space} um [Calibre source]")
+  t4m2dum_dmyblk_space = rval('t4m2dum_dmyblk_space')
+  space_to.call(T4M2DUM, DMYBLK, t4m2dum_dmyblk_space).output('T4M2DUM_S_15',
+    "T4M2DUM_S_15: T4M2 dummy to DMYBLK spacing must be at least #{t4m2dum_dmyblk_space} um [Calibre source]")
+
+  # Slot overlap, spacing, and size rules. The source SL_W_1_L_1 predicate is
+  # NOT RECTANGLE with width >= 2 and length >= 4.5; the port accepts either
+  # orientation and additionally reports non-rectangular slots.
+  slot_space = rval('slot_space')
+  slot_width = rval('slot_width')
+  slot_length = rval('slot_length')
   [
     ['M1', MET1SLOT], ['M2', MET2SLOT], ['M3', MET3SLOT],
     ['M4', MET4SLOT], ['M5', MET5SLOT], ['T4M2', T4M2SLOT]
   ].each do |name, slot|
     slot.and(CB).output('SL_R_1', "SL_R_1: #{name} slot must not overlap CB")
+    slot.drc(space < slot_space.um).not_inside(NODRC).output('SL_S_1',
+      "SL_S_1: #{name} slot spacing must be at least #{slot_space} um [Calibre source]")
+    horizontal = slot.with_bbox_width(slot_width.um, 1e6.um)
+      .with_bbox_height(slot_length.um, 1e6.um)
+    vertical = slot.with_bbox_width(slot_length.um, 1e6.um)
+      .with_bbox_height(slot_width.um, 1e6.um)
+    slot.not(horizontal.or(vertical)).or(slot.non_rectangles).not_inside(NODRC)
+      .output('SL_W_1_L_1',
+        "SL_W_1_L_1: #{name} slot must be a rectangle of at least #{slot_width}x#{slot_length} um [Calibre source]")
   end
 end

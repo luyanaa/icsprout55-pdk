@@ -75,10 +75,191 @@ if BEOL
   # M1_S_1 and M2-M5_S_1 thresholds use generic KLayout space checks, not the
   # source ABUT<90/SINGULAR qualifiers. M1_S_1's ABUT<89 branch inside INDALL
   # is omitted.
-  # Omitted active rules: MET1_W_1/W_2/W_3, MET1_S_2/S_3/S_4/S_5;
-  # M2-M5_W_1a/W_1b/W_2/W_3 and M2-M5_S_2/S_3/S_4/S_5; T4M2_W_1,
-  # T4M2_S_1/S_2. Width, angle, run-length, array, and marker-specific
-  # predicates are not represented exactly here.
+
+  # ---------------------------------------------------------------------
+  # Width, 45-degree, wide-metal, dense line-end and huge-void rules.
+  # Calibre predicates that select individual edges cannot be expressed with
+  # KLayout's region API; they are translated with the RBA edge geometry and
+  # wrapped back as marker polygons. ABUT/SINGULAR/REGION qualifiers are
+  # approximated, and the deviations are stated per rule. The shared marker
+  # helpers (wrap_region, bbox_longer_than, edge_pair_overlap) and the
+  # manufacturing grid are defined in layers_def.drc.
+  # ---------------------------------------------------------------------
+
+  # MET1_W_1 and M2-M5_W_1a/W_1b. Maximum width uses the source's minimum
+  # width metric: a shape is too wide only when every cross-section > max.
+  metal_width_rules = [
+    ['M1', M1, 'm1', 'MET1_W_1', 'MET1_W_1', true, false],
+    ['M2', M2, 'm2', 'M2_W_1a', 'M2_W_1b', false, false],
+    ['M3', M3, 'm3', 'M3_W_1a', 'M3_W_1b', false, false],
+    ['M4', M4, 'm4', 'M4_W_1a', 'M4_W_1b', false, false],
+    ['M5', M5, 'm5', 'M5_W_1a', 'M5_W_1b', false, true]
+  ]
+  metal_width_rules.each do |name, layer, key, min_rule, max_rule, sramall_waiver, deupad_max|
+    min_width = rval("#{key}_width")
+    width_errors = layer.drc(width < min_width.um)
+    width_errors = width_errors.not_inside(SRAMALL) if sramall_waiver
+    width_errors.not_inside(NODRC).output("metal.#{key}.width",
+      "#{min_rule}: #{name} width must be at least #{min_width} um [Calibre source]")
+
+    max_width = rval("#{key}_max_width")
+    wide_shapes = layer.interacting(layer.sized(-(max_width / 2.0).um))
+    # M5 is TM-1 when total_metal=6/top_metal=1: DEUPAD is exempt from the
+    # maximum-width clause (source M5_W_1b).
+    wide_shapes = wide_shapes.not(DEUPAD) if deupad_max
+    wide_shapes.not_inside(NODRC).output("metal.#{key}.max_width",
+      "#{max_rule}: #{name} width must be at most #{max_width} um [Calibre source]")
+  end
+
+  # MET1_W_2/S_4 and M2-M5_W_2/S_4: 45-degree width and spacing. The source
+  # exempts the area within 0.1um of a bending point and has a corner-to-edge
+  # clause for M2-M5; those qualifiers are not represented.
+  metal_angle_rules = [
+    ['M1', M1, 'm1', 'MET1_W_2', 'MET1_S_4'],
+    ['M2', M2, 'm2', 'M2_W_2', 'M2_S_4'],
+    ['M3', M3, 'm3', 'M3_W_2', 'M3_S_4'],
+    ['M4', M4, 'm4', 'M4_W_2', 'M4_S_4'],
+    ['M5', M5, 'm5', 'M5_W_2', 'M5_S_4']
+  ]
+  metal_angle_rules.each do |name, layer, key, width_rule, space_rule|
+    region = layer.data
+    angle_width = rval("#{key}_45_width")
+    wrap_region.call(
+      region.edges.with_abs_angle(45, false).width_check((angle_width / grid).round).polygons
+    ).not_inside(NODRC).output("metal.#{key}.angle_width",
+      "#{width_rule}: #{name} 45-degree width must be at least #{angle_width} um [Calibre source]")
+
+    angle_space = rval("#{key}_45_space")
+    wrap_region.call(
+      region.edges.with_abs_angle(45, false)
+        .space_check((angle_space / grid).round, region.edges).polygons
+    ).not_inside(NODRC).output("metal.#{key}.angle_space",
+      "#{space_rule}: #{name} space to 45-degree metal must be at least #{angle_space} um [Calibre source]")
+  end
+
+  # MET1_S_2/S_3 and M2-M5_S_2/S_3: wide-metal spacing. The source Mn_2b
+  # macro defines wide context through DFM SPACE narrow-gap edges and keeps
+  # ABUT<90 OPPOSITE edge pairs with LENGTH >= MTLEN; this port approximates
+  # it by eroding each shape by width/2 (minus one grid step), keeping space
+  # markers that touch a wide shape, and filtering markers by bbox run. The
+  # source's EDGE and NOT INSIDE EDGE qualifiers are not represented.
+  metal_wide_rules = [
+    ['M1', M1.not(MET1SLOT).or(MET1DUM), 'm1', 'wide'],
+    ['M2', M2.not(MET2SLOT).or(MET2DUM), 'm2', 'wide'],
+    ['M3', M3.not(MET3SLOT).or(MET3DUM), 'm3', 'wide'],
+    ['M4', M4.not(MET4SLOT).or(MET4DUM), 'm4', 'wide'],
+    ['M5', M5.not(MET5SLOT).or(MET5DUM), 'm5', 'wide']
+  ]
+  metal_wide_rules.each do |name, layer, key, _tag|
+    region = layer.data
+    [
+      ['metal_wide_width', 'metal_wide_run', 'metal_wide_space', 'wide_space',
+       name == 'M1' ? 'MET1_S_2' : "#{name}_S_2"],
+      ['metal_wider_width', 'metal_wider_run', 'metal_wider_space', 'wider_space',
+       name == 'M1' ? 'MET1_S_3' : "#{name}_S_3"]
+    ].each do |width_key, run_key, space_key, category, rule_id|
+      wide_width = rval(width_key)
+      run_length = rval(run_key)
+      min_space = rval(space_key)
+      # Raw RBA::Region#sized expects database units, unlike DRCLayer#sized.
+      wide_shapes = region.interacting(region.sized(-((wide_width / 2.0 - grid) / grid).round))
+      markers = region.space_check((min_space / grid).round).polygons
+      markers = markers.interacting(wide_shapes)
+      markers = bbox_longer_than.call(markers, (run_length / grid).round)
+      wrap_region.call(markers).not_inside(NODRC).output("metal.#{key}.#{category}",
+        "#{rule_id}: #{name} spacing to wide metal must be at least #{min_space} um " \
+        "when width >= #{wide_width} um and run >= #{run_length} um [Calibre source]")
+    end
+  end
+
+  # MET1_S_5 and M2-M5_S_5: dense line-end spacing. Line-end edges are
+  # approximated by edges shorter than the source line-end length; the
+  # source's adjacent-edge and INTERSECTING ONLY conditions are not
+  # represented. M1 additionally waives SRAMALL.
+  metal_eol_rules = [
+    ['M1', M1, 'm1', 'MET1_S_5', true],
+    ['M2', M2, 'm2', 'M2_S_5', false],
+    ['M3', M3, 'm3', 'M3_S_5', false],
+    ['M4', M4, 'm4', 'M4_S_5', false],
+    ['M5', M5, 'm5', 'M5_S_5', false]
+  ]
+  metal_eol_rules.each do |name, layer, key, rule_id, sramall_waiver|
+    region = layer.data
+    eol_len = rval("#{key}_dense_eol_len")
+    eol_space = rval("#{key}_dense_eol_space")
+    eol_jog = rval("#{key}_dense_eol_jog")
+    # RBA::Edges#with_length's two-argument overload is (length, inverse);
+    # the third argument selects the min/max range form.
+    line_ends = region.edges.with_length(0, (eol_len / grid).round, false)
+    pairs = line_ends.space_check((eol_space / grid).round, region.edges)
+    jog_dbu = (eol_jog / grid).round
+    markers = RBA::Region.new
+    pairs.each do |pair|
+      markers.insert(pair.polygon(0)) if edge_pair_overlap.call(pair) >= jog_dbu
+    end
+    eol_errors = wrap_region.call(markers).not_inside(MOMTER)
+    eol_errors = eol_errors.not_inside(SRAMALL) if sramall_waiver
+    eol_errors.not_inside(NODRC).output("metal.#{key}.eol_space",
+      "#{rule_id}: #{name} dense line-end spacing must be at least #{eol_space} um " \
+      "(line-end edges < #{eol_len} um, jogs < #{eol_jog} um exempt) [Calibre source]")
+  end
+
+  # MET1_W_3 and M2-M5_W_3: metal adjoining a huge non-metal region must be
+  # at least 0.35um wide. The source CHECK_REGION is built with ENCLOSE
+  # RECTANGLE on that region; a 0.35um halo is used here.
+  metal_void_rules = [
+    ['M1', M1, MET1DUM, 'm1', 'MET1_W_3'],
+    ['M2', M2, MET2DUM, 'm2', 'M2_W_3'],
+    ['M3', M3, MET3DUM, 'm3', 'M3_W_3'],
+    ['M4', M4, MET4DUM, 'm4', 'M4_W_3'],
+    ['M5', M5, MET5DUM, 'm5', 'M5_W_3']
+  ]
+  void_area_min = rval('metal_void_area_min')
+  void_band = rval('metal_void_band')
+  void_width = rval('metal_void_width')
+  metal_void_rules.each do |name, layer, dummy, key, rule_id|
+    huge_void = extent.not(layer.or(dummy)).with_area(void_area_min.um2, 1e9.um2)
+    check_mal = layer.interacting(huge_void.sized(void_band.um))
+    check_mal.drc(width < void_width.um).not_inside(NODRC).output("metal.#{key}.void_width",
+      "#{rule_id}: #{name} width must be at least #{void_width} um next to a non-metal " \
+      "region above #{void_area_min} um^2 [Calibre source]")
+  end
+
+  # T4M2_W_1: width >= 0.40um, width <= 20um excluding DEUPAD and pads (PA),
+  # with the source's INDALL waiver branch omitted like M1_S_1.
+  tm2 = TM2.not(T4M2SLOT)
+  tm2_width = rval('tm2_width')
+  tm2.drc(width < tm2_width.um).not_inside(INDALL).not_inside(NODRC).output('metal.tm2.width',
+    "T4M2_W_1: T4M2 width must be at least #{tm2_width} um [Calibre source]")
+
+  tm2_max_width = rval('tm2_max_width')
+  tm2_wide_shapes = tm2.interacting(tm2.sized(-(tm2_max_width / 2.0).um))
+  tm2_wide_shapes.not(DEUPAD).not_interacting(PA).not_inside(INDALL).not_inside(NODRC)
+    .output('metal.tm2.max_width',
+      "T4M2_W_1: T4M2 width must be at most #{tm2_max_width} um (DEUPAD/PA exempt) [Calibre source]")
+
+  # T4M2_S_1: space >= 0.40um, INDALL waiver branch omitted.
+  tm2_space = rval('tm2_space')
+  tm2.drc(space < tm2_space.um).not_inside(INDALL).not_inside(NODRC).output('metal.tm2.spacing',
+    "T4M2_S_1: T4M2 spacing must be at least #{tm2_space} um [Calibre source]")
+
+  # T4M2_S_2: wide-metal spacing from Mn_2b on T4M2ALL. The source comment
+  # qualifies "width or length >= 2um"; this port uses the same shape-width
+  # erosion approximation as the M1-M5 S_2/S_3 rules.
+  tm2_all = tm2.or(T4M2DUM)
+  tm2_region = tm2_all.data
+  tm2_wide_width = rval('tm2_wide_width')
+  tm2_wide_run = rval('tm2_wide_run')
+  tm2_wide_space = rval('tm2_wide_space')
+  tm2_wide = tm2_region.interacting(
+    tm2_region.sized(-((tm2_wide_width / 2.0 - grid) / grid).round))
+  tm2_markers = tm2_region.space_check((tm2_wide_space / grid).round).polygons
+  tm2_markers = tm2_markers.interacting(tm2_wide)
+  tm2_markers = bbox_longer_than.call(tm2_markers, (tm2_wide_run / grid).round)
+  wrap_region.call(tm2_markers).not_inside(NODRC).output('metal.tm2.wide_space',
+    "T4M2_S_2: T4M2 spacing must be at least #{tm2_wide_space} um when width/length " \
+    ">= #{tm2_wide_width} um and run >= #{tm2_wide_run} um [Calibre source]")
+
   # Density checks are defined in density.drc. Recommended rules are inactive
   # for OPEN_RECOMMENDED_ON=NO.
 end

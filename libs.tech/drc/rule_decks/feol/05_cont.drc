@@ -15,27 +15,209 @@
 #=========================================================================================
 # FEOL 05 - Contact (CT)
 #
-# CT_EN_1 uses the official CT alias, CT = CTi OR CTbar (Calibre source
-# lines 865-866, 3965-3967). Tech-LEF cut dimensions are not substitutes for
-# the Calibre CT width rules.
+# CT = CTi OR CTbar (Calibre source lines 865-866). The module implements the
+# active CT predicates whose geometry can be represented: fixed square/bar
+# width, minimum spacing, gate-poly to contact spacing, coverage, and the
+# source tap rule. KLayout's generic space/enclosure/separation operators do
+# not reproduce Calibre ABUT<90/SINGULAR/OUTSIDE ALSO qualifiers; those
+# differences are called out per rule below.
 #=========================================================================================
 
 if FEOL
   cts = CT.or(CTbar)
+  ct_square = rval('ct_w1_size')
+
+  not_exact_square = lambda do |layer, size|
+    rects = layer.rectangles
+    rects.without_bbox_width(size.um)
+      .or(rects.without_bbox_height(size.um))
+      .or(layer.non_rectangles)
+  end
+
+  # CT_W_1 clause 1: CT outside RCT/GCT must be a fixed 0.09x0.09 square.
+  ct_width_base = cts.not(RCT).not(GCT)
+  not_exact_square.call(ct_width_base, ct_square)
+    .not_inside(GRID_SRC.or(SRAMALL).or(EFUSEALL))
+    .not_inside(SRINGBLK_SRC).not_inside(NODRC)
+    .output('cont.ct.width',
+      "CT_W_1: CT/CTbar must be a #{ct_square}x#{ct_square} um square outside GRID/SRAMALL/EFUSEALL and SRINGBLK/NODRC [Calibre source]")
+
+  # CT_W_1 clause 2: rectangular CT in GRID must still be the fixed square.
+  # Non-rectangular ring contacts in GRID remain waived, as in the source.
+  ct_in_grid_rects = cts.and(GRID_SRC).rectangles
+  ct_in_grid_rects.without_bbox_width(ct_square.um)
+    .or(ct_in_grid_rects.without_bbox_height(ct_square.um))
+    .not_inside(SRINGBLK_SRC).not_inside(NODRC)
+    .output('cont.ct.width.grid',
+      "CT_W_1: rectangular CT in GRID must be a #{ct_square}x#{ct_square} um square outside SRINGBLK/NODRC [Calibre source]")
+
+  # CT_W_1 clauses 3-4: aspect-1 CT in EFUSEALL/SRAMALL must still be square.
+  [
+    ['EFUSEALL', EFUSEALL, 'cont.ct.width.efuse'],
+    ['SRAMALL', SRAMALL, 'cont.ct.width.sram']
+  ].each do |name, marker, rule_id|
+    squares = cts.and(marker).with_bbox_aspect_ratio(1.0)
+    squares.without_bbox_width(ct_square.um)
+      .or(squares.without_bbox_height(ct_square.um))
+      .not_inside(SRINGBLK_SRC).not_inside(NODRC)
+      .output(rule_id,
+        "CT_W_1: aspect-1 CT in #{name} must be a #{ct_square}x#{ct_square} um square outside SRINGBLK/NODRC [Calibre source]")
+  end
+
+  # CT_W_2: datatype-7 contact-bar width outside SRAMALL/EFUSEALL.
+  ct_bar_width_errors = CTbar.drc(width < ct_square.um) + CTbar.drc(width > ct_square.um)
+  ct_bar_width_errors.not_inside(SRAMALL.or(EFUSEALL)).output('cont.ct.bar.width',
+    "CT_W_2: CTbar width must equal #{ct_square} um outside SRAMALL/EFUSEALL [Calibre source]")
+
+  # CT_S_1: minimum contact spacing. Generic KLayout space checks omit the
+  # source ABUT<90/SINGULAR REGION qualifiers.
+  ct_min_space = rval('ct_s1_space')
+  cts.drc(space < ct_min_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC)
+    .output('cont.ct.spacing',
+      "CT_S_1: CT/CTbar spacing must be at least #{ct_min_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  # CT_S_1a: dense-array contact spacing. The source opens CT by 0.075 and
+  # closes the result by 0.24 (SIZE OVERUNDER / UNDEROVER), then applies the
+  # 0.14 um spacing to CTs inside that envelope, so the larger limit only
+  # reaches contacts in 3-neighbor arrays.
+  ct_neighbor_space = rval('ct_s1a_space')
+  ct_neighbor_envelope = cts.sized(0.075).sized(-0.075).sized(-0.24).sized(0.24)
+  cts.inside(ct_neighbor_envelope).drc(space < ct_neighbor_space.um)
+    .not_inside(NODRC)
+    .output('cont.ct.spacing.neighbor',
+      "CT_S_1a: CT spacing in 3-neighbor arrays must be at least #{ct_neighbor_space} um outside NODRC [Calibre source]")
+
+  # CT_S_3: contact-on-poly to active spacing.
+  ct_on_poly = cts.and(POLY)
+  ct_poly_active_space = rval('ct_s3_space')
+  ct_on_poly.separation(ACT, ct_poly_active_space.um)
+    .not_inside(NODRC)
+    .output('cont.ct.poly.aa.space',
+      "CT_S_3: CT on POLY must be at least #{ct_poly_active_space} um from AA outside NODRC [Calibre source]")
+
+  # CT_S_4: core-gate poly to contact-on-active spacing.
+  ct_core_gate_space = rval('ct_s4_space')
+  core_gate_poly = POLY.interacting(GATE_core)
+  AA_CT.separation(core_gate_poly, ct_core_gate_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC)
+    .output('cont.ct.core_gate.space',
+      "CT_S_4: core-gate POLY must be at least #{ct_core_gate_space} um from CT on AA outside SRAMALL/NODRC [Calibre source]")
+
+  # CT_S_5: 1.8V+ gate poly to contact-on-active spacing in DG/TG.
+  ct_io_gate_space = rval('ct_s5_space')
+  io_gate_spacing = GATE_io1.separation(AA_CT.and(DGOX), ct_io_gate_space.um) +
+    GATE_io2.separation(AA_CT.and(TGOX), ct_io_gate_space.um)
+  io_gate_spacing.not_inside(NODRC).output('cont.ct.io_gate.space',
+    "CT_S_5: DG/TG gate POLY must be at least #{ct_io_gate_space} um from CT on AA outside NODRC [Calibre source]")
+
+  # CT_EN_1: CT must be fully covered by M1 and (AA OR POLY).
   cts.not(M1.and(POLY.or(ACT))).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.inside',
     "CT_EN_1: CT/CTbar must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC [Calibre source]")
 
-  # CT_EN_2a requires its source threshold for CTs that interact ACT.
+  # CT_EN_2a: CT enclosure by AA. The KLayout enclosure operator preserves the
+  # source threshold but not ABUT<90/SINGULAR/OUTSIDE ALSO.
   ct_min_active_enclosure = rval('ct_drc_enc_act')
   ct_active = cts.interacting(ACT)
   ct_active.drc(enclosed(ACT) < ct_min_active_enclosure.um).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.active.enclosure',
     "CT_EN_2a: CT/CTbar active enclosure must be at least #{ct_min_active_enclosure} um [Calibre source]")
 
-  # CT_W_1 is omitted: source lines 3895-3902 use RCT/GCT geometry and
-  # region-specific rectangular checks not represented by existing DRC layers.
-  # The KLayout CT_EN_2a enclosure operator preserves the 0.015um threshold,
-  # but not Calibre's ABUT<90/SINGULAR/OUTSIDE ALSO qualifiers.
-  # CT_W_2, CT_S_1 through CT_S_6, CT_EN_2b through CT_EN_4d, and CT_R_1
-  # through CT_R_5 remain omitted because they need connectivity, directional
-  # enclosure, or source-only exclusion semantics.
+  # CT_EN_2b directional clause: on top of the EN_2a minimum, one opposite pair
+  # must reach 0.03. Restricted to CTs that already meet the 0.015 minimum so
+  # the two categories stay disjoint; the source's D2 reporting filter is not
+  # reproduced.
+  ct_active_pair = rval('ct_en2_dir')
+  aa_at_min = ACT.sized(-ct_min_active_enclosure.um)
+  aa_at_pair = ACT.sized(-ct_active_pair.um, 0)
+    .or(ACT.sized(0, -ct_active_pair.um))
+  ct_active.inside(aa_at_min).not(aa_at_min.and(aa_at_pair))
+    .not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.active.enclosure.dir',
+      "CT_EN_2b: CT/CTbar active enclosure must reach #{ct_active_pair} um on at least two opposite sides [Calibre source]")
+
+  # CT_EN_2b coverage clause: the part of an AA-interacting CT outside AA.
+  ct_active.not(ACT).not_inside(SRAMALL).output('cont.ct.active.coverage',
+    "CT_EN_2b: CT interacting AA must be covered by AA outside SRAMALL [Calibre source]")
+
+  # CT_EN_3a/3b/3c: poly enclosure and poly coverage. The source RECTANGLE ENC
+  # GOOD clauses are alternatives: all sides >= 0.01 with one opposite pair
+  # >= 0.04, or all sides >= 0.025. Directional OPPOSITE output clauses and the
+  # corner-interaction D2 marker are omitted.
+  ct_poly = cts.interacting(POLY)
+  ct_poly_min_enclosure = rval('ct_en3_min')
+  ct_poly_dir_enclosure = rval('ct_en3_dir')
+  ct_poly_all_enclosure = rval('ct_en3_all')
+  poly_at_min = POLY.sized(-ct_poly_min_enclosure.um)
+  poly_at_dir = POLY.sized(-ct_poly_dir_enclosure.um, 0)
+    .or(POLY.sized(0, -ct_poly_dir_enclosure.um))
+  poly_at_all = POLY.sized(-ct_poly_all_enclosure.um)
+  poly_enclosure_ok = poly_at_min.and(poly_at_dir.or(poly_at_all))
+  ct_poly.drc(enclosed(POLY) < ct_poly_min_enclosure.um).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.poly.enclosure',
+    "CT_EN_3a: CT/CTbar poly enclosure must be at least #{ct_poly_min_enclosure} um [Calibre source]")
+  ct_poly.not(poly_enclosure_ok).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.poly.enclosure.all',
+    "CT_EN_3b/3c: CT/CTbar poly enclosure must be at least #{ct_poly_all_enclosure} um on all sides or #{ct_poly_dir_enclosure} um on two opposite sides [Calibre source]")
+  ct_poly.not(POLY).not_inside(SRAMALL).output('cont.ct.poly.coverage',
+    "CT_EN_3c: CT interacting POLY must be covered by POLY outside SRAMALL [Calibre source]")
+
+  # CT_EN_4a_4b_4c coverage clauses and the OR of the source's two enclosure
+  # configurations: one opposite pair >= 0.04, or all sides >= 0.025. The
+  # source X is built from (CT NOT TOUCH M1), so CTs whose edge coincides with
+  # the M1 boundary are excluded here; those are covered by the source COIN EDGE
+  # markers, which are omitted.
+  ct_m1_dir_enclosure = rval('ct_en4_dir')
+  ct_m1_all_enclosure = rval('ct_en4_all')
+  ct_in_m1 = cts.inside(M1.sized(-1.dbu))
+  m1_enclosure_ok = M1.sized(-ct_m1_dir_enclosure.um, 0)
+    .or(M1.sized(0, -ct_m1_dir_enclosure.um))
+    .or(M1.sized(-ct_m1_all_enclosure.um))
+  ct_in_m1.not(m1_enclosure_ok).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.m1.enclosure',
+    "CT_EN_4a_4b_4c: CT/CTbar M1 enclosure must be at least #{ct_m1_dir_enclosure} um on two opposite sides or #{ct_m1_all_enclosure} um on all sides [Calibre source]")
+  cts.not(M1).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.m1.coverage',
+    "CT_EN_4a_4b_4c: CT/CTbar must be covered by M1 outside SRAMALL/NODRC [Calibre source]")
+  cts.not_interacting(M1).not_inside(NODRC).output('cont.ct.m1.not_interacting',
+    "CT_EN_4a_4b_4c: CT/CTbar must interact M1 outside NODRC [Calibre source]")
+
+  # CT_EN_4d: wide-M1 enclosure. WITH WIDTH > 1 selects M1 polygons that
+  # survive a 0.5 um erosion; CTs fully inside those polygons keep the 0.04 um
+  # all-sides enclosure measured against the drawn M1.
+  ct_wide_m1_width = rval('ct_en4d_width')
+  ct_wide_m1_enc = rval('ct_en4d_enc')
+  wide_m1 = M1.interacting(M1.sized(-(ct_wide_m1_width / 2.0).um))
+  cts.inside(wide_m1).edges.inside_part(M1)
+    .extended_out(ct_wide_m1_enc.um).not(M1)
+    .not_inside(NODRC).output('cont.ct.m1.enclosure.wide',
+      "CT_EN_4d: CT/CTbar inside M1 wider than #{ct_wide_m1_width} um must be enclosed by #{ct_wide_m1_enc} um on all sides outside NODRC [Calibre source]")
+
+  # CT_R_1: CT landing on GATE is forbidden.
+  cts.and(GATE).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.on_gate',
+    "CT_R_1: CT/CTbar must not overlap GATE outside SRAMALL/NODRC [Calibre source]")
+
+  # CT_R_2: CT interacting SAB is forbidden.
+  cts.interacting(SAB).not_inside(SRAMALL.or(EFUSEALL)).not_inside(NODRC).output('cont.ct.sab',
+    "CT_R_2: CT/CTbar must not interact SAB outside SRAMALL/EFUSEALL and NODRC [Calibre source]")
+
+  # CT_R_3: 45-degree CT edges are forbidden outside SRINGBLK/NODRC.
+  cts.interacting(cts.edges.with_angle(45, absolute))
+    .not_inside(SRINGBLK_SRC).not_inside(NODRC).output('cont.ct.rotated',
+      "CT_R_3: 45-degree CT/CTbar edges are not allowed outside SRINGBLK/NODRC [Calibre source]")
+
+  # CT_R_5: butted well tap on source/drain without CT. The source uses TOUCH;
+  # the implant pairs are disjoint, so KLayout's interacting selects the same
+  # polygons. No SRAMALL waiver in the source.
+  nsdi = NACT.not(NGATE).not(NW)
+  psdi = PACT.not(PGATE).and(NW)
+  ct_taps = NTAP.interacting(nsdi).not_interacting(cts)
+    .or(PTAP.interacting(psdi).not_interacting(cts))
+    .or(NTAP.interacting(psdi).not_interacting(cts))
+    .or(PTAP.interacting(nsdi).not_interacting(cts))
+  ct_taps.not(NODRC).output('cont.ct.tap',
+    'CT_R_5: butted well tap/source region must contain a CT outside NODRC [Calibre source]')
+
+  # Omitted active rules:
+  # CT_S_2 (NOT CONNECTED) and CT_S_6 (edge-layer enclosure with COIN/INSIDE
+  # EDGE) have no faithful KLayout primitive representation, and the
+  # directional output and COIN EDGE clauses of CT_EN_3/EN_4a_4b_4c are not
+  # reproduced (the directional configurations themselves are evaluated as the
+  # erosion alternatives above). CT_EN_2_R, CT_EN_3_R, CT_EN_4a_R_4b_R,
+  # CT_S_4_R and CT_R_4 are recommended rules compiled out by
+  # OPEN_RECOMMENDED_ON=NO.
 end

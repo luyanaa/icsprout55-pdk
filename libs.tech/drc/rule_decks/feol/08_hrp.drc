@@ -1,0 +1,85 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 08 - High-resistance poly (HRP) and high-precision resistor mark (HPR)
+#
+# HRP = HRPi (54/1), HPR = HPR (385/12). PO_HRP follows the source
+# ((HPR AND PO) AND HRP) AND SAB. The source ABUT/SINGULAR/OPPOSITE
+# qualifiers are not reproduced. HRP_W_2 excludes poly edges coincident with
+# SDP; the port measures the width of every poly polygon interacting the
+# resistor body, which can also flag narrow resistor leads (slightly
+# stricter). HRP_O_1 second SDP_CK statement is not reproduced; the first
+# overlap-width clause covers the source intent.
+#=========================================================================================
+
+if FEOL
+  hrp_width = rval('hrp_width')
+  HRP.drc(width < hrp_width.um).not_inside(NODRC).output('HRP_W_1',
+    "HRP_W_1: HRP width must be at least #{hrp_width} um outside NODRC [Calibre source]")
+
+  hrp_poly_width = rval('hrp_poly_width')
+  po_hrp = POLY.and(HPR).and(HRP).and(SAB)
+  POLY.interacting(po_hrp).drc(width < hrp_poly_width.um).not_inside(NODRC).output('HRP_W_2',
+    "HRP_W_2: high-resistance poly width must be at least #{hrp_poly_width} um outside NODRC [Calibre source]")
+
+  hrp_space = rval('hrp_space')
+  HRP.drc(space < hrp_space.um).not_inside(NODRC).output('HRP_S_1',
+    "HRP_S_1: HRP spacing must be at least #{hrp_space} um outside NODRC [Calibre source]")
+
+  hrp_po_space = rval('hrp_po_space')
+  po_mos = POLY.interacting(GATE)
+  HRP.drc(separation(po_mos) < hrp_po_space.um).not_inside(NODRC).output('HRP_S_2',
+    "HRP_S_2: HRP to MOS poly spacing must be at least #{hrp_po_space} um outside NODRC [Calibre source]")
+
+  # HRP_S_3: fixed 0.21 um spacing between SAB and CT inside HRP. Each CT in
+  # the HRP/SAB region is expanded by 0.21; an expanded CT that does not touch
+  # the SAB means the source spacing exceeds 0.21.
+  hrp_sab_ct_space = rval('hrp_sab_ct_space')
+  sab_in_hrp = SAB.interacting(HRP)
+  ct_in_hrp = CT.or(CTbar).and(HRP.interacting(SAB))
+  ct_in_hrp.sized(hrp_sab_ct_space.um).not_interacting(sab_in_hrp)
+    .output('HRP_S_3',
+      "HRP_S_3: SAB to CT spacing inside HRP must be fixed at #{hrp_sab_ct_space} um [Calibre source]")
+
+  hrp_po_enc = rval('hrp_po_enc')
+  po_hrp.drc(enclosed(HRP) < hrp_po_enc.um).not_inside(NODRC).output('HRP_EN_1',
+    "HRP_EN_1: HRP enclosure of high-resistance poly must be at least #{hrp_po_enc} um outside NODRC [Calibre source]")
+
+  hrp_sab_ext = rval('hrp_sab_ext')
+  po_in_hrp = POLY.interacting(po_hrp)
+  po_in_hrp.drc(enclosed(SAB) < hrp_sab_ext.um).not_inside(NODRC).output('HRP_EX_1',
+    "HRP_EX_1: SAB extension outside high-resistance poly must be at least #{hrp_sab_ext} um outside NODRC [Calibre source]")
+
+  hrp_pp_sab_ovl = rval('hrp_pp_sab_ovl')
+  res_hrp = HPR.and(HRP).and(POLY).and(SAB)
+  SAB.interacting(res_hrp).and(PP).drc(width < hrp_pp_sab_ovl.um)
+    .not_inside(SRINGBLK_SRC).not_inside(SRAMALL).not_inside(NODRC).output('HRP_O_1',
+      "HRP_O_1: PP overlap of SAB inside RES_HRP must be at least #{hrp_pp_sab_ovl} um outside SRINGBLK/SRAMALL/NODRC [Calibre source]")
+
+  # HRP_R_1: NP/PP must not overlap the resistor middle. HRP_MID removes the
+  # 0.30 um end zones (poly outside HPR grown by 0.30).
+  hrp_end_space = rval('hrp_end_space')
+  hrpr = POLY.interacting(HPR)
+  hrp_end = hrpr.not(HPR).sized(hrp_end_space.um)
+  hrp_mid = hrpr.not(hrp_end)
+  NP.or(PP).and(hrp_mid).not_inside(NODRC).output('HRP_R_1',
+    "HRP_R_1: NP/PP must not overlap the HPR resistor middle (#{hrp_end_space} um end zones removed) outside NODRC [Calibre source]")
+
+  # HRP_R_2: the SAB inside HPR and the HPR mark must select the same poly.
+  sab_and_hrp = SAB.interacting(HRP).and(POLY)
+  dmy_and_hrp = HPR.and(POLY)
+  sab_and_hrp.xor(dmy_and_hrp).not_inside(NODRC).output('HRP_R_2',
+    'HRP_R_2: HPR edges must align with the SAB edge on poly outside NODRC [Calibre source]')
+end

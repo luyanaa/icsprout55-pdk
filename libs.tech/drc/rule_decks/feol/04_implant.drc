@@ -13,11 +13,13 @@
 # limitations under the License.
 
 #=========================================================================================
-# FEOL 04 - Implants
+# FEOL 04 - Implants (NP, PP)
 #
-# Port source implant area checks only.  The remaining checks use layer-derived
-# active/tap classes, edge coincidence, connectivity, and ABUT<90 qualifiers
-# that are not equivalent to plain width/space/enclosure primitives.
+# Calibre SDN = COPY NPi and SDP = COPY PPi, so the implant width/spacing checks
+# run on the drawn implant layers themselves, not on the active intersection.
+# The source INT-based overlap rules (NP_O_1/PP_O_1) are implemented as the
+# implant enclosure of AA with the edge-strip method; the source
+# ABUT<90/SINGULAR and NOT TOUCH EDGE qualifiers are not reproduced.
 #=========================================================================================
 
 if FEOL
@@ -30,9 +32,310 @@ if FEOL
   PP.holes.not(PP.holes.with_area(0.12.um2, 1e9.um2)).not_inside(NODRC).output('implant.pp.enclosed_area',
     "PP_A_2: PP enclosed area minimum 0.12 um^2; waived inside NODRC")
 
-  # Unsupported source rules: NP_W_1, NP_S_1 through NP_S_6, NP_EN_1
-  # through NP_EN_3, NP_EX_1 / NP_EX_1a, NP_O_1, NP_A_3; PP_W_1,
-  # PP_S_1 through PP_S_6, PP_EN_1 through PP_EN_3, PP_EX_1 / PP_EX_1a,
-  # PP_O_1, PP_A_3, PP_R_1.  In particular, NP_W_1 allows single-point
-  # interaction and source S rules require directional/abutment qualifiers.
+  # NP_W_1/PP_W_1 allow single-point interactions in the source; the generic
+  # KLayout width check does not reproduce that ABUT<90 qualifier.
+  np_width = rval('np_width')
+  NP.drc(width < np_width.um).not_inside(NODRC).output('implant.np.width',
+    "NP_W_1: NP width must be at least #{np_width} um outside NODRC [Calibre source]")
+  pp_width = rval('pp_width')
+  PP.drc(width < pp_width.um).not_inside(NODRC).output('implant.pp.width',
+    "PP_W_1: PP width must be at least #{pp_width} um outside NODRC [Calibre source]")
+
+  # NP_S_1/PP_S_1 are EXT with ABUT<90 OPPOSITE; the generic space check does
+  # not reproduce those edge qualifiers.
+  np_space = rval('np_space')
+  NP.drc(space < np_space.um).not_inside(NODRC).output('implant.np.spacing',
+    "NP_S_1: NP spacing must be at least #{np_space} um outside NODRC [Calibre source]")
+  pp_space = rval('pp_space')
+  PP.drc(space < pp_space.um).not_inside(NODRC).output('implant.pp.spacing',
+    "PP_S_1: PP spacing must be at least #{pp_space} um outside NODRC [Calibre source]")
+
+  # NP_O_1/PP_O_1 measure the implant-to-AA overlap margin. Only AA edges
+  # inside the implant are qualified (INT without overlapping-edge reporting),
+  # so the inside-edge strip method matches the source measurement point.
+  np_act_overlap = rval('np_act_overlap')
+  ACT.edges.inside_part(NP)
+    .extended_out(np_act_overlap.um).not(NP)
+    .not_inside(NODRC).output('implant.np.act.overlap',
+      "NP_O_1: NP overlap of ACT must be at least #{np_act_overlap} um outside NODRC [Calibre source]")
+  pp_act_overlap = rval('pp_act_overlap')
+  ACT.edges.inside_part(PP)
+    .extended_out(pp_act_overlap.um).not(PP)
+    .not_inside(NODRC).output('implant.pp.act.overlap',
+      "PP_O_1: PP overlap of ACT must be at least #{pp_act_overlap} um outside NODRC [Calibre source]")
+
+  # NP_S_4/PP_S_4: the implant must not overlap butted opposite-type AA.
+  # PP_R_1: NP and PP must not overlap at all. The zero-space rules have no
+  # width/angle qualifiers.
+  NP.and(PACT).not_inside(SRAMALL).not_inside(NODRC).output('implant.np.pact.overlap',
+    'NP_S_4: NP must not overlap butted P+ AA outside SRAMALL/NODRC [Calibre source]')
+  PP.and(NACT).not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.nact.overlap',
+    'PP_S_4: PP must not overlap butted N+ AA outside SRAMALL/NODRC [Calibre source]')
+  NP.and(PP).not_inside(NODRC).output('implant.np_pp.overlap',
+    'PP_R_1: NP and PP must not overlap outside NODRC [Calibre source]')
+
+  # PP_R_3: NP and PP must not share a coincident edge on unsilicided AA/PO.
+  np_pp_coincident = NP.data.edges.and(PP.data.edges)
+  sab_aa_po = SAB.and(ACT.or(POLY)).data
+  wrap_region.call(np_pp_coincident.inside_part(sab_aa_po).extended_out(1))
+    .not_inside(NODRC).output('implant.np_pp.sab_coincident',
+      'PP_R_3: NP and PP must not share an edge on unsilicided AA/PO outside NODRC [Calibre source]')
+
+  # NP_S_2/S_3 and PP_S_2/S_3: implant to opposite-type AA. The source removes
+  # the AA touching the implant/opposite-AA edge (NOT TOUCH EDGE). A 1-dbu
+  # expansion turns edge coincidence into an area overlap, so interacting()
+  # reproduces the selector; NP_S_4/PP_S_4 report the zero-space overlap
+  # itself. One-dbu gaps are below every threshold here and are not modelled.
+  one_dbu = 1.dbu
+  np_pact_space = rval('np_pact_space')
+  np_pact_x = PACT.not(PTAP).not(PACT.interacting(NP.sized(one_dbu)))
+  NP.drc(separation(np_pact_x, transparent) < np_pact_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.pact_space',
+      "NP_S_2: NP to P+ source/drain AA inside NW spacing must be at least #{np_pact_space} um outside SRAMALL/NODRC [Calibre source]")
+  np_ptap_space = rval('np_ptap_space')
+  np_ptap_x = PTAP.not(PTAP.interacting(NACT.sized(one_dbu)))
+    .not(PTAP.interacting(NP.sized(one_dbu)))
+  NP.drc(separation(np_ptap_x, transparent) < np_ptap_space.um)
+    .not_inside(NODRC).output('implant.np.ptap_space',
+      "NP_S_3: NP to P+ pickup AA inside PW spacing must be at least #{np_ptap_space} um outside NODRC [Calibre source]")
+  pp_nact_space = rval('pp_nact_space')
+  pp_nact_x = NACT.not(NTAP).not(NACT.interacting(PP.sized(one_dbu)))
+  PP.drc(separation(pp_nact_x, transparent) < pp_nact_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.nact_space',
+      "PP_S_2: PP to N+ source/drain AA spacing must be at least #{pp_nact_space} um outside SRAMALL/NODRC [Calibre source]")
+  pp_ntap_space = rval('pp_ntap_space')
+  pp_ntap_x = NTAP.not(NTAP.interacting(PACT.sized(one_dbu)))
+    .not(NTAP.interacting(PP.sized(one_dbu)))
+  PP.drc(separation(pp_ntap_x, transparent) < pp_ntap_space.um)
+    .not_inside(NODRC).output('implant.pp.ntap_space',
+      "PP_S_3: PP to N+ pickup AA inside NW spacing must be at least #{pp_ntap_space} um outside NODRC [Calibre source]")
+
+  # NP_S_5/PP_S_5: implant to the opposite-type gate. The source selects
+  # GATE_W INSIDE EDGE SDP and PO INSIDE EDGE NACT; GATE and the N+ gate use
+  # the source-derived GATE/NGATE layers, so dummy and resistor poly are not
+  # included.
+  np_gate_space = rval('np_gate_space')
+  NP.drc(separation(GATE.and(PP), transparent) < np_gate_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.gate_space',
+      "NP_S_5: NP to PMOS gate spacing must be at least #{np_gate_space} um outside SRAMALL/NODRC [Calibre source]")
+  pp_gate_space = rval('pp_gate_space')
+  PP.drc(separation(NGATE, transparent) < pp_gate_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.gate_space',
+      "PP_S_5: PP to NMOS gate spacing must be at least #{pp_gate_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  # NP_S_6/PP_S_6: a butted pickup of the opposite type must keep 0.30 um to
+  # the gate that owns the adjoining source/drain. The source selects the
+  # butted edge inside the 0.16 um gate-side extension; that edge qualifier is
+  # approximated by requiring the pickup to interact an AA of the gate's type
+  # that in turn interacts the gate.
+  np_s6_space = rval('np_s6_space')
+  ptap_butted_gate = PTAP.interacting(NACT.interacting(NGATE))
+  ptap_butted_gate.drc(separation(NGATE, transparent) < np_s6_space.um)
+    .not_inside(NODRC).output('implant.np.ptap_gate.space',
+      "NP_S_6: butted P+ pickup to NMOS gate spacing must be at least #{np_s6_space} um outside NODRC [Calibre source]")
+  pp_s6_space = rval('pp_s6_space')
+  ntap_butted_gate = NTAP.interacting(PACT.interacting(PGATE))
+  ntap_butted_gate.drc(separation(PGATE, transparent) < pp_s6_space.um)
+    .not_inside(NODRC).output('implant.pp.ntap_gate.space',
+      "PP_S_6: butted N+ pickup to PMOS gate spacing must be at least #{pp_s6_space} um outside NODRC [Calibre source]")
+
+  # NP_EX_1_EX_1a and PP_EX_1_EX_1a (CMACRO SNP_68): the implant must extend
+  # 0.16 um beyond the AA at the gate ends and 0.30 um beyond the gate in the
+  # source/drain direction. The macro's EXPAND EDGE bands are replaced by
+  # inside-edge strips near the gate; the SRAMALL waiver is a region waiver.
+  np_ext_aa = rval('np_ext_aa')
+  np_ext_sd = rval('np_ext_sd')
+  n_gate_zone = POLY.and(NACT).sized(0.2.um)
+  NACT.edges.inside_part(n_gate_zone).inside_part(NP)
+    .extended_out(np_ext_aa.um).not(NP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.gate_aa.enclosure',
+      "NP_EX_1: NP enclosure of N+ AA at the gate must be at least #{np_ext_aa} um outside SRAMALL/NODRC [Calibre source]")
+  POLY.edges.inside_part(NACT).inside_part(NP)
+    .extended_out(np_ext_sd.um).not(NP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.gate_ext',
+      "NP_EX_1a: NP extension beyond the NMOS gate in the source/drain direction must be at least #{np_ext_sd} um outside SRAMALL/NODRC [Calibre source]")
+  pp_ext_aa = rval('pp_ext_aa')
+  pp_ext_sd = rval('pp_ext_sd')
+  p_gate_zone = POLY.and(PACT).sized(0.2.um)
+  PACT.edges.inside_part(p_gate_zone).inside_part(PP)
+    .extended_out(pp_ext_aa.um).not(PP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.gate_aa.enclosure',
+      "PP_EX_1: PP enclosure of P+ AA at the gate must be at least #{pp_ext_aa} um outside SRAMALL/NODRC [Calibre source]")
+  POLY.edges.inside_part(PACT).inside_part(PP)
+    .extended_out(pp_ext_sd.um).not(PP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.gate_ext',
+      "PP_EX_1a: PP extension beyond the PMOS gate in the source/drain direction must be at least #{pp_ext_sd} um outside SRAMALL/NODRC [Calibre source]")
+
+  # NP_EN_1/EN_2 and PP_EN_1/EN_2: implant enclosure of AA. As with the active
+  # enclosure rules, only the target edges inside the enclosing layer are
+  # checked (ENC without OUTSIDE ALSO). The source removes edges coincident
+  # with the opposite-type AA (COIN EDGE PACT/SDP); subtracting the opposite
+  # implant from the leftover sliver reproduces that exclusion. The PW/NW
+  # boundary slivers are subtracted as well because X INSIDE EDGE PW/NW ends
+  # there and the source measures no enclosure across the well edge.
+  nwr = NW.interacting(NW1RES)
+  np_aa_enc = rval('np_aa_enc')
+  ACT.not(NP.interacting(nwr)).edges.inside_part(NP)
+    .extended_out(np_aa_enc.um).not(NP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.aa.enclosure',
+      "NP_EN_1: AA enclosure by NP must be at least #{np_aa_enc} um outside SRAMALL/NODRC [Calibre source]")
+  np_nact_pw_enc = rval('np_nact_pw_enc')
+  np_in_pw = NP.and(pw)
+  NACT.not_interacting(nwr).and(pw).edges.inside_part(np_in_pw)
+    .extended_out(np_nact_pw_enc.um).not(np_in_pw)
+    .not(NW).not(PP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.nact_pw.enclosure',
+      "NP_EN_2: N+ active inside PW enclosure by NP must be at least #{np_nact_pw_enc} um outside SRAMALL/NODRC [Calibre source]")
+  pp_ptap_enc = rval('pp_ptap_enc')
+  PTAP.not_interacting(nwr).edges.inside_part(PP)
+    .extended_out(pp_ptap_enc.um).not(PP)
+    .not(NP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.ptap.enclosure',
+      "PP_EN_1: P+ pickup AA enclosure by PP must be at least #{pp_ptap_enc} um outside SRAMALL/NODRC [Calibre source]")
+  pp_pact_nw_enc = rval('pp_pact_nw_enc')
+  pp_in_nw = PP.and(NW)
+  PACT.not_interacting(nwr).and(NW).edges.inside_part(pp_in_nw)
+    .extended_out(pp_pact_nw_enc.um).not(pp_in_nw)
+    .not(pw).not(NP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.pact_nw.enclosure',
+      "PP_EN_2: P+ active inside NW enclosure by PP must be at least #{pp_pact_nw_enc} um outside SRAMALL/NODRC [Calibre source]")
+
+  # NP_EN_3/PP_EN_3: implant enclosure of field PO. PO spans both implants
+  # (the source PO_CUT selector) are exempt; PO over AA, POLYres and HPR are
+  # excluded from PO_inter.
+  po_inter = POLY.not(ACT).not(PPO).not(HPR)
+  po_cut = po_inter.interacting(NP).interacting(PP)
+  po_enc_x = po_inter.not(po_cut)
+  np_po_enc = rval('np_po_enc')
+  po_enc_x.edges.inside_part(NP)
+    .extended_out(np_po_enc.um).not(NP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.np.po.enclosure',
+      "NP_EN_3: PO enclosure by NP must be at least #{np_po_enc} um outside SRAMALL/NODRC [Calibre source]")
+  pp_po_enc = rval('pp_po_enc')
+  po_enc_x.edges.inside_part(PP)
+    .extended_out(pp_po_enc.um).not(PP)
+    .not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.po.enclosure',
+      "PP_EN_3: PO enclosure by PP must be at least #{pp_po_enc} um outside SRAMALL/NODRC [Calibre source]")
+
+  # NP_A_3/PP_A_3: source TOUCH selects the whole tap polygon; the tap area
+  # threshold uses strict-area semantics.
+  np_tap_area = rval('np_tap_area')
+  NTAP.interacting(PACT.not(PTAP)).with_area(0, np_tap_area.um2).not_inside(NODRC).output('implant.np.tap_area',
+    "NP_A_3: butted N+ tap area must be at least #{np_tap_area} um^2 outside NODRC [Calibre source]")
+  pp_tap_area = rval('pp_tap_area')
+  PTAP.interacting(NACT.not(NTAP)).with_area(0, pp_tap_area.um2).not_inside(NODRC).output('implant.pp.tap_area',
+    "PP_A_3: butted P+ tap area must be at least #{pp_tap_area} um^2 outside NODRC [Calibre source]")
+
+  # ---------------------------------------------------------------------
+  # PSUB - native NMOS blocked implant (source lines 2469-2590). The frozen
+  # profile defines IO 1833, so PSUB_W_3c (#IFDEF IO 1825) is compiled out;
+  # PSUB_W_3d carries the 3.3V channel-length check without an upper bound.
+  # GATE_W/GATE_L are the PO-/AA-coincident edges of the gate region: a 1-dbu
+  # outward sweep followed by subtraction of the other layer leaves exactly
+  # the edges on that boundary (same construction as the ACT channel width).
+  # ---------------------------------------------------------------------
+  psub_area = rval('psub_area')
+  PSUB.not(PSUB.with_area(psub_area.um2, 1e9.um2)).not_inside(NODRC).output('implant.psub.area',
+    "PSUB_A_1: PSUB minimum area #{psub_area} um^2 outside NODRC [Calibre source]")
+  psub_hole_area = rval('psub_hole_area')
+  PSUB.holes.not(PSUB.holes.with_area(psub_hole_area.um2, 1e9.um2)).not_inside(NODRC).output('implant.psub.enclosed_area',
+    "PSUB_A_2: PSUB enclosed area minimum #{psub_hole_area} um^2 outside NODRC [Calibre source]")
+
+  psub_width = rval('psub_width')
+  PSUB.drc(width < psub_width.um).not_inside(NODRC).output('implant.psub.width',
+    "PSUB_W_1: PSUB width must be at least #{psub_width} um outside NODRC [Calibre source]")
+  psub_space = rval('psub_space')
+  PSUB.drc(space < psub_space.um).not_inside(NODRC).output('implant.psub.spacing',
+    "PSUB_S_1: PSUB spacing must be at least #{psub_space} um outside NODRC [Calibre source]")
+  psub_nw_space = rval('psub_nw_space')
+  PSUB.drc(separation(NW, transparent) < psub_nw_space.um).not_inside(NODRC).output('implant.psub.nw_space',
+    "PSUB_S_3: PSUB to NW spacing must be at least #{psub_nw_space} um outside NODRC [Calibre source]")
+
+  # PSUB_S_2: native MOS includes gate and source/drain; AA_LDMOS has no
+  # separate drawn layers in this PDK, so the LDMOS device mark clipped to
+  # AA/PO is the closest available construction (empty in released libraries).
+  nmos = NGATE.or(NSD)
+  pmos = PGATE.or(PSD)
+  mos = nmos.or(pmos)
+  aa_ldmos = LDMOS.and(ACT.or(POLY))
+  psub_mos_space = rval('psub_mos_space')
+  PSUB.drc(separation(mos, transparent) < psub_mos_space.um).not_inside(NODRC).output('implant.psub.mos_space',
+    "PSUB_S_2: PSUB to native MOS spacing must be at least #{psub_mos_space} um outside NODRC [Calibre source]")
+  PSUB.drc(separation(aa_ldmos, transparent) < psub_mos_space.um).not_inside(NODRC).output('implant.psub.ldmos_space',
+    "PSUB_S_2: PSUB to LDMOS AA spacing must be at least #{psub_mos_space} um outside NODRC [Calibre source]")
+
+  # PSUB_W_2: native NMOS channel width bounds. The strips are 1 dbu wide, so
+  # the area window equals an edge-length window.
+  psub_channel_width_min = rval('psub_channel_width_min')
+  psub_channel_width_max = rval('psub_channel_width_max')
+  native_gate = GATE.interacting(PSUB)
+  native_gate_w = native_gate.edges.extended_out(1.dbu).not(POLY)
+  native_gate_w.with_area(0, psub_channel_width_min.um * 1.dbu).not_inside(NODRC).output('implant.psub.channel_width_min',
+    "PSUB_W_2: native NMOS channel width must be at least #{psub_channel_width_min} um outside NODRC [Calibre source]")
+  native_gate_w.with_area(psub_channel_width_max.um * 1.dbu, 1e9.um2).not_inside(NODRC).output('implant.psub.channel_width_max',
+    "PSUB_W_2: native NMOS channel width must be at most #{psub_channel_width_max} um outside NODRC [Calibre source]")
+
+  # PSUB_W_3a/3b/3d: native NMOS channel length. The AA-coincident gate-edge
+  # strip length equals the channel length (same metric as GATE_*_L).
+  psub_core_len = rval('psub_core_len')
+  psub_core_len_max = rval('psub_core_len_max')
+  native_core_l = GATE_core.interacting(PSUB).edges.extended_out(1.dbu).not(ACT)
+  native_core_l.with_area(0, psub_core_len.um * 1.dbu).not_inside(NODRC).output('implant.psub.core_length_min',
+    "PSUB_W_3a: 1.2V native NMOS channel length must be at least #{psub_core_len} um outside NODRC [Calibre source]")
+  native_core_l.with_area(psub_core_len_max.um * 1.dbu, 1e9.um2).not_inside(NODRC).output('implant.psub.core_length_max',
+    "PSUB_W_3a: 1.2V native NMOS channel length must be at most #{psub_core_len_max} um outside NODRC [Calibre source]")
+  psub_io1_len = rval('psub_io1_len')
+  psub_io1_len_max = rval('psub_io1_len_max')
+  native_io1_l = GATE_io1.interacting(PSUB).edges.extended_out(1.dbu).not(ACT)
+  native_io1_l.with_area(0, psub_io1_len.um * 1.dbu).not_inside(NODRC).output('implant.psub.io1_length_min',
+    "PSUB_W_3b: 1.8V native NMOS channel length must be at least #{psub_io1_len} um outside NODRC [Calibre source]")
+  native_io1_l.with_area(psub_io1_len_max.um * 1.dbu, 1e9.um2).not_inside(NODRC).output('implant.psub.io1_length_max',
+    "PSUB_W_3b: 1.8V native NMOS channel length must be at most #{psub_io1_len_max} um outside NODRC [Calibre source]")
+  psub_io2_len = rval('psub_io2_len')
+  GATE_io2.interacting(PSUB).edges.extended_out(1.dbu).not(ACT)
+    .with_area(0, psub_io2_len.um * 1.dbu).not_inside(NODRC).output('implant.psub.io2_length',
+      "PSUB_W_3d: 3.3V native NMOS channel length must be at least #{psub_io2_len} um outside NODRC [Calibre source]")
+
+  # PSUB_EN_1: the source XORs the 0.285 um halo of PBMOS with every PSUB
+  # polygon interacting PBMOS, so this is an exact-shape enclosure rule.
+  psub_aa_enc = rval('psub_aa_enc')
+  pbnmos = nmos.and(PSUB)
+  psub_enc_expected = pbnmos.sized(psub_aa_enc.um).data
+  psub_enc_actual = PSUB.interacting(pbnmos).data
+  wrap_region.call(psub_enc_expected.xor(psub_enc_actual)).not_inside(NODRC).output('implant.psub.aa.enclosure',
+    "PSUB_EN_1: native NMOS AA must be enclosed by the exact #{psub_aa_enc} um PSUB halo outside NODRC [Calibre source]")
+
+  # PSUB_EX_1: native gate poly must extend >= 0.32 um beyond PBAA.
+  psub_gate_ext = rval('psub_gate_ext')
+  pb_aa = ACT.and(PSUB)
+  pb_po = POLY.interacting(PSUB)
+  pb_aa.edges.inside_part(pb_po).extended_out(psub_gate_ext.um).not(pb_po)
+    .not_inside(INDALL).not_inside(NODRC).output('implant.psub.gate_ext',
+      "PSUB_EX_1: native gate poly extension outside AA must be at least #{psub_gate_ext} um outside INDALL/NODRC [Calibre source]")
+
+  # PSUB_R_1: overlap with DNW, or coincident PSUB/DNW edges, is forbidden.
+  # The first source layer flags area overlap; the second intersects the raw
+  # edge sets to find coincident edges (shared-edge contact is zero-area).
+  PSUB.and(DNW).not_inside(NODRC).output('implant.psub.dnw.overlap',
+    'PSUB_R_1: PSUB must not overlap DNW outside NODRC [Calibre source]')
+  psub_dnw_shared = PSUB.data.edges.and(DNW.data.edges)
+  wrap_region.call(psub_dnw_shared.extended_out(1))
+    .not_inside(NODRC).output('implant.psub.dnw.coincident',
+      'PSUB_R_1: PSUB and DNW must not share coincident edges outside NODRC [Calibre source]')
+
+  # PSUB_R_2: PP inside PSUB must not touch a native gate (AA or PO).
+  psub_pp = PP.and(PSUB).not_inside(INDALL)
+  psub_gate_area = ACT.or(POLY).interacting(GATE).and(PSUB)
+  psub_pp.interacting(psub_gate_area).not_inside(NODRC).output('implant.psub.pp_gate.overlap',
+    'PSUB_R_2: PP inside PSUB must not touch a native gate outside INDALL/NODRC [Calibre source]')
+
+  # PSUB_R_3: only one AA pattern per PSUB polygon, except NMOS capacitors.
+  psub_one_aa = ACT.not(ACT.interacting(INDALL))
+  PSUB.interacting(psub_one_aa, 2).not_inside(NODRC).output('implant.psub.multi_aa',
+    'PSUB_R_3: PSUB may contain only one AA pattern outside INDALL/NODRC [Calibre source]')
+
+  # The NP_S_6/PP_S_6 butted-pickup rules, the NP_EX/PP_EX gate-extension
+  # rules and PP_R_3 above approximate the source COIN EDGE / EXPAND EDGE /
+  # CMACRO semantics with inside-edge strips and region interactions.
+  # Recommended rules are inactive for OPEN_RECOMMENDED_ON=NO.
 end

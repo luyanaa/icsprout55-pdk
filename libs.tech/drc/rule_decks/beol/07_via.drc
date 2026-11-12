@@ -107,13 +107,42 @@ if BEOL
   tv2_source.drc(enclosed(tv2_top_metal) < tv2_upper_min_enclosure.um).not_inside(NODRC).output('via.tv2.enclosure.upper',
     "T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least #{tv2_upper_min_enclosure} um [Calibre source]")
 
+  # T4V2_W_1: fixed 0.36x0.36 square outside GRID, plus the source's
+  # GRID-specific clause requiring rectangular T4V2 portions inside GRID to be
+  # 0.36 squares. The source subtracts the GT4V2 rule-group result layer from
+  # the tested geometry; T4V2bar is that group's W_2 geometry here, so the
+  # bar cut is subtracted explicitly.
+  tv2_fixed = rval('tv2_width').um
+  tv2_squares = tv2_source.not(TV2BAR)
+  tv2_rectangles = tv2_squares.rectangles
+  tv2_wrong_rectangles = tv2_rectangles.without_bbox_width(tv2_fixed)
+    .or(tv2_rectangles.without_bbox_height(tv2_fixed))
+  tv2_width_errors = tv2_squares.non_rectangles.or(tv2_wrong_rectangles).not(GRID_SRC)
+  tv2_grid_rectangles = tv2_squares.and(GRID_SRC).rectangles
+  tv2_grid_errors = tv2_grid_rectangles.without_bbox_width(tv2_fixed)
+    .or(tv2_grid_rectangles.without_bbox_height(tv2_fixed))
+  tv2_width_errors.or(tv2_grid_errors).not_inside(SRINGBLK_SRC.or(NODRC)).output('via.tv2.width',
+    "T4V2_W_1: T4V2 must be a #{rval('tv2_width')}x#{rval('tv2_width')} um square outside GRID/SRINGBLK/NODRC [Calibre source]")
 
-  # Omitted active rules: T4V2_W_1 (its source predicate subtracts the
-  # Calibre GT4V2 rule-result group), V1-V4_S_2/_S_3 (array-neighbor,
-  # OPPOSITE/NOT CONNECTED), V1-V4_R_3 (H-shaped arrays), and the conditional
-  # opposite-side enclosure clauses in V1-V4_EN_2a_2b_2c / EN_5a_5b and
-  # T4V2_EN_2_EN_3. Generic spacing/enclosure operators do not preserve
-  # Calibre's ABUT<90/SINGULAR or directional GOOD qualifiers; conditional
-  # 0.02um upper and 0.05um lower via margins remain omitted.
-  # Recommended rules are inactive for OPEN_RECOMMENDED_ON=NO.
+  # T4V2_S_2: vias spaced at most 0.56 um are merged by the source 0.28
+  # OVERUNDER closing; only clusters surviving the 0.855 UNDEROVER opening
+  # (3x3-or-larger arrays) are checked at 0.5 um. The source ABUT<90 SINGULAR
+  # REGION qualifier is not represented.
+  tv2_s2_detect = rval('tv2_s2_detect').um
+  tv2_s2_grow = rval('tv2_s2_grow').um
+  tv2_s2_space = rval('tv2_s2_space').um
+  tv2_clusters = tv2_source.sized(tv2_s2_detect).sized(-tv2_s2_detect)
+  tv2_arrays = tv2_clusters.sized(-tv2_s2_grow).sized(tv2_s2_grow)
+  tv2_array_vias = tv2_source.inside(tv2_arrays)
+  tv2_array_vias.drc(space < tv2_s2_space).not_inside(NODRC).output('via.tv2.array.spacing',
+    "T4V2_S_2: T4V2 spacing within a 3x3-or-larger array must be at least #{rval('tv2_s2_space')} um [Calibre source]")
+
+
+  # Omitted active rules: V1-V4_S_2/_S_3 (array-neighbor, OPPOSITE/NOT
+  # CONNECTED), V1-V4_R_3 (H-shaped arrays), and the conditional opposite-side
+  # enclosure clauses in V1-V4_EN_2a_2b_2c / EN_5a_5b and T4V2_EN_2_EN_3.
+  # Generic spacing/enclosure operators do not preserve Calibre's
+  # ABUT<90/SINGULAR or directional GOOD qualifiers; conditional 0.02um upper
+  # and 0.05um lower via margins remain omitted.
+  # Recommended rules T4V2_R_1_R/R_4_R are inactive for OPEN_RECOMMENDED_ON=NO.
 end

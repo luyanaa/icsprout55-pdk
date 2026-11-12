@@ -13,8 +13,17 @@
 # limitations under the License.
 
 #=========================================================================================
-# Exact, unqualified source predicates are emitted; checks with unsupported
-# Calibre edge/width qualifiers or rectangle-enclosure predicates are omitted.
+# RV/RDL/CB/COVER source predicates. Plain width/space/enclosure forms are
+# emitted; Calibre ABUT/SINGULAR/INDALL qualifiers are not always represented
+# and no marker here is a Calibre-equivalent signoff result.
+#
+# Approximations in this file:
+#   - "WITH WIDTH > w" polygon selection is reproduced by eroding w/2 and
+#     keeping ALPA polygons that survive (any region wider than w, so slightly
+#     stricter than a minimum-width selector on bent polygons).
+#   - The source's ABUT/SINGULAR REGION edge qualifiers are not reproduced.
+#   - RV_EN_1_2's metal list (T4M2/T2M2/T8M2) reduces to T4M2 in the active
+#     6-metal profile; RV_EN_3_4 waivers use SRINGBLK_SRC + FUTR + GRID.
 #=========================================================================================
 
 if BEOL
@@ -23,17 +32,50 @@ if BEOL
   hrdl = RDL.holes.interacting(FUTR)
   grdl = RDL.interacting(hrdl).and(GRID_SRC)
   rdv_fuse = RV.inside(hrdl).or(RV.interacting(grdl))
-  rv_width_scope = RV.not(rdv_fuse).not(GRID_SRC)
+  rv_scope = RV.not(rdv_fuse)
+  rv_width_scope = rv_scope.not(GRID_SRC)
   rv_rectangles = rv_width_scope.rectangles
   wrong_rv_rectangles = rv_rectangles.without_bbox_width(3.um)
     .or(rv_rectangles.without_bbox_height(3.um))
   rv_width_scope.non_rectangles.or(wrong_rv_rectangles).output('pad.rv.width',
     'RV_W_1: RV must be a 3x3 um rectangle after source fuse/grid exclusions [Calibre source]')
 
+  rv_space_min = rval('rv_space')
+  rv_scope.drc(space < rv_space_min.um).not_inside(NODRC).output('pad.rv.space',
+    "RV_S_1: RV spacing must be at least #{rv_space_min} um outside NODRC [Calibre source]")
+
+  rv_cb_space = rval('rv_cb_space')
+  RV.drc(separation(CB, transparent) < rv_cb_space.um).not_inside(INDALL).not_inside(NODRC).output('pad.rv.cb.space',
+    "RV_S_2: RV to CB spacing must be at least #{rv_cb_space} um outside INDALL/NODRC [Calibre source]")
+
+  # RV_EN_1_2: enclosure by the metal directly underneath RV (T4M2 in the
+  # active profile), with the source's LOGO/GRID marker waivers and the
+  # OUTSIDE ALSO part emitted explicitly.
+  rv_enc = rval('rv_enc_metal')
+  rv_enc_msg =
+    "RV_EN_1_2: RV enclosure by T4M2 must be at least #{rv_enc} um outside LOGO/GRID/NODRC [Calibre source]"
+  rv_scope.drc(enclosed(TM2) < rv_enc.um).not_inside(LOGO).not_inside(GRID_SRC).not_inside(NODRC)
+    .output('pad.rv.enc.metal', rv_enc_msg)
+  rv_scope.not(TM2).not_inside(LOGO).not_inside(GRID_SRC).not_inside(NODRC)
+    .output('pad.rv.enc.metal', rv_enc_msg)
+
   # RV_EN_3_4 has a separate, unqualified OUTLAYER for via portions outside
   # RDL. It does not inherit the enclosure clause's marker waivers.
   RV.not(RDL).output('pad.rv.cover.rdl',
     'RV_EN_3_4: RV must be covered by RDL [Calibre source]')
+
+  # RV_EN_3_4 qualified clause: enclosure by RDL, waiver (SRINGBLK FUTR GRID)
+  # plus LOGO on the marker.
+  rv_enc_rdl_waiver = LOGO.or(SRINGBLK_SRC).or(GRID_SRC).or(FUTR)
+  rv_enc_rdl = rval('rv_enc_rdl')
+  rv_scope.drc(enclosed(RDL) < rv_enc_rdl.um).not_inside(rv_enc_rdl_waiver).not_inside(NODRC)
+    .output('pad.rv.enc.rdl',
+      "RV_EN_3_4: RV enclosure by RDL must be at least #{rv_enc_rdl} um outside LOGO/SRINGBLK/FUTR/GRID/NODRC [Calibre source]")
+
+  # RV_R_1: the recommended redundancy check is active in the source deck.
+  rv_single_base = TM2.and(RDL).not(SRINGBLK_SRC)
+  rv_single_base.interacting(RV, 1, 1).output('pad.rv.single',
+    'RV_R_1: a T4M2/RDL island should carry more than one RV [Calibre source]')
 
   # RDL_EN_1: ALPA is (CB sized by PA_su=1.5um) OR RDL OR ALPAD.
   alpa = CB.sized(1.5.um).or(RDL).or(ALPAD)
@@ -44,10 +86,145 @@ if BEOL
   CB.not(ALPAD).output('pad.cb.alpad_full',
     'RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]')
 
-  # Omitted active checks: RV_S_1/S_2, RV_EN_1_2 and the qualified enclosure
-  # clause in RV_EN_3_4; CB_W_1/S_1/EN_1_EN_2; RDL_W_1/S_1/S_2/S_3;
-  # COVER_W_1/S_1/S_2/EN_1 require unrepresented edge qualifiers, width
-  # selection, or derived pad-metal predicates. COVER_L_1's arbitrary-polygon
-  # ENCLOSE RECTANGLE 40x65 test has no exact selector here.
-  # Recommended RV_R_1 is inactive for OPEN_RECOMMENDED_ON=NO.
+  #-----------------------------------------------------------------------------------------
+  # RDL (aluminium redistribution) rules.
+  #-----------------------------------------------------------------------------------------
+  rdl_width_min = rval('rdl_width')
+  rdl_width_msg =
+    "RDL_W_1: RDL width must be at least #{rdl_width_min} um outside INDALL/NODRC [Calibre source]"
+  RDL.drc(width < rdl_width_min.um).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.rdl.width', rdl_width_msg)
+  RDL.and(INDALL).drc(width < rdl_width_min.um - 0.002.um).not_inside(NODRC)
+    .output('pad.rdl.width', rdl_width_msg)
+
+  rdl_width_max = rval('rdl_width_max')
+  # KLayout's width metric reports holed/ring polygons as unbounded-width self
+  # edge pairs, so a plain width > max check flags every RDL seal ring. The
+  # source's WITH WIDTH polygon selector is reproduced by erosion: a polygon
+  # only survives a half-width erosion when it is wider than the threshold in
+  # every direction.
+  rdl_too_wide = RDL.interacting(RDL.sized(-(rdl_width_max / 2.0).um))
+  rdl_too_wide.not_inside(INDALL).not_inside(NODRC).output('pad.rdl.width',
+    "RDL_W_1: RDL width must be at most #{rdl_width_max} um outside INDALL/NODRC [Calibre source]")
+
+  rdl_space_min = rval('rdl_space')
+  rdl_space_msg =
+    "RDL_S_1: ALPA spacing must be at least #{rdl_space_min} um outside INDALL/NODRC [Calibre source]"
+  alpa.drc(space < rdl_space_min.um).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.rdl.space', rdl_space_msg)
+  alpa.and(INDALL).drc(space < rdl_space_min.um - 0.002.um).not_inside(NODRC)
+    .output('pad.rdl.space', rdl_space_msg)
+
+  # The source selects the edges of ALPA polygons wider than the threshold
+  # (COIN EDGE) and measures their external space; the port selects the whole
+  # wide polygon and measures polygon-to-polygon separation instead.
+  rdl_wide_width = rval('rdl_wide_width')
+  rdl_wide_space = rval('rdl_wide_space')
+  wide_alpa = alpa.interacting(alpa.sized(-(rdl_wide_width / 2).um))
+  wide_msg =
+    "RDL_S_2: ALPA spacing with one ALPA wider than #{rdl_wide_width} um must be at least #{rdl_wide_space} um outside INDALL/NODRC [Calibre source]"
+  alpa.drc(separation(wide_alpa) < rdl_wide_space.um).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.rdl.wide.space', wide_msg)
+  alpa.and(INDALL).drc(separation(wide_alpa) < rdl_wide_space.um - 0.002.um).not_inside(NODRC)
+    .output('pad.rdl.wide.space', wide_msg)
+
+  rdl_wider_width = rval('rdl_wider_width')
+  rdl_wider_space = rval('rdl_wider_space')
+  wider_alpa = alpa.interacting(alpa.sized(-(rdl_wider_width / 2).um))
+  wider_msg =
+    "RDL_S_3: ALPA spacing with one ALPA wider than #{rdl_wider_width} um must be at least #{rdl_wider_space} um outside INDALL/NODRC [Calibre source]"
+  alpa.drc(separation(wider_alpa) < rdl_wider_space.um).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.rdl.wider.space', wider_msg)
+  alpa.and(INDALL).drc(separation(wider_alpa) < rdl_wider_space.um - 0.002.um).not_inside(NODRC)
+    .output('pad.rdl.wider.space', wider_msg)
+
+  #-----------------------------------------------------------------------------------------
+  # CB (passivation opening) rules. The source PA layer is CB (official CBi).
+  # Calibre's INT/EXT predicates carry an explicit 0.001/0.002 edge tolerance
+  # and split the markers by INDALL; the union keeps both source thresholds.
+  #-----------------------------------------------------------------------------------------
+  cb_width_min = rval('cb_width').um
+  cb_width_msg =
+    "CB_W_1: CB width must be at least #{rval('cb_width')} um outside INDALL/NODRC [Calibre source]"
+  CB.drc(width < cb_width_min - 0.001.um).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.cb.width', cb_width_msg)
+  CB.and(INDALL).drc(width < cb_width_min - 0.001.um).not_inside(NODRC)
+    .output('pad.cb.width', cb_width_msg)
+
+  cb_space_min = rval('cb_space').um
+  cb_space_msg =
+    "CB_S_1: CB spacing must be at least #{rval('cb_space')} um outside INDALL/NODRC [Calibre source]"
+  CB.drc(space < cb_space_min).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.cb.space', cb_space_msg)
+  CB.and(INDALL).drc(space < cb_space_min - 0.002.um).not_inside(NODRC)
+    .output('pad.cb.space', cb_space_msg)
+
+  # CB_EN_1_EN_2: the source enclosure list
+  # (T2M1/T4M1/T8M1/T4M2/T2M2/T8M2) reduces to the T4M2 top metal in the
+  # active 6-metal profile.
+  cb_enc_min = rval('cb_enc_metal').um
+  cb_top_metal = TM2.not(T4M2SLOT)
+  cb_enc_msg =
+    "CB_EN_1_EN_2: CB enclosure by T4M2 must be at least #{rval('cb_enc_metal')} um outside INDALL/NODRC [Calibre source]"
+  CB.drc(enclosed(cb_top_metal) < cb_enc_min).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.cb.enclosure', cb_enc_msg)
+  CB.and(INDALL).drc(enclosed(cb_top_metal) < cb_enc_min - 0.002.um).not_inside(NODRC)
+    .output('pad.cb.enclosure', cb_enc_msg)
+  # ENC ... OUTSIDE ALSO: KLayout's enclosed() metric has no edge pair for CB
+  # with no surrounding metal, so the fully-outside portion is emitted here.
+  CB.not(cb_top_metal).not_inside(NODRC).output('pad.cb.enclosure', cb_enc_msg)
+
+  #-----------------------------------------------------------------------------------------
+  # COVER (source RDLPA2 = COPY COVER) rules.
+  #-----------------------------------------------------------------------------------------
+  cover_waiver = SRBLK.or(SRINGBLK_SRC).or(NODRC)
+
+  cover_width_min = rval('cover_width').um
+  COVER.drc(width < cover_width_min - 0.002.um).not_inside(cover_waiver).output('pad.cover.width',
+    "COVER_W_1: COVER width must be at least #{rval('cover_width')} um outside SRBLK/SRINGBLK/NODRC [Calibre source]")
+
+  # COVER_L_1: NOT ENCLOSE RECTANGLE RDLPA2 40 65. KLayout has no polygon-
+  # enclosure selector, so the axis-aligned test is reproduced by an
+  # anisotropic erosion one grid unit short of the half width/length; merged
+  # polygons without an enclosed 40x65 rectangle are reported.
+  cover_length_min = rval('cover_length').um
+  cover_merged = COVER.merged
+  cover_inscribed = cover_merged.sized(-(cover_width_min / 2 - 0.001), -(cover_length_min / 2 - 0.001))
+  cover_enclosing = cover_merged.interacting(cover_inscribed)
+  cover_merged.not(cover_enclosing).not_inside(cover_waiver).output('pad.cover.length',
+    "COVER_L_1: COVER must enclose a #{rval('cover_width')}x#{rval('cover_length')} um rectangle outside SRBLK/SRINGBLK/NODRC [Calibre source]")
+
+  cover_space_min = rval('cover_space').um
+  COVER.drc(space < cover_space_min - 0.002.um).not_inside(cover_waiver).output('pad.cover.space',
+    "COVER_S_1: COVER spacing must be at least #{rval('cover_space')} um outside SRBLK/SRINGBLK/NODRC [Calibre source]")
+
+  # COVER_EN_1: COVER enclosure by ALPA (source INDALL split at 1.5/1.498).
+  cover_enc_min = rval('cover_enc')
+  cover_enc_msg =
+    "COVER_EN_1: COVER enclosure by ALPA must be at least #{cover_enc_min} um outside INDALL/NODRC [Calibre source]"
+  COVER.drc(enclosed(alpa) < cover_enc_min.um).not_inside(INDALL).not_inside(NODRC)
+    .output('pad.cover.enc.alpa', cover_enc_msg)
+  COVER.and(INDALL).drc(enclosed(alpa) < cover_enc_min.um - 0.002.um).not_inside(NODRC)
+    .output('pad.cover.enc.alpa', cover_enc_msg)
+
+  # COVER_S_2: rebuild each metal pad plate from the metal polygons that
+  # interact COVER (plus their holes) with the source 21.499 um UNDEROVER
+  # opening, then check the plate-to-metal spacing. The source's
+  # ABUT>0<90 REGION qualifier is not represented.
+  cover_pad_open = rval('cover_pad_open').um
+  cover_pad_space = rval('cover_pad_space').um
+  [
+    ['M1', M1, 'm1'],
+    ['M2', M2, 'm2'],
+    ['M3', M3, 'm3'],
+    ['M4', M4, 'm4'],
+    ['M5', M5, 'm5'],
+    ['T4M2', TM2, 't4m2']
+  ].each do |name, metal, key|
+    pad = metal.interacting(COVER).or(metal.holes.interacting(COVER))
+      .sized(-cover_pad_open).sized(cover_pad_open)
+    pad.drc(separation(metal, transparent) < cover_pad_space).not_inside(NODRC).output(
+      "pad.cover.#{key}.pad.space",
+      "COVER_S_2: #{name} pad-plate spacing must be at least #{rval('cover_pad_space')} um [Calibre source]")
+  end
 end

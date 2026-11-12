@@ -1,0 +1,155 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 06 - Thick/thin gate oxide markers (TG/DG) and drawn-skew geometry
+#
+# TG = TGOX (28/1) and DG = DGOX (27/1). The source EXT/ENC qualifiers
+# ABUT<90/SINGULAR REGION/OPPOSITE are not reproduced. The source allows a
+# zero extension/overlap in TG_EX_*/DG_EX_*/TG_O_*/DG_O_*; the KLayout
+# separation and intersection checks below also report coincident edges, which
+# is slightly stricter at zero-distance contacts.
+#
+# The source MOS layer is PMOS OR NMOS (gate or source/drain). The gate
+# enclosure along the source/drain direction uses an edge strip on the poly
+# edges inside AA, which matches Calibre "PO INSIDE EDGE AA".
+#
+# DGR_3 is the drawn-skew check on the base layers (ACT/POLY/CT/NP/PP): every
+# non-orthogonal edge must be within 0.1 degree of 45 degrees, waived inside
+# INDDMY. KLayout's width-based angle metrics are unreliable for arbitrary
+# angles, so the edges are filtered in Ruby and emitted as marker boxes.
+#=========================================================================================
+
+if FEOL
+  mos = PGATE.or(PSD).or(NGATE).or(NSD)
+  aa_ldmos = ACT.and(LDMOS)
+  gate_sd_edges = POLY.edges.inside_part(ACT)
+
+  tg_dg_width = rval('tg_dg_width')
+  TG.drc(width < tg_dg_width.um).not_inside(NODRC).output('TG_W_1',
+    "TG_W_1: TG width must be at least #{tg_dg_width} um outside NODRC [Calibre source]")
+  DG.drc(width < tg_dg_width.um).not_inside(NODRC).output('DG_W_1',
+    "DG_W_1: DG width must be at least #{tg_dg_width} um outside NODRC [Calibre source]")
+
+  tg_dg_space = rval('tg_dg_space')
+  TG.drc(space < tg_dg_space.um).not_inside(NODRC).output('TG_S_1',
+    "TG_S_1: TG spacing must be at least #{tg_dg_space} um outside NODRC [Calibre source]")
+  DG.drc(space < tg_dg_space.um).not_inside(NODRC).output('DG_S_1',
+    "DG_S_1: DG spacing must be at least #{tg_dg_space} um outside NODRC [Calibre source]")
+
+  tg_dg_mos_space = rval('tg_dg_mos_space')
+  TG.drc(separation(mos) < tg_dg_mos_space.um).not_inside(NODRC).output('TG_S_2',
+    "TG_S_2: TG to MOS AA spacing must be at least #{tg_dg_mos_space} um outside NODRC [Calibre source]")
+  DG.drc(separation(mos) < tg_dg_mos_space.um).not_inside(NODRC).output('DG_S_2',
+    "DG_S_2: DG to MOS AA spacing must be at least #{tg_dg_mos_space} um outside NODRC [Calibre source]")
+  DG.drc(separation(aa_ldmos) < tg_dg_mos_space.um).not_inside(NODRC).output('DG_S_2',
+    "DG_S_2: DG to LDMOS AA spacing must be at least #{tg_dg_mos_space} um outside NODRC [Calibre source]")
+
+  tg_dg_gate_space = rval('tg_dg_gate_space')
+  GATE.drc(separation(TG) < tg_dg_gate_space.um).not_inside(NODRC).output('TG_S_3',
+    "TG_S_3: TG to GATE spacing must be at least #{tg_dg_gate_space} um outside NODRC [Calibre source]")
+  GATE.drc(separation(DG) < tg_dg_gate_space.um).not_inside(NODRC).output('DG_S_3',
+    "DG_S_3: DG to GATE spacing must be at least #{tg_dg_gate_space} um outside NODRC [Calibre source]")
+
+  tg_dg_nw_space = rval('tg_dg_nw_space')
+  NW.drc(separation(TG) < tg_dg_nw_space.um).not_inside(NODRC).output('TG_S_4',
+    "TG_S_4: TG to NW spacing must be at least #{tg_dg_nw_space} um outside NODRC [Calibre source]")
+  NW.drc(separation(DG) < tg_dg_nw_space.um).not_inside(NODRC).output('DG_S_4',
+    "DG_S_4: DG to NW spacing must be at least #{tg_dg_nw_space} um outside NODRC [Calibre source]")
+
+  tg_dg_psub_space = rval('tg_dg_psub_space')
+  TG.drc(separation(PSUB) < tg_dg_psub_space.um).not_inside(NODRC).output('TG_S_5',
+    "TG_S_5: TG to PSUB spacing must be at least #{tg_dg_psub_space} um outside NODRC [Calibre source]")
+  DG.drc(separation(PSUB) < tg_dg_psub_space.um).not_inside(NODRC).output('DG_S_5',
+    "DG_S_5: DG to PSUB spacing must be at least #{tg_dg_psub_space} um outside NODRC [Calibre source]")
+
+  tg_dg_each_space = rval('tg_dg_each_space')
+  TG.drc(separation(DG) < tg_dg_each_space.um).not_inside(NODRC).output('TG_S_6',
+    "TG_S_6: TG to DG spacing must be at least #{tg_dg_each_space} um outside NODRC [Calibre source]")
+  TG.and(DG).not_inside(NODRC).output('TG_S_6',
+    'TG_S_6: TG and DG must not overlap outside NODRC [Calibre source]')
+
+  tg_dg_aa_enc = rval('tg_dg_aa_enc')
+  mos.drc(enclosed(TG) < tg_dg_aa_enc.um).not_inside(NODRC).output('TG_EN_1',
+    "TG_EN_1: TG enclosure of MOS AA must be at least #{tg_dg_aa_enc} um outside NODRC [Calibre source]")
+  ACT.not(NTAP.or(PTAP)).drc(enclosed(DG) < tg_dg_aa_enc.um).not_inside(NODRC).output('DG_EN_1',
+    "DG_EN_1: DG enclosure of non-tap AA must be at least #{tg_dg_aa_enc} um outside NODRC [Calibre source]")
+
+  tg_dg_gate_enc_poly = rval('tg_dg_gate_enc_poly')
+  GATE.drc(enclosed(TG) < tg_dg_gate_enc_poly.um).not_inside(NODRC).output('TG_EN_2',
+    "TG_EN_2: TG enclosure of GATE along the poly direction must be at least #{tg_dg_gate_enc_poly} um outside NODRC [Calibre source]")
+  GATE.drc(enclosed(DG) < tg_dg_gate_enc_poly.um).not_inside(NODRC).output('DG_EN_2',
+    "DG_EN_2: DG enclosure of GATE along the poly direction must be at least #{tg_dg_gate_enc_poly} um outside NODRC [Calibre source]")
+
+  tg_dg_gate_enc_sd = rval('tg_dg_gate_enc_sd')
+  gate_sd_in_tg = POLY.edges.inside_part(ACT.and(TG))
+  gate_sd_in_tg.extended_out(tg_dg_gate_enc_sd.um).not(TG)
+    .not_inside(NODRC).output('TG_EN_3',
+      "TG_EN_3: TG enclosure of GATE along the source/drain direction must be at least #{tg_dg_gate_enc_sd} um outside NODRC [Calibre source]")
+  gate_sd_in_dg = POLY.edges.inside_part(ACT.and(DG))
+  gate_sd_in_dg.extended_out(tg_dg_gate_enc_sd.um).not(DG)
+    .not_inside(NODRC).output('DG_EN_3',
+      "DG_EN_3: DG enclosure of GATE along the source/drain direction must be at least #{tg_dg_gate_enc_sd} um outside NODRC [Calibre source]")
+
+  tg_dg_nw_ext = rval('tg_dg_nw_ext')
+  TG.edges.inside_part(NW).extended_out(tg_dg_nw_ext.um).not(NW)
+    .not_inside(NODRC).output('TG_EX_1',
+      "TG_EX_1: NW extension on TG must be at least #{tg_dg_nw_ext} um outside NODRC [Calibre source]")
+  NW.edges.inside_part(TG).extended_out(tg_dg_nw_ext.um).not(TG)
+    .not_inside(NODRC).output('TG_EX_2',
+      "TG_EX_2: TG extension on NW must be at least #{tg_dg_nw_ext} um outside NODRC [Calibre source]")
+  DG.edges.inside_part(NW).extended_out(tg_dg_nw_ext.um).not(NW)
+    .not_inside(NODRC).output('DG_EX_1',
+      "DG_EX_1: NW extension on DG must be at least #{tg_dg_nw_ext} um outside NODRC [Calibre source]")
+  NW.edges.inside_part(DG).extended_out(tg_dg_nw_ext.um).not(DG)
+    .not_inside(NODRC).output('DG_EX_2',
+      "DG_EX_2: DG extension on NW must be at least #{tg_dg_nw_ext} um outside NODRC [Calibre source]")
+
+  tg_dg_psub_ext = rval('tg_dg_psub_ext')
+  PSUB.edges.inside_part(TG).extended_out(tg_dg_psub_ext.um).not(TG)
+    .not_inside(NODRC).output('TG_EX_3',
+      "TG_EX_3: TG extension on PSUB must be at least #{tg_dg_psub_ext} um outside NODRC [Calibre source]")
+  PSUB.edges.inside_part(DG).extended_out(tg_dg_psub_ext.um).not(DG)
+    .not_inside(NODRC).output('DG_EX_3',
+      "DG_EX_3: DG extension on PSUB must be at least #{tg_dg_psub_ext} um outside NODRC [Calibre source]")
+
+  tg_dg_nw_ovl = rval('tg_dg_nw_ovl')
+  TG.and(NW).drc(width < tg_dg_nw_ovl.um).not_inside(NODRC).output('TG_O_1',
+    "TG_O_1: TG/NW overlap width must be at least #{tg_dg_nw_ovl} um outside NODRC [Calibre source]")
+  DG.and(NW).drc(width < tg_dg_nw_ovl.um).not_inside(NODRC).output('DG_O_1',
+    "DG_O_1: DG/NW overlap width must be at least #{tg_dg_nw_ovl} um outside NODRC [Calibre source]")
+
+  tg_dg_psub_ovl = rval('tg_dg_psub_ovl')
+  TG.and(PSUB).drc(width < tg_dg_psub_ovl.um).not_inside(NODRC).output('TG_O_2',
+    "TG_O_2: TG/PSUB overlap width must be at least #{tg_dg_psub_ovl} um outside NODRC [Calibre source]")
+  DG.and(PSUB).drc(width < tg_dg_psub_ovl.um).not_inside(NODRC).output('DG_O_2',
+    "DG_O_2: DG/PSUB overlap width must be at least #{tg_dg_psub_ovl} um outside NODRC [Calibre source]")
+
+  # DGR_3: non-orthogonal, non-45-degree edges of the base layers. The 0.1
+  # degree tolerance matches the source ANGLE 44.9..45.1 qualifier.
+  skew_markers = RBA::Region.new
+  [ACT, POLY, CT, NP, PP].each do |layer|
+    layer.data.each do |poly|
+      poly.each_edge do |edge|
+        dx = (edge.p2.x - edge.p1.x).abs
+        dy = (edge.p2.y - edge.p1.y).abs
+        next if dx.zero? || dy.zero?
+        next if (Math.atan2(dy, dx) * 180.0 / Math::PI - 45.0).abs <= 0.1
+        skew_markers.insert(edge.bbox)
+      end
+    end
+  end
+  wrap_region.call(skew_markers).not_inside(INDDMY).output('DGR_3',
+    'DGR_3: drawn base-layer edges must be orthogonal or 45 degrees (+/-0.1) outside INDDMY [Calibre source]')
+end

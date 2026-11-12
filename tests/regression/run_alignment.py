@@ -38,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[2]
 LVS_RUNNER = ROOT / "libs.tech" / "lvs" / "run_lvs.py"
 NORMALIZER = Path(__file__).resolve().parent / "normalize_lvs.py"
 DRC_DECK = ROOT / "libs.tech" / "drc" / "ics55_drc.drc"
+ANTENNA_DECK = ROOT / "libs.tech" / "drc" / "ics55_antenna.drc"
 DRC_FIXTURE_RUNNER = Path(__file__).resolve().parent / "drc_fixture_check.py"
 DRC_FIXTURE_GENERATOR = Path(__file__).resolve().parent / "make_fixtures.rb"
 CALIBRE_DRC_SOURCE = ROOT / "pv" / "DRC" / "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc"
@@ -188,6 +189,7 @@ def main():
     rule_decks.extend(sorted((ROOT / "libs.tech" / "lvs" / "rule_decks").glob("*")))
     drc_rule_decks = [
         DRC_DECK,
+        ANTENNA_DECK,
         *sorted((ROOT / "libs.tech" / "drc" / "rule_decks").rglob("*.drc")),
         ROOT / "libs.tech" / "drc" / "rule_decks" / "ics55_rules.json",
     ]

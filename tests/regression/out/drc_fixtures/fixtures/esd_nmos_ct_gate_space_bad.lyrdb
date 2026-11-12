@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>EFU_1b_G</name>
+   <description>EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1c_G</name>
+   <description>EFU_1c_G: FUSEALL (292/12) must fully cover EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2b_G</name>
+   <description>EFU_2b_G: EFUSEALL (293/12) must interact with POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2c_G</name>
+   <description>EFU_2c_G: EFUSEALL (293/12) must fully cover POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_2</name>
+   <description>DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_3</name>
+   <description>DEUPAD_R_3: padarea must be covered by the T4M2 top metal and by M5 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_5</name>
+   <description>DEUPAD_R_5: ALPADres, MOMLVS1, INDALL and M5/T4M2 resistors must be outside the DEUPAD area [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_6</name>
+   <description>DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_7</name>
+   <description>DEUPAD_R_7: padarea must overlap a T4V2 array (vias spaced &lt;= 0.51 um) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_1</name>
+   <description>ESD_A_1: ESD1 area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_2</name>
+   <description>ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_W_1</name>
+   <description>ESD_W_1: ESD1 width must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_S_1</name>
+   <description>ESD_S_1: ESD1 spacing must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_1_SEDP_1</name>
+   <description>ESDN_1_SEDP_1: source contacts must be enclosed by source active by 0.15 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_2_ESDP_2</name>
+   <description>ESDN_2_ESDP_2: source contacts must be at least 0.15 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_4_ESDP_4</name>
+   <description>ESDN_4_ESDP_4: drain SAB must overlap the gate by at least 0.05 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_5_ESDP_5</name>
+   <description>ESDN_5_ESDP_5: the drain SAB hole must be at least 1.29 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_6_ESDP_6</name>
+   <description>ESDN_6_ESDP_6: drain contacts must be enclosed by the drain SAB hole by 0.21 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_7_ESDP_7</name>
+   <description>ESDN_7_ESDP_7: drain SAB must extend 0.21 um beyond the drain active on non-gate sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_8_ESDP_8</name>
+   <description>ESDN_8_ESDP_8: the drain SAB hole must be enclosed by the drain active by 1.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_9</name>
+   <description>ESDN_9: the ESD implant must be at least 0.4 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_10</name>
+   <description>ESDN_10: the ESD implant must be enclosed by the drain active by 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_11</name>
+   <description>ESDN_11: the ESD implant must not overlap the ESD gate poly [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_12</name>
+   <description>ESDN_12: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_9</name>
+   <description>ESDP_9: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_3</name>
+   <description>ESDN_3: 3.3V ESD NMOS channel length must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_3</name>
+   <description>ESDP_3: 3.3V ESD PMOS channel length must be 0.4..0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>ESDN_1_SEDP_1</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>edge-pair: (2.43,16.09;2.43,15.91)/(2.5,16.223;2.5,15.777)</value>
+   </values>
+  </item>
+  <item>
+   <tags/>
+   <category>ESDN_2_ESDP_2</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>edge-pair: (2.43,16.09;2.43,15.91)/(2.5,15.777;2.5,16.223)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

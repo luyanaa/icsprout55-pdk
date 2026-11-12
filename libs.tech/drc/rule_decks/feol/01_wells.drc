@@ -13,18 +13,126 @@
 # limitations under the License.
 
 #=========================================================================================
-# FEOL 01 - Wells
+# FEOL 01 - Wells (NW1/NW, DNW)
 #
-# DNW is mapped from the Calibre source layer (7/1), but its source checks use
-# ABUT<90/SINGULAR, directional enclosure, voltage and net-class semantics not
-# represented by this module API; keep them disabled rather than approximating.
-# NW1 source checks likewise depend on voltage/net classes and ABUT<90 /
-# SINGULAR REGION semantics not represented by the current module API.
+# DNW is the Calibre source layer (7/1); NW/NW1 is (9/1). Area, width and spacing
+# checks take the source thresholds, but the source ABUT<90/SINGULAR REGION
+# reporting qualifiers are not reproduced.
+#
+# NW1_S_1 is checked on the low-voltage NW construction LVNW0 = (NW NOT NW1res)
+# intersect ((NW NOT (NW AND TG)) NOT (NW AND DG)), with resistor NW subtracted
+# from the markers. NW1_S_2 through NW1_S_5 are omitted because they require
+# CONNECTED/NOT CONNECTED net classes.
+#
+# DNW_S_2a (different-net spacing) is omitted because it requires CONNECTED
+# net classes. DNW_S_3/DNW_S_4 run on the derived PW (drawn extent outside
+# NW/PSUB, source PWi = DRC:1 NOT (NW1i OR PSUBi)); the DNW_S_4 DG/TG
+# condition is reproduced by intersecting DG/TG instead of the source's
+# connected-region predicate.
+# DNW_R_1 is an active rule, but its "DNW enclosed by NW" marker set is a
+# subset of the DNW_EN_1 enclosure, coincident-edge and coverage outputs.
 #=========================================================================================
 
 if FEOL
-  # Unsupported source rules: DNW_W_1, DNW_S_1, DNW_S_2a, DNW_S_3,
-  # DNW_S_4, DNW_S_5, DNW_EN_1, DNW_EN_2, DNW_O_1, DNW_R_1,
-  # DNW_R_3; NW1_W_1, NW1_S_1 through NW1_S_5, NW1_A_1.
-  # TGOX/DGOX checks also require source-specific layers/qualifiers.
+  # NW1_A_1/NW1_A_2: source area checks on the drawn NW layer.
+  nw_area = rval('nw_area')
+  NW.not(NW.with_area(nw_area.um2, 1e9.um2)).not_inside(NODRC).output('well.nw.area',
+    "NW1_A_1: NW area must be at least #{nw_area} um^2 outside NODRC [Calibre source]")
+  nw_hole_area = rval('nw_hole_area')
+  NW.holes.not(NW.holes.with_area(nw_hole_area.um2, 1e9.um2)).not_inside(NODRC).output('well.nw.enclosed_area',
+    "NW1_A_2: NW enclosed hole area must be at least #{nw_hole_area} um^2 outside NODRC [Calibre source]")
+
+  # NW1_W_1: NW width. The generic KLayout width metric does not reproduce the
+  # source single-point-interaction qualifier.
+  nw_width = rval('nw_width')
+  NW.drc(width < nw_width.um).not_inside(SRAMALL).not_inside(NODRC).output('well.nw.width',
+    "NW1_W_1: NW width must be at least #{nw_width} um outside SRAMALL/NODRC [Calibre source]")
+
+  # NW1_S_1: spacing between low-voltage NW1s. HVNW = NW covered by TG,
+  # MVNW = NW covered by DG, LVNW = NW minus both; NW0 excludes NW1res.
+  lv_nw = NW.not(NW.and(TG)).not(NW.and(DG))
+  lv_nw0 = NW.not(NW1RES).and(lv_nw)
+  nw_res = NW.and(NW1RES)
+  nw_space = rval('nw_space')
+  lv_nw0.drc(space < nw_space.um).polygons.not(nw_res).not_inside(NODRC).output('well.nw.space',
+    "NW1_S_1: low-voltage NW spacing must be at least #{nw_space} um outside NW resistor and NODRC [Calibre source]")
+
+  # NW1_R_1: floating NW. The source selects taps that enclose a CT (Calibre
+  # CT = CTi OR CTbar); KLayout Region#inside supplies the same whole-polygon
+  # containment.
+  ct_in_ntap = CT.or(CTbar).inside(NTAP)
+  nw_tapped = NTAP.interacting(ct_in_ntap)
+  NW.not_interacting(nw_tapped).not_inside(NODRC).output('well.nw.floating',
+    'NW1_R_1: NW must interact a tap enclosing CT outside NODRC [Calibre source]')
+
+  # DNW_W_1/DNW_S_1: direct DNW width and spacing thresholds.
+  dnw_width = rval('dnw_width')
+  DNW.drc(width < dnw_width.um).not_inside(NODRC).output('well.dnw.width',
+    "DNW_W_1: DNW width must be at least #{dnw_width} um outside NODRC [Calibre source]")
+  dnw_space = rval('dnw_space')
+  DNW.drc(space < dnw_space.um).not_inside(NODRC).output('well.dnw.space',
+    "DNW_S_1: DNW spacing must be at least #{dnw_space} um outside NODRC [Calibre source]")
+
+  # DNW_S_5: DNW to N+ source/drain (NACT NOT NGATE NOT NW).
+  nsdi = NACT.not(NGATE).not(NW)
+  dnw_nsdi_space = rval('dnw_nsdi_space')
+  DNW.drc(separation(nsdi, transparent) < dnw_nsdi_space.um).not_inside(NODRC).output('well.dnw.nsdi.space',
+    "DNW_S_5: DNW to N+ source/drain spacing must be at least #{dnw_nsdi_space} um outside NODRC [Calibre source]")
+
+  # DNW_EN_1: NW enclosure of DNW. The inside-edge strip method matches the
+  # source ENC measurement; DNW edges coincident with the NW boundary have zero
+  # enclosure and are reported by the coincident-edge clause, while DNW outside
+  # NW is reported by the coverage clause. The source's edge-level NODRC waiver
+  # is approximated by region markers.
+  dnw_nw_enc = rval('dnw_nw_enc')
+  DNW.edges.inside_part(NW)
+    .extended_out(dnw_nw_enc.um).not(NW)
+    .not_inside(NODRC).output('well.dnw.nw.enclosure',
+      "DNW_EN_1: NW enclosure of DNW must be at least #{dnw_nw_enc} um outside NODRC [Calibre source]")
+  DNW.edges.and(NW.edges).not_inside(NODRC).output('well.dnw.nw.coincident',
+    'DNW_EN_1: DNW edge coincident with NW outside NODRC [Calibre source]')
+  DNW.not(NW).not_inside(NODRC).output('well.dnw.nw.coverage',
+    'DNW_EN_1: DNW must be inside NW outside NODRC [Calibre source]')
+
+  # DNW_EN_2: DNW enclosure of non-tap N+ AA.
+  nact_notap = NACT.not(NTAP).not(PTAP)
+  dnw_nact_enc = rval('dnw_nact_enc')
+  nact_notap.edges.inside_part(DNW)
+    .extended_out(dnw_nact_enc.um).not(DNW)
+    .not_inside(NODRC).output('well.dnw.nact.enclosure',
+      "DNW_EN_2: DNW enclosure of non-tap N+ AA must be at least #{dnw_nact_enc} um outside NODRC [Calibre source]")
+
+  # DNW_O_1: the NW/DNW overlap must be at least 0.40 um wide so the two
+  # wells do not meet along a sliver.
+  dnw_nw_overlap = rval('dnw_nw_overlap')
+  NW.and(DNW).drc(width < dnw_nw_overlap.um)
+    .not_inside(NODRC).output('well.dnw.nw.overlap',
+      "DNW_O_1: NW/DNW overlap width must be at least #{dnw_nw_overlap} um outside NODRC [Calibre source]")
+
+  # DNW_R_3: a P-well island inside DNW must interact a CT on P+ tap. PW is the
+  # drawn extent outside NW/PSUB (source PWi = DRC:1 NOT (NW1i OR PSUBi)).
+  pw = extent.not(NW.or(PSUB))
+  tpw = pw.and(DNW)
+  tpw.not_interacting(CT.or(CTbar).interacting(PTAP)).output('well.dnw.tpw.floating',
+    'DNW_R_3: PW inside DNW must interact a CT on P+ tap [Calibre source]')
+
+  # DNW_S_3: TPW to PW spacing. The source measures X = PW INSIDE DNW against
+  # Y = PW OR X; since X is a subset of PW, the reference is PW itself.
+  # KLayout separation ignores polygon pairs that overlap or nest, which
+  # matches EXT between connected polygons.
+  dnw_s3_space = rval('dnw_s3_space')
+  tpw.drc(separation(pw, transparent) < dnw_s3_space.um)
+    .not_inside(LDMOS).not_inside(NODRC).output('well.dnw.tpw.space',
+      "DNW_S_3: TPW to PW spacing must be at least #{dnw_s3_space} um outside LDMOS/NODRC [Calibre source]")
+
+  # DNW_S_4: TPW/PW touching DG or TG must keep 1.20 um to TPW. The source's
+  # connected-region predicate is approximated by intersecting DG/TG.
+  dnw_s4_space = rval('dnw_s4_space')
+  dgtg = DG.or(TG)
+  tpw.and(dgtg).drc(separation(tpw, transparent) < dnw_s4_space.um)
+    .not_inside(LDMOS).not_inside(NODRC).output('well.dnw.tpw_dgtg.space',
+      "DNW_S_4: TPW with DG/TG to TPW spacing must be at least #{dnw_s4_space} um outside LDMOS/NODRC [Calibre source]")
+  pw.and(dgtg).drc(separation(tpw, transparent) < dnw_s4_space.um)
+    .not_inside(LDMOS).not_inside(NODRC).output('well.dnw.pw_dgtg.space',
+      "DNW_S_4: PW with DG/TG to TPW spacing must be at least #{dnw_s4_space} um outside LDMOS/NODRC [Calibre source]")
 end

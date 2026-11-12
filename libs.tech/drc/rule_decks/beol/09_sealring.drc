@@ -1,0 +1,207 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 09 - Seal-ring rules (source SRCK_3..SRCK_16)
+#
+# Active profile: total_metal=6, top_metal=1, T4V2/T4M2.  The source loops over
+# m_j = M1..M5 and T4M2; T2*/T8* variants are compiled out.  MxS is metal
+# inside SRINGBLK; outer/inner ring are the two concentric ring polygons there.
+#
+# The source separates S_OUTER and S_INNER with Calibre TOUCH counts on hole
+# polygons/edges.  That selector has no direct KLayout equivalent; here the
+# candidates are single-hole metal polygons inside SRINGBLK, and the ring
+# whose hole contains another candidate is the outer ring.  A lone ring is
+# treated as the outer ring.
+#
+# The source ANGLED/ABUT/SINGULAR/OPPOSITE qualifiers and the SRCK_3 45-degree
+# corner companion branch are not represented; each emitted marker is the
+# primary threshold of its rule.  SRCK_16b_16c keeps only its final 0.6 um
+# metric because the 0.74 um pre-filter only narrows the bars considered.
+#=========================================================================================
+
+if BEOL
+  seal_ring = SRINGBLK_SRC
+  if seal_ring.count > 0
+    # DRC1_S = EXTENT drawn original INTERACT SRINGBLK (source line 1825).
+    drc1_s = extent.interacting(seal_ring)
+
+    seal_rings = lambda do |metal|
+      # DRC input layers keep raw polygons; merge so abutting ring sides form
+      # one polygon with a hole.
+      metal_s = metal.and(seal_ring).merged
+      candidates = []
+      metal_s.data.each { |poly| candidates << poly if poly.holes == 1 }
+      inner = RBA::Region.new
+      outer = RBA::Region.new
+      if candidates.size == 1
+        outer.insert(candidates[0])
+      else
+        rings = candidates.map do |poly|
+          ring = RBA::Region.new
+          ring.insert(poly)
+          [ring, ring.holes]
+        end
+        rings.each do |ring, holes|
+          contains_other = rings.any? do |other_ring, _|
+            !other_ring.equal?(ring) && !(holes & other_ring).is_empty?
+          end
+          (contains_other ? outer : inner).insert(ring)
+        end
+      end
+      [wrap_region.call(inner), wrap_region.call(outer)]
+    end
+
+    seal_extent_space = lambda do |ring_layer, limit, rule_id, what|
+      ring_layer.drc(enclosed(drc1_s) < limit.um).output(rule_id,
+        "#{rule_id}: #{what} must be at least #{limit} um inside the window edge [Calibre source]")
+    end
+
+    outer_edge_space = rval('srck_outer_edge_space')
+    ring_space = rval('srck_ring_space')
+    outer_width = rval('srck_outer_width')
+    inner_width = rval('srck_inner_width')
+
+    [
+      ['M1', M1.not(MET1SLOT)],
+      ['M2', M2.not(MET2SLOT)],
+      ['M3', M3.not(MET3SLOT)],
+      ['M4', M4.not(MET4SLOT)],
+      ['M5', M5.not(MET5SLOT)]
+    ].each do |name, metal|
+      inner, outer = seal_rings.call(metal)
+      seal_extent_space.call(outer, outer_edge_space, 'SRCK_3_M',
+        "#{name} outer seal-ring metal")
+      outer.drc(separation(inner, transparent) < ring_space.um).output('SRCK_4_M',
+        "SRCK_4_M: #{name} inner/outer seal-ring metal spacing must be at least #{ring_space} um [Calibre source]")
+      outer.drc(width < outer_width.um).output('SRCK_5_M',
+        "SRCK_5_M: #{name} outer seal-ring metal width must be at least #{outer_width} um [Calibre source]")
+      inner.drc(width < inner_width.um).output('SRCK_6_M',
+        "SRCK_6_M: #{name} inner seal-ring metal width must be at least #{inner_width} um [Calibre source]")
+    end
+
+    # T4M2 top-metal seal rings (source SRCK_*_T4M2).
+    t4m2_metal = TM2.not(T4M2SLOT)
+    t4m2_inner, t4m2_outer = seal_rings.call(t4m2_metal)
+    seal_extent_space.call(t4m2_outer, outer_edge_space, 'SRCK_3_T4M2',
+      'T4M2 outer seal-ring metal')
+    t4m2_outer.drc(separation(t4m2_inner, transparent) < ring_space.um).output('SRCK_4_T4M2',
+      "SRCK_4_T4M2: T4M2 inner/outer seal-ring metal spacing must be at least #{ring_space} um [Calibre source]")
+    t4m2_outer.drc(width < outer_width.um).output('SRCK_5_T4M2',
+      "SRCK_5_T4M2: T4M2 outer seal-ring metal width must be at least #{outer_width} um [Calibre source]")
+    t4m2_inner.drc(width < inner_width.um).output('SRCK_6_T4M2',
+      "SRCK_6_T4M2: T4M2 inner seal-ring metal width must be at least #{inner_width} um [Calibre source]")
+
+    # RDL / RV seal-ring rings (source SRCK_7_RDL..SRCK_10_RV).
+    _, rdl_outer = seal_rings.call(RDL)
+    seal_extent_space.call(rdl_outer, rval('srck_rdl_edge_space'), 'SRCK_7_RDL',
+      'RDL outer seal-ring metal')
+    rdl_seal = RDL.and(seal_ring)
+    rdl_seal.drc(width < rval('srck_rdl_width').um).output('SRCK_8_RDL',
+      "SRCK_8_RDL: RDL seal-ring width must be at least #{rval('srck_rdl_width')} um [Calibre source]")
+    rv_seal = RV.and(seal_ring)
+    seal_extent_space.call(rv_seal, rval('srck_rv_edge_space'), 'SRCK_9_RV',
+      'RV seal-ring geometry')
+    rv_seal.drc(width < rval('srck_rv_width').um).output('SRCK_10_RV',
+      "SRCK_10_RV: RV seal-ring width must be at least #{rval('srck_rv_width')} um [Calibre source]")
+
+    # Contact/via bar and square classes (source SRCK_11/13). Calibre selects
+    # bars with ENCLOSE RECTANGLE w l (rotation allowed); the bbox test below
+    # approximates that in both orientations.
+    bar_and_square = lambda do |layer, bar_width, bar_length|
+      bw = (bar_width / grid).round
+      bl = (bar_length / grid).round
+      region = layer.data
+      bars = region.with_bbox_width(bw, 2**31 - 1, false)
+        .with_bbox_height(bl, 2**31 - 1, false) +
+        region.with_bbox_width(bl, 2**31 - 1, false)
+          .with_bbox_height(bw, 2**31 - 1, false)
+      [wrap_region.call(bars), wrap_region.call(region - bars)]
+    end
+
+    square_errors = lambda do |squares, size, rule_id, what|
+      rectangles = squares.rectangles
+      squares.non_rectangles
+        .or(rectangles.without_bbox_width(size.um))
+        .or(rectangles.without_bbox_height(size.um))
+        .output(rule_id, "#{rule_id}: #{what} must be #{size}x#{size} um [Calibre source]")
+    end
+
+    ct_bar_width = rval('srck_ct_bar_width')
+    ct_seal = CT.or(CTbar).and(seal_ring)
+    ct_bars, ct_squares = bar_and_square.call(ct_seal, ct_bar_width, rval('srck_ct_bar_length'))
+    ct_bars.drc(width < ct_bar_width.um).output('SRCK_11a',
+      "SRCK_11a: seal-ring CT bar width must be at least #{ct_bar_width} um [Calibre source]")
+    square_errors.call(ct_squares, rval('srck_ct_square'), 'SRCK_13a', 'seal-ring CT square')
+
+    m1_seal = M1.not(MET1SLOT).and(seal_ring)
+    m1_inner, m1_outer = seal_rings.call(M1.not(MET1SLOT))
+    ct_bars.drc(enclosed(m1_seal) < rval('srck_ct_bar_enc').um).output('SRCK_14a_CT',
+      "SRCK_14a_CT: M1 enclosure of seal-ring CT bar must be at least #{rval('srck_ct_bar_enc')} um [Calibre source]")
+    ct_squares.drc(enclosed(m1_outer) < rval('srck_square_enc_outer').um).output('SRCK_15a_CT',
+      "SRCK_15a_CT: M1 outer-ring enclosure of seal-ring CT square must be at least #{rval('srck_square_enc_outer')} um [Calibre source]")
+    ct_bars.drc(separation(ct_squares, transparent) < rval('srck_ct_bar_square_space').um).output('SRCK_16a',
+      "SRCK_16a: seal-ring CT bar-to-square spacing must be at least #{rval('srck_ct_bar_square_space')} um [Calibre source]")
+
+    via_bar_width = rval('srck_via_bar_width')
+    via_bar_length = rval('srck_via_bar_length')
+    via_square = rval('srck_via_square')
+    via_bar_enc = rval('srck_via_bar_enc')
+    via_bar_enc_thick = rval('srck_via_bar_enc_thick')
+    via_bar_square_space = rval('srck_via_bar_square_space')
+    square_enc_outer = rval('srck_square_enc_outer')
+
+    [
+      ['V1', V1.or(V1BAR), M1.not(MET1SLOT), M2.not(MET2SLOT), via_bar_enc, M1.not(MET1SLOT)],
+      ['V2', V2.or(V2BAR), M2.not(MET2SLOT), M3.not(MET3SLOT), via_bar_enc_thick, M2.not(MET2SLOT)],
+      ['V3', V3.or(V3BAR), M3.not(MET3SLOT), M4.not(MET4SLOT), via_bar_enc, M3.not(MET3SLOT)],
+      ['V4', V4.or(V4BAR), M4.not(MET4SLOT), M5.not(MET5SLOT), via_bar_enc_thick, M4.not(MET4SLOT)]
+    ].each do |name, via_source, lower_metal, upper_metal, bar_enc, square_ring_metal|
+      via_seal = via_source.and(seal_ring)
+      via_bars, via_squares = bar_and_square.call(via_seal, via_bar_width, via_bar_length)
+      via_bars.drc(width < via_bar_width.um).output('SRCK_11b',
+        "SRCK_11b: seal-ring #{name} bar width must be at least #{via_bar_width} um [Calibre source]")
+      square_errors.call(via_squares, via_square, 'SRCK_13b_13c', "seal-ring #{name} square")
+
+      via_bars.drc(enclosed(lower_metal.and(seal_ring)) < bar_enc.um).output('SRCK_14b_14c',
+        "SRCK_14b_14c: #{name} bar lower-metal enclosure must be at least #{bar_enc} um [Calibre source]")
+      via_bars.drc(enclosed(upper_metal.and(seal_ring)) < bar_enc.um).output('SRCK_14b_14c',
+        "SRCK_14b_14c: #{name} bar upper-metal enclosure must be at least #{bar_enc} um [Calibre source]")
+      via_bars.drc(separation(via_squares, transparent) < via_bar_square_space.um).output('SRCK_16b_16c',
+        "SRCK_16b_16c: seal-ring #{name} bar-to-square spacing must be at least #{via_bar_square_space} um [Calibre source]")
+
+      _, square_outer = seal_rings.call(square_ring_metal)
+      via_squares.drc(enclosed(square_outer) < square_enc_outer.um).output(
+        name == 'V1' ? 'SRCK_15b_v1' : 'SRCK_15b_15c',
+        "SRCK_15b: #{name} square enclosure by its seal-ring outer metal must be at least #{square_enc_outer} um [Calibre source]")
+    end
+
+    # T4V2 bars/squares (source SRCK_11d_12e, 13e_13f, 14d_14e_14f,
+    # 15d_15e_15f, 16d_16e_16f).
+    tv2_bar_width = rval('srck_tv_bar_width')
+    tv2_seal = TV2.or(TV2BAR).and(seal_ring)
+    tv2_bars, tv2_squares = bar_and_square.call(tv2_seal, tv2_bar_width, rval('srck_tv_bar_length'))
+    tv2_bars.drc(width < tv2_bar_width.um).output('SRCK_11d_12e',
+      "SRCK_11d_12e: seal-ring T4V2 bar width must be at least #{tv2_bar_width} um [Calibre source]")
+    square_errors.call(tv2_squares, rval('srck_tv_square'), 'SRCK_13e_13f', 'seal-ring T4V2 square')
+
+    t4m2_seal = TM2.not(T4M2SLOT).and(seal_ring)
+    tv2_bars.drc(enclosed(t4m2_seal) < rval('srck_tv_bar_enc').um).output('SRCK_14d_14e_14f',
+      "SRCK_14d_14e_14f: T4M2 enclosure of seal-ring T4V2 bar must be at least #{rval('srck_tv_bar_enc')} um [Calibre source]")
+    tv2_seal.drc(enclosed(t4m2_seal) < rval('srck_tv_ring_enc').um).output('SRCK_15d_15e_15f',
+      "SRCK_15d_15e_15f: T4M2 enclosure of seal-ring T4V2 must be at least #{rval('srck_tv_ring_enc')} um [Calibre source]")
+    tv2_bars.drc(separation(tv2_squares, transparent) < rval('srck_tv_bar_square_space').um).output('SRCK_16d_16e_16f',
+      "SRCK_16d_16e_16f: seal-ring T4V2 bar-to-square spacing must be at least #{rval('srck_tv_bar_square_space')} um [Calibre source]")
+  end
+end

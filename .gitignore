@@ -237,6 +237,9 @@ libs.ref/ics55_LLSC_H7C*/liberty/
 # Temporary release-asset staging is removed after each run.
 libs.ref/.ecos-macros.*
 
+# LibreLane run directories produced by the bundled examples.
+libs.tech/librelane/examples/**/runs/
+
 # Canonically named ECOS Factory macro libraries.
 libs.ref/icsprout55_fd_rom__*/
 libs.ref/icsprout55_fd_sram__*/

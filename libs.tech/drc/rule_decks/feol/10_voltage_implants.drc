@@ -1,0 +1,104 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 10 - Voltage-class implant markers (NVT1/NVT3/PVT1/PVT3)
+#
+# LVTN = NVT1 (17/1), HVTN = NVT3 (21/1), LVTP = PVT1 (18/1),
+# HVTP = PVT3 (22/1). All four families share the same 0.18/0.18/0.15/0.21
+# thresholds, so they are emitted by one parameterised block:
+#   - gate spacing/extension uses the poly edges inside AA,
+#   - AA spacing uses the shielded separation to AA (enclosing markers are
+#     governed by the EX_2 enclosure),
+#   - S_4 (non-silicide AA) exists for NVT1/NVT3/PVT3,
+#   - NVT3/PVT3 waive S_3/EX_2/A_1 inside SRAMALL,
+#   - R_1 follows the per-family source clauses (PVT1 only forbids PSUB).
+# ABUT/SINGULAR/OPPOSITE qualifiers are not reproduced.
+#=========================================================================================
+
+if FEOL
+  gate_sd_edges = POLY.edges.inside_part(ACT)
+  pact_nontap = PACT.not(PTAP)
+  nact_nontap = NACT.not(NTAP)
+
+  vt_family = lambda do |name, vt, opp_aa, other_vt, sab_rule, waive_sram, dg_tg|
+    vt_width = rval('vt_width')
+    vt.drc(width < vt_width.um).not_inside(NODRC).output("#{name}_W_1",
+      "#{name}_W_1: #{name} width must be at least #{vt_width} um outside NODRC [Calibre source]")
+
+    vt_space = rval('vt_space')
+    vt.drc(space < vt_space.um).not_inside(NODRC).output("#{name}_S_1",
+      "#{name}_S_1: #{name} spacing must be at least #{vt_space} um outside NODRC [Calibre source]")
+
+    vt_gate_space = rval('vt_gate_space')
+    vt.edges.separation(gate_sd_edges, vt_gate_space.um).polygons.not_inside(NODRC).output("#{name}_S_2",
+      "#{name}_S_2: #{name} to gate spacing along the source/drain direction must be at least #{vt_gate_space} um outside NODRC [Calibre source]")
+
+    vt_aa_space = rval('vt_aa_space')
+    vt_aa_markers = vt.drc(separation(ACT) < vt_aa_space.um)
+    vt_aa_markers = vt_aa_markers.not_inside(SRAMALL) if waive_sram
+    vt_aa_markers.not_inside(NODRC).output("#{name}_S_3",
+      "#{name}_S_3: #{name} to AA spacing along the poly direction must be at least #{vt_aa_space} um outside NODRC [Calibre source]")
+
+    if sab_rule
+      vt_sab_aa_space = rval('vt_sab_aa_space')
+      sab_aa_out = ACT.and(SAB).not_inside(vt)
+      vt.drc(separation(sab_aa_out) < vt_sab_aa_space.um).not_inside(NODRC).output("#{name}_S_4",
+        "#{name}_S_4: #{name} to non-silicide AA spacing must be at least #{vt_sab_aa_space} um outside NODRC [Calibre source]")
+    end
+
+    vt_gate_ext = rval('vt_gate_ext')
+    POLY.edges.inside_part(vt.and(ACT)).and(GATE.edges).extended_out(vt_gate_ext.um).not(vt)
+      .not_inside(NODRC).output("#{name}_EX_1",
+        "#{name}_EX_1: #{name} extension outside GATE along the source/drain direction must be at least #{vt_gate_ext} um outside NODRC [Calibre source]")
+
+    vt_aa_gate_ext = rval('vt_aa_gate_ext')
+    vt_aa_enc = (vt.and(ACT)).edges.and(GATE.edges).extended_out(vt_aa_gate_ext.um).not(vt)
+    vt_aa_enc = vt_aa_enc.not_inside(SRAMALL) if waive_sram
+    vt_aa_enc.not_inside(NODRC).output("#{name}_EX_2",
+      "#{name}_EX_2: #{name} extension outside AA along the poly direction must be at least #{vt_aa_gate_ext} um outside NODRC [Calibre source]")
+
+    vt_area = rval('vt_area')
+    vt_area_markers = vt.not(vt.with_area(vt_area.um2, 1e9.um2))
+    vt_area_markers = vt_area_markers.not_inside(SRAMALL) if waive_sram
+    vt_area_markers.not_inside(NODRC).output("#{name}_A_1",
+      "#{name}_A_1: #{name} area must be at least #{vt_area} um^2 outside NODRC [Calibre source]")
+
+    vt_hole_area = rval('vt_hole_area')
+    vt.holes.not(vt.holes.with_area(vt_hole_area.um2, 1e9.um2)).not_inside(NODRC).output("#{name}_A_2",
+      "#{name}_A_2: #{name} enclosed hole area must be at least #{vt_hole_area} um^2 outside NODRC [Calibre source]")
+
+    vt.and(PSUB).not_inside(NODRC).output("#{name}_R_1",
+      "#{name}_R_1: #{name} must not overlap PSUB outside NODRC [Calibre source]")
+    if opp_aa
+      vt.and(opp_aa).not_inside(NODRC).output("#{name}_R_1",
+        "#{name}_R_1: #{name} must not overlap opposite-type non-pickup AA outside NODRC [Calibre source]")
+    end
+    if other_vt
+      vt.and(other_vt).not_inside(NODRC).output("#{name}_R_1",
+        "#{name}_R_1: #{name} must not overlap the opposite voltage class outside NODRC [Calibre source]")
+    end
+    if dg_tg
+      vt.and(DG).not_inside(NODRC).output("#{name}_R_1",
+        "#{name}_R_1: #{name} must not overlap DG outside NODRC [Calibre source]")
+      vt.and(TG).not_inside(NODRC).output("#{name}_R_1",
+        "#{name}_R_1: #{name} must not overlap TG outside NODRC [Calibre source]")
+    end
+  end
+
+  vt_family.call('NVT1', LVTN, pact_nontap, nil, true, false, true)
+  vt_family.call('NVT3', HVTN, pact_nontap, LVTN, true, true, true)
+  vt_family.call('PVT1', LVTP, nil, nil, false, false, false)
+  vt_family.call('PVT3', HVTP, nact_nontap, LVTP, true, true, true)
+end

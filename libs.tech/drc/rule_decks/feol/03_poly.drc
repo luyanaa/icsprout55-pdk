@@ -35,9 +35,36 @@ if FEOL
     "PO_S_1: POLY spacing must be at least #{poly_min_space} um outside INDALL/NODRC [Calibre source]")
   # KLayout space checks do not reproduce the source ABUT/SINGULAR qualifiers;
   # PO_S_1's separate ABUT<89 clause inside INDALL is omitted.
+
+  # PO_L_1: voltage-drop length limit for thin poly (width < 0.13 um). Three
+  # source clauses are approximated: (1) contacts inside the same thin
+  # non-gate poly must be at most 25 um apart (12.5 um CT halos), (2) a thin
+  # non-gate poly connected to a contact must not run more than 25 um from it,
+  # and (3) a thin-channel gate must have a contact within 25 um. The Calibre
+  # SIZE/STEP/opposite-edge selectors become region coverage; the ESDIOE and
+  # NODRC edge waivers become region waivers.
+  po_l1_width = rval('po_l1_width')
+  po_l1_len = rval('po_l1_len')
+  po_ct = CT.or(CTbar)
+  po_thin = POLY.interacting(
+    wrap_region.call(POLY.data.width_check((po_l1_width / grid).round).polygons))
+  po_check = po_thin.not(GATE).interacting(po_ct)
+  po_check.interacting(po_ct, 2).not(po_ct.sized((po_l1_len / 2.0).um))
+    .not_inside(ESDIOE).not_inside(NODRC).output('poly.po.ct_length',
+      "PO_L_1: thin PO contact-to-contact length must be at most #{po_l1_len} um outside ESDIOE/NODRC [Calibre source]")
+  po_check.not(po_ct.sized(po_l1_len.um))
+    .not_inside(ESDIOE).not_inside(NODRC).output('poly.po.length',
+      "PO_L_1: thin PO contact-to-line-end length must be at most #{po_l1_len} um outside ESDIOE/NODRC [Calibre source]")
+  thin_channel = GATE.interacting(
+    GATE.edges.extended_out(1.dbu).not(ACT).with_area(0, po_l1_width.um * 1.dbu))
+  gate_po_with_ct = POLY.interacting(thin_channel).interacting(po_ct)
+  thin_channel.interacting(gate_po_with_ct).not(po_ct.sized(po_l1_len.um))
+    .not_inside(ESDIOE).not_inside(NODRC).output('poly.po.gate_length',
+      "PO_L_1: thin-channel gate must lie within #{po_l1_len} um of a contact outside ESDIOE/NODRC [Calibre source]")
+
   # Unsupported source rules: PO_W_2a through PO_W_2f, PO_W_3, PO_S_2,
   # PO_S_3, PO_S_5 through PO_S_7, PO_S_9, PO_S_11, PO_S_12,
-  # PO_S_14 through PO_S_16, PO_EX_1, PO_EX_2, PO_L_1, PO_R_1, PO_R_2.
+  # PO_S_14 through PO_S_16, PO_EX_1, PO_EX_2, PO_R_1, PO_R_2.
   # PO_S_4_R, PO_S_7a_R, PO_S_8_R, PO_S_13_R, PO_S_14a_R,
   # PO_EN_1_R through PO_EN_3_R, PO_EX_1_R, PO_EX_3_R, PO_L_2_R,
   # and PO_A_1_R remain disabled (OPEN_RECOMMENDED_ON=NO).

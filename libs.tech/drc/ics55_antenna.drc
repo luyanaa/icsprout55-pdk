@@ -1,0 +1,442 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 antenna checks (KLayout port of the vendor .ant deck)
+#
+# Source: pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.ant with the released
+# profile M=6, T=1, TM_NAME=T4M2, TV_NAME=T4V2, RDL_thickness=1.595.
+#
+# Calibre builds each antenna ratio with NET AREA RATIO over a net extracted
+# under "DRC INCREMENTAL CONNECT YES": a check sees only the CONNECT statements
+# executed before it, so gates tied together only at an upper metal are still
+# separate nets at the lower-metal stages.  KLayout's netter always extracts the
+# fully connected layout, so this deck builds one netter per source stage with
+# exactly the CONNECT statements issued up to that check.  The stage netters
+# are cheap to extract; a single full-connectivity netter would merge gates
+# through upper metal and could dilute a lower-stage ratio.
+#
+# The source credits a net with an antenna diode by 500 um^-2 of SD area plus a
+# fixed !AREA term (38000/42000/980/850/90/8000/45000/49000/29000 depending on
+# the rule).  Only the per-um^2 SD credit is applied here; the fixed term is
+# omitted, so every threshold is at least as tight as Calibre.  The ACCUMULATE
+# chain recomputes lower-stage ratios without repeating the credit, so one
+# credit per stage net matches the source expression.
+#
+# Usage:
+#   klayout -b -r ics55_antenna.drc -rd input=<layout.gds> \
+#       [-rd top=<topcell>] [-rd report=<out.lyrdb>]
+#=========================================================================================
+
+require 'json'
+
+if $input
+  if $top
+    source($input, $top)
+  else
+    source($input)
+  end
+end
+
+if $report
+  report("ICsprout55 Antenna", $report)
+else
+  report("ICsprout55 Antenna", "ics55_antenna.lyrdb")
+end
+
+SCRIPT_DIR = File.expand_path(File.dirname(__FILE__))
+
+def load_ant_rules
+  path = File.join(SCRIPT_DIR, 'rule_decks', 'ics55_rules.json')
+  JSON.parse(File.read(path))['drc_rules']
+end
+
+ANT_RULES = load_ant_rules
+
+def rval(key)
+  v = ANT_RULES[key]
+  raise "missing rule value: #{key}" if v.nil?
+  v.to_f
+end
+
+DBU = dbu
+U2 = DBU * DBU
+
+#-----------------------------------------------------------------------------------------
+# Input layers (official Calibre map)
+#-----------------------------------------------------------------------------------------
+
+ACT = input(2, 1)
+DGOX = input(27, 1)
+TGOX = input(28, 1)
+POLY = input(41, 1)
+NP = input(52, 1)
+PP = input(53, 1)
+CT = input(72, 1)
+CTBAR = input(72, 7)
+M1 = input(81, 1)
+M2 = input(82, 1)
+M3 = input(83, 1)
+M4 = input(84, 1)
+M5 = input(85, 1)
+V1 = input(91, 1).or(input(91, 7))
+V2 = input(92, 1).or(input(92, 7))
+V3 = input(93, 1).or(input(93, 7))
+V4 = input(94, 1).or(input(94, 7))
+T4M2 = input(103, 1)
+T4V2 = input(113, 1).or(input(113, 7))
+RV = input(120, 1)
+CB = input(121, 1)
+RDL = input(123, 1)
+
+#-----------------------------------------------------------------------------------------
+# Derived layers, transcribed from the .ant deck
+#-----------------------------------------------------------------------------------------
+
+PO = POLY
+# SD_1 = AA NOT PO; GATE = (PO AND AA) INTERACT SD_1 == 2.  interacting(n, 2)
+# selects at least two and the not(3) removes the three-or-more case, giving
+# the exactly-two source semantics either way.
+SD_1 = ACT.not(PO)
+GATE0 = PO.and(ACT)
+GATE = GATE0.interacting(SD_1, 2).not(GATE0.interacting(SD_1, 3))
+GATE18 = GATE.and(DGOX)
+GATE1825 = GATE.and(DGOX.or(TGOX))
+SD = NP.or(PP).and(ACT).not(PO)
+CT1 = CT.or(CTBAR)
+RDV = RV.or(CB)
+
+#-----------------------------------------------------------------------------------------
+# Stage-wise net extraction
+#-----------------------------------------------------------------------------------------
+
+# Thresholds are fixed; read them once.
+PO_AREA_RATIO = rval('ant_po_area_ratio')
+PO_PERIM_FACTOR = rval('ant_po_perimeter_factor')
+PO_PERIM_RATIO = rval('ant_po_perimeter_ratio')
+CT_AREA_RATIO = rval('ant_ct_area_ratio')
+METAL_RATIO = rval('ant_metal_ratio')
+METAL18_RATIO = rval('ant_metal18_ratio')
+METAL_BOOST = rval('ant_metal_boost')
+TOP_BOOST = rval('ant_top_boost')
+VIA_SINGLE_RATIO = rval('ant_via_single_ratio')
+VIA_SINGLE_BOOST = rval('ant_via_single_boost')
+VIA_CUM_RATIO = rval('ant_via_cum_ratio')
+VIA_CUM_BOOST = rval('ant_via_cum_boost')
+RDV_IO_RATIO = rval('ant_rdv_io_ratio')
+RDV_CORE_RATIO = rval('ant_rdv_core_ratio')
+RDV_BOOST = rval('ant_rdv_boost')
+RDL_RATIO = rval('ant_rdl_ratio')
+RDL_THICKNESS = rval('ant_rdl_thickness')
+
+# Per-rule marker polygons are accumulated across nets and emitted once.
+markers = Hash.new { |h, k| h[k] = RBA::Region.new }
+
+def mark(markers, name, shapes)
+  markers[name] += shapes
+end
+
+def net_shapes(l2n, net, layer)
+  l2n.shapes_of_net(net, layer.data)
+end
+
+def net_area(l2n, net, layer)
+  net_shapes(l2n, net, layer).area
+end
+
+# Stage index follows the source order:
+#   0 PO/GATE, 1 +CT1, 2 +M1/SD, 3 +V1, 4 +M2, 5 +V2, 6 +M3, 7 +V3,
+#   8 +M4, 9 +V4, 10 +M5, 11 +T4V2, 12 +T4M2, 13 +RDV, 14 +RDL.
+stage_netter = lambda do |stage|
+  nx = netter
+  nx.connect(PO, GATE)
+  nx.connect(PO, GATE18)
+  nx.connect(PO, GATE1825)
+  if stage >= 1
+    nx.connect(CT1, PO)
+  end
+  if stage >= 2
+    nx.connect(CT1, SD)
+    nx.connect(M1, CT1)
+  end
+  nx.connect(V1, M1) if stage >= 3
+  nx.connect(M2, V1) if stage >= 4
+  nx.connect(V2, M2) if stage >= 5
+  nx.connect(M3, V2) if stage >= 6
+  nx.connect(V3, M3) if stage >= 7
+  nx.connect(M4, V3) if stage >= 8
+  nx.connect(V4, M4) if stage >= 9
+  nx.connect(M5, V4) if stage >= 10
+  nx.connect(T4V2, M5) if stage >= 11
+  nx.connect(T4M2, T4V2) if stage >= 12
+  nx.connect(RDV, T4M2) if stage >= 13
+  nx.connect(RDL, RDV) if stage >= 14
+  nx
+end
+
+each_gate_net = lambda do |stage, &blk|
+  nx = stage_netter.call(stage)
+  l2n = nx.l2n_data
+  nx.netlist.top_circuit.each_net do |net|
+    gate_dbu = net_area(l2n, net, GATE)
+    blk.call(net, l2n, gate_dbu) if gate_dbu > 0
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# AR_1 / AR_2: PO net, before CT is connected
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(0) do |net, l2n, gate_dbu|
+  po = net_shapes(l2n, net, PO)
+  mark(markers, 'AR_1', po) if po.area.to_f / gate_dbu > PO_AREA_RATIO
+  if (po.perimeter * DBU * PO_PERIM_FACTOR) / (gate_dbu * U2) > PO_PERIM_RATIO
+    mark(markers, 'AR_2', po)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# AR_3: CT1 connected to PO
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(1) do |net, l2n, gate_dbu|
+  ct = net_shapes(l2n, net, CT1)
+  mark(markers, 'AR_3', ct) if ct.area.to_f / gate_dbu > CT_AREA_RATIO
+end
+
+#-----------------------------------------------------------------------------------------
+# M1: CONNECT M1 PO SD BY CT1
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(2) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  m1 = net_shapes(l2n, net, M1)
+  if m1.area.to_f / gate_dbu > METAL_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR_5_10_M1', m1)
+  end
+  gate18 = net_area(l2n, net, GATE18)
+  if gate18 > 0 && m1.area.to_f / gate18 > METAL18_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR18_5_10_M1', m1)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# VIA1: CONNECT VIA1 M1
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(3) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  v1 = net_shapes(l2n, net, V1)
+  if v1.area.to_f / gate_dbu > VIA_SINGLE_RATIO + VIA_SINGLE_BOOST * credit
+    mark(markers, 'AR_4_VIA1', v1)
+  end
+  if v1.area.to_f / gate_dbu > VIA_CUM_RATIO + VIA_CUM_BOOST * credit
+    mark(markers, 'AR_6_9_VIA1', v1)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# M2: CONNECT M2 M1 BY VIA1
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(4) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_metal = net_area(l2n, net, M1) + net_area(l2n, net, M2)
+  m2 = net_shapes(l2n, net, M2)
+  if cum_metal.to_f / gate_dbu > METAL_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR_5_10_M2', m2)
+  end
+  gate18 = net_area(l2n, net, GATE18)
+  if gate18 > 0 && cum_metal.to_f / gate18 > METAL18_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR18_5_10_M2', m2)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# VIA2: CONNECT M2 VIA2
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(5) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_via = net_area(l2n, net, V1) + net_area(l2n, net, V2)
+  v2 = net_shapes(l2n, net, V2)
+  if v2.area.to_f / gate_dbu > VIA_SINGLE_RATIO + VIA_SINGLE_BOOST * credit
+    mark(markers, 'AR_4_VIA2', v2)
+  end
+  if cum_via.to_f / gate_dbu > VIA_CUM_RATIO + VIA_CUM_BOOST * credit
+    mark(markers, 'AR_6_9_VIA2', v2)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# M3: CONNECT M3 M2 BY VIA2
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(6) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_metal = net_area(l2n, net, M1) + net_area(l2n, net, M2) + net_area(l2n, net, M3)
+  m3 = net_shapes(l2n, net, M3)
+  if cum_metal.to_f / gate_dbu > METAL_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR_5_10_M3', m3)
+  end
+  gate18 = net_area(l2n, net, GATE18)
+  if gate18 > 0 && cum_metal.to_f / gate18 > METAL18_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR18_5_10_M3', m3)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# VIA3: CONNECT M3 VIA3
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(7) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_via = net_area(l2n, net, V1) + net_area(l2n, net, V2) + net_area(l2n, net, V3)
+  v3 = net_shapes(l2n, net, V3)
+  if v3.area.to_f / gate_dbu > VIA_SINGLE_RATIO + VIA_SINGLE_BOOST * credit
+    mark(markers, 'AR_4_VIA3', v3)
+  end
+  if cum_via.to_f / gate_dbu > VIA_CUM_RATIO + VIA_CUM_BOOST * credit
+    mark(markers, 'AR_6_9_VIA3', v3)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# M4: CONNECT M4 M3 BY VIA3
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(8) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_metal = net_area(l2n, net, M1) + net_area(l2n, net, M2) +
+              net_area(l2n, net, M3) + net_area(l2n, net, M4)
+  m4 = net_shapes(l2n, net, M4)
+  if cum_metal.to_f / gate_dbu > METAL_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR_5_10_M4', m4)
+  end
+  gate18 = net_area(l2n, net, GATE18)
+  if gate18 > 0 && cum_metal.to_f / gate18 > METAL18_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR18_5_10_M4', m4)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# VIA4: CONNECT M4 VIA4
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(9) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_via = net_area(l2n, net, V1) + net_area(l2n, net, V2) +
+            net_area(l2n, net, V3) + net_area(l2n, net, V4)
+  v4 = net_shapes(l2n, net, V4)
+  if v4.area.to_f / gate_dbu > VIA_SINGLE_RATIO + VIA_SINGLE_BOOST * credit
+    mark(markers, 'AR_4_VIA4', v4)
+  end
+  if cum_via.to_f / gate_dbu > VIA_CUM_RATIO + VIA_CUM_BOOST * credit
+    mark(markers, 'AR_6_9_VIA4', v4)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# M5: CONNECT M5 M4 BY VIA4
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(10) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_metal = net_area(l2n, net, M1) + net_area(l2n, net, M2) +
+              net_area(l2n, net, M3) + net_area(l2n, net, M4) +
+              net_area(l2n, net, M5)
+  m5 = net_shapes(l2n, net, M5)
+  if cum_metal.to_f / gate_dbu > METAL_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR_5_10_M5', m5)
+  end
+  gate18 = net_area(l2n, net, GATE18)
+  if gate18 > 0 && cum_metal.to_f / gate18 > METAL18_RATIO + METAL_BOOST * credit
+    mark(markers, 'AR18_5_10_M5', m5)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# T4V2: CONNECT T4V2 M5
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(11) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_via = net_area(l2n, net, V1) + net_area(l2n, net, V2) +
+            net_area(l2n, net, V3) + net_area(l2n, net, V4) +
+            net_area(l2n, net, T4V2)
+  t4v2 = net_shapes(l2n, net, T4V2)
+  if t4v2.area.to_f / gate_dbu > VIA_SINGLE_RATIO + VIA_SINGLE_BOOST * credit
+    mark(markers, 'AR_4_T4V2', t4v2)
+  end
+  if cum_via.to_f / gate_dbu > VIA_CUM_RATIO + VIA_CUM_BOOST * credit
+    mark(markers, 'AR_6_9_T4V2', t4v2)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# T4M2: CONNECT T4M2 M5 BY T4V2 (8000 um^-2 diode credit in the source)
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(12) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  cum_metal = net_area(l2n, net, M1) + net_area(l2n, net, M2) +
+              net_area(l2n, net, M3) + net_area(l2n, net, M4) +
+              net_area(l2n, net, M5) + net_area(l2n, net, T4M2)
+  t4m2 = net_shapes(l2n, net, T4M2)
+  if cum_metal.to_f / gate_dbu > METAL_RATIO + TOP_BOOST * credit
+    mark(markers, 'AR_5_10_T4M2', t4m2)
+  end
+  gate18 = net_area(l2n, net, GATE18)
+  if gate18 > 0 && cum_metal.to_f / gate18 > METAL18_RATIO + TOP_BOOST * credit
+    mark(markers, 'AR18_5_10_T4M2', t4m2)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# RDV: CONNECT RDV T4M2
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(13) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  rdv = net_shapes(l2n, net, RDV)
+  gate1825 = net_area(l2n, net, GATE1825)
+  if gate1825 > 0 && rdv.area.to_f / gate1825 > RDV_IO_RATIO + RDV_BOOST * credit
+    mark(markers, 'AR_7_11_io', rdv)
+  end
+  if rdv.area.to_f / gate_dbu > RDV_CORE_RATIO + RDV_BOOST * credit
+    mark(markers, 'AR_7_11_core', rdv)
+  end
+end
+
+#-----------------------------------------------------------------------------------------
+# RDL: CONNECT RDL T4M2 BY RDV (side wall = perimeter * 1.595)
+#-----------------------------------------------------------------------------------------
+
+each_gate_net.call(14) do |net, l2n, gate_dbu|
+  credit = net_area(l2n, net, SD) * U2
+  rdl = net_shapes(l2n, net, RDL)
+  side_wall = rdl.perimeter * DBU * RDL_THICKNESS
+  if side_wall / (gate_dbu * U2) > RDL_RATIO + TOP_BOOST * credit
+    mark(markers, 'AR_8_12', rdl)
+  end
+end
+
+markers.each do |name, region|
+  next if region.is_empty?
+  marker_layer = polygons
+  marker_layer.data = region
+  marker_layer.output("antenna.#{name}", "ICsprout55 antenna #{name}")
+end
+
+puts "ICsprout55 antenna run completed"

@@ -77,6 +77,7 @@ SAB    = clip_layer.call(input(71, 1))  # official 71/1 (silicide block); was mi
 DGOX   = clip_layer.call(input(27, 1))  # official 27/1 (2.5V IO gate oxide)
 CTbar  = clip_layer.call(input(72, 7))  # official 72/7 contact cut-bar
 CTopcblk = clip_layer.call(input(72, 5))  # official 72/5 contact OPC block
+LDMOS    = clip_layer.call(input(211, 12))  # official LDMOS mark (2204 in Calibre map)
 DIODE  = clip_layer.call(input(191, 12))  # official 191/12 (was misaliased BOUNDARY)
 RV     = clip_layer.call(input(120, 1))  # official 120/1 redistribution via (was PADM)
 CB     = clip_layer.call(input(121, 1))  # official 121/1 (was ALPAD)
@@ -147,6 +148,11 @@ T4M2DUM  = clip_layer.call(input(103, 2))
 T4M2DUMB = clip_layer.call(input(103, 3))
 T4M2SLOT = clip_layer.call(input(103, 8))
 
+HRP      = clip_layer.call(input(54, 1))  # official HRPi (high-res poly)
+HPR      = clip_layer.call(input(385, 12))  # official HPR (high-precision resistor mark)
+ULLD     = clip_layer.call(input(152, 12))  # official ULLD marker
+INDDMY   = clip_layer.call(input(301, 12))  # official inductor-dummy mark
+NPR      = clip_layer.call(input(384, 12))  # official NPR (N+ resistor mark)
 INDALL   = clip_layer.call(input(302, 12))
 FUTR     = clip_layer.call(input(291, 12))
 FUSEALL  = clip_layer.call(input(292, 12))
@@ -173,6 +179,9 @@ ESDIOT   = clip_layer.call(input(231, 12))
 ESDIOE   = clip_layer.call(input(232, 12))
 SRAMALL    = clip_layer.call(input(171, 12))
 NODRC      = clip_layer.call(input(357, 12))
+MOMTER     = clip_layer.call(input(282, 12))
+# Official PA = COPY CBi (Calibre layer 2178 = GDS 121/1).
+PA         = CB
 
 # n+/p+ active regions
 NACT = ACT.and(NP)
@@ -183,13 +192,68 @@ PTAP = PACT.not(NW)
 # IO active (official: ACT under the 3.3V gate oxide TGOX)
 IOACT  = ACT.and(TGOX)
 
-# gates (poly over active) and source/drain
-GATES  = POLY.and(ACT)
-GATE = GATES
+# gates. The official GATE is not simply PO AND AA: GATE1 keeps only
+# transistor gates touching two contacted source/drain regions (source lines
+# 1869-1879), and GATE2 adds LDMOS gates (empty in the released libraries).
+GATE0  = POLY.and(ACT)
+AA1    = ACT.interacting(GATE0).not(GATE0)
+AA2    = AA1.interacting(GATE0, 2)
+AA3    = AA1.interacting(CT.or(CTbar))
+AA4    = AA2.or(AA3)
+GATE   = GATE0.interacting(AA4, 2).or(GATE0.and(LDMOS))
 NGATE  = POLY.and(NACT)
 PGATE  = POLY.and(PACT)
 NSD    = NACT.not(NGATE)
 PSD    = PACT.not(PGATE)
 
+# Official gate-oxide splits and CT-derived layers (source lines 1898-1950).
+# DG/TG are the Calibre aliases of DGOX/TGOX.
+DG        = DGOX
+TG        = TGOX
+GATE_core = GATE.not(DGOX.or(TGOX))
+GATE_io1  = GATE.and(DGOX).not(TGOX)
+GATE_io2  = GATE.and(TGOX).not(DGOX)
+EFU       = POLY.interacting(EFUSEALL)   # PO INTERACT EFUSEALL
+RCT       = CT.or(CTbar).interacting(EFU)  # CT INTERACT EFU
+AA_CT     = CT.or(CTbar).and(ACT)        # CT AND AA
+# The released source references GM1 only in "SETLAYER GCT = CT INTERACT GM1"
+# and never defines it (no layer-map entry either), so GCT is empty here.
+GCT       = CT.not(CT)
+
+# Raw source/drain layers used by the source CT tap rule (source line 1760).
+NSDI      = NACT.not(NGATE).not(NW)
+PSDI      = PACT.not(PGATE).and(NW)
+
 # all drawing layers for the off-grid check
 DRAWING = ACT + NW + LVTN + LVTP + HVTN + HVTP + TGOX + DGOX + POLY + PPO + NP + PP + ESD + SAB + IOACT + CT + CTbar + CTopcblk + M1 + M2 + M3 + M4 + M5 + V1 + V2 + V3 + V4 + TM2 + TV2 + RV + CB + ALPAD + RDL + COVER + DIODE
+
+# Shared helpers for rules that need raw RBA edge geometry. Calibre predicates
+# that select individual edges are translated with RBA edges and wrapped back
+# as marker polygons.
+grid = rval('manufacturing_grid')
+wrap_region = lambda do |region|
+  marker_layer = polygons
+  marker_layer.data = region
+  marker_layer
+end
+bbox_longer_than = lambda do |region, run_dbu|
+  region.with_bbox_width(run_dbu, 2**31 - 1, false) +
+    region.with_bbox_height(run_dbu, 2**31 - 1, false)
+end
+# EdgePairs#polygons spans the full source edges, so a run/jog filter based on
+# the marker bbox sees the whole long edge. Compute the projected overlap of
+# each facing edge pair instead, matching the Calibre EXT length metric.
+edge_pair_overlap = lambda do |pair|
+  e1 = pair.first
+  e2 = pair.second
+  vx = e1.p2.x - e1.p1.x
+  vy = e1.p2.y - e1.p1.y
+  len = Math.sqrt(vx * vx + vy * vy)
+  next 0.0 if len < 0.5
+  ux = vx / len
+  uy = vy / len
+  b1 = (e2.p1.x - e1.p1.x) * ux + (e2.p1.y - e1.p1.y) * uy
+  b2 = (e2.p2.x - e1.p1.x) * ux + (e2.p2.y - e1.p1.y) * uy
+  overlap = [len, [b1, b2].max].min - [0.0, [b1, b2].min].max
+  overlap.negative? ? 0.0 : overlap
+end

@@ -28,22 +28,42 @@ DEFAULT_ROOT = HERE.parent.parent.parent
 
 def parse_vendor(path: Path) -> tuple[set[str], set[str]]:
     text = path.read_text(encoding="utf8", errors="replace")
-    ruled = set(re.findall(r"RULECHECK\s+([A-Za-z0-9_.]+)\s*\{", text))
+    # Anchor at the line start so disabled "#RULECHECK ..." stubs are excluded.
+    ruled = set(re.findall(r"^[ \t]*RULECHECK\s+([A-Za-z0-9_.]+)\s*\{", text,
+                           re.M))
     blocks = set()
     for m in re.finditer(r"^([A-Z][A-Z0-9_]*(?:_[A-Za-z0-9]+)*)\s*\{\s*$",
                          text, re.M):
-        blocks.add(m.group(1))
+        if m.group(1) != "VERBATIM":
+            blocks.add(m.group(1))
     return ruled, blocks - ruled
 
 
-def parse_klayout(root: Path) -> dict[str, str]:
-    """category -> source file for every emitted .output(...)."""
+def parse_klayout(root: Path) -> tuple[dict[str, str], set[str], list[re.Pattern[str]]]:
+    """Collect emitted categories and mapping literals from the KLayout deck.
+
+    Returns ``(output_categories, literals, templates)``.  ``output_categories``
+    counts literal ``.output('name', ...)`` calls.  ``literals``/``templates``
+    also include names passed indirectly (``output(rule_id)`` with the literal
+    at the call site) and Ruby-interpolated names (``"metal.#{key}.area"``),
+    which are matched as full-name regex templates.
+    """
     out: dict[str, str] = {}
+    literals: set[str] = set()
+    patterns: list[re.Pattern[str]] = []
     for f in sorted((root / "libs.tech/drc").rglob("*.drc")):
         text = f.read_text(encoding="utf8", errors="replace")
-        for m in re.finditer(r"\.output\(\s*'([^']+)'", text):
-            out.setdefault(m.group(1), str(f.relative_to(root)))
-    return out
+        for m in re.finditer(r"\.output\(\s*(['\"])(.+?)\1", text):
+            if "#{" not in m.group(2):
+                out.setdefault(m.group(2), str(f.relative_to(root)))
+        for m in re.finditer(r"(['\"])(.+?)\1", text):
+            name = m.group(2)
+            if "#{" in name:
+                parts = re.split(r"#\{[^}]+\}", name)
+                patterns.append(re.compile(".+".join(map(re.escape, parts))))
+            else:
+                literals.add(name)
+    return out, literals, patterns
 
 
 def main() -> int:
@@ -55,13 +75,17 @@ def main() -> int:
     vendor_path = root / "pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc"
     ruled, blocks = parse_vendor(vendor_path)
     vendor = ruled | blocks
-    cats = parse_klayout(root)
+    cats, literals, templates = parse_klayout(root)
+
+    def emitted(name: str) -> bool:
+        return name in literals or any(p.fullmatch(name) for p in templates)
+
     cw = json.loads((root / "tests/regression/official/drc_rule_comparison.json")
                     .read_text())
     rules = cw["rules"]
     covered = [r for r in rules if r["status"] == "covered"]
-    mapped_live = [r for r in covered if r.get("klayout") in cats]
-    mapped_stale = [r for r in covered if r.get("klayout") not in cats]
+    mapped_live = [r for r in covered if emitted(r.get("klayout") or "")]
+    mapped_stale = [r for r in covered if not emitted(r.get("klayout") or "")]
     block_prefix = Counter(b.split("_")[0] for b in blocks)
 
     print(f"vendor deck      : {vendor_path.name}")

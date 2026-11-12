@@ -15,19 +15,214 @@
 #=========================================================================================
 # FEOL 02 - Active
 #
-# Port only source geometry representable without changing Calibre qualifiers.
-# ACT_A_1 is an area test with exact SRAMALL/NODRC waivers.  Width, spacing,
-# directional enclosure, and topology rules need Calibre-specific operators.
+# Port source geometry predicates that map to KLayout region/edge operations.
+# Width and spacing checks take the source thresholds; the source ABUT<90 /
+# SINGULAR REGION reporting qualifiers are not reproduced. The Manhattan width
+# proxy uses angle_limit(45) so KLayout does not report acute-corner edge pairs
+# that Calibre's ABUT<90 qualifier excludes.
 #=========================================================================================
 
 if FEOL
   ACT.not(ACT.with_area(0.0384.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('active.act.area',
     "ACT_A_1: AA minimum area 0.0384 um^2; waived inside SRAMALL and NODRC")
 
-  # Unsupported source rules: ACT_W_1, ACT_W_2, ACT_W_3a, ACT_W_3b,
-  # ACT_L_1, ACT_L_2, ACT_S_1, ACT_S_1a, ACT_S_2, ACT_S_3, ACT_S_4,
-  # ACT_S_5 through ACT_S_8, ACT_EN_1, ACT_EN_2, ACT_EN_2a, ACT_A_2,
-  # ACT_R_1, ACT_R_3.  Recommended ACT_S_1_R / ACT_S_2a_R and ACT_W_3a_R
-  # remain disabled (OPEN_RECOMMENDED_ON=NO).
-  # ACT_D_* require density windows/gradient support; not implemented here.
+  act_hole_area = rval('act_hole_area')
+  ACT.holes.not(ACT.holes.with_area(act_hole_area.um2, 1e9.um2)).not_inside(NODRC).output('active.act.enclosed_area',
+    "ACT_A_2: AA enclosed area minimum #{act_hole_area} um^2; waived inside NODRC")
+
+  # ACT_W_1: AA width. angle_limit(45) keeps the opposite-edge metric but drops
+  # the acute-corner pairs KLayout would otherwise report at 45-degree bends.
+  act_min_width = rval('act_width')
+  ACT.drc(width(angle_limit(45)) < act_min_width.um).not_inside(NODRC).output('active.act.width',
+    "ACT_W_1: AA width must be at least #{act_min_width} um outside NODRC [Calibre source]")
+
+  # ACT_W_3a/3b: channel width from the PO-coincident edges of the gate region.
+  # Sweeping each edge 1 DBU outward and subtracting POLY leaves only the edges
+  # that coincide with the PO boundary (the ACT-side edges stay inside POLY).
+  # The sweep area is edge_length x 1 DBU, so the area bound is the width bound.
+  act_channel_width = rval('act_channel_width')
+  GATE_core.edges.extended_out(1.dbu).not(POLY)
+    .with_area(0, act_channel_width.um * 1.dbu)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.gate.channel_width',
+      "ACT_W_3a: core-gate channel width must be at least #{act_channel_width} um outside SRAMALL/NODRC [Calibre source]")
+
+  act_io_channel_width = rval('act_io_channel_width')
+  GATE_io1.or(GATE_io2).edges.extended_out(1.dbu).not(POLY)
+    .with_area(0, act_io_channel_width.um * 1.dbu)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.gate.io_channel_width',
+      "ACT_W_3b: 1.8/2.5/3.3V gate channel width must be at least #{act_io_channel_width} um outside SRAMALL/NODRC [Calibre source]")
+
+  # ACT_W_2: width of 45-degree bent AA. The source selects the bent edges
+  # (ANGLE AA == 45) and measures INT across them; the ABUT<90 qualifier is
+  # not reproduced. The RBA width check reports the short perpendiculars.
+  act_45_width = rval('act_45_width')
+  wrap_region.call(
+    ACT.data.edges.with_abs_angle(45, false)
+      .width_check((act_45_width / grid).round).polygons
+  ).not_inside(NODRC).output('active.act.angle_width',
+    "ACT_W_2: 45-degree AA width must be at least #{act_45_width} um outside NODRC [Calibre source]")
+
+  # ACT_S_1: minimum AA spacing.
+  act_min_space = rval('act_space')
+  ACT.drc(space < act_min_space.um).not_inside(NODRC.or(SRAMALL)).output('active.act.spacing',
+    "ACT_S_1: AA spacing must be at least #{act_min_space} um outside NODRC/SRAMALL [Calibre source]")
+
+  # ACT_S_1a: spacing to AA that is inside TG. transparent disables shielding,
+  # which otherwise suppresses every pair because AA_TG is a subset of AA.
+  act_tg_space = rval('act_space_tg')
+  aa_tg = ACT.and(TG)
+  ACT.drc(separation(aa_tg, transparent) < act_tg_space.um).not_inside(NODRC.or(SRAMALL)).output('active.act.tg_spacing',
+    "ACT_S_1a: AA to TG-covered AA spacing must be at least #{act_tg_space} um outside NODRC/SRAMALL [Calibre source]")
+
+  # ACT_S_5/S_6: NW to N+ active in PW / TG. PW is the complement of NW1/PSUB.
+  pw = extent.not(NW.or(PSUB))
+  nw_no_res = NW.not_interacting(NW1RES)
+  act_nw_nact_pw_space = rval('act_nw_nact_pw_space')
+  nw_no_res.drc(separation(NACT.and(pw), transparent) < act_nw_nact_pw_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.nw.nact.space.pw',
+      "ACT_S_5: NW to N+ active inside PW spacing must be at least #{act_nw_nact_pw_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  act_nw_nact_tg_space = rval('act_nw_nact_tg_space')
+  nw_no_res.drc(separation(NACT.and(TG), transparent) < act_nw_nact_tg_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.nw.nact.space.tg',
+      "ACT_S_6: NW to N+ active inside TG spacing must be at least #{act_nw_nact_tg_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  # ACT_S_8: NW to P+ pickup active outside NW/PSUB/LDMOS.
+  act_nw_pact_space = rval('act_nw_pact_space')
+  pact_outside_nw = PACT.not(NW).not(PSUB).not(LDMOS)
+  NW.drc(separation(pact_outside_nw, transparent) < act_nw_pact_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.nw.pact.space',
+      "ACT_S_8: NW to P+ pickup active spacing must be at least #{act_nw_pact_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  # ACT_S_2: AA spacing when one AA is wider than 0.2 um, the facing run is at
+  # least 0.3 um and the gap is at least 0.08 um (the source's ENCLOSE
+  # RECTANGLE 0.3 0.08 ORTHOGONAL ONLY qualifier). The run is measured as the
+  # projected overlap of each facing edge pair, not the marker bbox.
+  act_wide_width = rval('act_wide_width')
+  act_wide_space = rval('act_wide_space')
+  act_wide_run = rval('act_wide_run')
+  act_wide_gap = rval('act_wide_gap')
+  act_region = ACT.data
+  wide_act = act_region.interacting(
+    act_region.sized(-((act_wide_width / 2.0) / grid).round))
+  wide_pairs = wide_act.edges.separation_check(
+    act_region.edges, (act_wide_space / grid).round)
+  wide_markers = RBA::Region.new
+  wide_pairs.each do |pair|
+    next if edge_pair_overlap.call(pair) < (act_wide_run / grid).round
+    next if pair.distance < (act_wide_gap / grid).round
+    wide_markers.insert(pair.polygon(0))
+  end
+  wrap_region.call(wide_markers).not_inside(NODRC.or(SRAMALL))
+    .output('active.act.wide_space',
+      "ACT_S_2: AA spacing with one AA wider than #{act_wide_width} um must be at least " \
+      "#{act_wide_space} um when the run is >= #{act_wide_run} um " \
+      "(gap >= #{act_wide_gap} um) outside NODRC/SRAMALL [Calibre source]")
+
+  # ACT_S_3: space to 45-degree bent AA. The source pairs the bent edges
+  # (ANGLE AA == 45) with the whole AA layer; the ABUT<90 qualifier is not
+  # reproduced.
+  act_45_space = rval('act_45_space')
+  wrap_region.call(
+    ACT.data.edges.with_abs_angle(45, false)
+      .space_check((act_45_space / grid).round, ACT.data.edges).polygons
+  ).not_inside(NODRC).output('active.act.angle_space',
+    "ACT_S_3: 45-degree AA spacing must be at least #{act_45_space} um outside NODRC [Calibre source]")
+
+  # ACT_S_4: U-shape (notch) and O-shape (hole) AA inner-edge spacing. The
+  # source selects CONVEX EDGE of the derived AA_OS/AA_US layers, which are
+  # not defined in the released deck; KLayout notch_check reproduces the
+  # U-shape intra-polygon gap and a hole width check reproduces the O-shape.
+  # The source edge-level NODRC waiver is approximated by a region waiver.
+  act_u_space = rval('act_u_space')
+  wrap_region.call(ACT.data.notch_check((act_u_space / grid).round).polygons)
+    .not_inside(NODRC).output('active.act.u_space',
+      "ACT_S_4: U-shape AA inner-edge spacing must be at least #{act_u_space} um outside NODRC [Calibre source]")
+  ACT.holes.drc(width < act_u_space.um).not_inside(NODRC).output('active.act.o_space',
+    "ACT_S_4: O-shape AA hole width must be at least #{act_u_space} um outside NODRC [Calibre source]")
+
+  # ACT_S_7: N+ AA to NW that encloses a DNW. The source's NW_DNW is NW
+  # INTERACT (EXPAND EDGE (DNW INSIDE EDGE NW) OUTSIDE BY 0.001); the 1-dbu
+  # edge expansion only bridges the NW/DNW coincidence, so NW INTERACT DNW is
+  # equivalent here. Markers inside the DNW are waived by the source. EXT is an
+  # external-spacing check, so N+ active contained by the NW itself is excluded;
+  # a raw edge separation would otherwise report the enclosure gap.
+  act_nw_dnw_space = rval('act_nw_dnw_space')
+  nw_dnw = NW.interacting(DNW)
+  nact_outside_nw = NACT.not(NW)
+  s7_pairs = nact_outside_nw.data.separation_check(nw_dnw.data, (act_nw_dnw_space / grid).round)
+  s7_markers = RBA::Region.new
+  s7_pairs.each { |pair| s7_markers.insert(pair.polygon(0)) }
+  s7_markers -= DNW.data
+  wrap_region.call(s7_markers).not_inside(NODRC).output('active.nw_dnw.nact.space',
+    "ACT_S_7: N+ active to DNW-enclosing NW spacing must be at least #{act_nw_dnw_space} um outside DNW/NODRC [Calibre source]")
+
+  # ACT_EN_1/2/2a: enclosure. The source uses ENC without OUTSIDE ALSO, so only
+  # the portions of active edges inside the enclosing layer are checked, and an
+  # active shape straddling the enclosure boundary is not flagged by itself.
+  # Extending each inside edge outward by the threshold and subtracting the
+  # enclosing layer leaves a sliver exactly where the perpendicular enclosure
+  # is short; unlike KLayout "enclosed", this does not report whole polygons
+  # merely because they cross the boundary.
+  nw_act_enc = rval('nw_act_enc')
+  NACT.edges.inside_part(nw_no_res)
+    .extended_out(nw_act_enc.um).not(nw_no_res)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.nact.nw.enclosure',
+      "ACT_EN_1: N+ active enclosure by NW must be at least #{nw_act_enc} um outside SRAMALL/NODRC [Calibre source]")
+
+  PACT.edges.inside_part(NW)
+    .extended_out(nw_act_enc.um).not(NW)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.pact.nw.enclosure',
+      "ACT_EN_2: P+ active enclosure by NW must be at least #{nw_act_enc} um outside SRAMALL/NODRC [Calibre source]")
+
+  nw_tg = NW.interacting(TG)
+  act_nw_tg_enc = rval('act_nw_tg_enc')
+  PACT.edges.inside_part(nw_tg)
+    .extended_out(act_nw_tg_enc.um).not(nw_tg)
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.pact.nw_tg.enclosure',
+      "ACT_EN_2a: P+ active enclosure by TG-interacting NW must be at least #{act_nw_tg_enc} um outside SRAMALL/NODRC [Calibre source]")
+
+  # ACT_R_1: every AA shape must be covered by NP or PP, except NW resistors.
+  ACT.not(NP.or(PP)).not_interacting(NW1RES).output('active.act.implant_coverage',
+    'ACT_R_1: AA must be fully covered by NP or PP outside NW1RES [Calibre source]')
+
+  # ACT_L_1: maximum length of thin AA (width < 0.15 um) between contacts, or
+  # from one contact to the AA line end. The source builds 12.5 um CT halos
+  # clipped inside the thin AA, so two contacts more than 25 um apart leave the
+  # midpoint uncovered; the AA line end must stay within 25 um of a contact.
+  # The Calibre SIZE/STEP and opposite-edge selectors are replaced by region
+  # coverage, and the NODRC edge waiver by a region waiver.
+  act_l1_width = rval('act_l1_width')
+  act_l1_len = rval('act_l1_len')
+  ct_all = CT.or(CTbar)
+  thin_aa = ACT.interacting(
+    wrap_region.call(ACT.data.width_check((act_l1_width / grid).round).polygons))
+  aa_with_ct = thin_aa.interacting(ct_all)
+  aa_with_ct.interacting(ct_all, 2).not(ct_all.sized((act_l1_len / 2.0).um))
+    .not_inside(NODRC).output('active.act.max_length_ct',
+      "ACT_L_1: thin AA contact-to-contact length must be at most #{act_l1_len} um outside NODRC [Calibre source]")
+  aa_with_ct.not(ct_all.sized(act_l1_len.um))
+    .not_inside(NODRC).output('active.act.max_length_end',
+      "ACT_L_1: thin AA contact-to-line-end length must be at most #{act_l1_len} um outside NODRC [Calibre source]")
+
+  # ACT_L_2: thin source/drain AA (width < 0.15 um) without a contact that is
+  # butted to a tap must be at most 0.5 um long. The source's WITH EDGE and
+  # LENGTH selectors are approximated with a width marker and a bbox length
+  # check on the derived N+/P+ source/drain layers.
+  act_l2_width = rval('act_l2_width')
+  act_l2_len = rval('act_l2_len')
+  sd_all = NSDI.or(PSDI)
+  sd_no_ct = sd_all.not_interacting(ct_all)
+  thin_sd = sd_no_ct.interacting(
+    wrap_region.call(sd_no_ct.data.width_check((act_l2_width / grid).round).polygons))
+  sd_thin_tap = thin_sd.interacting(NTAP.or(PTAP))
+  sd_long = bbox_longer_than.call(sd_thin_tap.data, (act_l2_len / grid).round + 1)
+  sd_all.interacting(wrap_region.call(sd_long))
+    .not_inside(SRAMALL).not_inside(NODRC).output('active.act.sd_length',
+      "ACT_L_2: thin butted source/drain AA length must be at most #{act_l2_len} um outside SRAMALL/NODRC [Calibre source]")
+
+  # ACT_R_3 is a recommended rule (inactive for OPEN_RECOMMENDED_ON=NO); the
+  # 45-degree width/space, wide-AA space, and NW_DNW rules above approximate
+  # the source edge qualifiers with RBA edge geometry.
+  # ACT_D_* density rules live in density.drc.
 end

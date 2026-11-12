@@ -2,7 +2,7 @@
 <report-database>
  <description>ICsprout55 DRC</description>
  <original-file/>
- <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
  <top-cell>TOP</top-cell>
  <tags>
  </tags>
@@ -171,7 +171,7 @@
    <comment/>
    <image/>
    <values>
-    <value>polygon: (0,0;0,100;100,100;100,0)</value>
+    <value>polygon: (0,50;0,150;100,150;100,50)</value>
    </values>
   </item>
   <item>
@@ -183,7 +183,7 @@
    <comment/>
    <image/>
    <values>
-    <value>polygon: (0,50;0,150;100,150;100,50)</value>
+    <value>polygon: (0,0;0,100;100,100;100,0)</value>
    </values>
   </item>
   <item>

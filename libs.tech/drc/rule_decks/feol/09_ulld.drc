@@ -1,0 +1,89 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 09 - Ultra-low-leakage device marker (ULLD)
+#
+# ULLD = 152/12. The source EXT/ENC edge selectors
+# (LAY_POLY INSIDE EDGE AA / AA INSIDE EDGE LAY_POLY) are approximated by:
+#   - gate edges: POLY edges inside AA,
+#   - AA edges:   the default shielded separation to AA (only AA edges outside
+#                 the marker face the marker boundary, so enclosing markers
+#                 are governed by the EX enclosure checks).
+# The far-poly EX_3b branch (0.12 um) is folded into the tighter 0.15 um
+# EX_3a enclosure. ABUT/SINGULAR/OPPOSITE qualifiers are not reproduced.
+#=========================================================================================
+
+if FEOL
+  ulld_width = rval('ulld_width')
+  ULLD.drc(width < ulld_width.um).not_inside(NODRC).output('ULLD_W_1',
+    "ULLD_W_1: ULLD width must be at least #{ulld_width} um outside NODRC [Calibre source]")
+
+  ulld_space = rval('ulld_space')
+  ULLD.drc(space < ulld_space.um).not_inside(NODRC).output('ULLD_S_1',
+    "ULLD_S_1: ULLD spacing must be at least #{ulld_space} um outside NODRC [Calibre source]")
+
+  ulld_aa_space = rval('ulld_aa_space')
+  ULLD.drc(separation(ACT) < ulld_aa_space.um).not_inside(NODRC).output('ULLD_S_2',
+    "ULLD_S_2: ULLD to AA spacing must be at least #{ulld_aa_space} um outside NODRC [Calibre source]")
+
+  ulld_nact_space = rval('ulld_nact_space')
+  ULLD.drc(separation(NACT) < ulld_nact_space.um).not_inside(NODRC).output('ULLD_S_4',
+    "ULLD_S_4: ULLD to N+ AA spacing must be at least #{ulld_nact_space} um outside NODRC [Calibre source]")
+
+  gate_sd_edges = POLY.edges.inside_part(ACT)
+  ulld_gate_space = rval('ulld_gate_space')
+  ULLD.edges.separation(gate_sd_edges, ulld_gate_space.um).polygons
+    .not_inside(NODRC).output('ULLD_S_5',
+      "ULLD_S_5: ULLD to gate spacing along the source/drain direction must be at least #{ulld_gate_space} um outside NODRC [Calibre source]")
+
+  ulld_aa_gate_space = rval('ulld_aa_gate_space')
+  ULLD.drc(separation(ACT) < ulld_aa_gate_space.um).not_inside(NODRC).output('ULLD_S_6',
+    "ULLD_S_6: ULLD to AA spacing along the poly direction must be at least #{ulld_aa_gate_space} um outside NODRC [Calibre source]")
+
+  ulld_aa_ext = rval('ulld_aa_ext')
+  ACT.edges.inside_part(ULLD).extended_out(ulld_aa_ext.um).not(ULLD)
+    .not_inside(NODRC).output('ULLD_EX_1',
+      "ULLD_EX_1: ULLD extension outside AA must be at least #{ulld_aa_ext} um outside NODRC [Calibre source]")
+
+  ulld_gate_ext = rval('ulld_gate_ext')
+  gate_sd_in_ulld = POLY.edges.inside_part(ACT.and(ULLD))
+  gate_sd_in_ulld.extended_out(ulld_gate_ext.um).not(ULLD)
+    .not_inside(NODRC).output('ULLD_EX_2',
+      "ULLD_EX_2: ULLD extension outside GATE along the source/drain direction must be at least #{ulld_gate_ext} um outside NODRC [Calibre source]")
+
+  ulld_aa_gate_ext = rval('ulld_aa_gate_ext')
+  ACT.edges.inside_part(ULLD).and(GATE.edges).extended_out(ulld_aa_gate_ext.um).not(ULLD)
+    .not_inside(NODRC).output('ULLD_EX_3a',
+      "ULLD_EX_3a: ULLD extension outside AA along the poly direction must be at least #{ulld_aa_gate_ext} um outside NODRC [Calibre source]")
+
+  ulld_area = rval('ulld_area')
+  ULLD.not(ULLD.with_area(ulld_area.um2, 1e9.um2)).not_inside(NODRC).output('ULLD_A_1',
+    "ULLD_A_1: ULLD area must be at least #{ulld_area} um^2 outside NODRC [Calibre source]")
+  ulld_hole_area = rval('ulld_hole_area')
+  ULLD.holes.not(ULLD.holes.with_area(ulld_hole_area.um2, 1e9.um2)).not_inside(NODRC).output('ULLD_A_2',
+    "ULLD_A_2: ULLD enclosed hole area must be at least #{ulld_hole_area} um^2 outside NODRC [Calibre source]")
+
+  ULLD.and(PSUB).not_inside(NODRC).output('ULLD_R_1',
+    'ULLD_R_1: ULLD must not overlap PSUB outside NODRC [Calibre source]')
+  ULLD.and(DG).not_inside(NODRC).output('ULLD_R_1',
+    'ULLD_R_1: ULLD must not overlap DG outside NODRC [Calibre source]')
+  ULLD.and(TG).not_inside(NODRC).output('ULLD_R_1',
+    'ULLD_R_1: ULLD must not overlap TG outside NODRC [Calibre source]')
+
+  ULLD.not_interacting(HVTN).not_inside(NODRC).output('ULLD_R_2',
+    'ULLD_R_2: ULLD must interact NVT3 outside NODRC [Calibre source]')
+  ULLD.not_interacting(HVTP).not_inside(NODRC).output('ULLD_R_2',
+    'ULLD_R_2: ULLD must interact PVT3 outside NODRC [Calibre source]')
+end

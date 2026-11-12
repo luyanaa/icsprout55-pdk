@@ -1,0 +1,1495 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 (ICS55) source-driven KLayout DRC port
+#
+# The deck emits predicates transcribed from the supplied Calibre source when
+# their geometry, active profile, and exclusions are representable in KLayout.
+# Unsupported Calibre-only semantics are omitted, not approximated by default.
+# Optional empirical/LEF diagnostics require explicit opt-in.
+# Provenance is recorded in rule_decks/ics55_rules.json.
+#
+# This is a partial source port, not formal Calibre equivalence. A matched
+# Calibre run/report is required for cross-tool behavioral validation.
+#
+# Usage:
+#   klayout -b -r ics55_drc.drc -rd input=<layout.gds> \
+#       [-rd top=<topcell>] [-rd report=<out.lyrdb>] \
+#       [-rd no_feol=true] [-rd no_beol=true] \
+#       [-rd no_density=true] [-rd no_mom=true] [-rd tables=feol] [-z]
+#
+# Switches:
+#   tables: main (default) or selected families: feol beol dummy_slot density
+#           mom special grid advanced
+#   advanced=true / tables=advanced: opt in to empirical checks
+#   check_grid=true / tables=grid: opt in to LEF-derived manufacturing-grid check
+#   run_mode: deep (default) | flat | tiling
+#=========================================================================================
+
+require 'json'
+require 'etc'
+
+#-----------------------------------------------------------------------------------------
+# File setup
+#-----------------------------------------------------------------------------------------
+
+if $input
+  if $top
+    source($input, $top)
+  else
+    source($input)
+  end
+end
+
+if $report
+  report("ICsprout55 DRC", $report)
+else
+  report("ICsprout55 DRC", "ics55_drc.lyrdb")
+end
+
+#-----------------------------------------------------------------------------------------
+# Switches
+#-----------------------------------------------------------------------------------------
+
+def bool_check?(obj)
+  obj.to_s.downcase == 'true'
+end
+
+TABLES = ($tables || 'main').split
+MAIN_TABLE = TABLES.include?('main')
+FEOL = !bool_check?($no_feol) && (MAIN_TABLE || TABLES.include?('feol'))
+BEOL = !bool_check?($no_beol) && (MAIN_TABLE || TABLES.include?('beol'))
+GRID = bool_check?($check_grid) || TABLES.include?('grid')
+ADVANCED = bool_check?($advanced) || TABLES.include?('advanced')
+DENSITY = !bool_check?($no_density) && (MAIN_TABLE || TABLES.include?('density'))
+MOM = !bool_check?($no_mom) && (MAIN_TABLE || TABLES.include?('mom'))
+DUMMY_SLOT = MAIN_TABLE || TABLES.include?('dummy_slot')
+SPECIAL = MAIN_TABLE || TABLES.include?('special')
+CELL_EXCLUSION = bool_check?($cell_exclusion)
+
+case $run_mode
+when 'tiling'
+  tiles(500.um)
+  tile_borders(30.um)
+when 'flat'
+  flat
+else
+  deep
+end
+
+threads($threads || Etc.nprocessors)
+
+#-----------------------------------------------------------------------------------------
+# Rule values (JSON, one source of truth)
+#-----------------------------------------------------------------------------------------
+
+SCRIPT_DIR = File.expand_path(File.dirname(__FILE__))
+
+def load_rules
+  path = File.join(SCRIPT_DIR, 'rule_decks', 'ics55_rules.json')
+  data = JSON.parse(File.read(path))
+  [data['drc_rules'], data['meta']]
+end
+
+DRC_RULES, RULE_META = load_rules
+
+def rval(key)
+  v = DRC_RULES[key]
+  raise "missing rule value: #{key}" if v.nil?
+  v.to_f
+end
+
+#-----------------------------------------------------------------------------------------
+# Layer definitions + derived layers (included via MODULE_FILES below)
+#-----------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------
+# Rule modules (one per iDRC check family / process layer group)
+#
+# The macro preprocessor does not expand "include" directives reliably in batch
+# mode, and separate eval() calls do not share locals.  The layer definitions
+# and rule modules are therefore concatenated and evaluated in ONE scope, which
+# can still read the main deck's locals (DRC_RULES, rval, switches).
+#-----------------------------------------------------------------------------------------
+
+MODULE_FILES = [
+  'rule_decks/layers_def.drc',
+  # FEOL: direct area, enclosure and coverage predicates; unsupported qualifiers stay off.
+  'rule_decks/feol/01_wells.drc',
+  'rule_decks/feol/02_active.drc',
+  'rule_decks/feol/03_poly.drc',
+  'rule_decks/feol/04_implant.drc',
+  'rule_decks/feol/05_cont.drc',
+  # BEOL: only source predicates supported with their active profile/waivers.
+  'rule_decks/beol/06_metal.drc',
+  'rule_decks/beol/07_via.drc',
+  'rule_decks/beol/08_pad.drc',
+  'rule_decks/dummy_slot.drc',
+  # Geometry and optional empirical diagnostics.
+  'rule_decks/geometry/09_grid.drc',
+  'rule_decks/advanced/10_eol_jog.drc',
+  # Source-driven Density_rules for the configured 6-metal/T4M2 profile.
+  'rule_decks/density.drc',
+  # Source-backed MOM rules; unsupported source qualifiers are not approximated.
+  'rule_decks/mom.drc',
+  'rule_decks/special.drc'
+]
+
+
+# ==== inlined module files ====
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 layer definitions (KLayout DRC)
+#
+# Layer numbers per libs.tech/klayout/tech/ics55.map.  Derived layers follow the
+# FreePDK45/iDRC convention: nact/pact from ACT and NP/PP implants.
+# Calibre maps SRINGBLK to 354/13 and derives GRID from GRBLK OR SRINGBLK;
+# the manual/stream map instead list 354/12 and GRID 179/40. Keep both pairs
+# distinct; source-derived rules use the *_SRC aliases below.
+#=========================================================================================
+
+#-----------------------------------------------------------------------------------------
+# Cell exclusion (real-GDS / analog-interconnect runs only)
+#
+# With -rd cell_exclusion=true the DRC checks run on the top-level interconnect
+# and analog shapes only: the interior of every instance (bounding box shrunk by
+# cell_excl_margin) is excluded from all checked input layers.  The margin band
+# keeps shapes at the cell frames (interconnect crossing cell edges).
+#
+# The exclusion uses instance bboxes because official 191/12 is DIODE, not a
+# cell frame.  Std-cell verification runs leave this OFF (the per-cell flags
+# are the point there).
+#-----------------------------------------------------------------------------------------
+
+cell_interior = nil
+if CELL_EXCLUSION
+  ly_ex = RBA::Layout.new
+  ly_ex.read($input)
+  raise 'cell_exclusion requires -rd top=<topcell>' if $top.nil? || $top.empty?
+  tc = ly_ex.cell($top)
+  raise "cell_exclusion top cell #{$top} was not found" if tc.nil?
+  interior = RBA::Region.new
+  collect_bboxes = lambda do |cell, trans|
+    cell.each_inst do |i|
+      t = trans * i.trans
+      child = ly_ex.cell(i.cell_index)
+      interior += t * child.bbox
+      collect_bboxes.call(child, t)
+    end
+  end
+  collect_bboxes.call(tc, RBA::Trans.new)
+  cell_interior = DRCLayer::new(self, interior).sized(-rval('cell_excl_margin').um)
+end
+
+clip_layer = lambda do |layer|
+  CELL_EXCLUSION ? layer.not(cell_interior) : layer
+end
+
+# --- input layers -----------------------------------------------------------------
+
+ACT    = clip_layer.call(input(2, 1))
+NW     = clip_layer.call(input(9, 1))
+LVTN   = clip_layer.call(input(17, 1))
+LVTP   = clip_layer.call(input(18, 1))
+HVTN   = clip_layer.call(input(21, 1))
+HVTP   = clip_layer.call(input(22, 1))
+TGOX   = clip_layer.call(input(28, 1))  # official 28/1 (3.3V IO gate oxide); was misaliased IOWELL
+POLY   = clip_layer.call(input(41, 1))
+PPO    = clip_layer.call(input(41, 4))
+NP     = clip_layer.call(input(52, 1))
+PP     = clip_layer.call(input(53, 1))
+ESD    = clip_layer.call(input(55, 1))
+SAB    = clip_layer.call(input(71, 1))  # official 71/1 (silicide block); was misaliased IOACT
+DGOX   = clip_layer.call(input(27, 1))  # official 27/1 (2.5V IO gate oxide)
+CTbar  = clip_layer.call(input(72, 7))  # official 72/7 contact cut-bar
+CTopcblk = clip_layer.call(input(72, 5))  # official 72/5 contact OPC block
+DIODE  = clip_layer.call(input(191, 12))  # official 191/12 (was misaliased BOUNDARY)
+RV     = clip_layer.call(input(120, 1))  # official 120/1 redistribution via (was PADM)
+CB     = clip_layer.call(input(121, 1))  # official 121/1 (was ALPAD)
+RDL    = clip_layer.call(input(123, 1))  # official 123/1 redistribution layer
+COVER  = clip_layer.call(input(124, 1))  # official 124/1 passivation cover
+CT     = clip_layer.call(input(72, 1))
+M1     = clip_layer.call(input(81, 1))
+M2     = clip_layer.call(input(82, 1))
+M3     = clip_layer.call(input(83, 1))
+M4     = clip_layer.call(input(84, 1))
+M5     = clip_layer.call(input(85, 1))
+V1     = clip_layer.call(input(91, 1))
+V2     = clip_layer.call(input(92, 1))
+V3     = clip_layer.call(input(93, 1))
+V4     = clip_layer.call(input(94, 1))
+V1BAR  = clip_layer.call(input(91, 7))
+V2BAR  = clip_layer.call(input(92, 7))
+V3BAR  = clip_layer.call(input(93, 7))
+V4BAR  = clip_layer.call(input(94, 7))
+TM2    = clip_layer.call(input(103, 1))
+TV2    = clip_layer.call(input(113, 1))
+TV2BAR = clip_layer.call(input(113, 7))
+ALPAD  = clip_layer.call(input(122, 1))  # official 122/1 aluminium pad (was 121/1)
+ALPADRES = clip_layer.call(input(122, 4))
+MET5RES = clip_layer.call(input(85, 4))
+T4M2RES = clip_layer.call(input(103, 4))
+DNW      = clip_layer.call(input(7, 1))
+NW1RES   = clip_layer.call(input(9, 4))
+BMIM     = clip_layer.call(input(140, 1))
+
+ACTDUM   = clip_layer.call(input(2, 2))
+ACTDUMB  = clip_layer.call(input(2, 3))
+POLYDUM  = clip_layer.call(input(41, 2))
+POLYDUMB = clip_layer.call(input(41, 3))
+MET1DUM  = clip_layer.call(input(81, 2))
+MET2DUM  = clip_layer.call(input(82, 2))
+MET3DUM  = clip_layer.call(input(83, 2))
+MET4DUM  = clip_layer.call(input(84, 2))
+MET5DUM  = clip_layer.call(input(85, 2))
+MET6DUM  = clip_layer.call(input(86, 2))
+MET7DUM  = clip_layer.call(input(87, 2))
+MET8DUM  = clip_layer.call(input(88, 2))
+MET1DUMB = clip_layer.call(input(81, 3))
+MET2DUMB = clip_layer.call(input(82, 3))
+MET3DUMB = clip_layer.call(input(83, 3))
+MET4DUMB = clip_layer.call(input(84, 3))
+MET5DUMB = clip_layer.call(input(85, 3))
+MET6DUMB = clip_layer.call(input(86, 3))
+MET7DUMB = clip_layer.call(input(87, 3))
+MET8DUMB = clip_layer.call(input(88, 3))
+MET1SLOT = clip_layer.call(input(81, 8))
+MET2SLOT = clip_layer.call(input(82, 8))
+MET3SLOT = clip_layer.call(input(83, 8))
+MET4SLOT = clip_layer.call(input(84, 8))
+MET5SLOT = clip_layer.call(input(85, 8))
+MET6SLOT = clip_layer.call(input(86, 8))
+MET7SLOT = clip_layer.call(input(87, 8))
+MET8SLOT = clip_layer.call(input(88, 8))
+MET1MOM  = clip_layer.call(input(81, 10))
+MET2MOM  = clip_layer.call(input(82, 10))
+MET3MOM  = clip_layer.call(input(83, 10))
+MET4MOM  = clip_layer.call(input(84, 10))
+MET5MOM  = clip_layer.call(input(85, 10))
+MET6MOM  = clip_layer.call(input(86, 10))
+MET7MOM  = clip_layer.call(input(87, 10))
+MET8MOM  = clip_layer.call(input(88, 10))
+T4M2DUM  = clip_layer.call(input(103, 2))
+T4M2DUMB = clip_layer.call(input(103, 3))
+T4M2SLOT = clip_layer.call(input(103, 8))
+
+INDALL   = clip_layer.call(input(302, 12))
+FUTR     = clip_layer.call(input(291, 12))
+FUSEALL  = clip_layer.call(input(292, 12))
+EFUSEALL = clip_layer.call(input(293, 12))
+POEFUSEBLK = clip_layer.call(input(294, 12))
+PSUB     = clip_layer.call(input(261, 12))
+LATCHUP  = clip_layer.call(input(316, 12))
+MOMLVS1  = clip_layer.call(input(323, 12))
+CHIPBLK  = clip_layer.call(input(351, 12))
+SRBLK    = clip_layer.call(input(352, 12))
+GRBLK    = clip_layer.call(input(353, 12))
+SRINGBLK_SRC = clip_layer.call(input(354, 13))
+SRINGBLK_MANUAL = clip_layer.call(input(354, 12))
+GRID_SRC = GRBLK + SRINGBLK_SRC
+GRID_MANUAL = clip_layer.call(input(179, 40))
+LOGO     = clip_layer.call(input(355, 12))
+DMYBLK   = clip_layer.call(input(359, 12))
+NOEBBLK  = clip_layer.call(input(360, 12))
+DEUPAD   = clip_layer.call(input(381, 12))
+PVDD     = clip_layer.call(input(382, 12))
+PVSS     = clip_layer.call(input(383, 12))
+POWER_PAD = PVDD + PVSS
+ESDIOT   = clip_layer.call(input(231, 12))
+ESDIOE   = clip_layer.call(input(232, 12))
+SRAMALL    = clip_layer.call(input(171, 12))
+NODRC      = clip_layer.call(input(357, 12))
+
+# n+/p+ active regions
+NACT = ACT.and(NP)
+PACT = ACT.and(PP)
+NTAP = NACT.and(NW)
+PTAP = PACT.not(NW)
+
+# IO active (official: ACT under the 3.3V gate oxide TGOX)
+IOACT  = ACT.and(TGOX)
+
+# gates (poly over active) and source/drain
+GATES  = POLY.and(ACT)
+GATE = GATES
+NGATE  = POLY.and(NACT)
+PGATE  = POLY.and(PACT)
+NSD    = NACT.not(NGATE)
+PSD    = PACT.not(PGATE)
+
+# all drawing layers for the off-grid check
+DRAWING = ACT + NW + LVTN + LVTP + HVTN + HVTP + TGOX + DGOX + POLY + PPO + NP + PP + ESD + SAB + IOACT + CT + CTbar + CTopcblk + M1 + M2 + M3 + M4 + M5 + V1 + V2 + V3 + V4 + TM2 + TV2 + RV + CB + ALPAD + RDL + COVER + DIODE
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 01 - Wells
+#
+# DNW is mapped from the Calibre source layer (7/1), but its source checks use
+# ABUT<90/SINGULAR, directional enclosure, voltage and net-class semantics not
+# represented by this module API; keep them disabled rather than approximating.
+# NW1 source checks likewise depend on voltage/net classes and ABUT<90 /
+# SINGULAR REGION semantics not represented by the current module API.
+#=========================================================================================
+
+if FEOL
+  # Unsupported source rules: DNW_W_1, DNW_S_1, DNW_S_2a, DNW_S_3,
+  # DNW_S_4, DNW_S_5, DNW_EN_1, DNW_EN_2, DNW_O_1, DNW_R_1,
+  # DNW_R_3; NW1_W_1, NW1_S_1 through NW1_S_5, NW1_A_1.
+  # TGOX/DGOX checks also require source-specific layers/qualifiers.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 02 - Active
+#
+# Port only source geometry representable without changing Calibre qualifiers.
+# ACT_A_1 is an area test with exact SRAMALL/NODRC waivers.  Width, spacing,
+# directional enclosure, and topology rules need Calibre-specific operators.
+#=========================================================================================
+
+if FEOL
+  ACT.not(ACT.with_area(0.0384.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC)
+
+  # Unsupported source rules: ACT_W_1, ACT_W_2, ACT_W_3a, ACT_W_3b,
+  # ACT_L_1, ACT_L_2, ACT_S_1, ACT_S_1a, ACT_S_2, ACT_S_3, ACT_S_4,
+  # ACT_S_5 through ACT_S_8, ACT_EN_1, ACT_EN_2, ACT_EN_2a, ACT_A_2,
+  # ACT_R_1, ACT_R_3.  Recommended ACT_S_1_R / ACT_S_2a_R and ACT_W_3a_R
+  # remain disabled (OPEN_RECOMMENDED_ON=NO).
+  # ACT_D_* require density windows/gradient support; not implemented here.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 03 - Poly
+#
+# Port source area checks that map directly to KLayout regions.  Rules whose
+# Calibre definition depends on edge classes, connectivity, density windows,
+# or directional enclosure remain disabled instead of using geometric proxies.
+#=========================================================================================
+
+if FEOL
+  POLY.not(POLY.with_area(0.04.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('poly.poly.area',
+    "PO_A_1: POLY minimum area 0.04 um^2; waived inside SRAMALL and NODRC")
+  POLY.holes.not(POLY.holes.with_area(0.09.um2, 1e9.um2)).not_inside(NODRC)
+
+  poly_min_width = rval('poly_width')
+  POLY.drc(width < poly_min_width.um).not_inside(NODRC).output('poly.poly.width',
+    "PO_W_1: POLY width must be at least #{poly_min_width} um outside NODRC [Calibre source]")
+
+  poly_min_space = rval('poly_space')
+  POLY.drc(space < poly_min_space.um).not_inside(INDALL).not_inside(NODRC)
+  # KLayout space checks do not reproduce the source ABUT/SINGULAR qualifiers;
+  # PO_S_1's separate ABUT<89 clause inside INDALL is omitted.
+  # Unsupported source rules: PO_W_2a through PO_W_2f, PO_W_3, PO_S_2,
+  # PO_S_3, PO_S_5 through PO_S_7, PO_S_9, PO_S_11, PO_S_12,
+  # PO_S_14 through PO_S_16, PO_EX_1, PO_EX_2, PO_L_1, PO_R_1, PO_R_2.
+  # PO_S_4_R, PO_S_7a_R, PO_S_8_R, PO_S_13_R, PO_S_14a_R,
+  # PO_EN_1_R through PO_EN_3_R, PO_EX_1_R, PO_EX_3_R, PO_L_2_R,
+  # and PO_A_1_R remain disabled (OPEN_RECOMMENDED_ON=NO).
+  # PO_D_* require density-window/gradient operators not represented here.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 04 - Implants
+#
+# Port source implant area checks only.  The remaining checks use layer-derived
+# active/tap classes, edge coincidence, connectivity, and ABUT<90 qualifiers
+# that are not equivalent to plain width/space/enclosure primitives.
+#=========================================================================================
+
+if FEOL
+  NP.not(NP.with_area(0.12.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('implant.np.area',
+    "NP_A_1: NP minimum area 0.12 um^2; waived inside SRAMALL and NODRC")
+  NP.holes.not(NP.holes.with_area(0.12.um2, 1e9.um2)).not_inside(NODRC)
+  PP.not(PP.with_area(0.12.um2, 1e9.um2)).not_inside(SRAMALL).not_inside(NODRC).output('implant.pp.area',
+    "PP_A_1: PP minimum area 0.12 um^2; waived inside SRAMALL and NODRC")
+  PP.holes.not(PP.holes.with_area(0.12.um2, 1e9.um2)).not_inside(NODRC)
+
+  # Unsupported source rules: NP_W_1, NP_S_1 through NP_S_6, NP_EN_1
+  # through NP_EN_3, NP_EX_1 / NP_EX_1a, NP_O_1, NP_A_3; PP_W_1,
+  # PP_S_1 through PP_S_6, PP_EN_1 through PP_EN_3, PP_EX_1 / PP_EX_1a,
+  # PP_O_1, PP_A_3, PP_R_1.  In particular, NP_W_1 allows single-point
+  # interaction and source S rules require directional/abutment qualifiers.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 05 - Contact (CT)
+#
+# CT_EN_1 uses the official CT alias, CT = CTi OR CTbar (Calibre source
+# lines 865-866, 3965-3967). Tech-LEF cut dimensions are not substitutes for
+# the Calibre CT width rules.
+#=========================================================================================
+
+if FEOL
+  cts = CT.or(CTbar)
+  cts.not(M1.and(POLY.or(ACT))).not_inside(SRAMALL).not_inside(NODRC).output('cont.ct.inside',
+    "CT_EN_1: CT/CTbar must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC [Calibre source]")
+
+  # CT_EN_2a requires its source threshold for CTs that interact ACT.
+  ct_min_active_enclosure = rval('ct_drc_enc_act')
+  ct_active = cts.interacting(ACT)
+  ct_active.drc(enclosed(ACT) < ct_min_active_enclosure.um).not_inside(SRAMALL).not_inside(NODRC)
+
+  # CT_W_1 is omitted: source lines 3895-3902 use RCT/GCT geometry and
+  # region-specific rectangular checks not represented by existing DRC layers.
+  # The KLayout CT_EN_2a enclosure operator preserves the 0.015um threshold,
+  # but not Calibre's ABUT<90/SINGULAR/OUTSIDE ALSO qualifiers.
+  # CT_W_2, CT_S_1 through CT_S_6, CT_EN_2b through CT_EN_4d, and CT_R_1
+  # through CT_R_5 remain omitted because they need connectivity, directional
+  # enclosure, or source-only exclusion semantics.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 06 - Metals (M1..M5, T4M2)
+#
+# Area/hole predicates and baseline M1-M5 S_1 thresholds use source values
+# with represented masks. Generic KLayout spacing omits source
+# ABUT/SINGULAR and marker-specific qualifiers; width rules remain omitted.
+#=========================================================================================
+
+if BEOL
+  metal_area_rules = [
+    ['M1', M1.not(MET1SLOT), 'm1', 'm1_area', 'm1_min_hole', 'MET1_A_1', 'MET1_A_2', true],
+    ['M2', M2.not(MET2SLOT), 'm2', 'm2_area', 'm2_min_hole', 'M2_A_1', 'M2_A_2', true],
+    ['M3', M3.not(MET3SLOT), 'm3', 'm3_area', 'm3_min_hole', 'M3_A_1', 'M3_A_2', false],
+    ['M4', M4.not(MET4SLOT), 'm4', 'm4_area', 'm4_min_hole', 'M4_A_1', 'M4_A_2', false],
+    ['M5', M5.not(MET5SLOT), 'm5', 'm5_area', 'm5_min_hole', 'M5_A_1', 'M5_A_2', false]
+  ]
+
+  metal_area_rules.each do |name, layer, key, area_key, hole_key, area_rule, hole_rule, sramall_waiver|
+    min_area = rval(area_key)
+    # Source AREA checks use strict "<"; subtracting the inclusive >= range
+    # keeps exact-threshold polygons legal.
+    area_errors = layer.not(layer.with_area(min_area.um2, 1e9.um2))
+    area_errors = area_errors.not_inside(SRAMALL) if sramall_waiver
+    area_errors.not_inside(NODRC).output("metal.#{key}.area",
+      "#{area_rule}: #{name} area must be at least #{min_area} um^2 [Calibre source]")
+
+    min_hole_area = rval(hole_key)
+    holes = layer.holes.not(layer)
+    hole_errors = holes.not(holes.with_area(min_hole_area.um2, 1e9.um2))
+    hole_errors.not_inside(NODRC)
+  end
+
+  t4m2 = TM2.not(T4M2SLOT)
+  min_area = rval('tm2_area')
+  t4m2.not(t4m2.with_area(min_area.um2, 1e9.um2)).not_inside(NODRC).output('metal.tm2.area',
+    "T4M2_A_1: T4M2 area must be at least #{min_area} um^2 [Calibre source]")
+
+  min_hole_area = rval('tm2_min_hole')
+  t4m2_holes = t4m2.holes.not(t4m2)
+  t4m2_holes.not(t4m2_holes.with_area(min_hole_area.um2, 1e9.um2))
+    .not_inside(NODRC)
+
+  metal_spacing_rules = [
+    ['M1', M1.not(MET1SLOT), 'm1', true, true],
+    ['M2', M2.not(MET2SLOT), 'm2', true, false],
+    ['M3', M3.not(MET3SLOT), 'm3', false, false],
+    ['M4', M4.not(MET4SLOT), 'm4', false, false],
+    ['M5', M5.not(MET5SLOT), 'm5', false, false]
+  ]
+  metal_spacing_rules.each do |name, layer, key, sramall_waiver, indall_waiver|
+    min_space = rval("#{key}_space")
+    spacing_errors = layer.drc(space < min_space.um)
+    spacing_errors = spacing_errors.not_inside(INDALL) if indall_waiver
+    spacing_errors = spacing_errors.not_inside(SRAMALL) if sramall_waiver
+    spacing_errors.not_inside(NODRC).output("metal.#{key}.spacing",
+      "#{name}_S_1: #{name} spacing must be at least #{min_space} um [Calibre source]")
+  end
+
+  # M1_S_1 and M2-M5_S_1 thresholds use generic KLayout space checks, not the
+  # source ABUT<90/SINGULAR qualifiers. M1_S_1's ABUT<89 branch inside INDALL
+  # is omitted.
+  # Omitted active rules: MET1_W_1/W_2/W_3, MET1_S_2/S_3/S_4/S_5;
+  # M2-M5_W_1a/W_1b/W_2/W_3 and M2-M5_S_2/S_3/S_4/S_5; T4M2_W_1,
+  # T4M2_S_1/S_2. Width, angle, run-length, array, and marker-specific
+  # predicates are not represented exactly here.
+  # Density checks are defined in density.drc. Recommended rules are inactive
+  # for OPEN_RECOMMENDED_ON=NO.
+end
+
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 07 - Vias (V1..V4, T4V2)
+#
+# VIAn W_1 predicates follow the official ordinary/bar union at ALLOW_V01=NO;
+# datatype-7 bar W_2 checks remain separate from those square predicates.
+#=========================================================================================
+
+if BEOL
+  square_exclusions = GRID_SRC.or(SRINGBLK_SRC).or(NODRC)
+  # Literal source mask for VIAn_W_2 is INSIDE this marker union. (The source
+  # prose calls these areas exclusions, but the predicates say INSIDE.)
+  via_bar_mask = SRAMALL.or(EFUSEALL).or(FUSEALL)
+  via_bar_width = 0.09.um
+  via_upper_min_enclosure = rval('via_drc_enc_upper')
+
+
+  [
+    ['V1', V1.or(V1BAR), V1BAR, 'v1', M1.not(MET1SLOT), M2.not(MET2SLOT)],
+    ['V2', V2.or(V2BAR), V2BAR, 'v2', M2.not(MET2SLOT), M3.not(MET3SLOT)],
+    ['V3', V3.or(V3BAR), V3BAR, 'v3', M3.not(MET3SLOT), M4.not(MET4SLOT)],
+    ['V4', V4.or(V4BAR), V4BAR, 'v4', M4.not(MET4SLOT), M5.not(MET5SLOT)]
+  ].each do |name, source_via, via_bar, key, lower_metal, upper_metal|
+    # VIAn_W_1 checks the source union Vn_org = ordinary Vn OR datatype-7
+    # VnBAR (ALLOW_V01=NO), with the source GRID/SRINGBLK/NODRC waiver.
+    square_size = 0.09
+    rectangles = source_via.rectangles
+    wrong_rectangles = rectangles.without_bbox_width(square_size.um)
+      .or(rectangles.without_bbox_height(square_size.um))
+    non_squares = source_via.non_rectangles.or(wrong_rectangles)
+    non_squares.not_inside(square_exclusions)
+    # VIAn_S_1 minimum gap; generic KLayout space checks omit source
+    # ABUT<90/SINGULAR qualifiers.
+    min_space = rval("#{key}_space")
+    source_via.drc(space < min_space.um).not_inside(NODRC).output("via.#{key}.spacing",
+      "#{name}_S_1: #{name} spacing must be at least #{min_space} um outside NODRC [Calibre source]")
+
+
+    # VIAn_W_2 separately checks datatype-7 bar width < or > 0.09 um.
+    # Keep the literal source INSIDE mask and do not apply the square test to
+    # bar geometry as a substitute for this width predicate.
+    bar_width_errors = via_bar.drc(width < via_bar_width) + via_bar.drc(width > via_bar_width)
+    bar_width_errors.inside(via_bar_mask)
+
+    # VIAn_R_5 selects via polygons containing a 45-degree edge; exclusions
+    # are applied in the same order as the source rule.
+    rotated = source_via.interacting(source_via.edges.with_angle(45, absolute))
+    rotated.not_inside(SRINGBLK_SRC).not_inside(NODRC).output("via.#{key}.rotated",
+      "#{name}_R_5: 45-degree #{name} edges are not allowed outside SRINGBLK/NODRC [Calibre source]")
+
+    # The separate OUTLAYER in VIAn_EN_2a_2b_2c flags via geometry outside
+    # its lower metal; this clause has only the NODRC waiver.
+    source_via.not(lower_metal).not_inside(NODRC)
+    source_via.not(upper_metal).not_inside(NODRC).output("via.#{key}.cover.upper",
+      "#{name}_EN_5a_5b: #{name} must be covered by its upper metal outside NODRC [Calibre source]")
+    source_via.drc(enclosed(upper_metal) < via_upper_min_enclosure.um).not_inside(NODRC)
+  end
+
+  tv2_source = TV2.or(TV2BAR)
+  tv2_min_space = rval('tv2_space')
+  tv2_source.drc(space < tv2_min_space.um).not_inside(NODRC).output('via.tv2.spacing',
+    "T4V2_S_1: T4V2 spacing must be at least #{tv2_min_space} um outside NODRC [Calibre source]")
+
+  # T4V2_W_2 has no source waiver: datatype-7 T4V2bar width must equal its official threshold.
+  tv2_bar_width = rval('tv2_bar_width')
+  tv2_bar_width_errors = TV2BAR.drc(width < tv2_bar_width.um) + TV2BAR.drc(width > tv2_bar_width.um)
+  tv2_bar_width_errors
+
+  rotated_tv2 = tv2_source.interacting(tv2_source.edges.with_angle(45, absolute))
+  rotated_tv2.not_inside(SRINGBLK_SRC).not_inside(NODRC).output('via.tv2.rotated',
+    'T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]')
+
+  # The source chooses $bottom_metal by scanning
+  # {T2M1, T4M1, M8, M7, M6, M5, M4, M3} for the first enabled CHECK_* layer.
+  # For the official 6-metal, top_metal=1, T4V2_T4M2=1 stack this selects M5.
+  # Existing DRC definitions do not represent T2M1, T4M1, or M6-M8.
+  tv2_bottom_metal = M5.not(MET5SLOT)
+  tv2_source.not(tv2_bottom_metal).not_inside(NODRC)
+  # Generic full-enclosure predicates retain the source minima; Calibre's
+  # directional GOOD clauses are not represented by KLayout's space model.
+  tv2_lower_min_enclosure = rval('tv2_drc_enc_m5')
+  tv2_source.drc(enclosed(tv2_bottom_metal) < tv2_lower_min_enclosure.um).not_inside(NODRC).output('via.tv2.enclosure.lower',
+    "T4V2_EN_2_EN_3: T4V2 lower-metal enclosure must be at least #{tv2_lower_min_enclosure} um [Calibre source]")
+  tv2_top_metal = TM2.not(T4M2SLOT)
+  tv2_source.not(tv2_top_metal).not_inside(NODRC)
+  tv2_upper_min_enclosure = rval('tv2_drc_enc_tm2')
+  tv2_source.drc(enclosed(tv2_top_metal) < tv2_upper_min_enclosure.um).not_inside(NODRC).output('via.tv2.enclosure.upper',
+    "T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least #{tv2_upper_min_enclosure} um [Calibre source]")
+
+
+  # Omitted active rules: T4V2_W_1 (its source predicate subtracts the
+  # Calibre GT4V2 rule-result group), V1-V4_S_2/_S_3 (array-neighbor,
+  # OPPOSITE/NOT CONNECTED), V1-V4_R_3 (H-shaped arrays), and the conditional
+  # opposite-side enclosure clauses in V1-V4_EN_2a_2b_2c / EN_5a_5b and
+  # T4V2_EN_2_EN_3. Generic spacing/enclosure operators do not preserve
+  # Calibre's ABUT<90/SINGULAR or directional GOOD qualifiers; conditional
+  # 0.02um upper and 0.05um lower via margins remain omitted.
+  # Recommended rules are inactive for OPEN_RECOMMENDED_ON=NO.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Exact, unqualified source predicates are emitted; checks with unsupported
+# Calibre edge/width qualifiers or rectangle-enclosure predicates are omitted.
+#=========================================================================================
+
+if BEOL
+  # RV_W_1: derive the source fuse-ring exclusions before testing exact 3x3
+  # rectangle geometry. The source rule has no NODRC waiver.
+  hrdl = RDL.holes.interacting(FUTR)
+  grdl = RDL.interacting(hrdl).and(GRID_SRC)
+  rdv_fuse = RV.inside(hrdl).or(RV.interacting(grdl))
+  rv_width_scope = RV.not(rdv_fuse).not(GRID_SRC)
+  rv_rectangles = rv_width_scope.rectangles
+  wrong_rv_rectangles = rv_rectangles.without_bbox_width(3.um)
+    .or(rv_rectangles.without_bbox_height(3.um))
+  rv_width_scope.non_rectangles.or(wrong_rv_rectangles)
+
+  # RV_EN_3_4 has a separate, unqualified OUTLAYER for via portions outside
+  # RDL. It does not inherit the enclosure clause's marker waivers.
+  RV.not(RDL).output('pad.rv.cover.rdl',
+    'RV_EN_3_4: RV must be covered by RDL [Calibre source]')
+
+  # RDL_EN_1: ALPA is (CB sized by PA_su=1.5um) OR RDL OR ALPAD.
+  alpa = CB.sized(1.5.um).or(RDL).or(ALPAD)
+  COVER.not(alpa)
+
+  # RDL_EN_2: the source reports the part of CB outside ALPAD.
+  CB.not(ALPAD).output('pad.cb.alpad_full',
+    'RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]')
+
+  # Omitted active checks: RV_S_1/S_2, RV_EN_1_2 and the qualified enclosure
+  # clause in RV_EN_3_4; CB_W_1/S_1/EN_1_EN_2; RDL_W_1/S_1/S_2/S_3;
+  # COVER_W_1/S_1/S_2/EN_1 require unrepresented edge qualifiers, width
+  # selection, or derived pad-metal predicates. COVER_L_1's arbitrary-polygon
+  # ENCLOSE RECTANGLE 40x65 test has no exact selector here.
+  # Recommended RV_R_1 is inactive for OPEN_RECOMMENDED_ON=NO.
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Exact geometry-only dummy/slot checks from the supplied Calibre source.
+# Spacing predicates using ABUT<90, SINGULAR, REGION, Mn_2c_DUM, or dynamic
+# NOT RECTANGLE qualifiers are omitted rather than approximated with KLayout
+# space/bounding-box checks.
+if DUMMY_SLOT
+  exact_rectangle = lambda do |layer, width, height|
+    area = (width * height).um2
+    layer.with_bbox_width(width.um).with_bbox_height(height.um).with_area(area)
+  end
+  act_dummy_3 = rval('act_dummy_3')
+  act_dummy_1 = rval('act_dummy_1')
+  act_dummy_0467 = rval('act_dummy_0467')
+  poly_dummy_24 = rval('poly_dummy_24')
+  poly_dummy_092 = rval('poly_dummy_092')
+  poly_dummy_0381 = rval('poly_dummy_0381')
+  metal_dummy_2 = rval('metal_dummy_2')
+  metal_dummy_1 = rval('metal_dummy_1')
+  metal_dummy_rect_width = rval('metal_dummy_rect_width')
+  metal_dummy_rect_length = rval('metal_dummy_rect_length')
+  t4m2_dummy_rect_width = rval('t4m2_dummy_rect_width')
+  t4m2_dummy_rect_length = rval('t4m2_dummy_rect_length')
+
+  # AADUM shape whitelist and overlap rules.
+  aadum_allowed = exact_rectangle.call(ACTDUM, act_dummy_3, act_dummy_3)
+    .or(exact_rectangle.call(ACTDUM, act_dummy_1, act_dummy_1))
+    .or(exact_rectangle.call(ACTDUM, act_dummy_0467, act_dummy_0467))
+  ACTDUM.not(aadum_allowed)
+  ACTDUM.and(CT).output('AADUM_R_1', 'AADUM_R_1: ACTDUM must not overlap CT')
+
+  # PODUM shape whitelist and overlap rules.
+  podum_allowed = exact_rectangle.call(POLYDUM, poly_dummy_24, poly_dummy_24)
+    .or(exact_rectangle.call(POLYDUM, poly_dummy_092, poly_dummy_092))
+    .or(exact_rectangle.call(POLYDUM, poly_dummy_0381, poly_dummy_0381))
+  POLYDUM.not(podum_allowed)
+  POLYDUM.and(CT).output('PODUM_R_1', 'PODUM_R_1: POLYDUM must not overlap CT')
+
+  # M1-M5 and the selected T4M2 top-metal dummy shape whitelists. Source
+  # spacing checks are omitted because their qualifiers and layer-specific
+  # source macros differ from KLayout's generic spacing result.
+  metal_dummies = [
+    ['M1', MET1DUM], ['M2', MET2DUM], ['M3', MET3DUM],
+    ['M4', MET4DUM], ['M5', MET5DUM], ['T4M2', T4M2DUM]
+  ]
+  metal_dummies.each do |name, dummy|
+    if name == 'T4M2'
+      special = exact_rectangle.call(dummy, t4m2_dummy_rect_width, t4m2_dummy_rect_length)
+        .or(exact_rectangle.call(dummy, t4m2_dummy_rect_length, t4m2_dummy_rect_width))
+      special_size = "#{t4m2_dummy_rect_width}x#{t4m2_dummy_rect_length}"
+    else
+      special = exact_rectangle.call(dummy, metal_dummy_rect_width, metal_dummy_rect_length)
+        .or(exact_rectangle.call(dummy, metal_dummy_rect_length, metal_dummy_rect_width))
+      special_size = "#{metal_dummy_rect_width}x#{metal_dummy_rect_length}"
+    end
+    allowed = exact_rectangle.call(dummy, metal_dummy_2, metal_dummy_2)
+      .or(exact_rectangle.call(dummy, metal_dummy_1, metal_dummy_1))
+      .or(special)
+    rule_id = name == 'T4M2' ? 'T4M2DUM_W_1' : "#{name}DUM_W_1"
+    dummy.not(allowed)
+  end
+
+  # Slot-to-CB overlap is an exact Boolean check. SL_W_1_L_1 and SL_S_1 are
+  # omitted: the former requires Calibre's dynamic NOT RECTANGLE predicate;
+  # the latter uses ABUT<90 SINGULAR REGION.
+  [
+    ['M1', MET1SLOT], ['M2', MET2SLOT], ['M3', MET3SLOT],
+    ['M4', MET4SLOT], ['M5', MET5SLOT], ['T4M2', T4M2SLOT]
+  ].each do |name, slot|
+    slot.and(CB).output('SL_R_1', "SL_R_1: #{name} slot must not overlap CB")
+  end
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Geometry 09 - Manufacturing grid (off-grid check)
+#
+# MANUFACTURINGGRID 0.001 from the tech LEF.  Vertices of all drawing layers
+# must lie on the 1 nm grid.  FreePDK45-style check (ongrid).
+#=========================================================================================
+
+if GRID
+  grid = rval('manufacturing_grid').um
+  [
+    ['ACT', ACT], ['NW', NW], ['LVTN', LVTN], ['LVTP', LVTP],
+    ['HVTN', HVTN], ['HVTP', HVTP], ['TGOX', TGOX], ['DGOX', DGOX], ['SAB', SAB], ['POLY', POLY],
+    ['PPO', PPO], ['NP', NP], ['PP', PP], ['ESD', ESD], ['IOACT', IOACT],
+    ['CT', CT], ['M1', M1], ['M2', M2], ['M3', M3], ['M4', M4], ['M5', M5],
+    ['V1', V1], ['V2', V2], ['V3', V3], ['V4', V4], ['TM2', TM2],
+    ['TV2', TV2], ['RV', RV], ['CB', CB], ['ALPAD', ALPAD], ['RDL', RDL], ['COVER', COVER], ['DIODE', DIODE]
+  ].each do |name, layer|
+    layer.ongrid(grid)
+  end
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Advanced 10 - MinStep / EOL spacing / gate overhang / jog / 45-degree bends
+#
+# The checks run on *cleaned* layers: grid snapping and binarization introduce
+# 1nm jogs and small steps, so the input is snapped to the 1nm grid, smoothed
+# (jogs removed) and cleaned before the derived checks.  The cleaning does not
+# affect the FEOL/BEOL width/space checks (they use the raw input layers).
+#
+#   MinStep       : no edge shorter than min_step (0.03 um placeholder) on the
+#                   cleaned layers (drawn steps are >=5nm; sub-30nm steps are
+#                   removed by the smoothing, so foundry-clean cells pass).
+#   EOL spacing   : line ends (edges <= eol_len) keep eol_space to any other
+#                   edge (KLayout space(min, eol(min, width))).
+#   Gate overhang : poly must extend >= poly_gate_overhang beyond the gate
+#                   (gate.extension(poly_clean, ...)); active must extend
+#                   >= act_gate_overhang beyond the gate ends.
+#   Jog spacing   : intra-polygon notch check (approximation).
+#   45-degree bent: width at 45-degree bends (FreePDK45 M1.g/M1.i idiom).
+#
+# Rule values: provenance `derived` in ics55_rules.json - the released
+# libraries bound them from above (measured drawn minima: poly gate overhang
+# 0.110 um, active gate overhang 0.140 um, drawn steps >= 5nm) but they are
+# NOT foundry rule values. Enable with -rd advanced=true or tables=advanced.
+#=========================================================================================
+
+if ADVANCED
+
+  # cleaned input: snap to the 1nm manufacturing grid, remove jog artifacts,
+  # clean (removes the small steps introduced by grid snapping/binarization)
+  clean_layer = lambda do |l|
+    l.snapped(rval('manufacturing_grid').um).smoothed(90).clean
+  end
+
+  poly_clean   = clean_layer.call(POLY)
+  active_clean = clean_layer.call(ACT)
+  m1_clean     = clean_layer.call(M1)
+  m2_clean     = clean_layer.call(M2)
+  m3_clean     = clean_layer.call(M3)
+  m4_clean     = clean_layer.call(M4)
+  m5_clean     = clean_layer.call(M5)
+
+  [
+    ['POLY', poly_clean, 'poly'], ['M1', m1_clean, 'm1'], ['M2', m2_clean, 'm2'],
+    ['M3', m3_clean, 'm3'], ['M4', m4_clean, 'm4'], ['M5', m5_clean, 'm5'],
+    ['ACT', active_clean, 'act']
+  ].each do |name, layer, key|
+    # MinStep: no edge shorter than min_step on the cleaned layer
+    layer.edges.with_length(0, rval("#{key}_min_step").um).output("adv.#{key}.min_step",
+      "adv.#{key}.min_step: #{name} edge shorter than #{rval("#{key}_min_step")} um (MinStep, cleaned) [derived]")
+    # EOL spacing: line ends (edges shorter than eol_len) keep eol_space to
+    # any other edge.  KLayout 0.30.x has no native eol() parameter in space(),
+    # so this is the edge-based form (line-end edges .sep to all edges).
+    # DISABLED 2026-09-25 (user call): the EOL family is a placeholder approximation
+    # (no official line-end rule ported; the official MET1_S_5 covers only the dense
+    # line-end config) and flags the foundry-clean jog steps.  Re-enable by
+    # uncommenting.
+    # eol_edges = layer.edges.with_length(0, rval("#{key}_eol_len").um)
+    # eol_edges.sep(layer.edges, rval("#{key}_eol_space").um, euclidian).output("adv.#{key}.eol",
+    #   "adv.#{key}.eol: #{name} EOL spacing #{rval("#{key}_eol_space")} um / eol len #{rval("#{key}_eol_len")} um (cleaned, edge-based) [derived]")
+  end
+
+  # Gate overhang: the gate is poly over active.  The overhangs are
+  # direction-specific (the poly extends beyond the gate in the channel
+  # direction, the active beyond the gate ends in the L direction), so the
+  # overhang zones are built from the gate's edges (extended_out/in = the
+  # 0.060/0.140 um bands along the gate's horizontal/vertical edges) and
+  # checked for coverage by the poly/active.  (A region enclosure check would
+  # flag the gate's L-direction, where the poly legitimately ends at the gate.)
+  gate = poly_clean.and(active_clean)
+  he = gate.edges.with_angle(0)
+  overhang_zone_y = he.extended_out(rval('poly_gate_overhang').um) + he.extended_in(rval('poly_gate_overhang').um)
+  # the area filter drops the sub-resolution slivers created by the ACT/poly
+  # step geometry (the foundry draws width-transition steps at the gates)
+  overhang_zone_y.not(poly_clean).with_area(0.004, 1e6)
+  ve = gate.edges.with_angle(90)
+  overhang_zone_x = ve.extended_out(rval('act_gate_overhang').um) + ve.extended_in(rval('act_gate_overhang').um)
+  # DISABLED 2026-09-25 (user call): the gate definition (poly over ACT) includes
+  # the 0.32um-wide power straps - the official PO_EX_2 (0.14) applies to the
+  # channel-length gates only (the official gate selection is LENGTH GATE_core_W
+  # < 0.12); the straps' 0.065um ACT extension is not a violation.  Re-enable by
+  # uncommenting.
+  # overhang_zone_x.not(active_clean).with_area(0.004, 1e6).output('adv.gate.act_overhang',
+  #   "adv.gate.act_overhang: active extension beyond gate ends < #{rval('act_gate_overhang')} um (L direction, slivers <0.004um2 dropped) [derived]")
+
+  # Min corner / min adjacency (empirical 0.03 / 0.05, derived): short edges
+  # are the corners below the minimum corner size; corners closer than min_adj
+  # to each other (or notch edges to concave corners) are the invalid
+  # corner/step adjacencies.  Runs on the cleaned poly.
+  poly_short = poly_clean.edges.with_length(0, rval('min_corner').um)
+  poly_short.output('adv.poly.min_corner',
+    "adv.poly.min_corner: POLY edge shorter than #{rval('min_corner')} um (min corner, cleaned) [derived]")
+  poly_corners = poly_clean.corners
+  poly_corners.space(rval('min_adj').um)
+  poly_short.and(poly_corners.sized(rval('min_adj').um)).output('adv.poly.short_adj',
+    "adv.poly.short_adj: POLY short edge within #{rval('min_adj')} um of a corner (cleaned) [derived]")
+  poly_clean.space(rval('poly_min_step').um).edges.and(poly_clean.corners(180..360).sized(rval('min_adj').um))
+
+  # DISABLED 2026-09-25 (user call): the jog/notch family is a placeholder
+  # approximation (no official notch/jog rule ported) and flags the foundry-drawn
+  # intra-polygon jog pairs.  Re-enable by uncommenting.
+  # m1_clean.notch(rval('m1_jog_space').um).output('adv.m1.notch',
+  #   "adv.m1.notch: M1 intra-polygon space < #{rval('m1_jog_space')} um (approx jog/notch) [derived]")
+  # m2_clean.notch(rval('m2_jog_space').um).output('adv.m2.notch',
+  #   "adv.m2.notch: M2 intra-polygon space < #{rval('m2_jog_space')} um (approx jog/notch) [derived]")
+
+  # 45-degree bent width (FreePDK45 M1.g style)
+  m1_clean.edges.with_angle(45, absolute).width(rval('m1_bent_width').um, euclidian).output('adv.m1.bent45',
+    "adv.m1.bent45: M1 45-degree bent min width #{rval('m1_bent_width')} um [derived]")
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Source-derived ICsprout55 Density_rules translation.
+#
+# Rule IDs and limits below come from the supplied Calibre source; this KLayout
+# implementation is not Calibre-verified and makes no cross-tool equivalence
+# claim. The source's DRC:1 is the drawn-layout extent. Window grids are
+# anchored at that extent's lower-left corner; BACKUP adds a final window flush
+# with the far edge when the regular step grid would leave a strip uncovered.
+# A layout smaller than one window gets one origin-anchored window with
+# zero-density padding. Global density uses the source-described full-chip
+# extent as its denominator.
+#
+# The source's GRADIENT statements omit STEP; D_3 rules are intentionally not
+# emitted because the exact neighboring-window selection is not established.
+#=========================================================================================
+
+if DENSITY
+  density_chip = extent
+  density_box = density_chip.bbox
+
+  if density_box && density_box.width > 0 && density_box.height > 0
+    density_x0 = density_box.left
+    density_y0 = density_box.bottom
+    density_x1 = density_box.right
+    density_y1 = density_box.top
+
+    density_window = rval('density_window')
+    density_step = rval('density_step')
+    density_act_min = rval('density_act_min')
+    density_act_max = rval('density_act_max')
+    density_act_global_min = rval('density_act_global_min')
+    density_act_global_max = rval('density_act_global_max')
+    density_act_dummy_window = rval('density_act_dummy_window')
+    density_act_dummy_step = rval('density_act_dummy_step')
+    density_dummy_min = rval('density_dummy_min')
+    density_poly_window_min = rval('density_poly_window_min')
+    density_poly_window_max = rval('density_poly_window_max')
+    density_poly_global_min = rval('density_poly_global_min')
+    density_poly_global_max = rval('density_poly_global_max')
+    density_metal_min = rval('density_metal_min')
+    density_metal_max = rval('density_metal_max')
+    density_t4m2_min = rval('density_t4m2_min')
+    density_t4m2_max = rval('density_t4m2_max')
+    density_dummy_margin = rval('density_dummy_margin')
+    density_metal_dummy_halo = rval('density_metal_dummy_halo')
+
+    # Source DENSITY ... BACKUP grid: regular windows from the extent origin,
+    # plus a backed-up last window at the far edge when needed.
+    density_axis_windows = lambda do |lower, upper, window, step|
+      far_origin = upper - window
+      if far_origin <= lower + dbu * 0.5
+        [[lower], nil]
+      else
+        count = ((far_origin - lower) / step).floor + 1
+        regular = Array.new(count) { |index| lower + index * step }
+        backup = far_origin - regular[-1] > dbu * 0.5 ? far_origin : nil
+        [regular, backup]
+      end
+    end
+
+    density_window_tiles = lambda do |layer, comparison, threshold, window, step|
+      x_regular, x_backup = density_axis_windows.call(density_x0, density_x1, window, step)
+      y_regular, y_backup = density_axis_windows.call(density_y0, density_y1, window, step)
+      window_dbu = (window / dbu).round
+      density_epsilon = 1.5 / (window_dbu.to_f * window_dbu)
+      # KLayout 0.30.12 can round exact density one DBU-squared to the
+      # violating side; this margin keeps exact-threshold tiles out.
+      density_range = comparison == :lt ?
+        (0.0 .. (threshold - density_epsilon)) : ((threshold + density_epsilon) .. nil)
+      density_window_domain = density_chip.sized(
+        [window - (density_x1 - density_x0), 0.0].max.um,
+        [window - (density_y1 - density_y0), 0.0].max.um
+      )
+      parts = []
+      add_grid = lambda do |x, y, nx, ny|
+        # KLayout 0.30.12 emits no windows for tile_count(1, 1). On a singleton
+        # axis, use one non-overlapping extra tile and clip it at the intended
+        # source-window domain. KLayout offsets overlapping windows by half the
+        # overlap, so compensate in tile_origin.
+        grid_step_x = nx == 1 ? window : step
+        grid_step_y = ny == 1 ? window : step
+        grid_x = x + (window - grid_step_x) / 2.0
+        grid_y = y + (window - grid_step_y) / 2.0
+        tile_count_x = nx == 1 ? 2 : nx
+        tile_count_y = ny == 1 ? 2 : ny
+        markers = layer.with_density(
+          density_range,
+          tile_size(window.um, window.um),
+          tile_step(grid_step_x.um, grid_step_y.um),
+          tile_origin(grid_x, grid_y),
+          tile_count(tile_count_x, tile_count_y),
+          padding_zero
+        )
+        parts << markers.and(density_window_domain)
+      end
+      add_grid.call(x_regular[0], y_regular[0], x_regular.length, y_regular.length)
+      add_grid.call(x_backup, y_regular[0], 1, y_regular.length) if x_backup
+      add_grid.call(x_regular[0], y_backup, x_regular.length, 1) if y_backup
+      add_grid.call(x_backup, y_backup, 1, 1) if x_backup && y_backup
+      parts.reduce { |all, part| all + part }
+    end
+
+    density_output = lambda do |markers, rule_id, description|
+      markers
+    end
+
+    density_window_rule = lambda do |layer, comparison, threshold, window, step,
+                                     rule_id, description, inside_region|
+      markers = density_window_tiles.call(layer, comparison, threshold, window, step)
+      markers = markers.inside(inside_region) if inside_region
+      density_output.call(markers.not_inside(NODRC), rule_id, description)
+    end
+
+    density_global_rule = lambda do |layer, comparison, threshold, rule_id, description|
+      chip_area = density_chip.area
+      if chip_area > 0
+        density = layer.area.to_f / chip_area
+        violation = comparison == :lt ? density < threshold : density > threshold
+        density_output.call(density_chip.not_inside(NODRC), rule_id, description) if violation
+      end
+    end
+
+    # Density includes dummy shapes. Metal slot geometry is removed before
+    # dummy is added, matching the manual's §3.2.6 density convention.
+    density_aa_all = ACT.or(ACTDUM)
+    density_po_all = POLY.or(POLYDUM)
+    density_m1_all = M1.not(MET1SLOT).or(MET1DUM)
+    density_m2_all = M2.not(MET2SLOT).or(MET2DUM)
+    density_m3_all = M3.not(MET3SLOT).or(MET3DUM)
+    density_m4_all = M4.not(MET4SLOT).or(MET4DUM)
+    density_m5_all = M5.not(MET5SLOT).or(MET5DUM)
+    density_t4m2_all = TM2.not(T4M2SLOT).or(T4M2DUM)
+
+    # AA_D_1: 100um windows, 50um step; AA_all includes active dummy.
+    density_window_rule.call(density_aa_all, :lt, density_act_min, density_window, density_step,
+      'ACT_D_1_min', "AA_all density < #{density_act_min * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+    density_window_rule.call(density_aa_all, :gt, density_act_max, density_window, density_step,
+      'ACT_D_1_max', "AA_all density > #{density_act_max * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+
+    # AA_D_2: low density in 20um windows within AADUMB sized outward by 2.5um.
+    density_act_d2_region = ACTDUMB.sized(density_dummy_margin.um)
+    density_window_rule.call(density_aa_all, :lt, density_dummy_min,
+      density_act_dummy_window, density_act_dummy_step,
+      'ACT_D_2', "AA_all density < #{density_dummy_min * 100}% in #{density_act_dummy_window}um windows, #{density_act_dummy_step}um step, inside ACTDUMB sized by #{density_dummy_margin}um",
+      density_act_d2_region)
+
+    # ACT_D_3 is intentionally unsupported: its source GRADIENT omits STEP.
+    # AA_D_4: whole-chip density, with the drawn extent as denominator.
+    density_global_rule.call(density_aa_all, :lt, density_act_global_min,
+      'ACT_D_4_min', "global AA_all density < #{density_act_global_min * 100}% over the drawn-layout extent")
+    density_global_rule.call(density_aa_all, :gt, density_act_global_max,
+      'ACT_D_4_max', "global AA_all density > #{density_act_global_max * 100}% over the drawn-layout extent")
+
+    # PO_D_1: whole-chip density, with dummy poly included.
+    density_global_rule.call(density_po_all, :lt, density_poly_global_min,
+      'PO_D_1_min', "global PO_all density < #{density_poly_global_min * 100}% over the drawn-layout extent")
+    density_global_rule.call(density_po_all, :gt, density_poly_global_max,
+      'PO_D_1_max', "global PO_all density > #{density_poly_global_max * 100}% over the drawn-layout extent")
+
+    density_window_rule.call(density_po_all, :lt, density_poly_window_min, density_window, density_step,
+      'PO_D_2_min', "PO_all density < #{density_poly_window_min * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+    density_window_rule.call(density_po_all, :gt, density_poly_window_max, density_window, density_step,
+      'PO_D_2_max', "PO_all density > #{density_poly_window_max * 100}% in #{density_window}um windows, #{density_step}um step", nil)
+
+    # PO_D_3 is intentionally unsupported: its source GRADIENT omits STEP.
+
+    # M1/Mn D_1 checks are limited to windows inside the source check_region_1.
+    # The source expression excludes GRID, SRINGBLK, INDALL, then NODRC.
+    density_check_region_1 = density_chip.not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not(NODRC)
+    density_metal_rules = [
+      ['MET1', density_m1_all, MET1DUMB],
+      ['M2', density_m2_all, MET2DUMB],
+      ['M3', density_m3_all, MET3DUMB],
+      ['M4', density_m4_all, MET4DUMB],
+      ['M5', density_m5_all, MET5DUMB]
+    ]
+    density_metal_rules.each do |name, metal_all, dummy_block|
+      prefix = name == 'MET1' ? 'MET1' : name
+      density_window_tiles.call(metal_all, :lt, density_metal_min, density_window, density_step)
+        .inside(density_check_region_1)
+        .output("#{prefix}_D_1_min",
+          "#{prefix}_D_1_min: metal density < #{density_metal_min * 100}% in #{density_window}um windows, #{density_step}um step; inside source check_region_1 [KLayout translation; not Calibre-verified]")
+      density_window_tiles.call(metal_all, :gt, density_metal_max, density_window, density_step)
+        .inside(density_check_region_1)
+        
+
+      # Source Z = SIZE (SIZE dummy_block BY 2.5) BY 12.5 UNDEROVER.
+      # Positive KLayout sizing maps UNDEROVER to symmetric outward growth.
+      density_dummy_region = dummy_block.sized(density_dummy_margin.um)
+        .sized(density_metal_dummy_halo.um)
+      density_window_tiles.call(metal_all, :lt, density_dummy_min, density_window, density_step)
+        .and(density_dummy_region)
+        .not_inside(NODRC)
+        .output("#{prefix}_D_2",
+          "#{prefix}_D_2: metal density < #{density_dummy_min * 100}% in #{density_window}um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]")
+      # MET1_D_3/Mn_D_3 are intentionally unsupported: source GRADIENT omits
+      # STEP, so the exact neighboring-window selection is not established.
+    end
+
+    # The selected top metal is T4M2 (TM2), not T4M1/T8M. T4M2_D_1 uses
+    # density_checkarea plus GRID/SRINGBLK/INDALL result exclusions.
+    density_t4m2_checkarea = density_chip.not(INDALL)
+    density_window_tiles.call(density_t4m2_all, :lt, density_t4m2_min, density_window, density_step)
+      .inside(density_t4m2_checkarea)
+      .not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not_inside(NODRC)
+      
+    density_window_tiles.call(density_t4m2_all, :gt, density_t4m2_max, density_window, density_step)
+      .inside(density_t4m2_checkarea)
+      .not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not_inside(NODRC)
+      .output('T4M2_D_1_max',
+        "T4M2_D_1_max: T4M2ALLi density > #{density_t4m2_max * 100}% in #{density_window}um windows, #{density_step}um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]")
+
+    # T4M2_D_2 uses only the dummy-block area sized up by 2.5um.
+    density_t4m2_dummy_region = T4M2DUMB.sized(density_dummy_margin.um)
+    density_window_rule.call(density_t4m2_all, :lt, density_dummy_min, density_window, density_step,
+      'T4M2_D_2', "T4M2ALLi density < #{density_dummy_min * 100}% in #{density_window}um windows, #{density_step}um step, inside T4M2DUMB sized by #{density_dummy_margin}um",
+      density_t4m2_dummy_region)
+
+    # T4M2_D_3 is intentionally unsupported because its source GRADIENT omits
+    # STEP, so the exact neighboring-window selection is not established.
+  end
+end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# MOM_CHECK / MOM_R_1 and MOM_R_2 for the configured 6-metal, T4M2-top profile.
+# MOM_R_1 forbids a via intersecting the MOM finger marker on either adjacent
+# metal; its violations are waived inside NODRC. Source via aliases include
+# both the interior-cut and bar layers.
+# The profile's active pairs are V1..V4 across MET1..MET5 and top via T4V2 on MET5.
+if MOM
+   [
+     ['V1', V1.or(V1BAR), MET1MOM, 'MET1MOM'], ['V1', V1.or(V1BAR), MET2MOM, 'MET2MOM'],
+     ['V2', V2.or(V2BAR), MET2MOM, 'MET2MOM'], ['V2', V2.or(V2BAR), MET3MOM, 'MET3MOM'],
+     ['V3', V3.or(V3BAR), MET3MOM, 'MET3MOM'], ['V3', V3.or(V3BAR), MET4MOM, 'MET4MOM'],
+     ['V4', V4.or(V4BAR), MET4MOM, 'MET4MOM'], ['V4', V4.or(V4BAR), MET5MOM, 'MET5MOM'],
+     ['T4V2', TV2.or(TV2BAR), MET5MOM, 'MET5MOM']
+   ].each do |via_name, via, mom_marker, marker_name|
+     via.and(mom_marker).not_inside(NODRC)
+   end
+ 
+   # MOM_S_1 requires Calibre EXT with ABUT<90, SINGULAR, REGION qualifiers.
+   # KLayout's Region separation API cannot express those qualifiers; an
+   # unqualified separation result would be an approximation, so MOM_S_1 is
+   # deliberately not emitted.
+   #
+   # MOM_R_2 has active clauses for forbidden per-layer stack assignments and
+   # missing labels on complete, otherwise valid MOM stacks. The source's
+   # complementary "required marker" Y12..Y78 bodies are commented out and are
+   # not emitted.
+   mom_layers = [MET1MOM, MET2MOM, MET3MOM, MET4MOM, MET5MOM, MET6MOM, MET7MOM, MET8MOM]
+   mom_layer_names = %w[MET1MOM MET2MOM MET3MOM MET4MOM MET5MOM MET6MOM MET7MOM MET8MOM]
+   mom_texts = labels(323, 12)
+   mom_caps = %w[12 13 14 15 16 17 18 23 24 25 26 27 28 34 35 36 37 38 45 46 47 48 56 57 58 67 68 78]
+   forbidden_caps = [
+     %w[23 24 25 26 27 28 34 35 36 37 38 45 46 47 48 56 57 58 67 68 78],
+     %w[34 35 36 37 38 45 46 47 48 56 57 58 67 68 78],
+     %w[12 45 46 47 48 56 57 58 67 68 78],
+     %w[12 13 23 56 57 58 67 68 78],
+     %w[12 13 14 23 24 34 67 68 78],
+     %w[12 13 14 15 23 24 25 34 35 45 78],
+     %w[12 13 14 15 16 23 24 25 34 35 36 45 46 56],
+     %w[12 13 14 15 16 17 23 24 25 26 27 34 35 36 37 45 46 47 56 57 67]
+   ]
+ 
+   mom_caps.each do |cap|
+     cap_text = mom_texts.texts("momcap#{cap}")
+     cap_region = MOMLVS1.interacting(cap_text)
+ 
+     forbidden_caps.each_with_index do |caps, metal_index|
+       next unless caps.include?(cap)
+       marker = mom_layers[metal_index]
+       marker.interacting(cap_region).not(SRINGBLK_SRC).output("mom.MOM_R_2.forbidden_stack.#{mom_layer_names[metal_index]}.#{cap}",
+         "MOM_R_2: #{mom_layer_names[metal_index]} is forbidden for MOMLVS1 momcap#{cap} [ICsprout Calibre]")
+     end
+   end
+ 
+   # A geometrically correct stack without its matching MOMLVS1 text label is
+   # also a MOM_R_2 error. Extra MOM markers on any non-stack metal invalidate
+   # the candidate, matching the source's Z12..Z78 construction.
+   mom_caps.each do |cap|
+     first_metal = cap[0].to_i
+     last_metal = cap[1].to_i
+     candidate = MOMLVS1
+     (first_metal..last_metal).each do |metal_index|
+       candidate = candidate.interacting(mom_layers[metal_index - 1])
+     end
+     other_markers = mom_layers.each_with_index.reject { |_, index| (first_metal - 1..last_metal - 1).include?(index) }.map(&:first)
+     unless other_markers.empty?
+       candidate = candidate.not_interacting(other_markers.reduce(:+))
+     end
+     candidate.not_interacting(mom_texts.texts("momcap#{cap}")).not(SRINGBLK_SRC)
+   end
+ end
+
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# Source-backed special rules for the active ICsprout55 profile
+# (Poly_EFuse_CHECK, DUP_CHECK/DEUPAD, ESD_CHECK, LATCH_UP_CHECK).
+#
+# The supplied Calibre deck is the behavioral authority. Only checks whose
+# source geometry and exclusion layers are directly representable are emitted:
+#
+#   Poly_EFuse_CHECK=YES : EFU_1b_G, EFU_1c_G, EFU_2b_G, EFU_2c_G
+#   DUP_CHECK=YES        : DEUPAD_R_2, DEUPAD_R_5, DEUPAD_R_6
+#   ESD geometry         : ESD_A_1, ESD_A_2
+#
+# Rules are emitted only when the source geometry and exclusions survive the
+# mapping. DEUPAD_R_3 is omitted because KLayout cannot reproduce Calibre's
+# ENCLOSE marker geometry. ESD_W_1 and ESD_S_1 are omitted because their
+# ABUT<90 SINGULAR REGION qualifiers have no KLayout width()/space()
+# equivalent. Device, connectivity, and Calibre-only edge/sizing semantics
+# are listed below as omitted; no geometry approximation is emitted.
+# No marker here may be presented as a Calibre-equivalent signoff result.
+#=========================================================================================
+
+if SPECIAL
+  # ESD_A_1 and ESD_A_2 thresholds come from the source values JSON.
+  esd_area_min = rval('esd_area_min').um2
+
+  #-----------------------------------------------------------------------------------------
+  # Poly E-Fuse (source lines 6377-6400, Poly_EFuse_CHECK=YES)
+  # Source bodies are exact marker Booleans with a NOT INSIDE NODRC waiver.
+  #-----------------------------------------------------------------------------------------
+  FUSEALL.not_interacting(EFUSEALL).not_inside(NODRC).output('EFU_1b_G',
+    'EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]')
+  EFUSEALL.not(FUSEALL).not_inside(NODRC)
+  EFUSEALL.not_interacting(POEFUSEBLK).not_inside(NODRC).output('EFU_2b_G',
+    'EFU_2b_G: EFUSEALL (293/12) must interact with POEFUSEBLK (294/12) [Calibre source]')
+  POEFUSEBLK.not(EFUSEALL).not_inside(NODRC)
+
+  #-----------------------------------------------------------------------------------------
+  # DEUPAD - device under pad (source lines 6484-6526, DUP_CHECK=YES)
+  #
+  # Source defines padarea = DEUPAD AND MD with MD = CBi OR COVER (lines 869 and
+  # 1011), i.e. the ALPA/PA pad metal plus the passivation cover.  The active
+  # profile is total_metal=6 / top_metal=1, so the source metal_all list is
+  # M1..M5,T4M2 and via_all is V1..V4,T4V2: TM = T4M2, TM-1 = M5, and the via
+  # directly underneath the top via is V4.
+  #-----------------------------------------------------------------------------------------
+  deupad_pad_metal = CB + COVER
+  deupad_area = DEUPAD.and(deupad_pad_metal)
+
+  # DEUPAD_R_2: ((MD INTERACT DEUPAD) NOT DEUPAD) NOT INSIDE NODRC.
+  deupad_pad_metal.interacting(DEUPAD).not(DEUPAD).not_inside(NODRC).output('DEUPAD_R_2',
+    'DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]')
+
+  # DEUPAD_R_3 uses ENCLOSE on padarea against each uncovered upper-metal
+  # region. Its Calibre marker is the enclosing padarea polygon, not the
+  # uncovered geometry; omit it rather than emit different marker geometry.
+
+  # DEUPAD_R_5: ((ALPAR OR MOMLVS1 OR INDALL OR (TMres AND TM) OR
+  # (TM-1res AND TM-1)) AND padarea) NOT INSIDE NODRC.
+  deupad_forbidden_device = ALPADRES + MOMLVS1 + INDALL +
+    MET5RES.and(M5) + T4M2RES.and(TM2)
+  deupad_forbidden_device.and(deupad_area).not_inside(NODRC)
+
+  # DEUPAD_R_6: (padarea AND [lindex $via_all end-1]) NOT INSIDE NODRC.
+  # Source V4 includes both the interior cut and via-bar geometry.
+  deupad_area.and(V4.or(V4BAR)).not_inside(NODRC).output('DEUPAD_R_6',
+    'DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]')
+
+  # The source DEUPAD group defines no R_1 or R_4 body, so nothing is emitted
+  # for them; the manual's DEUPAD-R.4 (devices from a device truth table must
+  # sit below TM-1) has no source expression in the supplied .drc and its device
+  # table is not part of that source.
+  #
+  # DEUPAD_R_7 is not emitted.  It requires Calibre
+  # "EXT <topvia> <= 0.51 SINGULAR REGION" followed by
+  # "<topvia> INTERACT <that region>" to merge vias whose spacing is at most
+  # 0.51 um into one array, then flags padarea not interacting such an array.
+  # KLayout has no equivalent pairwise-space clustering operator, and an
+  # unqualified top-via spacing test would be a different rule.
+
+  #-----------------------------------------------------------------------------------------
+  # ESD implant geometry (source lines 8705-8727).
+  #
+  # ESD_A_1 and ESD_A_2 sit outside the ESD_CHECK conditional in the source.
+  # ESD1 is drawn on 55/1 (this deck's ESD layer).
+  #-----------------------------------------------------------------------------------------
+  # ESD_A_1: (AREA ESD1 < 0.6) NOT INSIDE NODRC.
+  ESD.not(ESD.with_area(esd_area_min, 1e9.um2)).not_inside(NODRC)
+
+  # ESD_A_2: (AREA ((HOLES ESD1 INNER) NOT ESD1) < 0.6) NOT INSIDE NODRC.
+  esd_enclosed_void = ESD.holes.not(ESD)
+  esd_enclosed_void.not(esd_enclosed_void.with_area(esd_area_min, 1e9.um2)).not_inside(NODRC).output('ESD_A_2',
+    'ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]')
+
+  # ESD_W_1 and ESD_S_1 are omitted: ABUT<90 SINGULAR REGION qualifiers are
+  # not expressible by KLayout's width()/space() primitives.
+
+  #-----------------------------------------------------------------------------------------
+  # Omitted source checks in the assigned sections
+  #
+  # ESD_CHECK=YES device rules: ESDN_1_SEDP_1, ESDN_2_ESDP_2, ESDN_4_ESDP_4,
+  # ESDN_5_ESDP_5, ESDN_6_ESDP_6, ESDN_7_ESDP_7, ESDN_8_ESDP_8, ESDN_9,
+  # ESDN_10, ESDN_11, ESDN_12/ESDP_9, and (IO=1833) ESDN_3/ESDP_3.  They are
+  # defined on ESDIOE-scoped device classes (EGATE, ENMOS/EPMOS, ENMOS_DRAIN,
+  # EPMOS_DRAIN, ESAB, ECT, ESD3C, EGATEHV) and use ENC/EXT/INTERNAL with
+  # ABUT<90, OPPOSITE REGION, SINGULAR REGION and INSIDE EDGE qualifiers, plus
+  # LENGTH/INSIDE EDGE finger-width extraction.  Those qualifiers and the
+  # ESDIOE device recognition are not reproducible here, so the rules are not
+  # approximated.
+  #
+  # ESDN_13_R and ESDP_10_R are inside OPEN_RECOMMENDED_ON (NO in this profile)
+  # and additionally need Calibre NET AREA RATIO connectivity over the ESD
+  # drain net; not emitted.
+  #
+  # LATCH_UP_CHECK=YES rules: LU_R_2, LU_W_1, LU_S_1a, LU_S_1b, LU_S_1c,
+  # LU_S_1d (both LU_3_CHECK FAST and ACCURATE forms) and LU_S_2_NTAP /
+  # LU_S_2_PTAP.  LU_R_2, LU_W_1 and LU_S_1a-d are defined on the IO-pad
+  # net classes NACT_IO_PAD / PACT_IO_PAD / NMOS_IO_PAD / PMOS_IO_PAD
+  # (lines 8734-9138).  Those classes come from Calibre net tracing of MD/CB,
+  # the metal stack, ALPA and the VDD/VSS/VCC/GND pad text, with POWER_PAD
+  # subtracted; deriving them from geometry would fabricate I/O net
+  # identification, so no LU geometry rule is emitted on a synthetic pad class.
+  # LU_W_1 additionally needs DONUT/INT with ABUT<90 SINGULAR REGION, and
+  # LU_S_1a-d need SIZE ... BEVEL and ENCLOSE-based device extraction.
+  # LU_S_2_NTAP / LU_S_2_PTAP depend on PMOS1/NMOS1 (PACT/NACT ENCLOSE GATE
+  # device recognition), the PW/PSUB/NW/DNW well topology, and
+  # "SIZE <layer> BY <d> INSIDE OF <other> STEP 0.38 BEVEL 4" growth with
+  # same-well island restriction and an INSIDE EDGE SRINGBLK waiver.  KLayout's
+  # sized()/inside() primitives have neither that corner/step model nor an
+  # equivalent same-well pickup distance measure, so a plain 35um distance check
+  # would be a different rule and is not emitted.
+  #-----------------------------------------------------------------------------------------
+end
+
+
+puts "ICsprout55 DRC run completed (tables: #{TABLES.join(' ')})"

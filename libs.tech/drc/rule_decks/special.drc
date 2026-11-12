@@ -20,21 +20,23 @@
 # source geometry and exclusion layers are directly representable are emitted:
 #
 #   Poly_EFuse_CHECK=YES : EFU_1b_G, EFU_1c_G, EFU_2b_G, EFU_2c_G
-#   DUP_CHECK=YES        : DEUPAD_R_2, DEUPAD_R_5, DEUPAD_R_6
-#   ESD geometry         : ESD_A_1, ESD_A_2
+#   DUP_CHECK=YES        : DEUPAD_R_2, DEUPAD_R_3, DEUPAD_R_5, DEUPAD_R_6,
+#                          DEUPAD_R_7
+#   ESD geometry         : ESD_W_1, ESD_S_1, ESD_A_1, ESD_A_2
+#   CHIPEDGE_CHECK=YES   : CHIPEDGE_EN_1, CHIPEDGE_EN_2, CHIPEDGE_EN_3
 #
 # Rules are emitted only when the source geometry and exclusions survive the
-# mapping. DEUPAD_R_3 is omitted because KLayout cannot reproduce Calibre's
-# ENCLOSE marker geometry. ESD_W_1 and ESD_S_1 are omitted because their
-# ABUT<90 SINGULAR REGION qualifiers have no KLayout width()/space()
-# equivalent. Device, connectivity, and Calibre-only edge/sizing semantics
-# are listed below as omitted; no geometry approximation is emitted.
+# mapping. Calibre ABUT/SINGULAR/ENCLOSE qualifiers are not always represented
+# (see each rule); device, connectivity, and Calibre-only edge/sizing
+# semantics are listed below as omitted.
 # No marker here may be presented as a Calibre-equivalent signoff result.
 #=========================================================================================
 
 if SPECIAL
-  # ESD_A_1 and ESD_A_2 thresholds come from the source values JSON.
+  # ESD thresholds come from the source values JSON.
   esd_area_min = rval('esd_area_min').um2
+  esd_width = rval('esd_width')
+  esd_space = rval('esd_space')
 
   #-----------------------------------------------------------------------------------------
   # Poly E-Fuse (source lines 6377-6400, Poly_EFuse_CHECK=YES)
@@ -65,9 +67,14 @@ if SPECIAL
   deupad_pad_metal.interacting(DEUPAD).not(DEUPAD).not_inside(NODRC).output('DEUPAD_R_2',
     'DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]')
 
-  # DEUPAD_R_3 uses ENCLOSE on padarea against each uncovered upper-metal
-  # region. Its Calibre marker is the enclosing padarea polygon, not the
-  # uncovered geometry; omit it rather than emit different marker geometry.
+  # DEUPAD_R_3: padarea must be covered by the TM (T4M2) and TM-1 (M5) metals.
+  # The source writes "padarea ENCLOSE (padarea NOT TM)", whose result is the
+  # uncovered pad-area portion; the same uncovered geometry is emitted here.
+  deupad_tm = TM2.not(T4M2SLOT)
+  deupad_tm1 = M5.not(MET5SLOT)
+  deupad_uncovered = deupad_area.not(deupad_tm) + deupad_area.not(deupad_tm1)
+  deupad_uncovered.not_inside(NODRC).output('DEUPAD_R_3',
+    'DEUPAD_R_3: padarea must be covered by the T4M2 top metal and by M5 [Calibre source]')
 
   # DEUPAD_R_5: ((ALPAR OR MOMLVS1 OR INDALL OR (TMres AND TM) OR
   # (TM-1res AND TM-1)) AND padarea) NOT INSIDE NODRC.
@@ -81,17 +88,21 @@ if SPECIAL
   deupad_area.and(V4.or(V4BAR)).not_inside(NODRC).output('DEUPAD_R_6',
     'DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]')
 
+  # DEUPAD_R_7: top vias spaced at most 0.51 um form an array, and every
+  # padarea must interact one such array. KLayout's space_check is strict, so
+  # the threshold is 0.51 um + 1 dbu to include the source equality. The
+  # source OUTLAYER has no NODRC waiver.
+  deupad_top_via = TV2.or(TV2BAR)
+  deupad_array_space = rval('deupad_array_space')
+  deupad_via_arrays = deupad_top_via.interacting(
+    wrap_region.call(deupad_top_via.data.space_check((deupad_array_space / grid).round + 1).polygons))
+  deupad_area.not_interacting(deupad_via_arrays).output('DEUPAD_R_7',
+    "DEUPAD_R_7: padarea must overlap a T4V2 array (vias spaced <= #{deupad_array_space} um) [Calibre source]")
+
   # The source DEUPAD group defines no R_1 or R_4 body, so nothing is emitted
   # for them; the manual's DEUPAD-R.4 (devices from a device truth table must
   # sit below TM-1) has no source expression in the supplied .drc and its device
   # table is not part of that source.
-  #
-  # DEUPAD_R_7 is not emitted.  It requires Calibre
-  # "EXT <topvia> <= 0.51 SINGULAR REGION" followed by
-  # "<topvia> INTERACT <that region>" to merge vias whose spacing is at most
-  # 0.51 um into one array, then flags padarea not interacting such an array.
-  # KLayout has no equivalent pairwise-space clustering operator, and an
-  # unqualified top-via spacing test would be a different rule.
 
   #-----------------------------------------------------------------------------------------
   # ESD implant geometry (source lines 8705-8727).
@@ -108,25 +119,229 @@ if SPECIAL
   esd_enclosed_void.not(esd_enclosed_void.with_area(esd_area_min, 1e9.um2)).not_inside(NODRC).output('ESD_A_2',
     'ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]')
 
-  # ESD_W_1 and ESD_S_1 are omitted: ABUT<90 SINGULAR REGION qualifiers are
-  # not expressible by KLayout's width()/space() primitives.
+  # ESD_W_1 / ESD_S_1: the source ABUT<90 SINGULAR REGION qualifiers are not
+  # represented by KLayout's width()/space() primitives; the plain checks are
+  # conservative for Manhattan ESD1 geometry.
+  ESD.drc(width < esd_width.um).not_inside(NODRC).output('ESD_W_1',
+    "ESD_W_1: ESD1 width must be at least #{esd_width} um [Calibre source]")
+  ESD.drc(space < esd_space.um).not_inside(NODRC).output('ESD_S_1',
+    "ESD_S_1: ESD1 spacing must be at least #{esd_space} um [Calibre source]")
+
+  #-----------------------------------------------------------------------------------------
+  # Chip edge (source lines 5949-5990, CHIPEDGE_CHECK=YES)
+  #
+  # CHIPEDGE is derived as CHIPBLK OR (HOLES CHIPBLK). The source extent is
+  # taken over the listed drawn layers of the active profile. The checks only
+  # run when CHIPBLK is drawn.
+  #-----------------------------------------------------------------------------------------
+  if CHIPBLK.count > 0
+    chipedge = CHIPBLK.or(CHIPBLK.holes)
+    chipedge_layers = DNW + ACT + NW + PSUB + LVTN + LVTP + HVTN + HVTP +
+      DGOX + TGOX + POLY + NP + PP + NPR + HPR + ESD + SAB + CT + CTbar +
+      M1 + M2 + M3 + M4 + M5 + V1 + V2 + V3 + V4 + V1BAR + V2BAR + V3BAR + V4BAR +
+      TV2 + TV2BAR + TM2 + CB + RV + COVER + RDL + FUTR +
+      ACTDUM + POLYDUM + MET1DUM + MET2DUM + MET3DUM + MET4DUM + MET5DUM +
+      MET6DUM + MET7DUM + MET8DUM + T4M2DUM
+    chipedge_extent_data = chipedge_layers.data
+    unless chipedge_extent_data.is_empty?
+      chipedge_extent_region = RBA::Region.new
+      chipedge_extent_region.insert(chipedge_extent_data.bbox)
+      chipedge_extent = wrap_region.call(chipedge_extent_region)
+
+      # CHIPEDGE_EN_1: ENC extent CHIPEDGE < 0.37, not interacting SRINGBLK.
+      # The source marker is the extent polygon; a failing extent is reported
+      # as that polygon.
+      chipedge_enclose = rval('chipedge_enclose').um
+      chipedge_en1_msg =
+        "CHIPEDGE_EN_1: the chip border must enclose all drawn patterns by #{rval('chipedge_enclose')} um [Calibre source]"
+      chipedge_fail = chipedge_extent.drc(enclosed(chipedge) < chipedge_enclose)
+      chipedge_fail.not_interacting(SRINGBLK_SRC).not_inside(NODRC)
+        .output('CHIPEDGE_EN_1', chipedge_en1_msg)
+      # KLayout's enclosed() metric only reports inside edges that sit too close
+      # to the enclosing boundary; extent portions outside CHIPEDGE are emitted
+      # here to match the source ENC marker.
+      chipedge_extent.not_inside(chipedge).not_interacting(SRINGBLK_SRC).not_inside(NODRC)
+        .output('CHIPEDGE_EN_1', chipedge_en1_msg)
+
+      # CHIPEDGE_EN_2: ENC DNW CHIPEDGE < 6.
+      chipedge_dnw_enclose = rval('chipedge_dnw_enclose').um
+      chipedge_en2_msg =
+        "CHIPEDGE_EN_2: the chip border must enclose DNW by #{rval('chipedge_dnw_enclose')} um [Calibre source]"
+      DNW.drc(enclosed(chipedge) < chipedge_dnw_enclose).not_inside(NODRC)
+        .output('CHIPEDGE_EN_2', chipedge_en2_msg)
+      DNW.not_inside(chipedge).not_inside(NODRC).output('CHIPEDGE_EN_2', chipedge_en2_msg)
+
+      # CHIPEDGE_EN_3: MS_OUT = metal/RDL geometry inside SRINGBLK;
+      # ENC MS_OUT CHIPEDGE < 1.5. M6-M8/T4M1/T2M* are outside the active
+      # 6-metal/T4M2 profile.
+      chipedge_sring_enclose = rval('chipedge_sring_enclose').um
+      chipedge_sring_metal = M1.not(MET1SLOT).and(SRINGBLK_SRC) +
+        M2.not(MET2SLOT).and(SRINGBLK_SRC) +
+        M3.not(MET3SLOT).and(SRINGBLK_SRC) +
+        M4.not(MET4SLOT).and(SRINGBLK_SRC) +
+        M5.not(MET5SLOT).and(SRINGBLK_SRC) +
+        TM2.not(T4M2SLOT).and(SRINGBLK_SRC) +
+        RDL.and(SRINGBLK_SRC)
+      chipedge_en3_msg =
+        "CHIPEDGE_EN_3: CHIPEDGE must enclose seal-ring metal by #{rval('chipedge_sring_enclose')} um [Calibre source]"
+      chipedge_sring_metal.drc(enclosed(chipedge) < chipedge_sring_enclose).not_inside(NODRC)
+        .output('CHIPEDGE_EN_3', chipedge_en3_msg)
+      chipedge_sring_metal.not_inside(chipedge).not_inside(NODRC)
+        .output('CHIPEDGE_EN_3', chipedge_en3_msg)
+    end
+  end
+
+  #-----------------------------------------------------------------------------------------
+  # ESD protection devices (source lines 8456-8702, ESD_CHECK=YES)
+  #
+  # The source scopes the device classes to ESDIOE: EGATE = (AA AND PO) AND
+  # ESDIOE, ENACT/EPACT = NACT/PACT AND ESDIOE, ECT = (CT OR CTbar) AND
+  # ESDIOE, ESAB = SAB AND ESDIOE, EGATEHV = (EGATE NOT DG) AND TG, and
+  # ENMOS/EPMOS = active ENCLOSE gate.  KLayout has no ENCLOSE layer
+  # selection, so ENMOS/EPMOS are recognised as ESDIOE-scoped active
+  # interacting EGATE.  The source ABUT<90 / SINGULAR / OPPOSITE qualifiers
+  # and the INSIDE EDGE finger-width filter are not represented; each
+  # emitted category is the primary threshold of its source RULECHECK.
+  # ESDN_13_R / ESDP_10_R remain omitted, see the note below.
+  #-----------------------------------------------------------------------------------------
+  esd_ct_act_enc = rval('esd_ct_act_enc')
+  esd_ct_gate_space = rval('esd_ct_gate_space')
+  esd_sab_gate_ovl = rval('esd_sab_gate_ovl')
+  esd_sab_hole_gate_space = rval('esd_sab_hole_gate_space')
+  esd_sab_hole_ct_enc = rval('esd_sab_hole_ct_enc')
+  esd_sab_act_space = rval('esd_sab_act_space')
+  esd_sab_hole_drain_enc = rval('esd_sab_hole_drain_enc')
+  esd_implant_gate_space = rval('esd_implant_gate_space')
+  esd_implant_act_enc = rval('esd_implant_act_enc')
+  esd_finger_width_min = rval('esd_finger_width_min')
+  esd_finger_width_max = rval('esd_finger_width_max')
+  esd_hv_nmos_length_min = rval('esd_hv_nmos_length_min')
+  esd_hv_pmos_length_min = rval('esd_hv_pmos_length_min')
+  esd_hv_pmos_length_max = rval('esd_hv_pmos_length_max')
+
+  esd_enact = NACT.and(ESDIOE)
+  esd_epact = PACT.and(ESDIOE)
+  esd_egate = ACT.and(POLY).and(ESDIOE)
+  esd_engate = esd_egate.and(esd_enact)
+  esd_epgate = esd_egate.and(esd_epact)
+  esd_egatehv = esd_egate.not(DG).and(TG)
+  esd_egate_poly = POLY.interacting(esd_egate)
+  esd_egate_l = esd_egate.edges.and(ACT.edges)
+  esd_egate_w = esd_egate.edges.and(POLY.edges)
+  esd_ect = CT.or(CTbar).and(ESDIOE)
+  esd_esab = SAB.and(ESDIOE)
+  esd_esab_ho_raw = esd_esab.holes
+
+  esd_enmos = esd_enact.interacting(esd_egate)
+  esd_epmos = esd_epact.interacting(esd_egate)
+  esd_enmos_sd = esd_enmos.not(esd_egate)
+  esd_epmos_sd = esd_epmos.not(esd_egate)
+  esd_enmos_s = esd_enmos_sd.not(esd_esab).interacting(esd_egate)
+  esd_enmos_d = esd_enmos_sd.not(esd_esab).not_interacting(esd_egate)
+  esd_epmos_s = esd_epmos_sd.not(esd_esab).interacting(esd_egate)
+  esd_epmos_d = esd_epmos_sd.not(esd_esab).not_interacting(esd_egate)
+  esd_emos_s = esd_enmos_s + esd_epmos_s
+  esd_emos_d = esd_enmos_d + esd_epmos_d
+  esd_esab_ho = esd_esab_ho_raw + esd_emos_d
+  esd_ect_s = esd_ect.not(esd_esab_ho)
+  esd_ect_d = esd_ect.and(esd_esab_ho)
+  esd_enmos_drain = esd_enmos_sd.interacting(esd_enmos_d).interacting(esd_ect)
+  esd_epmos_drain = esd_epmos_sd.interacting(esd_epmos_d).interacting(esd_ect)
+  esd_sab_filled = esd_esab + esd_esab_ho_raw
+
+  # Calibre ENC A B (B encloses A) includes the parts of A outside B.  KLayout's
+  # enclosed() only reports inside/coincident A edges, so each ENC check adds
+  # the outside part of the A polygons that actually interact B; fully
+  # disjoint A geometry is not an enclosure relationship (it is covered by the
+  # separate coverage rules, or by the other device's OUTLAYER).
+  esd_enc = lambda do |inner, outer, limit, rule_id, message|
+    inner.drc(enclosed(outer) < limit.um).not_inside(NODRC).output(rule_id, message)
+    inner.interacting(outer).not_inside(outer).not_inside(NODRC).output(rule_id, message)
+  end
+
+  # ESDN_1_SEDP_1: ENC ECT_S EMOS_S < 0.15.
+  esd_enc.call(esd_ect_s, esd_emos_s, esd_ct_act_enc, 'ESDN_1_SEDP_1',
+    "ESDN_1_SEDP_1: source contacts must be enclosed by source active by #{esd_ct_act_enc} um [Calibre source]")
+
+  # ESDN_2_ESDP_2: EXT ECT_S EGATE < 0.15.
+  esd_ect_s.drc(separation(esd_egate) < esd_ct_gate_space.um).not_inside(NODRC).output('ESDN_2_ESDP_2',
+    "ESDN_2_ESDP_2: source contacts must be at least #{esd_ct_gate_space} um from the gate [Calibre source]")
+
+  # ESDN_4_ESDP_4: INTERNAL ESAB EGATE < 0.05 (SAB overlap of the gate).
+  esd_esab.and(esd_egate).drc(width < esd_sab_gate_ovl.um).not_inside(NODRC).output('ESDN_4_ESDP_4',
+    "ESDN_4_ESDP_4: drain SAB must overlap the gate by at least #{esd_sab_gate_ovl} um [Calibre source]")
+
+  # ESDN_5_ESDP_5: EXT ESAB_HO_RAW EGATE < 1.29.
+  esd_esab_ho_raw.drc(separation(esd_egate) < esd_sab_hole_gate_space.um).not_inside(NODRC).output('ESDN_5_ESDP_5',
+    "ESDN_5_ESDP_5: the drain SAB hole must be at least #{esd_sab_hole_gate_space} um from the gate [Calibre source]")
+
+  # ESDN_6_ESDP_6: ENC ECT_D ESAB_HO_RAW < 0.21.
+  esd_enc.call(esd_ect_d, esd_esab_ho_raw, esd_sab_hole_ct_enc, 'ESDN_6_ESDP_6',
+    "ESDN_6_ESDP_6: drain contacts must be enclosed by the drain SAB hole by #{esd_sab_hole_ct_enc} um [Calibre source]")
+
+  # ESDN_7_ESDP_7: ENC (ENMOS_DRAIN NOT COIN EDGE EGATE) (ESAB OR ESAB_HO_RAW)
+  # < 0.21.  The source drops the gate-coincident drain edge from the check;
+  # here the gate grown by the threshold joins the enclosure layer, which
+  # exempts exactly that edge and leaves the other three sides measured.
+  esd_sab_encloser = esd_sab_filled + esd_egate.sized(esd_sab_act_space.um)
+  esd_enc.call(esd_enmos_drain, esd_sab_encloser, esd_sab_act_space, 'ESDN_7_ESDP_7',
+    "ESDN_7_ESDP_7: drain SAB must extend #{esd_sab_act_space} um beyond the drain active on non-gate sides [Calibre source]")
+  esd_enc.call(esd_epmos_drain, esd_sab_encloser, esd_sab_act_space, 'ESDN_7_ESDP_7',
+    "ESDN_7_ESDP_7: drain SAB must extend #{esd_sab_act_space} um beyond the drain active on non-gate sides [Calibre source]")
+
+  # ESDN_8_ESDP_8: ENC ESAB_HO_RAW ENMOS_DRAIN / EPMOS_DRAIN < 1.
+  esd_enc.call(esd_esab_ho_raw, esd_enmos_drain, esd_sab_hole_drain_enc, 'ESDN_8_ESDP_8',
+    "ESDN_8_ESDP_8: the drain SAB hole must be enclosed by the drain active by #{esd_sab_hole_drain_enc} um [Calibre source]")
+  esd_enc.call(esd_esab_ho_raw, esd_epmos_drain, esd_sab_hole_drain_enc, 'ESDN_8_ESDP_8',
+    "ESDN_8_ESDP_8: the drain SAB hole must be enclosed by the drain active by #{esd_sab_hole_drain_enc} um [Calibre source]")
+
+  # ESDN_9: EXT ESD1 EGATE < 0.4.
+  ESD.drc(separation(esd_egate) < esd_implant_gate_space.um).not_inside(NODRC).output('ESDN_9',
+    "ESDN_9: the ESD implant must be at least #{esd_implant_gate_space} um from the gate [Calibre source]")
+
+  # ESDN_10: ENC ESD1 ENMOS_DRAIN < 0.4.
+  esd_enc.call(ESD, esd_enmos_drain, esd_implant_act_enc, 'ESDN_10',
+    "ESDN_10: the ESD implant must be enclosed by the drain active by #{esd_implant_act_enc} um [Calibre source]")
+
+  # ESDN_11: (ESD1 AND EGATE_POLY).  PO ENCLOSE EGATE selects the gate poly;
+  # the deck uses the poly polygons interacting EGATE.
+  ESD.and(esd_egate_poly).not_inside(NODRC).output('ESDN_11',
+    'ESDN_11: the ESD implant must not overlap the ESD gate poly [Calibre source]')
+
+  # ESDN_12 / ESDP_9: finger width from the gate edges coincident with PO
+  # edges, LENGTH < 30 and LENGTH > 40.  with_length is [min, max); the
+  # upper bound adds one grid step so exactly 40 um stays clean.
+  esd_n_w = esd_egate_w.inside_part(esd_enmos)
+  esd_p_w = esd_egate_w.inside_part(esd_epmos)
+  esd_n_w.with_length(0, esd_finger_width_min.um).not_inside(NODRC).output('ESDN_12',
+    "ESDN_12: ESD finger width must be at least #{esd_finger_width_min} um [Calibre source]")
+  esd_n_w.with_length((esd_finger_width_max + grid).um, 1e9.um).not_inside(NODRC).output('ESDN_12',
+    "ESDN_12: ESD finger width must be at most #{esd_finger_width_max} um [Calibre source]")
+  esd_p_w.with_length(0, esd_finger_width_min.um).not_inside(NODRC).output('ESDP_9',
+    "ESDP_9: ESD finger width must be at least #{esd_finger_width_min} um [Calibre source]")
+  esd_p_w.with_length((esd_finger_width_max + grid).um, 1e9.um).not_inside(NODRC).output('ESDP_9',
+    "ESDP_9: ESD finger width must be at most #{esd_finger_width_max} um [Calibre source]")
+
+  # ESDN_3: (EGATEHV AND ENGATE) COIN EDGE EGATE_L, LENGTH < 0.5.
+  esd_hv_n = esd_egatehv.and(esd_engate)
+  esd_hv_n.edges.and(esd_egate_l).with_length(0, esd_hv_nmos_length_min.um)
+    .not_inside(NODRC).output('ESDN_3',
+      "ESDN_3: 3.3V ESD NMOS channel length must be at least #{esd_hv_nmos_length_min} um [Calibre source]")
+
+  # ESDP_3: (EGATEHV AND EPGATE) NOT WITH EDGE (LENGTH X >= 0.4 <= 0.5).
+  esd_hv_p = esd_egatehv.and(esd_epgate)
+  esd_hv_p_good = esd_hv_p.edges.and(esd_egate_l)
+    .with_length(esd_hv_pmos_length_min.um, (esd_hv_pmos_length_max + grid).um)
+  esd_hv_p.not_interacting(esd_hv_p_good).not_inside(NODRC).output('ESDP_3',
+    "ESDP_3: 3.3V ESD PMOS channel length must be #{esd_hv_pmos_length_min}..#{esd_hv_pmos_length_max} um [Calibre source]")
 
   #-----------------------------------------------------------------------------------------
   # Omitted source checks in the assigned sections
   #
-  # ESD_CHECK=YES device rules: ESDN_1_SEDP_1, ESDN_2_ESDP_2, ESDN_4_ESDP_4,
-  # ESDN_5_ESDP_5, ESDN_6_ESDP_6, ESDN_7_ESDP_7, ESDN_8_ESDP_8, ESDN_9,
-  # ESDN_10, ESDN_11, ESDN_12/ESDP_9, and (IO=1833) ESDN_3/ESDP_3.  They are
-  # defined on ESDIOE-scoped device classes (EGATE, ENMOS/EPMOS, ENMOS_DRAIN,
-  # EPMOS_DRAIN, ESAB, ECT, ESD3C, EGATEHV) and use ENC/EXT/INTERNAL with
-  # ABUT<90, OPPOSITE REGION, SINGULAR REGION and INSIDE EDGE qualifiers, plus
-  # LENGTH/INSIDE EDGE finger-width extraction.  Those qualifiers and the
-  # ESDIOE device recognition are not reproducible here, so the rules are not
-  # approximated.
-  #
-  # ESDN_13_R and ESDP_10_R are inside OPEN_RECOMMENDED_ON (NO in this profile)
-  # and additionally need Calibre NET AREA RATIO connectivity over the ESD
-  # drain net; not emitted.
+  # ESD_CHECK=YES: ESDN_13_R and ESDP_10_R are inside OPEN_RECOMMENDED_ON (NO
+  # in this profile) and additionally need Calibre NET AREA RATIO connectivity
+  # over the ESD drain net (ENGATE_D_EMPTY / EPGATE_D_EMPTY through ESD3C and
+  # the metal stack); not emitted.
   #
   # LATCH_UP_CHECK=YES rules: LU_R_2, LU_W_1, LU_S_1a, LU_S_1b, LU_S_1c,
   # LU_S_1d (both LU_3_CHECK FAST and ACCURATE forms) and LU_S_2_NTAP /

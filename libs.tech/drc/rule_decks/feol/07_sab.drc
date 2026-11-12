@@ -1,0 +1,93 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 07 - Silicide block (SAB)
+#
+# The source EXT/ENC qualifiers ABUT<90/SINGULAR REGION are not reproduced.
+# SAB_S_2 uses the source "DRC waive if no (PO OR AA) exists in the space
+# region" filter. SAB_S_4 second statement and SAB_R_2 flag SAB/GATE overlap
+# outside ESDIOE; the source's 0.06 um intentional ESD overlap waiver
+# (ESD_REGION = INT GATE_W SAB == 0.06) is not modelled, so the port also
+# flags intended ESD overlaps (slightly stricter inside ESDIOE).
+#=========================================================================================
+
+if FEOL
+  sab_width = rval('sab_width')
+  SAB.drc(width < sab_width.um).not_inside(NODRC).output('SAB_W_1',
+    "SAB_W_1: SAB width must be at least #{sab_width} um outside NODRC [Calibre source]")
+
+  sab_space = rval('sab_space')
+  SAB.drc(space < sab_space.um).not_inside(NODRC).output('SAB_S_1',
+    "SAB_S_1: SAB spacing must be at least #{sab_space} um outside NODRC [Calibre source]")
+
+  # SAB_S_2: the 0.44 um spacing applies when one or both SABs interact PO;
+  # transparent is required because sab_po is a subset of SAB.
+  sab_space_po = rval('sab_space_po')
+  sab_po = SAB.interacting(POLY)
+  sab_po.drc(separation(SAB, transparent) < sab_space_po.um)
+    .interacting(POLY.or(ACT)).not_inside(NODRC).output('SAB_S_2',
+      "SAB_S_2: SAB spacing with one SAB interacting PO must be at least #{sab_space_po} um outside NODRC [Calibre source]")
+
+  sab_aa_space = rval('sab_aa_space')
+  SAB.drc(separation(ACT) < sab_aa_space.um).not_inside(NODRC).output('SAB_S_3',
+    "SAB_S_3: SAB to AA spacing must be at least #{sab_aa_space} um outside NODRC [Calibre source]")
+
+  sab_gate_space = rval('sab_gate_space')
+  SAB.drc(separation(GATE) < sab_gate_space.um).not_inside(NODRC).output('SAB_S_4',
+    "SAB_S_4: SAB to GATE spacing must be at least #{sab_gate_space} um outside NODRC [Calibre source]")
+  SAB.and(GATE).not_inside(ESDIOE).not_inside(NODRC).output('SAB_S_4',
+    'SAB_S_4: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]')
+
+  # SAB_S_5: poly on field oxide excludes AA and AA dummy.
+  sab_po_field_space = rval('sab_po_field_space')
+  po_field = POLY.not(ACT).not(ACTDUM)
+  SAB.drc(separation(po_field) < sab_po_field_space.um).not_inside(ESDIOE).not_inside(NODRC).output('SAB_S_5',
+    "SAB_S_5: SAB to field poly spacing must be at least #{sab_po_field_space} um outside ESDIOE/NODRC [Calibre source]")
+
+  sab_ct_space = rval('sab_ct_space')
+  SAB.drc(separation(CT.or(CTbar)) < sab_ct_space.um).not_inside(NODRC).output('SAB_S_6',
+    "SAB_S_6: SAB to CT spacing must be at least #{sab_ct_space} um outside NODRC [Calibre source]")
+
+  # SAB_EX_1/EX_2: both source ENC checks are inside-only (no OUTSIDE ALSO),
+  # so only the enclosure of the inner layer where it lies inside the outer
+  # layer is measured.
+  sab_aa_ext = rval('sab_aa_ext')
+  SAB.drc(enclosed(ACT) < sab_aa_ext.um).not_inside(NODRC).output('SAB_EX_1',
+    "SAB_EX_1: AA extension outside SAB must be at least #{sab_aa_ext} um outside NODRC [Calibre source]")
+  sab_sab_ext = rval('sab_sab_ext')
+  ACT.drc(enclosed(SAB) < sab_sab_ext.um).not_inside(NODRC).output('SAB_EX_2',
+    "SAB_EX_2: SAB extension outside AA must be at least #{sab_sab_ext} um outside NODRC [Calibre source]")
+
+  sab_po_field_ext = rval('sab_po_field_ext')
+  po_field.drc(enclosed(SAB) < sab_po_field_ext.um).not_inside(NODRC).output('SAB_EX_3',
+    "SAB_EX_3: SAB extension outside field poly must be at least #{sab_po_field_ext} um outside NODRC [Calibre source]")
+
+  sab_area = rval('sab_area')
+  SAB.not(SAB.with_area(sab_area.um2, 1e9.um2)).not_inside(NODRC).output('SAB_A_1',
+    "SAB_A_1: SAB area must be at least #{sab_area} um^2 outside NODRC [Calibre source]")
+  sab_hole_area = rval('sab_hole_area')
+  SAB.holes.not(SAB.holes.with_area(sab_hole_area.um2, 1e9.um2)).not_inside(NODRC).output('SAB_A_2',
+    "SAB_A_2: SAB enclosed hole area must be at least #{sab_hole_area} um^2 outside NODRC [Calibre source]")
+
+  # SAB_R_1: SAB edges must not be coincident with PO or AA edges.
+  SAB.edges.and(POLY.edges).not_inside(NODRC).output('SAB_R_1',
+    'SAB_R_1: SAB must not share coincident edges with PO outside NODRC [Calibre source]')
+  SAB.edges.and(ACT.edges).not_inside(NODRC).output('SAB_R_1',
+    'SAB_R_1: SAB must not share coincident edges with AA outside NODRC [Calibre source]')
+
+  # SAB_R_2: SAB must not overlap GATE except ESD MOS.
+  SAB.and(GATE).not_inside(ESDIOE).not_inside(NODRC).output('SAB_R_2',
+    'SAB_R_2: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]')
+end

@@ -1,0 +1,2662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>well.nw.area</name>
+   <description>NW1_A_1: NW area must be at least 0.3 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.enclosed_area</name>
+   <description>NW1_A_2: NW enclosed hole area must be at least 0.3 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.width</name>
+   <description>NW1_W_1: NW width must be at least 0.47 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.space</name>
+   <description>NW1_S_1: low-voltage NW spacing must be at least 0.47 um outside NW resistor and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.floating</name>
+   <description>NW1_R_1: NW must interact a tap enclosing CT outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.width</name>
+   <description>DNW_W_1: DNW width must be at least 3.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.space</name>
+   <description>DNW_S_1: DNW spacing must be at least 3.5 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nsdi.space</name>
+   <description>DNW_S_5: DNW to N+ source/drain spacing must be at least 1.6 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nw.enclosure</name>
+   <description>DNW_EN_1: NW enclosure of DNW must be at least 1.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nw.coincident</name>
+   <description>DNW_EN_1: DNW edge coincident with NW outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nw.coverage</name>
+   <description>DNW_EN_1: DNW must be inside NW outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nact.enclosure</name>
+   <description>DNW_EN_2: DNW enclosure of non-tap N+ AA must be at least 0.55 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nw.overlap</name>
+   <description>DNW_O_1: NW/DNW overlap width must be at least 0.4 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.tpw.floating</name>
+   <description>DNW_R_3: PW inside DNW must interact a CT on P+ tap [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.tpw.space</name>
+   <description>DNW_S_3: TPW to PW spacing must be at least 0.8 um outside LDMOS/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.tpw_dgtg.space</name>
+   <description>DNW_S_4: TPW with DG/TG to TPW spacing must be at least 1.2 um outside LDMOS/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.pw_dgtg.space</name>
+   <description>DNW_S_4: PW with DG/TG to TPW spacing must be at least 1.2 um outside LDMOS/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.area</name>
+   <description>ACT_A_1: AA minimum area 0.0384 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.enclosed_area</name>
+   <description>ACT_A_2: AA enclosed area minimum 0.08 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.width</name>
+   <description>ACT_W_1: AA width must be at least 0.08 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.gate.channel_width</name>
+   <description>ACT_W_3a: core-gate channel width must be at least 0.12 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.gate.io_channel_width</name>
+   <description>ACT_W_3b: 1.8/2.5/3.3V gate channel width must be at least 0.21 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.angle_width</name>
+   <description>ACT_W_2: 45-degree AA width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.spacing</name>
+   <description>ACT_S_1: AA spacing must be at least 0.11 um outside NODRC/SRAMALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.tg_spacing</name>
+   <description>ACT_S_1a: AA to TG-covered AA spacing must be at least 0.16 um outside NODRC/SRAMALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.nw.nact.space.pw</name>
+   <description>ACT_S_5: NW to N+ active inside PW spacing must be at least 0.15 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.nw.nact.space.tg</name>
+   <description>ACT_S_6: NW to N+ active inside TG spacing must be at least 0.31 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.nw.pact.space</name>
+   <description>ACT_S_8: NW to P+ pickup active spacing must be at least 0.15 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.wide_space</name>
+   <description>ACT_S_2: AA spacing with one AA wider than 0.2 um must be at least 0.125 um when the run is &gt;= 0.3 um (gap &gt;= 0.08 um) outside NODRC/SRAMALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.angle_space</name>
+   <description>ACT_S_3: 45-degree AA spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.u_space</name>
+   <description>ACT_S_4: U-shape AA inner-edge spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.o_space</name>
+   <description>ACT_S_4: O-shape AA hole width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.nw_dnw.nact.space</name>
+   <description>ACT_S_7: N+ active to DNW-enclosing NW spacing must be at least 0.32 um outside DNW/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.nact.nw.enclosure</name>
+   <description>ACT_EN_1: N+ active enclosure by NW must be at least 0.15 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.pact.nw.enclosure</name>
+   <description>ACT_EN_2: P+ active enclosure by NW must be at least 0.15 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.pact.nw_tg.enclosure</name>
+   <description>ACT_EN_2a: P+ active enclosure by TG-interacting NW must be at least 0.31 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.implant_coverage</name>
+   <description>ACT_R_1: AA must be fully covered by NP or PP outside NW1RES [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.max_length_ct</name>
+   <description>ACT_L_1: thin AA contact-to-contact length must be at most 25.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.max_length_end</name>
+   <description>ACT_L_1: thin AA contact-to-line-end length must be at most 25.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.sd_length</name>
+   <description>ACT_L_2: thin butted source/drain AA length must be at most 0.5 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.area</name>
+   <description>PO_A_1: POLY minimum area 0.04 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.enclosed_area</name>
+   <description>PO_A_2: POLY enclosed area minimum 0.09 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.width</name>
+   <description>PO_W_1: POLY width must be at least 0.06 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.poly.spacing</name>
+   <description>PO_S_1: POLY spacing must be at least 0.12 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.po.ct_length</name>
+   <description>PO_L_1: thin PO contact-to-contact length must be at most 25.0 um outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.po.length</name>
+   <description>PO_L_1: thin PO contact-to-line-end length must be at most 25.0 um outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.po.gate_length</name>
+   <description>PO_L_1: thin-channel gate must lie within 25.0 um of a contact outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.area</name>
+   <description>NP_A_1: NP minimum area 0.12 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.enclosed_area</name>
+   <description>NP_A_2: NP enclosed area minimum 0.12 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.area</name>
+   <description>PP_A_1: PP minimum area 0.12 um^2; waived inside SRAMALL and NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.enclosed_area</name>
+   <description>PP_A_2: PP enclosed area minimum 0.12 um^2; waived inside NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.width</name>
+   <description>NP_W_1: NP width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.width</name>
+   <description>PP_W_1: PP width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.spacing</name>
+   <description>NP_S_1: NP spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.spacing</name>
+   <description>PP_S_1: PP spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.act.overlap</name>
+   <description>NP_O_1: NP overlap of ACT must be at least 0.12 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.act.overlap</name>
+   <description>PP_O_1: PP overlap of ACT must be at least 0.12 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.pact.overlap</name>
+   <description>NP_S_4: NP must not overlap butted P+ AA outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.nact.overlap</name>
+   <description>PP_S_4: PP must not overlap butted N+ AA outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np_pp.overlap</name>
+   <description>PP_R_1: NP and PP must not overlap outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np_pp.sab_coincident</name>
+   <description>PP_R_3: NP and PP must not share an edge on unsilicided AA/PO outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.pact_space</name>
+   <description>NP_S_2: NP to P+ source/drain AA inside NW spacing must be at least 0.12 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.ptap_space</name>
+   <description>NP_S_3: NP to P+ pickup AA inside PW spacing must be at least 0.02 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.nact_space</name>
+   <description>PP_S_2: PP to N+ source/drain AA spacing must be at least 0.12 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.ntap_space</name>
+   <description>PP_S_3: PP to N+ pickup AA inside NW spacing must be at least 0.02 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.gate_space</name>
+   <description>NP_S_5: NP to PMOS gate spacing must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.gate_space</name>
+   <description>PP_S_5: PP to NMOS gate spacing must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.ptap_gate.space</name>
+   <description>NP_S_6: butted P+ pickup to NMOS gate spacing must be at least 0.3 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.ntap_gate.space</name>
+   <description>PP_S_6: butted N+ pickup to PMOS gate spacing must be at least 0.3 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.gate_aa.enclosure</name>
+   <description>NP_EX_1: NP enclosure of N+ AA at the gate must be at least 0.16 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.gate_ext</name>
+   <description>NP_EX_1a: NP extension beyond the NMOS gate in the source/drain direction must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.gate_aa.enclosure</name>
+   <description>PP_EX_1: PP enclosure of P+ AA at the gate must be at least 0.16 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.gate_ext</name>
+   <description>PP_EX_1a: PP extension beyond the PMOS gate in the source/drain direction must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.aa.enclosure</name>
+   <description>NP_EN_1: AA enclosure by NP must be at least 0.02 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.nact_pw.enclosure</name>
+   <description>NP_EN_2: N+ active inside PW enclosure by NP must be at least 0.12 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.ptap.enclosure</name>
+   <description>PP_EN_1: P+ pickup AA enclosure by PP must be at least 0.02 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.pact_nw.enclosure</name>
+   <description>PP_EN_2: P+ active inside NW enclosure by PP must be at least 0.12 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.po.enclosure</name>
+   <description>NP_EN_3: PO enclosure by NP must be at least 0.15 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.po.enclosure</name>
+   <description>PP_EN_3: PO enclosure by PP must be at least 0.15 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.tap_area</name>
+   <description>NP_A_3: butted N+ tap area must be at least 0.04 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.tap_area</name>
+   <description>PP_A_3: butted P+ tap area must be at least 0.04 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.area</name>
+   <description>PSUB_A_1: PSUB minimum area 0.6 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.enclosed_area</name>
+   <description>PSUB_A_2: PSUB enclosed area minimum 0.6 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.width</name>
+   <description>PSUB_W_1: PSUB width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.spacing</name>
+   <description>PSUB_S_1: PSUB spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.nw_space</name>
+   <description>PSUB_S_3: PSUB to NW spacing must be at least 1.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.mos_space</name>
+   <description>PSUB_S_2: PSUB to native MOS spacing must be at least 0.36 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.ldmos_space</name>
+   <description>PSUB_S_2: PSUB to LDMOS AA spacing must be at least 0.36 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.channel_width_min</name>
+   <description>PSUB_W_2: native NMOS channel width must be at least 0.5 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.channel_width_max</name>
+   <description>PSUB_W_2: native NMOS channel width must be at most 100.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.core_length_min</name>
+   <description>PSUB_W_3a: 1.2V native NMOS channel length must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.core_length_max</name>
+   <description>PSUB_W_3a: 1.2V native NMOS channel length must be at most 100.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.io1_length_min</name>
+   <description>PSUB_W_3b: 1.8V native NMOS channel length must be at least 0.8 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.io1_length_max</name>
+   <description>PSUB_W_3b: 1.8V native NMOS channel length must be at most 20.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.io2_length</name>
+   <description>PSUB_W_3d: 3.3V native NMOS channel length must be at least 1.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.aa.enclosure</name>
+   <description>PSUB_EN_1: native NMOS AA must be enclosed by the exact 0.285 um PSUB halo outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.gate_ext</name>
+   <description>PSUB_EX_1: native gate poly extension outside AA must be at least 0.32 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.dnw.overlap</name>
+   <description>PSUB_R_1: PSUB must not overlap DNW outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.dnw.coincident</name>
+   <description>PSUB_R_1: PSUB and DNW must not share coincident edges outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.pp_gate.overlap</name>
+   <description>PSUB_R_2: PP inside PSUB must not touch a native gate outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.psub.multi_aa</name>
+   <description>PSUB_R_3: PSUB may contain only one AA pattern outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.width</name>
+   <description>CT_W_1: CT/CTbar must be a 0.09x0.09 um square outside GRID/SRAMALL/EFUSEALL and SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.width.grid</name>
+   <description>CT_W_1: rectangular CT in GRID must be a 0.09x0.09 um square outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.width.efuse</name>
+   <description>CT_W_1: aspect-1 CT in EFUSEALL must be a 0.09x0.09 um square outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.width.sram</name>
+   <description>CT_W_1: aspect-1 CT in SRAMALL must be a 0.09x0.09 um square outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.bar.width</name>
+   <description>CT_W_2: CTbar width must equal 0.09 um outside SRAMALL/EFUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.spacing</name>
+   <description>CT_S_1: CT/CTbar spacing must be at least 0.11 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.spacing.neighbor</name>
+   <description>CT_S_1a: CT spacing in 3-neighbor arrays must be at least 0.14 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.poly.aa.space</name>
+   <description>CT_S_3: CT on POLY must be at least 0.065 um from AA outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.core_gate.space</name>
+   <description>CT_S_4: core-gate POLY must be at least 0.055 um from CT on AA outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.io_gate.space</name>
+   <description>CT_S_5: DG/TG gate POLY must be at least 0.09 um from CT on AA outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.inside</name>
+   <description>CT_EN_1: CT/CTbar must be covered by M1 and (POLY or ACT); waived inside SRAMALL and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.active.enclosure</name>
+   <description>CT_EN_2a: CT/CTbar active enclosure must be at least 0.015 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.active.enclosure.dir</name>
+   <description>CT_EN_2b: CT/CTbar active enclosure must reach 0.03 um on at least two opposite sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.active.coverage</name>
+   <description>CT_EN_2b: CT interacting AA must be covered by AA outside SRAMALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.poly.enclosure</name>
+   <description>CT_EN_3a: CT/CTbar poly enclosure must be at least 0.01 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.poly.enclosure.all</name>
+   <description>CT_EN_3b/3c: CT/CTbar poly enclosure must be at least 0.025 um on all sides or 0.04 um on two opposite sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.poly.coverage</name>
+   <description>CT_EN_3c: CT interacting POLY must be covered by POLY outside SRAMALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.m1.enclosure</name>
+   <description>CT_EN_4a_4b_4c: CT/CTbar M1 enclosure must be at least 0.04 um on two opposite sides or 0.025 um on all sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.m1.coverage</name>
+   <description>CT_EN_4a_4b_4c: CT/CTbar must be covered by M1 outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.m1.not_interacting</name>
+   <description>CT_EN_4a_4b_4c: CT/CTbar must interact M1 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.m1.enclosure.wide</name>
+   <description>CT_EN_4d: CT/CTbar inside M1 wider than 1.0 um must be enclosed by 0.04 um on all sides outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.on_gate</name>
+   <description>CT_R_1: CT/CTbar must not overlap GATE outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.sab</name>
+   <description>CT_R_2: CT/CTbar must not interact SAB outside SRAMALL/EFUSEALL and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.rotated</name>
+   <description>CT_R_3: 45-degree CT/CTbar edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>cont.ct.tap</name>
+   <description>CT_R_5: butted well tap/source region must contain a CT outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_W_1</name>
+   <description>TG_W_1: TG width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_W_1</name>
+   <description>DG_W_1: DG width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_1</name>
+   <description>TG_S_1: TG spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_1</name>
+   <description>DG_S_1: DG spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_2</name>
+   <description>TG_S_2: TG to MOS AA spacing must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_2</name>
+   <description>DG_S_2: DG to LDMOS AA spacing must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_3</name>
+   <description>TG_S_3: TG to GATE spacing must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_3</name>
+   <description>DG_S_3: DG to GATE spacing must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_4</name>
+   <description>TG_S_4: TG to NW spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_4</name>
+   <description>DG_S_4: DG to NW spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_5</name>
+   <description>TG_S_5: TG to PSUB spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_5</name>
+   <description>DG_S_5: DG to PSUB spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_6</name>
+   <description>TG_S_6: TG and DG must not overlap outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EN_1</name>
+   <description>TG_EN_1: TG enclosure of MOS AA must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EN_1</name>
+   <description>DG_EN_1: DG enclosure of non-tap AA must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EN_2</name>
+   <description>TG_EN_2: TG enclosure of GATE along the poly direction must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EN_2</name>
+   <description>DG_EN_2: DG enclosure of GATE along the poly direction must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EN_3</name>
+   <description>TG_EN_3: TG enclosure of GATE along the source/drain direction must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EN_3</name>
+   <description>DG_EN_3: DG enclosure of GATE along the source/drain direction must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EX_1</name>
+   <description>TG_EX_1: NW extension on TG must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EX_2</name>
+   <description>TG_EX_2: TG extension on NW must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EX_1</name>
+   <description>DG_EX_1: NW extension on DG must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EX_2</name>
+   <description>DG_EX_2: DG extension on NW must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EX_3</name>
+   <description>TG_EX_3: TG extension on PSUB must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EX_3</name>
+   <description>DG_EX_3: DG extension on PSUB must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_O_1</name>
+   <description>TG_O_1: TG/NW overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_O_1</name>
+   <description>DG_O_1: DG/NW overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_O_2</name>
+   <description>TG_O_2: TG/PSUB overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_O_2</name>
+   <description>DG_O_2: DG/PSUB overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DGR_3</name>
+   <description>DGR_3: drawn base-layer edges must be orthogonal or 45 degrees (+/-0.1) outside INDDMY [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_W_1</name>
+   <description>SAB_W_1: SAB width must be at least 0.42 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_1</name>
+   <description>SAB_S_1: SAB spacing must be at least 0.42 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_2</name>
+   <description>SAB_S_2: SAB spacing with one SAB interacting PO must be at least 0.44 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_3</name>
+   <description>SAB_S_3: SAB to AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_4</name>
+   <description>SAB_S_4: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_5</name>
+   <description>SAB_S_5: SAB to field poly spacing must be at least 0.3 um outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_6</name>
+   <description>SAB_S_6: SAB to CT spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_EX_1</name>
+   <description>SAB_EX_1: AA extension outside SAB must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_EX_2</name>
+   <description>SAB_EX_2: SAB extension outside AA must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_EX_3</name>
+   <description>SAB_EX_3: SAB extension outside field poly must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_A_1</name>
+   <description>SAB_A_1: SAB area must be at least 0.8 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_A_2</name>
+   <description>SAB_A_2: SAB enclosed hole area must be at least 0.8 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_R_1</name>
+   <description>SAB_R_1: SAB must not share coincident edges with AA outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_R_2</name>
+   <description>SAB_R_2: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_W_1</name>
+   <description>HRP_W_1: HRP width must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_W_2</name>
+   <description>HRP_W_2: high-resistance poly width must be at least 2.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_S_1</name>
+   <description>HRP_S_1: HRP spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_S_2</name>
+   <description>HRP_S_2: HRP to MOS poly spacing must be at least 0.16 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_S_3</name>
+   <description>HRP_S_3: SAB to CT spacing inside HRP must be fixed at 0.21 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_EN_1</name>
+   <description>HRP_EN_1: HRP enclosure of high-resistance poly must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_EX_1</name>
+   <description>HRP_EX_1: SAB extension outside high-resistance poly must be at least 0.22 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_O_1</name>
+   <description>HRP_O_1: PP overlap of SAB inside RES_HRP must be at least 0.3 um outside SRINGBLK/SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_R_1</name>
+   <description>HRP_R_1: NP/PP must not overlap the HPR resistor middle (0.3 um end zones removed) outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_R_2</name>
+   <description>HRP_R_2: HPR edges must align with the SAB edge on poly outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_W_1</name>
+   <description>ULLD_W_1: ULLD width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_1</name>
+   <description>ULLD_S_1: ULLD spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_2</name>
+   <description>ULLD_S_2: ULLD to AA spacing must be at least 0.02 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_4</name>
+   <description>ULLD_S_4: ULLD to N+ AA spacing must be at least 0.055 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_5</name>
+   <description>ULLD_S_5: ULLD to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_6</name>
+   <description>ULLD_S_6: ULLD to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_EX_1</name>
+   <description>ULLD_EX_1: ULLD extension outside AA must be at least 0.02 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_EX_2</name>
+   <description>ULLD_EX_2: ULLD extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_EX_3a</name>
+   <description>ULLD_EX_3a: ULLD extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_A_1</name>
+   <description>ULLD_A_1: ULLD area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_A_2</name>
+   <description>ULLD_A_2: ULLD enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_R_1</name>
+   <description>ULLD_R_1: ULLD must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_R_2</name>
+   <description>ULLD_R_2: ULLD must interact PVT3 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_W_1</name>
+   <description>NVT1_W_1: NVT1 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_1</name>
+   <description>NVT1_S_1: NVT1 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_2</name>
+   <description>NVT1_S_2: NVT1 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_3</name>
+   <description>NVT1_S_3: NVT1 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_4</name>
+   <description>NVT1_S_4: NVT1 to non-silicide AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_EX_1</name>
+   <description>NVT1_EX_1: NVT1 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_EX_2</name>
+   <description>NVT1_EX_2: NVT1 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_A_1</name>
+   <description>NVT1_A_1: NVT1 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_A_2</name>
+   <description>NVT1_A_2: NVT1 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_R_1</name>
+   <description>NVT1_R_1: NVT1 must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_W_1</name>
+   <description>NVT3_W_1: NVT3 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_1</name>
+   <description>NVT3_S_1: NVT3 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_2</name>
+   <description>NVT3_S_2: NVT3 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_3</name>
+   <description>NVT3_S_3: NVT3 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_4</name>
+   <description>NVT3_S_4: NVT3 to non-silicide AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_EX_1</name>
+   <description>NVT3_EX_1: NVT3 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_EX_2</name>
+   <description>NVT3_EX_2: NVT3 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_A_1</name>
+   <description>NVT3_A_1: NVT3 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_A_2</name>
+   <description>NVT3_A_2: NVT3 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_R_1</name>
+   <description>NVT3_R_1: NVT3 must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_W_1</name>
+   <description>PVT1_W_1: PVT1 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_S_1</name>
+   <description>PVT1_S_1: PVT1 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_S_2</name>
+   <description>PVT1_S_2: PVT1 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_S_3</name>
+   <description>PVT1_S_3: PVT1 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_EX_1</name>
+   <description>PVT1_EX_1: PVT1 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_EX_2</name>
+   <description>PVT1_EX_2: PVT1 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_A_1</name>
+   <description>PVT1_A_1: PVT1 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_A_2</name>
+   <description>PVT1_A_2: PVT1 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_R_1</name>
+   <description>PVT1_R_1: PVT1 must not overlap PSUB outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_W_1</name>
+   <description>PVT3_W_1: PVT3 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_1</name>
+   <description>PVT3_S_1: PVT3 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_2</name>
+   <description>PVT3_S_2: PVT3 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_3</name>
+   <description>PVT3_S_3: PVT3 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_4</name>
+   <description>PVT3_S_4: PVT3 to non-silicide AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_EX_1</name>
+   <description>PVT3_EX_1: PVT3 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_EX_2</name>
+   <description>PVT3_EX_2: PVT3 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_A_1</name>
+   <description>PVT3_A_1: PVT3 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_A_2</name>
+   <description>PVT3_A_2: PVT3 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_R_1</name>
+   <description>PVT3_R_1: PVT3 must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.area</name>
+   <description>MET1_A_1: M1 area must be at least 0.042 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.min_hole</name>
+   <description>MET1_A_2: M1 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.area</name>
+   <description>M2_A_1: M2 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.min_hole</name>
+   <description>M2_A_2: M2 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.area</name>
+   <description>M3_A_1: M3 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.min_hole</name>
+   <description>M3_A_2: M3 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.area</name>
+   <description>M4_A_1: M4 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.min_hole</name>
+   <description>M4_A_2: M4 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.area</name>
+   <description>M5_A_1: M5 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.min_hole</name>
+   <description>M5_A_2: M5 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.area</name>
+   <description>T4M2_A_1: T4M2 area must be at least 0.4 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.min_hole</name>
+   <description>T4M2_A_2: T4M2 enclosed area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.spacing</name>
+   <description>M1_S_1: M1 spacing must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.spacing</name>
+   <description>M2_S_1: M2 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.spacing</name>
+   <description>M3_S_1: M3 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.spacing</name>
+   <description>M4_S_1: M4 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.spacing</name>
+   <description>M5_S_1: M5 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.width</name>
+   <description>MET1_W_1: M1 width must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.max_width</name>
+   <description>MET1_W_1: M1 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.width</name>
+   <description>M2_W_1a: M2 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.max_width</name>
+   <description>M2_W_1b: M2 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.width</name>
+   <description>M3_W_1a: M3 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.max_width</name>
+   <description>M3_W_1b: M3 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.width</name>
+   <description>M4_W_1a: M4 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.max_width</name>
+   <description>M4_W_1b: M4 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.width</name>
+   <description>M5_W_1a: M5 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.max_width</name>
+   <description>M5_W_1b: M5 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.angle_width</name>
+   <description>MET1_W_2: M1 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.angle_space</name>
+   <description>MET1_S_4: M1 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.angle_width</name>
+   <description>M2_W_2: M2 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.angle_space</name>
+   <description>M2_S_4: M2 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.angle_width</name>
+   <description>M3_W_2: M3 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.angle_space</name>
+   <description>M3_S_4: M3 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.angle_width</name>
+   <description>M4_W_2: M4 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.angle_space</name>
+   <description>M4_S_4: M4 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.angle_width</name>
+   <description>M5_W_2: M5 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.angle_space</name>
+   <description>M5_S_4: M5 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.wide_space</name>
+   <description>MET1_S_2: M1 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.wider_space</name>
+   <description>MET1_S_3: M1 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.wide_space</name>
+   <description>M2_S_2: M2 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.wider_space</name>
+   <description>M2_S_3: M2 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.wide_space</name>
+   <description>M3_S_2: M3 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.wider_space</name>
+   <description>M3_S_3: M3 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.wide_space</name>
+   <description>M4_S_2: M4 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.wider_space</name>
+   <description>M4_S_3: M4 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.wide_space</name>
+   <description>M5_S_2: M5 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.wider_space</name>
+   <description>M5_S_3: M5 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.eol_space</name>
+   <description>MET1_S_5: M1 dense line-end spacing must be at least 0.11 um (line-end edges &lt; 0.11 um, jogs &lt; 0.09 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.eol_space</name>
+   <description>M2_S_5: M2 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.eol_space</name>
+   <description>M3_S_5: M3 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.eol_space</name>
+   <description>M4_S_5: M4 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.eol_space</name>
+   <description>M5_S_5: M5 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.void_width</name>
+   <description>MET1_W_3: M1 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.void_width</name>
+   <description>M2_W_3: M2 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.void_width</name>
+   <description>M3_W_3: M3 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.void_width</name>
+   <description>M4_W_3: M4 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.void_width</name>
+   <description>M5_W_3: M5 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.width</name>
+   <description>T4M2_W_1: T4M2 width must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.max_width</name>
+   <description>T4M2_W_1: T4M2 width must be at most 20.0 um (DEUPAD/PA exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.spacing</name>
+   <description>T4M2_S_1: T4M2 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.wide_space</name>
+   <description>T4M2_S_2: T4M2 spacing must be at least 0.5 um when width/length &gt;= 2.0 um and run &gt;= 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.width</name>
+   <description>V1_W_1: V1 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.spacing</name>
+   <description>V1_S_1: V1 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.bar.width</name>
+   <description>V1_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.rotated</name>
+   <description>V1_R_5: 45-degree V1 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.lower</name>
+   <description>V1_EN_2a_2b_2c: V1 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.upper</name>
+   <description>V1_EN_5a_5b: V1 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.enclosure.upper</name>
+   <description>V1_EN_5a_5b: V1 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.width</name>
+   <description>V2_W_1: V2 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.spacing</name>
+   <description>V2_S_1: V2 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.bar.width</name>
+   <description>V2_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.rotated</name>
+   <description>V2_R_5: 45-degree V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.lower</name>
+   <description>V2_EN_2a_2b_2c: V2 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.upper</name>
+   <description>V2_EN_5a_5b: V2 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.enclosure.upper</name>
+   <description>V2_EN_5a_5b: V2 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.width</name>
+   <description>V3_W_1: V3 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.spacing</name>
+   <description>V3_S_1: V3 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.bar.width</name>
+   <description>V3_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.rotated</name>
+   <description>V3_R_5: 45-degree V3 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.lower</name>
+   <description>V3_EN_2a_2b_2c: V3 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.upper</name>
+   <description>V3_EN_5a_5b: V3 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.enclosure.upper</name>
+   <description>V3_EN_5a_5b: V3 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.width</name>
+   <description>V4_W_1: V4 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.spacing</name>
+   <description>V4_S_1: V4 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.bar.width</name>
+   <description>V4_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.rotated</name>
+   <description>V4_R_5: 45-degree V4 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.cover.lower</name>
+   <description>V4_EN_2a_2b_2c: V4 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.cover.upper</name>
+   <description>V4_EN_5a_5b: V4 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.enclosure.upper</name>
+   <description>V4_EN_5a_5b: V4 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.spacing</name>
+   <description>T4V2_S_1: T4V2 spacing must be at least 0.34 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.bar.width</name>
+   <description>T4V2_W_2: datatype-7 T4V2bar width must equal 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.rotated</name>
+   <description>T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 must be covered by source-selected M5 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 lower-metal enclosure must be at least 0.01 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 must be covered by T4M2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least 0.02 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.width</name>
+   <description>T4V2_W_1: T4V2 must be a 0.36x0.36 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.array.spacing</name>
+   <description>T4V2_S_2: T4V2 spacing within a 3x3-or-larger array must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.width</name>
+   <description>RV_W_1: RV must be a 3x3 um rectangle after source fuse/grid exclusions [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.space</name>
+   <description>RV_S_1: RV spacing must be at least 3.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cb.space</name>
+   <description>RV_S_2: RV to CB spacing must be at least 6.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.metal</name>
+   <description>RV_EN_1_2: RV enclosure by T4M2 must be at least 1.5 um outside LOGO/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cover.rdl</name>
+   <description>RV_EN_3_4: RV must be covered by RDL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.rdl</name>
+   <description>RV_EN_3_4: RV enclosure by RDL must be at least 1.5 um outside LOGO/SRINGBLK/FUTR/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.single</name>
+   <description>RV_R_1: a T4M2/RDL island should carry more than one RV [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.alpa_full</name>
+   <description>RDL_EN_1: COVER must be fully covered by ALPA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.alpad_full</name>
+   <description>RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.width</name>
+   <description>RDL_W_1: RDL width must be at most 35.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.space</name>
+   <description>RDL_S_1: ALPA spacing must be at least 2.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wide.space</name>
+   <description>RDL_S_2: ALPA spacing with one ALPA wider than 10.0 um must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wider.space</name>
+   <description>RDL_S_3: ALPA spacing with one ALPA wider than 35.0 um must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.width</name>
+   <description>CB_W_1: CB width must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.space</name>
+   <description>CB_S_1: CB spacing must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.enclosure</name>
+   <description>CB_EN_1_EN_2: CB enclosure by T4M2 must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.width</name>
+   <description>COVER_W_1: COVER width must be at least 40.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.length</name>
+   <description>COVER_L_1: COVER must enclose a 40.0x65.0 um rectangle outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.space</name>
+   <description>COVER_S_1: COVER spacing must be at least 5.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.enc.alpa</name>
+   <description>COVER_EN_1: COVER enclosure by ALPA must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m1.pad.space</name>
+   <description>COVER_S_2: M1 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m2.pad.space</name>
+   <description>COVER_S_2: M2 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m3.pad.space</name>
+   <description>COVER_S_2: M3 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m4.pad.space</name>
+   <description>COVER_S_2: M4 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m5.pad.space</name>
+   <description>COVER_S_2: M5 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.t4m2.pad.space</name>
+   <description>COVER_S_2: T4M2 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_W_1</name>
+   <description>AADUM_W_1: ACTDUM must be a source-defined 3.0x3.0, 1.0x1.0, or 0.467x0.467 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_R_1</name>
+   <description>AADUM_R_1: ACTDUM must not overlap CT</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_1</name>
+   <description>AADUM_S_1: 3x3 um ACTDUM spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_2</name>
+   <description>AADUM_S_2: 1x1 um ACTDUM spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_3</name>
+   <description>AADUM_S_3: 0.467x0.467 um ACTDUM spacing must be at least 0.28 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_4</name>
+   <description>AADUM_S_4: ACTDUM to AA spacing must be at least 1.6 um and must not overlap AA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_5</name>
+   <description>AADUM_S_5: ACTDUM to PO spacing must be at least 1.6 um and must not overlap PO [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_6</name>
+   <description>AADUM_S_6: ACTDUM to NW boundary spacing/enclosure must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_7</name>
+   <description>AADUM_S_7: ACTDUM to FUSEALL spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_8</name>
+   <description>AADUM_S_8: ACTDUM to NW1RES spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_9</name>
+   <description>AADUM_S_9: ACTDUM to LOGO spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_10</name>
+   <description>AADUM_S_10: ACTDUM to INDALL spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_11</name>
+   <description>AADUM_S_11: ACTDUM to chip boundary spacing/enclosure must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_12</name>
+   <description>AADUM_S_12: ACTDUM to ACTDUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_13</name>
+   <description>AADUM_S_13: ACTDUM to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_W_1</name>
+   <description>PODUM_W_1: POLYDUM must be a source-defined 2.4x2.4, 0.92x0.92, or 0.381x0.381 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_R_1</name>
+   <description>PODUM_R_1: POLYDUM must not overlap CT</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_1</name>
+   <description>PODUM_S_1: 2.4x2.4 um POLYDUM spacing must be at least 2.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_2</name>
+   <description>PODUM_S_2: 0.92x0.92 um POLYDUM spacing must be at least 0.68 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_3</name>
+   <description>PODUM_S_3: 0.381x0.381 um POLYDUM spacing must be at least 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_4</name>
+   <description>PODUM_S_4: POLYDUM to AA spacing must be at least 0.8 um and must not overlap AA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_5</name>
+   <description>PODUM_S_5: POLYDUM to PO spacing must be at least 0.8 um and must not overlap PO [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_6</name>
+   <description>PODUM_S_6: POLYDUM to NW boundary spacing/enclosure must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_7</name>
+   <description>PODUM_S_7: POLYDUM to NW1RES spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_8</name>
+   <description>PODUM_S_8: POLYDUM to LOGO spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_9</name>
+   <description>PODUM_S_9: POLYDUM to INDALL spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_10</name>
+   <description>PODUM_S_10: POLYDUM to chip boundary spacing must be at least 0.6 um and enclosure at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_11</name>
+   <description>PODUM_S_11: POLYDUM to POLYDUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_12</name>
+   <description>PODUM_S_12: POLYDUM to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_W_1</name>
+   <description>M1DUM_W_1: M1 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_W_1</name>
+   <description>M2DUM_W_1: M2 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_W_1</name>
+   <description>M3DUM_W_1: M3 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_W_1</name>
+   <description>M4DUM_W_1: M4 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M5DUM_W_1</name>
+   <description>M5DUM_W_1: M5 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_W_1</name>
+   <description>T4M2DUM_W_1: T4M2 dummy must be a source-defined 2x2, 1x1, or 0.6x1.2 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_1</name>
+   <description>T4M2DUM_S_1: 2x2 um T4M2 dummy spacing must be at least 0.8 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_2</name>
+   <description>T4M2DUM_S_2: 2x2 um T4M2 dummy to T4M2 spacing must be at least 10.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_3</name>
+   <description>T4M2DUM_S_3: 1x1 um T4M2 dummy spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_4</name>
+   <description>T4M2DUM_S_4: 1x1 um T4M2 dummy to T4M2 spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_5</name>
+   <description>T4M2DUM_S_5: 0.6x1.2 um T4M2 dummy spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_6</name>
+   <description>T4M2DUM_S_6: 0.6x1.2 um T4M2 dummy to T4M2 spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_7</name>
+   <description>T4M2DUM_S_7: T4M2 dummy spacing must be at least 0.6 um when width/length &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_8</name>
+   <description>T4M2DUM_S_8: T4M2 dummy to 45-degree T4M2 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_9</name>
+   <description>T4M2DUM_S_9: T4M2 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_10</name>
+   <description>T4M2DUM_S_10: T4M2 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_11</name>
+   <description>T4M2DUM_S_11: T4M2 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_12</name>
+   <description>T4M2DUM_S_12: T4M2 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_13</name>
+   <description>T4M2DUM_S_13: T4M2 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_14</name>
+   <description>T4M2DUM_S_14: T4M2 dummy to T4M2DUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_15</name>
+   <description>T4M2DUM_S_15: T4M2 dummy to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_R_1</name>
+   <description>SL_R_1: T4M2 slot must not overlap CB</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_S_1</name>
+   <description>SL_S_1: T4M2 slot spacing must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_W_1_L_1</name>
+   <description>SL_W_1_L_1: T4M2 slot must be a rectangle of at least 2.0x4.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1b_G</name>
+   <description>EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1c_G</name>
+   <description>EFU_1c_G: FUSEALL (292/12) must fully cover EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2b_G</name>
+   <description>EFU_2b_G: EFUSEALL (293/12) must interact with POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2c_G</name>
+   <description>EFU_2c_G: EFUSEALL (293/12) must fully cover POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_2</name>
+   <description>DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_3</name>
+   <description>DEUPAD_R_3: padarea must be covered by the T4M2 top metal and by M5 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_5</name>
+   <description>DEUPAD_R_5: ALPADres, MOMLVS1, INDALL and M5/T4M2 resistors must be outside the DEUPAD area [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_6</name>
+   <description>DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_7</name>
+   <description>DEUPAD_R_7: padarea must overlap a T4V2 array (vias spaced &lt;= 0.51 um) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_1</name>
+   <description>ESD_A_1: ESD1 area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_2</name>
+   <description>ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_W_1</name>
+   <description>ESD_W_1: ESD1 width must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_S_1</name>
+   <description>ESD_S_1: ESD1 spacing must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_1_SEDP_1</name>
+   <description>ESDN_1_SEDP_1: source contacts must be enclosed by source active by 0.15 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_2_ESDP_2</name>
+   <description>ESDN_2_ESDP_2: source contacts must be at least 0.15 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_4_ESDP_4</name>
+   <description>ESDN_4_ESDP_4: drain SAB must overlap the gate by at least 0.05 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_5_ESDP_5</name>
+   <description>ESDN_5_ESDP_5: the drain SAB hole must be at least 1.29 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_6_ESDP_6</name>
+   <description>ESDN_6_ESDP_6: drain contacts must be enclosed by the drain SAB hole by 0.21 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_7_ESDP_7</name>
+   <description>ESDN_7_ESDP_7: drain SAB must extend 0.21 um beyond the drain active on non-gate sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_8_ESDP_8</name>
+   <description>ESDN_8_ESDP_8: the drain SAB hole must be enclosed by the drain active by 1.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_9</name>
+   <description>ESDN_9: the ESD implant must be at least 0.4 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_10</name>
+   <description>ESDN_10: the ESD implant must be enclosed by the drain active by 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_11</name>
+   <description>ESDN_11: the ESD implant must not overlap the ESD gate poly [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_12</name>
+   <description>ESDN_12: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_9</name>
+   <description>ESDP_9: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_3</name>
+   <description>ESDN_3: 3.3V ESD NMOS channel length must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_3</name>
+   <description>ESDP_3: 3.3V ESD PMOS channel length must be 0.4..0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>T4M2DUM_S_10</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (-0.1,1.9;-0.1,2.9;0,2.9;0,1.9)</value>
+   </values>
+  </item>
+  <item>
+   <tags/>
+   <category>T4M2DUM_S_10</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (1.9,-0.1;1.9,0;2.9,0;2.9,-0.1)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

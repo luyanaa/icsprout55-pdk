@@ -2,7 +2,7 @@
 <report-database>
  <description>ICsprout55 DRC</description>
  <original-file/>
- <generator>drc: script='/Users/yanlu/Documents/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
  <top-cell>TOP</top-cell>
  <tags>
  </tags>
@@ -14,8 +14,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_S_1.V1.MET1MOM</name>
+   <description>MOM_S_1: V1 outside MOMLVS1 must keep 0.11 um from MET1MOM-covered metal outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_1.V1.MET2MOM</name>
    <description>MOM_R_1: V1 intersects MET2MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_S_1.V1.MET2MOM</name>
+   <description>MOM_S_1: V1 outside MOMLVS1 must keep 0.11 um from MET2MOM-covered metal outside NODRC [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -26,8 +38,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_S_1.V2.MET2MOM</name>
+   <description>MOM_S_1: V2 outside MOMLVS1 must keep 0.11 um from MET2MOM-covered metal outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_1.V2.MET3MOM</name>
    <description>MOM_R_1: V2 intersects MET3MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_S_1.V2.MET3MOM</name>
+   <description>MOM_S_1: V2 outside MOMLVS1 must keep 0.11 um from MET3MOM-covered metal outside NODRC [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -38,8 +62,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_S_1.V3.MET3MOM</name>
+   <description>MOM_S_1: V3 outside MOMLVS1 must keep 0.11 um from MET3MOM-covered metal outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_1.V3.MET4MOM</name>
    <description>MOM_R_1: V3 intersects MET4MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_S_1.V3.MET4MOM</name>
+   <description>MOM_S_1: V3 outside MOMLVS1 must keep 0.11 um from MET4MOM-covered metal outside NODRC [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -50,14 +86,32 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_S_1.V4.MET4MOM</name>
+   <description>MOM_S_1: V4 outside MOMLVS1 must keep 0.11 um from MET4MOM-covered metal outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_1.V4.MET5MOM</name>
    <description>MOM_R_1: V4 intersects MET5MOM outside NODRC [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
   <category>
+   <name>mom.MOM_S_1.V4.MET5MOM</name>
+   <description>MOM_S_1: V4 outside MOMLVS1 must keep 0.11 um from MET5MOM-covered metal outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_1.T4V2.MET5MOM</name>
    <description>MOM_R_1: T4V2 intersects MET5MOM outside NODRC [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_S_1.T4V2.MET5MOM</name>
+   <description>MOM_S_1: T4V2 outside MOMLVS1 must keep 0.11 um from MET5MOM-covered metal outside NODRC [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>

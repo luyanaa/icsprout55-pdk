@@ -18,21 +18,28 @@
 # both the interior-cut and bar layers.
 # The profile's active pairs are V1..V4 across MET1..MET5 and top via T4V2 on MET5.
 if MOM
+   mom_s1_space = rval('mom_s1_space')
    [
-     ['V1', V1.or(V1BAR), MET1MOM, 'MET1MOM'], ['V1', V1.or(V1BAR), MET2MOM, 'MET2MOM'],
-     ['V2', V2.or(V2BAR), MET2MOM, 'MET2MOM'], ['V2', V2.or(V2BAR), MET3MOM, 'MET3MOM'],
-     ['V3', V3.or(V3BAR), MET3MOM, 'MET3MOM'], ['V3', V3.or(V3BAR), MET4MOM, 'MET4MOM'],
-     ['V4', V4.or(V4BAR), MET4MOM, 'MET4MOM'], ['V4', V4.or(V4BAR), MET5MOM, 'MET5MOM'],
-     ['T4V2', TV2.or(TV2BAR), MET5MOM, 'MET5MOM']
-   ].each do |via_name, via, mom_marker, marker_name|
+     ['V1', V1.or(V1BAR), M1, MET1MOM, 'MET1MOM'], ['V1', V1.or(V1BAR), M2, MET2MOM, 'MET2MOM'],
+     ['V2', V2.or(V2BAR), M2, MET2MOM, 'MET2MOM'], ['V2', V2.or(V2BAR), M3, MET3MOM, 'MET3MOM'],
+     ['V3', V3.or(V3BAR), M3, MET3MOM, 'MET3MOM'], ['V3', V3.or(V3BAR), M4, MET4MOM, 'MET4MOM'],
+     ['V4', V4.or(V4BAR), M4, MET4MOM, 'MET4MOM'], ['V4', V4.or(V4BAR), M5, MET5MOM, 'MET5MOM'],
+     ['T4V2', TV2.or(TV2BAR), M5, MET5MOM, 'MET5MOM']
+   ].each do |via_name, via, metal, mom_marker, marker_name|
      via.and(mom_marker).not_inside(NODRC).output("mom.MOM_R_1.#{via_name}.#{marker_name}",
        "MOM_R_1: #{via_name} intersects #{marker_name} outside NODRC [ICsprout Calibre]")
+
+     # MOM_S_1: a via outside MOMLVS1 must keep 0.11 um to MOM-marker metal
+     # inside MOMLVS1. The source ABUT<90/SINGULAR/REGION qualifiers are not
+     # reproduced.
+     via.not(MOMLVS1).drc(separation(metal.and(mom_marker).and(MOMLVS1), transparent) < mom_s1_space.um)
+       .not_inside(NODRC).output("mom.MOM_S_1.#{via_name}.#{marker_name}",
+         "MOM_S_1: #{via_name} outside MOMLVS1 must keep #{mom_s1_space} um from #{marker_name}-covered metal outside NODRC [ICsprout Calibre]")
    end
  
-   # MOM_S_1 requires Calibre EXT with ABUT<90, SINGULAR, REGION qualifiers.
-   # KLayout's Region separation API cannot express those qualifiers; an
-   # unqualified separation result would be an approximation, so MOM_S_1 is
-   # deliberately not emitted.
+   # MOM_S_1 is emitted above with the source's EXT construction approximated
+   # by an unqualified KLayout separation check (the edge-pair reporting
+   # qualifiers are not expressible).
    #
    # MOM_R_2 has active clauses for forbidden per-layer stack assignments and
    # missing labels on complete, otherwise valid MOM stacks. The source's
