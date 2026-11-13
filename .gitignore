@@ -247,3 +247,7 @@ libs.ref/icsprout55_fd_sram__*/
 # Legacy names are ignored while existing local packages are migrated.
 libs.ref/ics55_ecos_rom_*/
 libs.ref/ics55_ecos_sram_*/
+
+# EM simulation output (regenerate with run_model.py / run_inductor_2port.py)
+libs.tech/pex/palace/palace_model/
+libs.tech/pex/openems/output/

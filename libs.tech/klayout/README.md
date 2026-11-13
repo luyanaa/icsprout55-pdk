@@ -11,6 +11,7 @@
 | `pcells/ics55_guard_ring.py` | Standalone guard ring (p+ for NMOS / n+ for PMOS) |
 | `pcells/ics55_res_poly.py` | SAB P+ poly resistor (re_ppo_sab) |
 | `pcells/ics55_mom.py` | Interdigitated MOM capacitor (M2..M5) |
+| `pcells/ics55_ind.py` | 1TM (TM2) + ALPA (RDL) spiral inductor with PGS |
 | `pcells/ics55_pcell_demo.py` | Demo/smoke test: instantiates every PCell to GDS |
 
 ## Usage
@@ -18,7 +19,7 @@
 - Load the technology: KLayout GUI → Tools → Manage Technologies → load
   `tech/ics55.lyt` (it references `ics55.lyp` next to it).
 - PCells: Macro Development → open the `pcells/*.py` files → Run.
-  Registers library **`ICsprout55`** with four PCells.
+  Registers library **`ICsprout55`** with five PCells.
 - Demo generation (headless):
 
 ```
@@ -53,9 +54,10 @@ Confirmed from std-cell + IO GDS analysis; `(prov)` = provisional name:
 | 91/1..94/1 | V1..V4 | vias (0.09um) |
 | 103/1 | TM2 | T4M2 thick top metal |
 | 113/1 | TV2 | T4V2 via (0.36um) |
-| 120/1 | PADM | pad metal/RDL strap (prov) |
-| 121/1 | ALPAD | Al bond pad (55x55um) |
-| 123/1 | PV | passivation opening (prov) |
+| 120/1 | RV | RDL via, 3x3um |
+| 121/1 | CB | passivation opening (CBi) |
+| 122/1 | ALPAD | Al pad |
+| 123/1 | RDL | Al redistribution layer |
 | 191/12, 351/12 | BOUNDARY, CELLBOUND | cell boundaries |
 | 261/12 | VPW | p-well text |
 | 313/12, 354/12, 356/12, 357/12 | L313.. | reserved (prov) |

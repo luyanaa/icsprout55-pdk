@@ -1,0 +1,191 @@
+* ICsprout55 RF resistors v0.1: UNCALIBRATED RF enhancements of the vendor
+* re_* DC resistor subcircuits.
+* Requires the vendor passive models to be loaded together with the
+* resistor corner section, e.g.
+*   .lib 'libs.tech/spice/foundry/ngspice/ICsprout_55LLULP1225_V1p1_hsp.lib' tt_res
+*   .include 'libs.tech/spice/foundry/ngspice/res/resistor.ckt'
+* The DC resistor body is the vendor re_* subcircuit. The series inductance,
+* feedthrough capacitance and lossy substrate network added here are
+* geometry-scaled ESTIMATES, not extracted or S-parameter fitted data.
+*
+* Device set ported from SMIC55LL_ULP_RF (ms0055ll_io25_rf_res):
+*   N+ diff SAB  -> re_ndif_sab_2t_rf / re_ndif_sab_3t_rf
+*   P+ diff SAB  -> re_pdif_sab_2t_rf / re_pdif_sab_3t_rf
+*   N+ poly SAB  -> re_npo_sab_2t_rf  / re_npo_sab_3t_rf
+*   P+ poly SAB  -> re_ppo_sab_2t_rf  / re_ppo_sab_3t_rf
+*   HR poly      -> re_hrpo_2t_rf     / re_hrpo_3t_rf
+*   TM2 metal    -> re_tm2_2t_rf      / re_tm2_3t_rf
+* SMIC's fitted coefficients are NOT reused: only the topology follows.
+*
+* Pin order: 2T = POS NEG ; 3T = POS NEG SUB
+* Layout: existing resistor PCells / vendor layouts.
+* ---------------------------------------------------------------------------
+
+.subckt re_ndif_sab_2t_rf POS NEG l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG re_ndif_sab_2t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends re_ndif_sab_2t_rf
+
+.subckt re_ndif_sab_3t_rf POS NEG SUB l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG SUB re_ndif_sab_3t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends re_ndif_sab_3t_rf
+
+.subckt re_pdif_sab_2t_rf POS NEG l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG re_pdif_sab_2t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends re_pdif_sab_2t_rf
+
+.subckt re_pdif_sab_3t_rf POS NEG SUB l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG SUB re_pdif_sab_3t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends re_pdif_sab_3t_rf
+
+.subckt re_npo_sab_2t_rf POS NEG l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG re_npo_sab_2t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends re_npo_sab_2t_rf
+
+.subckt re_npo_sab_3t_rf POS NEG SUB l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG SUB re_npo_sab_3t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends re_npo_sab_3t_rf
+
+.subckt re_ppo_sab_2t_rf POS NEG l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG re_ppo_sab_2t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends re_ppo_sab_2t_rf
+
+.subckt re_ppo_sab_3t_rf POS NEG SUB l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG SUB re_ppo_sab_3t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends re_ppo_sab_3t_rf
+
+.subckt re_hrpo_2t_rf POS NEG l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG re_hrpo_2t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends re_hrpo_2t_rf
+
+.subckt re_hrpo_3t_rf POS NEG SUB l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG SUB re_hrpo_3t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends re_hrpo_3t_rf
+
+* TM2 is a thick top-metal resistor: lower capacitance to the substrate.
+.subckt re_tm2_2t_rf POS NEG l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=0.5e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG re_tm2_2t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends re_tm2_2t_rf
+
+.subckt re_tm2_3t_rf POS NEG SUB l=10u w=2u mr=1
++ ls_per_m=0.6e-6 cf=0.01f cox_areacap=0.5e-3 csub_frac=0.3 rsub=500
+.param cox_port='cox_areacap*w*l'
+Ls POS 11 '{ls_per_m*l}'
+Xcore 11 NEG SUB re_tm2_3t l={l} w={w} mr={mr}
+Cf 11 NEG {cf}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 NEG 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends re_tm2_3t_rf

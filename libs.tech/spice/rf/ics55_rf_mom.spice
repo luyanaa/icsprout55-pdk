@@ -1,0 +1,60 @@
+* ICsprout55 RF MOM v0.1: UNCALIBRATED multi-terminal / RF MOM structures.
+* Requires the vendor passive models to be loaded together with the MOM
+* corner section, e.g.
+*   .lib 'libs.tech/spice/foundry/ngspice/ICsprout_55LLULP1225_V1p1_hsp.lib' tt_mom
+*   .include 'libs.tech/spice/foundry/ngspice/mom/mom.ckt'
+* The core capacitance is the vendor mom_2t/mom_3t model; the winding and
+* substrate elements added here are geometry-scaled ESTIMATES, not extracted
+* or S-parameter fitted data. Replace them with EM results before signoff.
+*
+* Device set ported from SMIC55LL_ULP_RF (mom_4t_ckt / mom_5t_ckt / mom_rf).
+* SMIC's fitted coefficients are NOT reused: only the topology and the
+* terminal order follow the SMIC55 devices.
+*
+* Pin order:
+*   mom_4t  A B A1 B1            (two independent comb pairs)
+*   mom_5t  A B A1 B1 P          (two comb pairs + shield plate P)
+*   mom_rf  1 2 B                (two-port RF MOM, B = well/substrate)
+*
+* Layout: see libs.tech/klayout/pcells/ics55_mom.py (terminals=2/3/4/5).
+* Metal stack: bm/tm select the bottom/top intra-metal layer (M1..M5).
+* ---------------------------------------------------------------------------
+
+* 4-terminal MOM: two independent comb pairs in the same footprint.
+* SMIC55 counterpart: mom_4t_ckt (a b a1 b1).
+.subckt mom_4t a b a1 b1 lf=1u nf=6 bm=1 tm=3 mr=1 mismod_mom=0
+Xpair1 a  b  mom_2t lf={lf} nf={nf} bm={bm} tm={tm} mr={mr}
++ mismod_mom={mismod_mom}
+Xpair2 a1 b1 mom_2t lf={lf} nf={nf} bm={bm} tm={tm} mr={mr}
++ mismod_mom={mismod_mom}
+.ends mom_4t
+
+* 5-terminal MOM: two comb pairs sharing a shield plate P.
+* SMIC55 counterpart: mom_5t_ckt (a b a1 b1 p).
+.subckt mom_5t a b a1 b1 p lf=1u nf=6 bm=1 tm=3 mr=1 mismod_mom=0 shielding=0
+Xpair1 a  b  p mom_3t lf={lf} nf={nf} bm={bm} tm={tm} mr={mr}
++ mismod_mom={mismod_mom} shielding={shielding}
+Xpair2 a1 b1 p mom_3t lf={lf} nf={nf} bm={bm} tm={tm} mr={mr}
++ mismod_mom={mismod_mom} shielding={shielding}
+.ends mom_5t
+
+* Two-port RF MOM with series winding impedance and a lossy substrate
+* network on both ports. SMIC55 counterpart: mom_rf (1 2 B).
+* metal_pitch is the finger pitch used to convert the finger count into an
+* area proxy; cox_areacap is the port-to-well capacitance per unit area.
+.subckt mom_rf 1 2 B lr=1u nr=6 bm=1 tm=3 mr=1 mismod_mom=0
++ ls_per_m=0.6e-6 rs_series=0.05
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500 metal_pitch=0.2u
+.param mom_area='lr*nr*metal_pitch'
+.param cox_port='cox_areacap*mom_area'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 mom_2t lf={lr} nf={nr} bm={bm} tm={tm} mr={mr}
++ mismod_mom={mismod_mom}
+Cox1 11 21 {cox_port}
+Rsub1 21 B {rsub}
+Csub1 21 B '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 B {rsub}
+Csub2 22 B '{csub_frac*cox_port}'
+.ends mom_rf

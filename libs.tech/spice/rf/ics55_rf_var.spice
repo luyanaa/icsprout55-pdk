@@ -1,0 +1,213 @@
+* ICsprout55 RF varactors v0.1: UNCALIBRATED deep-N-well and RF MOS
+* varactor structures built on the vendor var1p2/var2p5 cores.
+* Requires the vendor passive models to be loaded together with the varactor
+* and diode corner sections, e.g.
+*   .lib 'libs.tech/spice/foundry/ngspice/ICsprout_55LLULP1225_V1p1_hsp.lib' tt_var
+*   .lib 'libs.tech/spice/foundry/ngspice/ICsprout_55LLULP1225_V1p1_hsp.lib' tt_dio
+*   .include 'libs.tech/spice/foundry/ngspice/var/varactor.ckt'
+*   .include 'libs.tech/spice/foundry/ngspice/dio/dio_well.mdl'
+* The varactor core is the vendor N+poly/N-well model; the well junction,
+* series impedance and lossy substrate network added here are geometry-scaled
+* ESTIMATES, not extracted or S-parameter fitted data.
+*
+* Device set ported from SMIC55LL_ULP_RF (ms0055ll_io25_rf_var):
+*   pvar12lldnw_ckt_rf     -> var1p2_npd_nw_dnw_lp_like (2T, DNW tied to NW)
+*   pvar12ll_ckt_rf        -> var1p2_npd_nw_lp_rf
+*   pvar12ll_ckt_rf_3t     -> var1p2_npd_nw_lp_rf_3t
+*   pvar12lldnw_ckt_rf_3t  -> var1p2_npd_nw_dnw_lp_rf_3t
+* and the 2.5 V equivalents. SMIC's fitted coefficients are NOT reused.
+*
+* Pin order:
+*   var*_dnw_lp      1 2            (1 = gate, 2 = N-well; DNW tied to NW)
+*   var*_rf          1 2            (substrate returned to ground)
+*   var*_rf_3t       1 2 SUB        (SUB = p-substrate)
+* Layout: DNW ring tied to the N-well for the dnw flavours.
+* ---------------------------------------------------------------------------
+
+* 1.2 V N+poly/N-well varactor in DNW (2-terminal).
+.subckt var1p2_npd_nw_dnw_lp 1 2 lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ laddr=2u waddr=2u
+.param jarea='(wr+2*waddr)*(lr*nf+(nf-1)*0.2u+0.35u+2*laddr)'
+.param jperi='2*((wr+2*waddr)+(lr*nf+(nf-1)*0.2u+0.35u+2*laddr))'
+Xcore 1 2 var1p2_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Ddnw 2 0 dio_1p2_dnw_psub_lp AREA={jarea} PJ={jperi}
+.ends var1p2_npd_nw_dnw_lp
+
+* 2.5 V N+poly/N-well varactor in DNW (2-terminal).
+.subckt var2p5_npd_nw_dnw_lp 1 2 lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ laddr=2u waddr=2u
+.param jarea='(wr+2*waddr)*(lr*nf+(nf-1)*0.2u+0.35u+2*laddr)'
+.param jperi='2*((wr+2*waddr)+(lr*nf+(nf-1)*0.2u+0.35u+2*laddr))'
+Xcore 1 2 var2p5_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Ddnw 2 0 dio_1p2_dnw_psub_lp AREA={jarea} PJ={jperi}
+.ends var2p5_npd_nw_dnw_lp
+
+* 1.2 V RF varactor, substrate to ground.
+.subckt var1p2_npd_nw_lp_rf 1 2 lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ lspec=0.5u wspec=0.12u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*wspec)*(lr*nf+(nf-1)*0.2u+0.35u+2*lspec)'
+.param jperi='2*((wr+2*wspec)+(lr*nf+(nf-1)*0.2u+0.35u+2*lspec))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var1p2_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Dnw 2 0 dio_1p2_nw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends var1p2_npd_nw_lp_rf
+
+* 1.2 V RF varactor with explicit p-substrate terminal.
+.subckt var1p2_npd_nw_lp_rf_3t 1 2 SUB lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ lspec=0.5u wspec=0.12u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*wspec)*(lr*nf+(nf-1)*0.2u+0.35u+2*lspec)'
+.param jperi='2*((wr+2*wspec)+(lr*nf+(nf-1)*0.2u+0.35u+2*lspec))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var1p2_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Dnw 2 SUB dio_1p2_nw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends var1p2_npd_nw_lp_rf_3t
+
+* 1.2 V RF varactor in DNW, substrate to ground.
+.subckt var1p2_npd_nw_dnw_lp_rf 1 2 lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ laddr=2u waddr=2u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*waddr)*(lr*nf+(nf-1)*0.2u+0.35u+2*laddr)'
+.param jperi='2*((wr+2*waddr)+(lr*nf+(nf-1)*0.2u+0.35u+2*laddr))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var1p2_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Ddnw 2 0 dio_1p2_dnw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends var1p2_npd_nw_dnw_lp_rf
+
+* 1.2 V RF varactor in DNW with explicit p-substrate terminal.
+.subckt var1p2_npd_nw_dnw_lp_rf_3t 1 2 SUB lr=1u wr=1u nf=1
++ mismod_var=0 mr=1 laddr=2u waddr=2u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*waddr)*(lr*nf+(nf-1)*0.2u+0.35u+2*laddr)'
+.param jperi='2*((wr+2*waddr)+(lr*nf+(nf-1)*0.2u+0.35u+2*laddr))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var1p2_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Ddnw 2 SUB dio_1p2_dnw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends var1p2_npd_nw_dnw_lp_rf_3t
+
+* 2.5 V RF varactor, substrate to ground.
+.subckt var2p5_npd_nw_lp_rf 1 2 lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ lspec=0.5u wspec=0.12u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*wspec)*(lr*nf+(nf-1)*0.2u+0.35u+2*lspec)'
+.param jperi='2*((wr+2*wspec)+(lr*nf+(nf-1)*0.2u+0.35u+2*lspec))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var2p5_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Dnw 2 0 dio_1p2_nw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends var2p5_npd_nw_lp_rf
+
+* 2.5 V RF varactor with explicit p-substrate terminal.
+.subckt var2p5_npd_nw_lp_rf_3t 1 2 SUB lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ lspec=0.5u wspec=0.12u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*wspec)*(lr*nf+(nf-1)*0.2u+0.35u+2*lspec)'
+.param jperi='2*((wr+2*wspec)+(lr*nf+(nf-1)*0.2u+0.35u+2*lspec))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var2p5_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Dnw 2 SUB dio_1p2_nw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends var2p5_npd_nw_lp_rf_3t
+
+* 2.5 V RF varactor in DNW, substrate to ground.
+.subckt var2p5_npd_nw_dnw_lp_rf 1 2 lr=1u wr=1u nf=1 mismod_var=0 mr=1
++ laddr=2u waddr=2u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*waddr)*(lr*nf+(nf-1)*0.2u+0.35u+2*laddr)'
+.param jperi='2*((wr+2*waddr)+(lr*nf+(nf-1)*0.2u+0.35u+2*laddr))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var2p5_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Ddnw 2 0 dio_1p2_dnw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 0 {rsub}
+Csub1 21 0 '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 0 {rsub}
+Csub2 22 0 '{csub_frac*cox_port}'
+.ends var2p5_npd_nw_dnw_lp_rf
+
+* 2.5 V RF varactor in DNW with explicit p-substrate terminal.
+.subckt var2p5_npd_nw_dnw_lp_rf_3t 1 2 SUB lr=1u wr=1u nf=1
++ mismod_var=0 mr=1 laddr=2u waddr=2u
++ ls_per_m=0.6e-6 rs_series=0.5
++ cox_areacap=1e-3 csub_frac=0.3 rsub=500
+.param jarea='(wr+2*waddr)*(lr*nf+(nf-1)*0.2u+0.35u+2*laddr)'
+.param jperi='2*((wr+2*waddr)+(lr*nf+(nf-1)*0.2u+0.35u+2*laddr))'
+.param cox_port='cox_areacap*wr*lr*nf'
+Ls 1 12 '{ls_per_m*lr}'
+Rs 12 11 {rs_series}
+Xcore 11 2 var2p5_npd_nw_lp lr={lr} wr={wr} nf={nf}
++ mismod_var={mismod_var} mr={mr}
+Ddnw 2 SUB dio_1p2_dnw_psub_lp AREA={jarea} PJ={jperi}
+Cox1 11 21 {cox_port}
+Rsub1 21 SUB {rsub}
+Csub1 21 SUB '{csub_frac*cox_port}'
+Cox2 2 22 {cox_port}
+Rsub2 22 SUB {rsub}
+Csub2 22 SUB '{csub_frac*cox_port}'
+.ends var2p5_npd_nw_dnw_lp_rf_3t
