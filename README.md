@@ -40,6 +40,10 @@ make unzip PROXY_USE=true
 make unzip PROXY_USE=true TOOL=wget
 ```
 
+## IP libraries
+
+IP for ICS55 includes [IO libraries](libs.ref/ICsprout_55LLULP1233_IO_251013/), [standard cell libraries](libs.ref/), [PLL](libs.ref/ics55_ecos_pll), [DDR3/DDR2 PHY](libs.ref/55nm-ddr3-ddr2-phy), SRAM, and ROM. Use the **[SRAM Compiler](https://factory.openecos.com/ip/sram)** and **[ROM Compiler](https://factory.openecos.com/ip/rom)** to generate memory macros for your design. See the [ECOS IP Library](https://factory.openecos.com/ip) for documentation and project status.
+
 ### Optional SRAM and ROM macros
 
 `make unzip-macros` downloads all published `rom-v1-*` `.tar.gz` assets from
@@ -120,6 +124,8 @@ The ICsprout55 Open Source PDK contents:
 │   │   ├── lef
 │   │   ├── liberty
 │   │   └── verilog
+│   ├── ics55_ecos_pll                      # PLL submodule
+│   ├── 55nm-ddr3-ddr2-phy                  # DDR3/DDR2 PHY submodule
 │   ├── ics55_LLSC_H7CH                     # HVT standard cells
 │   │   ├── cdl
 │   │   ├── cell_list
