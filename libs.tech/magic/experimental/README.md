@@ -14,24 +14,35 @@ magic -dnull -noconsole -rcfile ics55_pex.magicrc extract_stack.tcl
 * poly -- CT -- M1 (gate-contact connectivity)
 * M1 -- V1 -- M2 (via connectivity)
 
-## Current result (baseline copy)
+## Current result (work copy)
 
-Both stacks fail.  The `.ext` file shows the contact/via layers as
-standalone nodes rather than connections:
+The two minimal stacks now pass:
 
 ```
-node "a_n4_n4#" ... ct        # the CT shape
-node "a_n100_n100#" ... p     # poly, separate
-node "P" ... m1               # label moved to metal1
-equiv "P" "M1_CT"
-
-node "m1_300_n100#" ... m1    # M1 pad
-node "M1_V" ... m2            # label moved to metal2
-equiv "M1_V" "M2_V"
+C0 M1_V SUB 2.162f     # M1 + M2 on one node
+C1 P    SUB 0.899f     # poly + M1 on one node
 ```
 
-The V1 shape is not a node at all; the CT is a node of type `ct`.  In
-`ext2spice` the two sides therefore remain separate nets.
+The fix is in the `connect` section: use the contact-area entries that the
+sky130/scmos techs use, and join the fet types to the poly plane:
+
+```
+poly,nfet,pfet,...,ct/a    poly,nfet,pfet,...,ct/a
+m1,ct/m1,v1/a,v1/m1        m1,ct/m1,v1/a,v1/m1
+m2,v1/a,v1/m2,v2/a,v2/m2   ...
+```
+
+The 8-cell block then extracts with 34 devices and 37 capacitors and the
+MOS gates are named (`M1000 ... db_b0_0`, `M1025 iout d_b0_0 ...`), so the
+poly CT, V1 and gate labels work.
+
+**Still open:** the diffusion CT to M1 local interconnect.  The `.ext`
+shows the mirror/cascode md nodes as diffusion-only (`a_3100_n800#`,
+`a_7600_n800#` with `pd` but no `m1`), so the 8-cell PEX has no current path
+and settles at 0 LSB while the schematic CDL gives 1/3/7 LSB for codes
+1/3/7.  The next iteration is the `ct ndiff/pdiff m1` contact plus
+`ndiff,ct/a` / `m1,ct/m1` path; `ct act m1` and removing `,ct` from the
+device model did not change it.  The full-row PEX is still blocked on this.
 
 ## KLayout LVS reference
 
@@ -54,18 +65,18 @@ Magic currently extracts only the core `nfet`/`pfet` devices; RF MOS,
 varactors, inductors and MOM are absent.  A full parity pass is a separate
 task after the CT/V1 contact stack works.
 
-## Tried variants (all rejected)
+## Tried variants
 
 1. size/overlap on `contact v1` — that syntax belongs to `wiring`, not
    `extract`; the tech fails to load.
 2. remove `v1` from the `metal1` alias / add a `cut` plane — `types` has no
    `cut` plane and `connect`/`extract` report an unknown type.
-3. rename `v1` to `via1` and keep `v1` as the connect alias (the sky130
-   `via1`/`v1` split) — the tech loads, but the stack still extracts as
-   separate nodes.
-4. add `v1/a`, `v1/m1`, `ct/a` contact-area terms to `connect` — parser
-   accepts some forms but the contact is not formed.
+3. rename `v1` to `via1` and keep `v1` as the connect alias — loads, but the
+   stack still splits.
+4. add `v1/a`, `v1/m1`, `ct/a` contact-area terms to `connect` — **this is
+   the fix for V1 and the poly CT**; the stacks now pass.
+5. `ct act m1`, or removing `,ct` from the device model — no change for the
+   diffusion CT; the md nodes stay diffusion-only.
 
-The next iteration should define CT/V1 as true cut types in the copy,
-mirroring the KLayout `CT -> M1 -> V1` chain, and keep the stack regression
-as the gate.
+The next iteration is the diffusion CT path; the stack regression and the
+8-cell PEX comparison (`analog/video_ics55/block8_pex.py`) are the gates.

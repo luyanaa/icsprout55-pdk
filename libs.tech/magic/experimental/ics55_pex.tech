@@ -154,15 +154,15 @@ end
 # ---------------------------------------------------------------------------
 connect
 	nwell		nwell
-	ndiff,ct	ndiff,ct
-	pdiff,ct	pdiff,ct
-	poly		poly
-	m1,v1		m1,v1
-	m2,v2		m2,v2
-	m3,v3		m3,v3
-	m4,v4		m4,v4
-	m5,tv2		m5,tv2
-	tm2		tm2
+	ndiff,ct/a	ndiff,ct/a
+	pdiff,ct/a	pdiff,ct/a
+	poly,nfet,pfet,lvtnfet,lvtpfet,hvtnfet,hvtpfet,ionfet,iopfet,ct/a	poly,nfet,pfet,lvtnfet,lvtpfet,hvtnfet,hvtpfet,ionfet,iopfet,ct/a
+	m1,ct/m1,v1/a,v1/m1	m1,ct/m1,v1/a,v1/m1
+	m2,v1/a,v1/m2,v2/a,v2/m2	m2,v1/a,v1/m2,v2/a,v2/m2
+	m3,v2/a,v2/m3,v3/a,v3/m3	m3,v2/a,v2/m3,v3/a,v3/m3
+	m4,v3/a,v3/m4,v4/a,v4/m4	m4,v3/a,v3/m4,v4/a,v4/m4
+	m5,v4/a,v4/m5,tv2/a,tv2/m5	m5,v4/a,v4/m5,tv2/a,tv2/m5
+	tm2,tv2/a,tv2/tm2	tm2,tv2/a,tv2/tm2
 end
 
 
