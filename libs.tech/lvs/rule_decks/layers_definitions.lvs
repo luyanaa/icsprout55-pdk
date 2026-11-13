@@ -112,6 +112,10 @@ COVER   = input(124, 1)
 
 DIODE = input(191, 12)
 
+# Inductor keep-out and base-layer exemption markers from the inductor PCell.
+INDALL  = input(302, 12)
+INDDMY  = input(301, 12)
+
 # --- source-faithful contacts, vias, and conductor regions --------------------------
 
 CTs = CT.or(CTbar)
@@ -146,7 +150,12 @@ M3s = M3.or(M3DUM).not(rm3_2t.or(rm3_3t))
 M4s = M4.or(M4DUM).not(rm4_2t.or(rm4_3t))
 M5s = M5.or(M5DUM).not(rm5_2t.or(rm5_3t))
 T4M1s = T4M1.or(T4M1DUM).not(rtm1_2t.or(rtm1_3t))
-T4M2s = T4M2.or(T4M2DUM).not(rtm2_2t.or(rtm2_3t))
+T4M2p = T4M2.or(T4M2DUM).not(rtm2_2t.or(rtm2_3t))
+# An inductor is a two-terminal device whose spiral is the device body.  The
+# PCell covers the whole footprint with INDALL; keep only the metal inside the
+# RV terminal pads as ordinary conductor and cut the spiral/underpass body.
+IND_TM2_CUT = T4M2p.and(INDALL).not(RV.sized(3.5))
+T4M2s = T4M2p.not(IND_TM2_CUT)
 TM2s = T4M2s
 
 # Calibre's APs conductor excludes both two- and three-terminal marked RDL
@@ -189,6 +198,9 @@ N_SD = NSD.not(NW)
 P_SD = PSD.and(NW)
 N_TAP = NSD.and(NW).interacting(CTs)
 P_TAP = PSD.not(NW).interacting(CTs)
+# A P+ tap inside DNW is a P-well tap of a triple-well device, not the
+# p-substrate.  Keep it out of the substrate soft tie.
+P_TAP_SUB = P_TAP.not(DNW)
 NIO_SD = NIOSD.not(NW)
 PIO_SD = PIOSD.and(NW)
 

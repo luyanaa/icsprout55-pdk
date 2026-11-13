@@ -195,10 +195,67 @@ def dedup_spice(path)
   tmp
 end
 
+# RF model wrappers have more terminals than the core MOS primitives.  They
+# are read as primitive devices so the schematic side uses the same classes as
+# the RF extractors in rule_decks/rf_extraction.lvs.
+ICS55_RF_SCHEMATIC_DEVICES = {
+  'ics55_rf_nmos_svt_5t' => %w[D G S B DNW],
+  'ics55_rf_nmos_lvt_5t' => %w[D G S B DNW],
+  'ics55_rf_nmos_hvt_5t' => %w[D G S B DNW],
+  'ics55_rf_nmos_svt_6t' => %w[D G S B DNW PSUB],
+  'ics55_rf_nmos_lvt_6t' => %w[D G S B DNW PSUB],
+  'ics55_rf_nmos_hvt_6t' => %w[D G S B DNW PSUB],
+  'ics55_rf_pmos_svt_5t' => %w[D G S B SUB],
+  'ics55_rf_pmos_lvt_5t' => %w[D G S B SUB],
+  'ics55_rf_pmos_hvt_5t' => %w[D G S B SUB],
+  'var1p2_npd_nw_lp' => %w[POS NEG],
+  'var1p2_npd_nw_dnw_lp' => %w[POS NEG],
+  'var2p5_npd_nw_lp' => %w[POS NEG],
+  'var2p5_npd_nw_dnw_lp' => %w[POS NEG],
+  'ics55_ind' => %w[PLUS MINUS]
+}.freeze
+
+class Ics55SpiceReaderDelegate < RBA::NetlistSpiceReaderDelegate
+  def wants_subcircuit(name)
+    ICS55_RF_SCHEMATIC_DEVICES.key?(name.to_s.downcase)
+  end
+
+  def element(circuit, element, name, model, _value, nets, _parameters)
+    model_name = model.to_s.downcase
+    terminals = ICS55_RF_SCHEMATIC_DEVICES[model_name]
+    return super unless element == 'X' && terminals
+
+    device_class = circuit.netlist.device_class_by_name(model_name)
+    unless device_class
+      device_class = RBA::DeviceClass.new
+      device_class.name = model_name
+      terminals.each do |terminal|
+        definition = RBA::DeviceTerminalDefinition.new
+        definition.name = terminal
+        definition.description = terminal
+        device_class.add_terminal(definition)
+      end
+      if terminals.include?('S') && terminals.include?('D')
+        device_class.equivalent_terminal_id(device_class.terminal_id('S'), device_class.terminal_id('D'))
+      end
+      if terminals.include?('PLUS') && terminals.include?('MINUS')
+        device_class.equivalent_terminal_id(device_class.terminal_id('PLUS'), device_class.terminal_id('MINUS'))
+      end
+      circuit.netlist.add(device_class)
+    end
+
+    device = circuit.create_device(device_class, name.to_s)
+    terminals.each_with_index do |terminal, index|
+      device.connect_terminal(terminal, nets[index]) if nets[index]
+    end
+    true
+  end
+end
+
 def load_schematic(path)
   tmp = dedup_spice(path)
   begin
-    schematic(tmp)
+    schematic(tmp, RBA::NetlistSpiceReader.new(Ics55SpiceReaderDelegate.new))
   ensure
     File.delete(tmp) if File.exist?(tmp)
   end
@@ -315,9 +372,11 @@ LVS_MODULE_FILES = [
   'rule_decks/layers_definitions.lvs',
   'rule_decks/general_derivations.lvs',
   'rule_decks/mos_derivations.lvs',
+  'rule_decks/rf_derivations.lvs',
   'rule_decks/res_diode_derivations.lvs',
   'rule_decks/devices_connections.lvs',
   'rule_decks/mos_extraction.lvs',
+  'rule_decks/rf_extraction.lvs',
   'rule_decks/res_diode_extraction.lvs',
   'rule_decks/combine_fingers.lvs',
   'rule_decks/erc.lvs'

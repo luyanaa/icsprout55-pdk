@@ -22,6 +22,11 @@ differential is available; this is not an LVS signoff result.
 | Metal resistors | `RE_M1..RE_M5_{2T,3T}` or `RE_TM1/TM2_{2T,3T}` | Stack-selected resistor marker and conductor; source sheet resistances |
 | ALPAD/RDL resistors | `RE_ALPA_{2T,3T}` | RDL/ALPAD resistor markers with AP terminals |
 | 3.3V P+/NW diode | `dio_3p3_pp_nw_lp` | P+ junction with DIODE marker (191/12) and TGOX in NW; ESD marker (55/1) is unrelated |
+| Varactor 1.2V/2.5V | `var1p2_npd_nw_lp` / `var2p5_npd_nw_lp` | N+ gate over NW with VARAM (193/12); DGOX selects 2.5V; POS = gate, NEG = contacted NW tap |
+| DNW varactor | `var1p2_npd_nw_dnw_lp` / `var2p5_npd_nw_dnw_lp` | Same core inside DNW; DNW is tied to the NW terminal |
+| RF NMOS 5T/6T | `ics55_rf_nmos_{svt,lvt,hvt}_{5t,6t}` | DNW-qualified NMOS with P-well tap; terminals D G S B DNW (6T adds PSUB) |
+| RF PMOS 5T | `ics55_rf_pmos_{svt,lvt,hvt}_5t` | DNW-qualified PMOS with N-well tap; terminals D G S B SUB |
+| 1TM+ALPA1 inductor | `ics55_ind` | INDALL (302/12) keep-out and RV (120/1) terminal pads; TM2/RDL spiral body cut from the conductor graph |
 | MOM capacitor | — | not extracted |
 
 LVT uses markers 17/18; HVT uses 21/22. Core MOS selectors exclude both TGOX
@@ -44,6 +49,22 @@ and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
 - The released CDL is preprocessed before reading: repeated definitions are
   deduplicated, `X <nets> / <subckt>` calls are converted to plain SPICE, and
   symbolic parameters are declared for instances.
+- RF model wrappers and `ics55_ind` are read as primitive devices by a
+  `NetlistSpiceReader` delegate, so the five- and six-terminal RF devices and
+  the two-terminal inductor compare directly against the layout extractors
+  instead of being flattened into unrelated internals. MOS source/drain (and
+  inductor PLUS/MINUS) are declared equivalent terminals.
+- Varactors use the official `npoGate AND NW AND VARAM` core split by
+  DGOX/TGOX and SAB. DNW variants are separated by `interacting(DNW)`; the
+  DNW is connected to NW where the two N regions overlap.
+- RF MOS 5T/6T are DNW-qualified core MOS devices with contacted body taps.
+  A P+ tap outside DNW adjacent to the triple well selects the 6T NMOS or the
+  5T PMOS substrate terminal; the 5T NMOS stops at the P-well/DNW terminals.
+- The inductor PCell draws INDALL over the whole footprint and RV pads at
+  both terminals. The deck cuts TM2 inside INDALL except in the RV pad
+  halos, so the spiral body is the device rather than a short between the
+  two terminal nets. On the schematic side instantiate it as
+  `X<name> PLUS MINUS ics55_ind`.
 - Comparison normally flattens the schematic. For `strict_topology=true`
   without `strict_hierarchy=true`, physical extraction also defaults to flat,
   unless `run_mode` is explicitly supplied. Generic and `net_only=true`
@@ -161,6 +182,20 @@ strict macro LVS launch; generic standard-cell LVS does not consume it.
   are not extracted. The released 1.2V antenna-diode cells (ANT2*, ANT4*)
   reference one of these unsupported diode flavors and therefore report a
   false mismatch against the ported extraction.
+- RF MOS 5T/6T recognition is DNW-based (the PDK has no RF device marker).
+  The layout must provide the contacted P-well/DNW taps; the 6T NMOS and 5T
+  PMOS additionally need a P+ substrate tap outside DNW within 3 um of the
+  triple well. Multi-finger source/drain regions are assigned alternately by
+  x-order; S/D are equivalent terminals, so a swapped assignment is accepted
+  but an irregular finger topology may need manual review.
+- The RF wrapper models are compared as primitive devices with topology only;
+  W/L and the wrapper's internal resistors/capacitors are not checked. The
+  varactor extractor covers the two-terminal flavours; RF 3T varactor
+  variants are not extracted.
+- Inductor extraction requires an RV terminal pad group at both ends of the
+  spiral (the PCell now draws them). Terminal nets are paired as the farthest
+  RV pads, and the TM2/RDL spiral inside INDALL is the device body. INDALL
+  must not enclose unrelated TM2 routing, which would be cut as body metal.
 - The IO library (P65_1233_*) comparison is not validated. Its wide
   multi-finger/ESD devices need further model and topology checks;
   `--combine-devices` is optional and is not a proven equivalence fix.

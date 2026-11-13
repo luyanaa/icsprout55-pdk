@@ -34,6 +34,7 @@ connect(N_SD, CTs)
 connect(P_SD, CTs)
 connect(CTs, N_TAP)
 connect(CTs, P_TAP)
+connect(CTs, P_TAP_SUB)
 connect(NIO_SD, CTs)
 connect(PIO_SD, CTs)
 connect(POLY_CON, CTs)
@@ -102,6 +103,25 @@ connect(APs, RDLLBL)
 connect(NMOS_BULK_ANNOTATION, PSUB)
 connect(PMOS_BULK_ANNOTATION, NW)
 
+# A DNW varactor ties the deep N-well to the N-well ring; NW drawn inside DNW
+# is one continuous N region.
+connect(NW, DNW)
+
+# RF/varactor derivations create new layer objects; attach them to the main
+# conductor graph so their device terminals resolve to real nets.
+[VAR_SEED_12_NW, VAR_SEED_12_DNW, VAR_SEED_25_NW, VAR_SEED_25_DNW,
+ RF_NGATE, RF_PGATE,
+ RF_NGATE_SVT_5T, RF_NGATE_SVT_6T, RF_NGATE_LVT_5T, RF_NGATE_LVT_6T,
+ RF_NGATE_HVT_5T, RF_NGATE_HVT_6T,
+ RF_PGATE_SVT_5T, RF_PGATE_LVT_5T, RF_PGATE_HVT_5T].each do |layer|
+  connect(layer, POLY_CON)
+end
+[RF_NSD, RF_PSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_NTAP_NW, RF_PSUB].each do |layer|
+  connect(layer, CTs)
+end
+connect(RV, PAS)
+connect(IND_RV_B, PAS)
+
 if WELL_TIES
   # Standard-cell GDS has no local taps; the deck selects aliases from top CDL pins.
   connect_global(PSUB, BULK_GROUND_NET)
@@ -113,5 +133,5 @@ else
   connect(NW, NW)
   connect(PSUB, PSUB)
   soft_connect(N_TAP, NW)
-  soft_connect(P_TAP, PSUB)
+  soft_connect(P_TAP_SUB, PSUB)
 end

@@ -20,8 +20,10 @@
 # The core oxide excludes both IO oxides.  Core SVT and IO selectors use the
 # distinct source-defined nonSVT / nonSVT_esd marker sets; ESDIOE is excluded
 # from core SVT but intentionally retained by the TGOX IO selector.
-CORE_NGATE = NGATE.not(DGOX).not(TGOX)
-CORE_PGATE = PGATE.not(DGOX).not(TGOX)
+# DNW-qualified devices are the RF triple-well family (5T/6T); the core
+# single-well models must not double-extract them.
+CORE_NGATE = NGATE.not(DGOX).not(TGOX).not_interacting(DNW)
+CORE_PGATE = PGATE.not(DGOX).not(TGOX).not_interacting(DNW)
 
 NON_SVT = LVTN.or(LVTP).or(HVTN).or(HVTP).or(SRAMALL).or(BJT).or(ACTRES).or(VARAM).or(ULLD).or(ESDIOE)
 NON_SVT_ESD = LVTN.or(LVTP).or(HVTN).or(HVTP).or(SRAMALL).or(BJT).or(ACTRES).or(VARAM).or(ULLD)

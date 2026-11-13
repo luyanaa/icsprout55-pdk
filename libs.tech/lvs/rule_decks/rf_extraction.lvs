@@ -1,0 +1,261 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS RF extraction
+#
+# The released PDK model wrappers have more terminals than the core MOS
+# classes, so they are extracted as explicit device classes:
+#   nmos 5T : D G S B DNW
+#   nmos 6T : D G S B DNW PSUB
+#   pmos 5T : D G S B SUB
+#   varactor: POS NEG
+#   inductor: PLUS MINUS
+#
+# The schematic reader delegate in ics55.lvs creates the matching primitive
+# classes for X calls of these wrappers, so the wrapper hierarchy is compared
+# as one device instead of being flattened into unrelated internals.
+#=========================================================================================
+
+module Ics55RegionUtil
+  def self.polygons(region)
+    polygons = []
+    region.each { |polygon| polygons << polygon }
+    polygons
+  end
+end
+
+class Ics55RfMosExtractor < RBA::GenericDeviceExtractor
+  def initialize(model_name, terminals)
+    super()
+    self.name = model_name
+    @model_name = model_name
+    @terminals = terminals
+  end
+
+  def setup
+    define_layer('G', 'gate')
+    define_layer('SD', 'source/drain')
+    define_layer('B', 'body')
+    define_layer('DNW', 'deep N-well')
+    define_layer('PSUB', 'p-substrate')
+    define_layer('FRAME', 'device frame')
+    dc = RBA::DeviceClass.new
+    dc.name = @model_name
+    @terminals.each do |terminal|
+      definition = RBA::DeviceTerminalDefinition.new
+      definition.name = terminal
+      definition.description = terminal
+      dc.add_terminal(definition)
+    end
+    # Source and drain are interchangeable for an LVS MOS device.
+    dc.equivalent_terminal_id(dc.terminal_id('S'), dc.terminal_id('D')) if dc.has_terminal?('S') && dc.has_terminal?('D')
+    register_device_class(dc)
+  end
+
+  def get_connectivity(_layout, layers)
+    # The frame covers gate, source/drain and all taps so every terminal is a
+    # candidate for this device.  The final netlist still uses the real
+    # conductor connectivity; this graph only groups the terminal shapes.
+    connectivity = RBA::Connectivity.new
+    frame = layers[5]
+    connectivity.connect(frame)
+    (0..4).each { |index| connectivity.connect(frame, layers[index]) }
+    connectivity
+  end
+
+  def extract_devices(layer_geometry)
+    gates = layer_geometry[0]
+    source_drain = layer_geometry[1]
+    body_layer = layer_geometry[2]
+    dnw_layer = layer_geometry[3]
+    psub_layer = layer_geometry[4]
+
+    gates.merged.each do |gate|
+      gate_region = RBA::Region.new(gate)
+      sd_polygons = Ics55RegionUtil.polygons(source_drain.interacting(gate_region).merged)
+      next if sd_polygons.size < 2
+
+      # Sort along the gate row; alternating fingers are source/drain.  For a
+      # single finger the left polygon becomes S and the right one D.
+      sd_polygons.sort_by! { |polygon| polygon.bbox.center.x }
+      source = sd_polygons.each_slice(2).map(&:first)
+      drain = sd_polygons.each_slice(2).map(&:last)
+      next if source.size != drain.size
+
+      near_gate = RBA::Region.new(gate.sized((6.0 / dbu).round))
+      body = Ics55RegionUtil.polygons(body_layer.interacting(near_gate).merged).first
+      next unless body
+
+      dnw = Ics55RegionUtil.polygons(dnw_layer.interacting(near_gate).merged).first
+      psub = Ics55RegionUtil.polygons(psub_layer.interacting(near_gate).merged).first
+
+      # Every declared terminal must have a shape, or the device would be
+      # compared with an unconnected pin.
+      next if @terminals.include?('DNW') && !dnw
+      next if (@terminals.include?('PSUB') || @terminals.include?('SUB')) && !psub
+
+      device = create_device
+      define_terminal(device, 'G', 'G', gate)
+      source.each { |polygon| define_terminal(device, 'S', 'SD', polygon) }
+      drain.each { |polygon| define_terminal(device, 'D', 'SD', polygon) }
+      define_terminal(device, 'B', 'B', body)
+      define_terminal(device, 'DNW', 'DNW', dnw) if @terminals.include?('DNW') && dnw
+      define_terminal(device, 'PSUB', 'PSUB', psub) if @terminals.include?('PSUB') && psub
+      if @terminals.include?('SUB') && psub
+        define_terminal(device, 'SUB', 'PSUB', psub)
+      end
+    end
+  end
+end
+
+class Ics55VaractorExtractor < RBA::GenericDeviceExtractor
+  def initialize(model_name)
+    super()
+    self.name = model_name
+    @model_name = model_name
+  end
+
+  def setup
+    define_layer('SEED', 'gate poly')
+    define_layer('POS', 'gate poly terminal')
+    define_layer('NEG', 'N-well tap terminal')
+    dc = RBA::DeviceClass.new
+    dc.name = @model_name
+    %w[POS NEG].each do |terminal|
+      definition = RBA::DeviceTerminalDefinition.new
+      definition.name = terminal
+      definition.description = terminal
+      dc.add_terminal(definition)
+    end
+    register_device_class(dc)
+  end
+
+  def get_connectivity(_layout, layers)
+    connectivity = RBA::Connectivity.new
+    connectivity.connect(layers[0])
+    layers.drop(1).each { |layer| connectivity.connect(layers[0], layer) }
+    connectivity
+  end
+
+  def extract_devices(layer_geometry)
+    seeds = layer_geometry[0]
+    positive = layer_geometry[1]
+    negative = layer_geometry[2]
+
+    seeds.merged.each do |seed|
+      seed_region = RBA::Region.new(seed)
+      pos = Ics55RegionUtil.polygons(positive.interacting(seed_region).merged).first
+      neg = Ics55RegionUtil.polygons(negative.interacting(RBA::Region.new(seed.sized((5.0 / dbu).round))).merged).first
+      next unless pos && neg
+
+      device = create_device
+      define_terminal(device, 'POS', 'POS', pos)
+      define_terminal(device, 'NEG', 'NEG', neg)
+    end
+  end
+end
+
+class Ics55InductorExtractor < RBA::GenericDeviceExtractor
+  def initialize(model_name)
+    super()
+    self.name = model_name
+    @model_name = model_name
+  end
+
+  def setup
+    define_layer('SEED', 'inductor keep-out')
+    define_layer('PLUS', 'plus terminal pad')
+    define_layer('MINUS', 'minus terminal pad')
+    dc = RBA::DeviceClassInductor.new
+    dc.clear_terminals
+    dc.name = @model_name
+    %w[PLUS MINUS].each do |terminal|
+      definition = RBA::DeviceTerminalDefinition.new
+      definition.name = terminal
+      definition.description = terminal
+      dc.add_terminal(definition)
+    end
+    dc.equivalent_terminal_id(dc.terminal_id('PLUS'), dc.terminal_id('MINUS'))
+    register_device_class(dc)
+  end
+
+  def get_connectivity(_layout, layers)
+    connectivity = RBA::Connectivity.new
+    connectivity.connect(layers[0])
+    layers.drop(1).each { |layer| connectivity.connect(layers[0], layer) }
+    connectivity
+  end
+
+  def extract_devices(layer_geometry)
+    seeds = layer_geometry[0]
+    plus_layer = layer_geometry[1]
+    minus_layer = layer_geometry[2]
+
+    seeds.merged.each do |seed|
+      seed_region = RBA::Region.new(seed)
+      plus_pads = Ics55RegionUtil.polygons(plus_layer.interacting(seed_region).merged)
+      minus_pads = Ics55RegionUtil.polygons(minus_layer.interacting(seed_region).merged)
+      next if plus_pads.empty? || minus_pads.empty?
+
+      # The two terminal groups sit at opposite ends of the spiral; use the
+      # farthest plus/minus pair.
+      first, second = plus_pads.product(minus_pads).max_by do |a, b|
+        ca = a.bbox.center
+        cb = b.bbox.center
+        (ca.x - cb.x)**2 + (ca.y - cb.y)**2
+      end
+      next unless first && second
+
+      device = create_device
+      define_terminal(device, 'PLUS', 'PLUS', first)
+      define_terminal(device, 'MINUS', 'MINUS', second)
+    end
+  end
+end
+
+# --- varactors -----------------------------------------------------------------------
+
+[
+  ['var1p2_npd_nw_lp', VAR_SEED_12_NW],
+  ['var1p2_npd_nw_dnw_lp', VAR_SEED_12_DNW],
+  ['var2p5_npd_nw_lp', VAR_SEED_25_NW],
+  ['var2p5_npd_nw_dnw_lp', VAR_SEED_25_DNW]
+].each do |model, seed|
+  extract_devices(Ics55VaractorExtractor.new(model),
+                  { 'SEED' => seed.sized(6.0), 'POS' => seed, 'NEG' => VAR_NEG })
+end
+
+# --- RF MOS --------------------------------------------------------------------------
+
+[
+  ['ics55_rf_nmos_svt_5t', RF_NGATE_SVT_5T, RF_NSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_PSUB, %w[D G S B DNW]],
+  ['ics55_rf_nmos_lvt_5t', RF_NGATE_LVT_5T, RF_NSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_PSUB, %w[D G S B DNW]],
+  ['ics55_rf_nmos_hvt_5t', RF_NGATE_HVT_5T, RF_NSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_PSUB, %w[D G S B DNW]],
+  ['ics55_rf_nmos_svt_6t', RF_NGATE_SVT_6T, RF_NSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_PSUB, %w[D G S B DNW PSUB]],
+  ['ics55_rf_nmos_lvt_6t', RF_NGATE_LVT_6T, RF_NSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_PSUB, %w[D G S B DNW PSUB]],
+  ['ics55_rf_nmos_hvt_6t', RF_NGATE_HVT_6T, RF_NSD, RF_PTAP_DNW, RF_NTAP_DNW, RF_PSUB, %w[D G S B DNW PSUB]],
+  ['ics55_rf_pmos_svt_5t', RF_PGATE_SVT_5T, RF_PSD, RF_NTAP_NW, RF_EMPTY, RF_PSUB, %w[D G S B SUB]],
+  ['ics55_rf_pmos_lvt_5t', RF_PGATE_LVT_5T, RF_PSD, RF_NTAP_NW, RF_EMPTY, RF_PSUB, %w[D G S B SUB]],
+  ['ics55_rf_pmos_hvt_5t', RF_PGATE_HVT_5T, RF_PSD, RF_NTAP_NW, RF_EMPTY, RF_PSUB, %w[D G S B SUB]]
+].each do |model, gate, sd, body, dnw, psub, terminals|
+  extract_devices(Ics55RfMosExtractor.new(model, terminals),
+                  { 'G' => gate, 'SD' => sd, 'B' => body, 'DNW' => dnw, 'PSUB' => psub,
+                    'FRAME' => gate.sized(6.0) })
+end
+
+# --- inductor ------------------------------------------------------------------------
+
+extract_devices(Ics55InductorExtractor.new('ics55_ind'),
+                { 'SEED' => INDALL, 'PLUS' => RV, 'MINUS' => IND_RV_B })

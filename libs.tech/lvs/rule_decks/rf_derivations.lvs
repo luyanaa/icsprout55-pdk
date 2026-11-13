@@ -1,0 +1,100 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS RF device derivations
+#
+# Varactors follow the official Calibre VARMOS derivation:
+#   npoGate AND NW AND VARAM, split by DGOX/TGOX and excluded from SAB.
+# The DNW flavour uses the same core inside a deep N-well; the NEG terminal is
+# the contacted N+ tap in NW/DNW.
+#
+# RF MOS 5T/6T are DNW-qualified core devices.  The 5T NMOS returns B (P-well)
+# and DNW; the 6T NMOS adds a separate PSUB tap outside DNW.  The 5T PMOS
+# returns B (N-well) and SUB (p-substrate).  No extra RF marker layer is
+# required by this PDK.
+#=========================================================================================
+
+# --- varactor cores ------------------------------------------------------------------
+
+# Calibre npoGate is the contact-qualified gate over N+ active, including the
+# part inside NW (the standard NGATE selector excludes NW).
+NPO_GATE = PO_GATE.and(NP)
+
+VAR_CORE_12 = NPO_GATE.and(NW).and(VARAM).not(DGOX).not(TGOX).not_interacting(SAB)
+VAR_CORE_25 = NPO_GATE.and(NW).and(VARAM).and(DGOX).not(TGOX).not_interacting(SAB)
+
+# Calibre uses "non_resPOLY ENCLOSE core"; interacting selection is the
+# KLayout equivalent for the drawn PCell where the gate poly covers the core.
+VAR_SEED_12 = NON_RES_POLY.interacting(VAR_CORE_12)
+VAR_SEED_25 = NON_RES_POLY.interacting(VAR_CORE_25)
+
+VAR_CORE_12_DNW = VAR_CORE_12.interacting(DNW)
+VAR_CORE_12_NW = VAR_CORE_12.not_interacting(DNW)
+VAR_CORE_25_DNW = VAR_CORE_25.interacting(DNW)
+VAR_CORE_25_NW = VAR_CORE_25.not_interacting(DNW)
+
+VAR_SEED_12_DNW = NON_RES_POLY.interacting(VAR_CORE_12_DNW)
+VAR_SEED_12_NW = NON_RES_POLY.interacting(VAR_CORE_12_NW)
+VAR_SEED_25_DNW = NON_RES_POLY.interacting(VAR_CORE_25_DNW)
+VAR_SEED_25_NW = NON_RES_POLY.interacting(VAR_CORE_25_NW)
+
+# NEG is the contacted N+ tap in the N-well; the DNW flavour ties DNW to NW by
+# layout (connect(NW, DNW) below).
+VAR_NEG = N_TAP
+
+# --- RF MOS selectors ----------------------------------------------------------------
+
+RF_NGATE = NGATE.not(DGOX).not(TGOX).interacting(DNW)
+RF_PGATE = PGATE.not(DGOX).not(TGOX).interacting(DNW)
+RF_EMPTY = DNW.not(DNW)
+
+RF_NGATE_SVT = RF_NGATE.not(PSUB_MARKER).not(OD).not(UD).not(NON_SVT)
+RF_NGATE_LVT = RF_NGATE.and(LVTN).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD)
+RF_NGATE_HVT = RF_NGATE.and(HVTN).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD).not(ULLD)
+
+RF_PGATE_SVT = RF_PGATE.not(PSUB_MARKER).not(OD).not(UD).not(NON_SVT)
+RF_PGATE_LVT = RF_PGATE.and(LVTP).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD)
+RF_PGATE_HVT = RF_PGATE.and(HVTP).not(PSUB_MARKER).not(SRAMALL).not(OD).not(UD).not(ULLD)
+
+RF_NSD = N_SD.and(DNW)
+RF_PSD = P_SD.and(DNW)
+
+# Terminal taps exclude the source/drain regions that touch the gate; only the
+# dedicated well/substrate taps remain.
+RF_NTAP_DNW = NSD.and(DNW).interacting(CTs).not_interacting(RF_NGATE)
+RF_PTAP_DNW = PSD.not(NW).and(DNW).interacting(CTs).not_interacting(RF_NGATE)
+RF_NTAP_NW = NSD.and(NW).and(DNW).interacting(CTs).not_interacting(RF_PGATE)
+RF_PSUB = PSD.not(NW).not(DNW).interacting(CTs).not_interacting(RF_NGATE).not_interacting(RF_PGATE)
+
+# A P+ substrate tap outside DNW adjacent to the triple-well marks the 6T
+# NMOS / 5T PMOS substrate terminal.  Select the DNW islands that see one.
+RF_PSUB_NEAR = RF_PSUB.interacting(DNW.sized(3.0))
+RF_DNW_WITH_PSUB = DNW.interacting(RF_PSUB_NEAR.sized(3.0))
+
+# Inductor terminal layers are electrically identical (both are RV pads); a
+# distinct layer object keeps the two device terminals from being folded into
+# one annotation layer.
+IND_RV_B = RV.dup
+
+RF_NGATE_SVT_5T = RF_NGATE_SVT.not_interacting(RF_DNW_WITH_PSUB)
+RF_NGATE_SVT_6T = RF_NGATE_SVT.interacting(RF_DNW_WITH_PSUB)
+RF_NGATE_LVT_5T = RF_NGATE_LVT.not_interacting(RF_DNW_WITH_PSUB)
+RF_NGATE_LVT_6T = RF_NGATE_LVT.interacting(RF_DNW_WITH_PSUB)
+RF_NGATE_HVT_5T = RF_NGATE_HVT.not_interacting(RF_DNW_WITH_PSUB)
+RF_NGATE_HVT_6T = RF_NGATE_HVT.interacting(RF_DNW_WITH_PSUB)
+
+RF_PGATE_SVT_5T = RF_PGATE_SVT.interacting(RF_DNW_WITH_PSUB)
+RF_PGATE_LVT_5T = RF_PGATE_LVT.interacting(RF_DNW_WITH_PSUB)
+RF_PGATE_HVT_5T = RF_PGATE_HVT.interacting(RF_DNW_WITH_PSUB)
