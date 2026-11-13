@@ -183,17 +183,106 @@ Magic ext2fastcap/ext2fasthenry, which are not part of Magic 8.3):
   solver (schemaVersion 2.0): metal conductivities from the LEF RPERSQ +
   bulk-Cu thickness inference (all ~5.81e7 S/m), via conductivities from the
   LEF 2.5 ohm via resistance and the LEF via cut sizes, dielectric eps/thickness
-  = typical 55nm-node estimates.  Verified with the gds2palace 0.6.0 stackup
+  = typical 55nm-node estimates.  Verified with the gds2palace 0.8.0 stackup
   reader (every metal/via zmin lands in its intended dielectric).
+  RDL (123, ALPA1-class 1.45 um Al, sigma 4.567e7 S/m) and its TM2->RDL via
+  RV (120, 3x3 um, RPV 0.08 ohm) are emitted above TM2 with the ITF top stack
+  (IMD7b1+PASS1..4 = 1.65 um ILD, eps 4.27; PASS5+6 above), so the
+  1TM+ALPA inductor winding and underpass are modelled as conductors.
+  PGS (AA, layer 2) is a 0.10 um silicide-equivalent conductor on the silicon
+  surface, sigma 1e6 S/m = 10 ohm/sq, kept below the M1 bottom (200.15 um).
+  The reader stacks dielectrics metal-bottom to next-metal-bottom, so
+  RDLILD = zmin(RDL) - zmin(TM2) = 2.55 um (1.65 um gap + 0.9 um TM2).
 - `palace/run_model.py` - model script: GDSII + stackup -> gmsh mesh +
-  Palace config.json (1 GHz default, fine mesh); `--thermal` switches to the
-  Elmer steady-state thermal flow (heatsources + const-temp boundaries, the
-  stackup carries the thermal conductivities/densities).  Requires
-  `pip install gds2palace` (gdspy, gmsh, numpy, shapely); the Palace solver
-  itself is installed separately (apptainer/spack, see the gds2palace docs).
+  Palace config.json.  Reads data type 1 (`purposelist=[1]`, the PDK
+  convention), takes `--gds/--name/--freq/--cellsize/--max-mesh/--order`;
+  `--thermal` switches to the Elmer steady-state thermal flow.  Requires
+  `pip install gds2palace` (gdspy, gmsh, numpy, shapely); Palace itself is
+  installed separately (spack: `spack load palace`; the wrapper takes
+  `-np <ranks>`, do not wrap it in another `mpirun`).
+- `palace/extract_lq.py` - S-parameter -> series R/L/Q:
+  `Y = (I-S)(I+S)^-1/Z0`, `Zs = -1/Y21`, plus the pad shunt capacitance.
+
+### Inductor EM deck (1TM + ALPA, PGS)
+
+`klayout -rd em=1 -rd gds=libs.tech/pex/palace/ics55_ind_em.gds` on
+`pcells/ics55_pcell_demo.py` writes a single inductor with the EM-only
+additions (`em_ports=1`):
+
+- 300/1 and 301/1 are thin lines under the two signal pads.  The ports are
+  vertical 50 ohm sheets from **M1 to TM2** (IHP via-port recipe), so both
+  ports share one reference plane.
+- a solid **M1 plane** under the whole footprint is that reference.  It is
+  EM-only (an inductor must not have M1 underneath in the real layout) and it
+  is the one DRC error of the EM deck (`metal.m1.max_width`).
+- the PGS ring (3 um solid AA) ties the stripes together; without it the
+  stripes are floating islands and cannot carry a return current.
+- the two ports must not be grounded through the 10 ohm/sq PGS alone: a
+  PGS-only return adds ~285 ohm and ~1.2 nH of fixture loop.
+
+Run (mesh + config in the docker image, solve on the host):
+
+```sh
+docker run --rm -v $PWD:/work -w /work/libs.tech/pex/palace \
+  hpretl/iic-osic-tools python3 run_model.py --gds ics55_ind_em.gds \
+  --name ics55_ind_1g --freq 1.0 --cellsize 2.0 --max-mesh 20
+# order 2 does not fit in 8 GB at this mesh: use order 1 and the real
+# coarse solve (config.json: Solver.Order=1, ComplexCoarseSolve=false)
+cd palace_model/ics55_ind_1g_data && palace -np 2 -nt 1 config.json
+python3 ../extract_lq.py output/ics55_ind_1g/port-S.csv
+```
+
+Measured at 1 GHz, 150 um / 2.5 turns / w 4 um / s 2 um (typ corner,
+2 um mesh, 390 k tets, 503 k ND unknowns, 2.7 GB peak, ~7 min on 2 ranks):
+
+| | L (nH) | R (ohm) | Q |
+|---|---|---|---|
+| Palace (PGS + substrate + M1 reference plane) | 1.715 | 12.9 | 0.83 |
+| FastHenry (coil + PGS equivalent sheet) | 1.825 | 7.73 | 1.48 |
+| Wheeler estimate | ~1.9 | - | - |
+
+L agrees within 6 %.  The R gap is expected: Palace carries the lossy
+10 ohm*cm substrate, the dielectric loss tangent and the M1 reference plane,
+none of which are in the FastHenry deck, while the FastHenry PGS sheet is
+under-resolved (12.5 um filaments vs a 2 um shield gap) and too lossless.
+Absolute Q is low by design here: TM2 is 0.9 um thick and the trace is 4 um
+wide, i.e. ~7.7 ohm of DC winding resistance.
 
 All stackup values are estimates (no absolute thicknesses or permittivities
 in the released data) and are overridable in the XML.
+
+For a 0.1-10 GHz sweep pass a frequency list:
+
+```sh
+python3 run_model.py --gds ics55_ind_em.gds --name ics55_ind_sweep \
+  --freq 0.1 0.25 0.5 0.75 1 1.5 2 2.5 3 4 5 6 7 8 9 10 --order 1
+cd palace_model/ics55_ind_sweep_data && mpirun -n 4 palace config.json
+python3 ../extract_lq.py output/ics55_ind_sweep/port-S.csv
+```
+
+## EM cross-check: openEMS FDTD (`openems/`)
+
+A second, independent EM engine on the same deck: `openems/` ports the IHP
+SG13G2 `openems_ihp_sg13g2` workflow (time-domain FDTD instead of Palace's
+frequency-domain FEM).  It reads the same `ics55_ind_em.gds` and the same
+`palace/ics55_stackup.xml`, uses the same M1->TM2 vertical via-ports, and
+reports the same series-branch L/R/Q convention as `extract_lq.py`.
+
+```sh
+export PATH=/opt/openEMS/bin:$PATH
+/opt/openEMS/venv/bin/python run_inductor_2port.py --simulate \
+  --cellsize 3.0 --margin 100 --nr-ts 300000 --numfreq 101 \
+  --name ics55_ind_2port_coarse
+```
+
+Outputs land in `openems/output/<name>_data/`: `<name>.s2p`, a printed
+L/Q/Csh table, and PNG plots.  See `openems/README.md` for usage,
+environment, and mesh/timestep caveats (the RV/RDL z-stack forces ~1e-17 s
+timesteps; note that port data is only written at the END of a run, so a
+killed job yields no S-parameters).  The Palace sweep above is the primary
+0.1-10 GHz result; the openEMS chain built and stepped correctly in a
+smoke run but was interrupted before post-processing, so its end-to-end
+validation is still open.
 
 ## 3D quasi-static R/L/M: FastHenry (`fasthenry/`)
 
@@ -206,6 +295,18 @@ segments (LEF cut sizes), a `g1` lossy-silicon ground plane, ports as
 `.external` nodes.  FastHenry directly yields R(f), L(f), M(f) - the regime
 the full-wave Palace handles less efficiently.  Build the solver from
 github.com/ediloren/FastHenry2 when needed.
+
+The routed.json contract is Manhattan-only, so spiral inductors use
+`fasthenry/ind2fasthenry.py` instead: it emits the 1TM+ALPA winding directly
+from the `ics55_ind` PCell parameters (one bar per centreline segment, 45-degree
+chamfers included), the RDL underpass and the TM2->RDL vias as vertical bars,
+one differential `.external` port between the two terminals, and a `g1` plane
+that is either the PGS equivalent sheet (default, sigma 1e6 S/m = 10 ohm/sq
+over 0.1 um) or the bare 200 um / 10 S/m substrate (`--pgs 0`).  Note that
+the plane filaments (`--pgs-seg`, default 20 over 250 um) under-resolve the
+2 um shield gap, so the FastHenry PGS is nearly transparent: its L changes by
+only ~0.2 % while Palace reports the real shield/eddy loss.
+Do not add `file=NONE` to the plane: FastHenry then silently skips it.
 
 ## Calibration
 

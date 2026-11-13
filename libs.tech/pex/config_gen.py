@@ -109,8 +109,24 @@ SPACING_PMD = 0.15       # um, PMD below M1
 SPACING_IMD = 0.12       # um, IMD between metals
 PASSIVATION_MARGIN = 0.5 # um, passivation above the top metal
 
+# RDL (ALPA1-class 14.5 kA Al) sits above TM2.  The vendor ITF top stack is
+# (top-down) PASS6 0.6 / PASS5 0.4 / RDL 1.45 / PASS4 0.2 / PASS3 0.075 /
+# PASS2 0.4 / PASS1 0.075 / IMD7b1 0.9 / TM 0.9, so the TM2-top to
+# RDL-bottom separation is 1.65 um with a thickness-weighted ER of 4.27.
+RDL_ILD_UM = 1.65
+RDL_ILD_EPS = 4.27
+RDL_THICK_UM = 1.45
+RV_CUT_UM = 3.0          # RV_W_1
+RV_R_OHM = 0.08          # ITF VIA RV RPV
+
 SUBSTRATE_THICK_UM = 200.0
 SUBSTRATE_SIGMA = 10.0   # S/m (~10 ohm*cm)
+
+# PGS: silicided active stripes on the silicon surface.  Kept below the M1
+# bottom (200.15 um) so the PGS conductor volume never overlaps M1; the
+# 10 ohm/sq sheet is preserved by sigma = 1/(Rsh*t).
+PGS_THICK_UM = 0.10
+PGS_SIGMA = 1.0e6        # S/m, Rsh = 10 ohm/sq at 0.10 um
 
 # thermal (W/m.K, kg/m3) - typical values
 THERMAL = {
@@ -120,7 +136,8 @@ THERMAL = {
 
 # GDS layer numbers (official map, libs.tech/klayout/tech/ics55.map)
 GDS_LAYER = {"M1": 81, "M2": 82, "M3": 83, "M4": 84, "M5": 85, "TM2": 103,
-             "V1": 91, "V2": 92, "V3": 93, "V4": 94, "TV2": 113}
+             "V1": 91, "V2": 92, "V3": 93, "V4": 94, "TV2": 113,
+             "RV": 120, "ALPAD": 122, "RDL": 123}
 
 # ---------------------------------------------------------------------------
 # 3. StarRC vendor override (libs.tech/pex/starrc/)
@@ -383,13 +400,36 @@ def build_stack(corner: str = "typ", rc_corner: str | None = None,
     if c_data is not None and typ_data is not None:
         ratio = c_data.capacitance_ratio("RDL", typ_data)
         rdl_cap, rdl_edge = rdl_cap * ratio, rdl_edge * ratio
+    rdl_th = RDL_THICK_UM
+    if rc_data is not None:
+        itf_t = rc_data.thickness_um("RDL")
+        if itf_t is not None:
+            rdl_th = itf_t
+    rdl_zmin = round(metals[-1]["zmax"] + RDL_ILD_UM, 4)
     rdl = {"name": "RDL", "rpsq": rdl_rpsq, "cap": rdl_cap,
-           "edge": rdl_edge, "width": rdl_width}
+           "edge": rdl_edge, "width": rdl_width, "thickness": rdl_th,
+           "zmin": rdl_zmin, "zmax": round(rdl_zmin + rdl_th, 4),
+           "sigma": sigma_s_m2(rdl_rpsq, rdl_th),
+           "thermal": THERMAL["metal"][0], "density": THERMAL["metal"][1]}
+
+    # RV: TM2 -> RDL, 3x3 um per RV_W_1.  Kept out of stack["vias"] so the
+    # Magic/STA emitters (which only know V1..V4/TV2) are unaffected.
+    rv_r = RV_R_OHM
+    if rc_data is not None:
+        itf_r = rc_data.via_r("RV")
+        if itf_r is not None:
+            rv_r = itf_r
+    rv_h = rdl["zmin"] - metals[-1]["zmax"]
+    rdl_via = {"name": "RV", "zmin": metals[-1]["zmax"], "zmax": rdl["zmin"],
+               "cut": RV_CUT_UM, "r": rv_r,
+               "sigma": rv_h * 1e-6 / (rv_r * (RV_CUT_UM * 1e-6) ** 2),
+               "lower": "TM2", "upper": "RDL"}
 
     return {
         "metals": metals,
         "vias": vias,
         "rdl": rdl,
+        "rdl_via": rdl_via,
         "eps": {"imd": eps_imd, "pmd": eps_pmd, "pass": eps_pass,
                 "sub": EPS_SUB},
         "contacts": rc_data.contact_r() if rc_data is not None else {},
@@ -419,9 +459,30 @@ def emit_palace_stackup(stack, out):
             "Type": "Conductor", "Conductivity": "%.1f" % v["sigma"],
             "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
             "Density": "%.1f" % THERMAL["metal"][1], "Color": "ffe6bf"})
+    # RDL (ALPA1-class) and its TM2->RDL via: the winding/underpass layers of
+    # the 1TM+ALPA inductor family.
+    rdl = stack["rdl"]
+    ET.SubElement(mats, "Material", {
+        "Name": "RDL", "Type": "Conductor", "Conductivity": "%.1f" % rdl["sigma"],
+        "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
+        "Density": "%.1f" % THERMAL["metal"][1], "Color": "e0a060"})
+    rv = stack["rdl_via"]
+    ET.SubElement(mats, "Material", {
+        "Name": "RV", "Type": "Conductor", "Conductivity": "%.1f" % rv["sigma"],
+        "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
+        "Density": "%.1f" % THERMAL["metal"][1], "Color": "ffe6bf"})
+    # Patterned ground shield: the drawn AA stripes (GDS 2) are meshed as a
+    # silicide-equivalent conductor on the silicon surface (Rsh ~10 ohm/sq).
+    # Use AA geometry, not a solid sheet: the slots are what break the
+    # eddy-current loops.
+    ET.SubElement(mats, "Material", {
+        "Name": "PGS", "Type": "Conductor", "Conductivity": "%.1f" % PGS_SIGMA,
+        "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
+        "Density": "%.1f" % THERMAL["metal"][1], "Color": "40c040"})
     eps = stack["eps"]
     for nm, epsv, k, rho, typ in [
             ("IMD", eps["imd"], *THERMAL["imd"], "Dielectric"),
+            ("RDLILD", RDL_ILD_EPS, *THERMAL["imd"], "Dielectric"),
             ("PMD", eps["pmd"], *THERMAL["pmd"], "Dielectric"),
             ("Passivation", eps["pass"], *THERMAL["passivation"], "Dielectric"),
             ("Substrate", eps["sub"], *THERMAL["substrate"], "Semiconductor"),
@@ -429,7 +490,8 @@ def emit_palace_stackup(stack, out):
         attrs = {"Name": nm, "Type": typ, "Permittivity": _num(epsv),
                  "DielectricLossTangent": "0.01",
                  "ThermalConductivity": "%.3f" % k, "Density": "%.1f" % rho,
-                 "Color": {"IMD": "fffcad", "PMD": "fffcad", "Passivation": "a0a0f0",
+                 "Color": {"IMD": "fffcad", "RDLILD": "fffcad", "PMD": "fffcad",
+                           "Passivation": "a0a0f0",
                            "Substrate": "01e0ff", "AIR": "d0d0d0"}[nm]}
         if nm == "Substrate":
             attrs["Conductivity"] = "%.1f" % SUBSTRATE_SIGMA
@@ -444,9 +506,11 @@ def emit_palace_stackup(stack, out):
     # registers each metal by its zmin, so every dielectric range must span
     # metal-bottom to next-metal-bottom (the verified convention):
     #   IMD_k = zmin(metal k+1) - zmin(metal k); passivation covers the top metal.
-    pass_th = metals[-1]["zmax"] + PASSIVATION_MARGIN - metals[-1]["zmin"]
+    top = stack["rdl"]
+    pass_th = top["zmax"] + PASSIVATION_MARGIN - top["zmin"]
     for name, th, mat in [
             ("Passivation", pass_th, "Passivation"),
+            ("RDLILD", top["zmin"] - metals[-1]["zmin"], "RDLILD"),
             ("IMD5", metals[5]["zmin"] - metals[4]["zmin"], "IMD"),
             ("IMD4", metals[4]["zmin"] - metals[3]["zmin"], "IMD"),
             ("IMD3", metals[3]["zmin"] - metals[2]["zmin"], "IMD"),
@@ -456,18 +520,33 @@ def emit_palace_stackup(stack, out):
         ET.SubElement(diels, "Dielectric", {
             "Name": name, "Material": mat, "Thickness": "%.4f" % th})
     layers = ET.SubElement(el, "Layers")
-    for m in reversed(metals):
+    for m in [top] + list(reversed(metals)):
+        if m["name"] == "RDL":
+            name, mat = "RDL", "RDL"
+        elif m["name"] == "TM2":
+            name, mat = "TM2", "TopMetal"
+        else:
+            name, mat = m["name"], "Metal" + m["name"][1:]
         ET.SubElement(layers, "Layer", {
-            "Name": "TM2" if m["name"] == "TM2" else m["name"], "Type": "conductor",
+            "Name": name, "Type": "conductor",
             "Zmin": "%.4f" % m["zmin"], "Zmax": "%.4f" % m["zmax"],
-            "Material": "TopMetal" if m["name"] == "TM2" else "Metal" + m["name"][1:],
-            "Layer": str(GDS_LAYER[m["name"]])})
-    for v in reversed(stack["vias"]):
+            "Material": mat, "Layer": str(GDS_LAYER[m["name"]])})
+    for v in [stack["rdl_via"]] + list(reversed(stack["vias"])):
+        if v["name"] == "RV":
+            name, mat = "RV", "RV"
+        elif v["name"] == "TV2":
+            name, mat = "TV2", "TopVia"
+        else:
+            name, mat = v["name"], "Via" + v["name"][1:]
         ET.SubElement(layers, "Layer", {
-            "Name": "TV2" if v["name"] == "TV2" else v["name"], "Type": "via",
+            "Name": name, "Type": "via",
             "Zmin": "%.4f" % v["zmin"], "Zmax": "%.4f" % v["zmax"],
-            "Material": "TopVia" if v["name"] == "TV2" else "Via" + v["name"][1:],
-            "Layer": str(GDS_LAYER[v["name"]])})
+            "Material": mat, "Layer": str(GDS_LAYER[v["name"]])})
+    ET.SubElement(layers, "Layer", {
+        "Name": "PGS", "Type": "conductor",
+        "Zmin": "%.4f" % SUBSTRATE_THICK_UM,
+        "Zmax": "%.4f" % (SUBSTRATE_THICK_UM + PGS_THICK_UM),
+        "Material": "PGS", "Layer": "2"})
     _indent(root)
     # The XML declaration must be the first thing in the document, so the
     # licence comment goes after it (a comment before it makes the file
