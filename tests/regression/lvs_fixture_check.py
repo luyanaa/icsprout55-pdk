@@ -33,6 +33,12 @@ ALL_MODELS = {
     "RE_TM1_2T", "RE_TM2_2T", "RE_ALPA_2T", "RE_M1_3T",
     "RE_M2_3T", "RE_M3_3T", "RE_M4_3T", "RE_M5_3T",
     "RE_TM1_3T", "RE_TM2_3T", "RE_ALPA_3T", "DIO_3P3_PP_NW_LP",
+    "VAR1P2_NPD_NW_LP", "VAR2P5_NPD_NW_LP",
+    "VAR1P2_NPD_NW_DNW_LP", "VAR2P5_NPD_NW_DNW_LP",
+    "ICS55_RF_NMOS_SVT_5T", "ICS55_RF_NMOS_LVT_5T", "ICS55_RF_NMOS_HVT_5T",
+    "ICS55_RF_NMOS_SVT_6T", "ICS55_RF_NMOS_LVT_6T", "ICS55_RF_NMOS_HVT_6T",
+    "ICS55_RF_PMOS_SVT_5T", "ICS55_RF_PMOS_LVT_5T", "ICS55_RF_PMOS_HVT_5T",
+    "ICS55_IND",
 }
 
 # Exact extracted classes are asserted, including absence of competing selectors.
@@ -49,6 +55,14 @@ FIXTURES: dict[str, dict[str, Any]] = {
     "metal_resistor": {"models": {"RE_M1_2T": 1}, "distinct_resistor_terms": 1, "ports": 2},
     "diode_marker": {"models": {"DIO_3P3_PP_NW_LP": 1}},
     "esd_marker_only": {"models": {}},
+    "varactor_1p2": {"models": {"VAR1P2_NPD_NW_LP": 1}},
+    "varactor_2p5": {"models": {"VAR2P5_NPD_NW_LP": 1}},
+    "varactor_dnw_1p2": {"models": {"VAR1P2_NPD_NW_DNW_LP": 1}},
+    "varactor_dnw_2p5": {"models": {"VAR2P5_NPD_NW_DNW_LP": 1}},
+    "rf_nmos_5t": {"models": {"ICS55_RF_NMOS_SVT_5T": 1}},
+    "rf_nmos_6t": {"models": {"ICS55_RF_NMOS_SVT_6T": 1}},
+    "rf_pmos_5t": {"models": {"ICS55_RF_PMOS_SVT_5T": 1}},
+    "inductor_1tm_alpa": {"models": {"ICS55_IND": 1}},
     "pad_m1_m5_bar": {"models": {"NM1P2_SVT_LP": 1}, "stack": "m1_m5", "ports": 1, "port_name": "PAD"},
     "pad_t4_bar": {"models": {"NM1P2_SVT_LP": 1}, "stack": "t4", "ports": 1, "port_name": "PAD"},
     "bulk_alias": {"models": {"NM1P2_SVT_LP": 1}, "bulk_aliases": "ground=gnd power=vdd"},
@@ -117,7 +131,7 @@ def model_counts(netlist: Path) -> tuple[collections.Counter[str], dict[str, lis
         if not stripped or stripped.startswith(("*", ".", "+")):
             continue
         fields = stripped.replace(",", " ").split()
-        if not fields or fields[0][0].upper() not in {"M", "R", "D"}:
+        if not fields or fields[0][0].upper() not in {"M", "R", "D", "C", "L", "X"}:
             continue
         for index, field in enumerate(fields):
             model = field.upper()

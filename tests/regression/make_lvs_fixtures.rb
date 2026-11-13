@@ -9,7 +9,8 @@ OUT = File.expand_path($out)
 FileUtils.mkdir_p(OUT)
 LAYERS = {
 'ACT' => [2, 1], 'ACTDUM' => [2, 2], 'ACTDUMB' => [2, 3], 'ACTRES' => [2, 4],
-  'NW' => [9, 1], 'ULLD' => [152, 12], 'UD' => [153, 12], 'OD' => [154, 12],
+  'DNW' => [7, 1], 'NW' => [9, 1],
+  'ULLD' => [152, 12], 'UD' => [153, 12], 'OD' => [154, 12],
   'LVTN' => [17, 1], 'LVTP' => [18, 1], 'HVTN' => [21, 1], 'HVTP' => [22, 1],
   'DGOX' => [27, 1], 'TGOX' => [28, 1], 'POLY' => [41, 1], 'POLYDUM' => [41, 2],
   'PPO' => [41, 4], 'HRP' => [54, 1], 'HRPBLK' => [385, 12],
@@ -31,7 +32,8 @@ LAYERS = {
   'T4M2LBL' => [103, 6], 'T4V2' => [113, 1], 'T4V2BAR' => [113, 7],
   'ALPAD' => [122, 1], 'ALPADRES' => [122, 4], 'ALPADLBL' => [122, 6],
   'RDLLBL' => [123, 6], 'CB' => [121, 1], 'RV' => [120, 1], 'RDL' => [123, 1],
-  'COVER' => [124, 1], 'DIODE' => [191, 12]
+  'COVER' => [124, 1], 'DIODE' => [191, 12],
+  'INDALL' => [302, 12], 'INDDMY' => [301, 12]
 }
 
 def box(layer, x1, y1, x2, y2, kind = :box)
@@ -77,6 +79,90 @@ diode_fixture = [
   box('M1', 0.12, 0.17, 0.38, 0.43)
 ]
 esd_only_fixture = diode_fixture.reject { |shape| shape[0] == 'DIODE' } + [box('ESD', 0, 0, 1.0, 0.6)]
+
+def varactor_fixture(dnw: false, dgox: false)
+  shapes = [
+    box('NW', 0, 0, 1.5, 0.6),
+    box('ACT', 0, 0, 1.0, 0.6),
+    box('NP', 0, 0, 1.0, 0.6),
+    box('POLY', 0.45, -0.1, 0.55, 0.7),
+    box('VARAM', 0, 0, 1.0, 0.6),
+    box('CT', 0.46, 0.62, 0.54, 0.70),
+    box('M1', 0.44, 0.60, 0.56, 0.72),
+    box('ACT', 1.15, 0.2, 1.45, 0.45),
+    box('NP', 1.15, 0.2, 1.45, 0.45),
+    box('CT', 1.24, 0.27, 1.36, 0.38),
+    box('M1', 1.20, 0.22, 1.40, 0.43)
+  ]
+  shapes << box('DGOX', 0, 0, 1.0, 0.6) if dgox
+  shapes << box('DNW', 0, -0.2, 1.5, 0.8) if dnw
+  shapes
+end
+
+def rf_nmos_fixture(six_t: false)
+  shapes = [
+    box('DNW', -0.5, -0.2, 1.6, 0.8),
+    box('ACT', 0, 0, 1.0, 0.6),
+    box('POLY', 0.45, -0.1, 0.55, 0.7),
+    box('NP', 0, 0, 1.0, 0.6),
+    box('CT', 0.10, 0.20, 0.25, 0.40),
+    box('CT', 0.75, 0.20, 0.90, 0.40),
+    box('M1', 0.08, 0.18, 0.27, 0.42),
+    box('M1', 0.73, 0.18, 0.92, 0.42),
+    box('CT', 0.46, 0.62, 0.54, 0.70),
+    box('M1', 0.44, 0.60, 0.56, 0.72),
+    box('ACT', 1.15, 0.2, 1.45, 0.45),
+    box('PP', 1.15, 0.2, 1.45, 0.45),
+    box('CT', 1.24, 0.27, 1.36, 0.38),
+    box('M1', 1.20, 0.22, 1.40, 0.43),
+    box('ACT', -0.35, 0.2, -0.1, 0.45),
+    box('NP', -0.35, 0.2, -0.1, 0.45),
+    box('CT', -0.26, 0.27, -0.14, 0.38),
+    box('M1', -0.30, 0.22, -0.10, 0.43)
+  ]
+  if six_t
+    shapes += [
+      box('ACT', -1.2, 0.2, -0.9, 0.45),
+      box('PP', -1.2, 0.2, -0.9, 0.45),
+      box('CT', -1.11, 0.27, -0.99, 0.38),
+      box('M1', -1.15, 0.22, -0.95, 0.43)
+    ]
+  end
+  shapes
+end
+
+rf_pmos_fixture = [
+  box('DNW', -0.5, -0.2, 1.6, 0.8),
+  box('NW', 0, 0, 1.5, 0.6),
+  box('ACT', 0, 0, 1.0, 0.6),
+  box('POLY', 0.45, -0.1, 0.55, 0.7),
+  box('PP', 0, 0, 1.0, 0.6),
+  box('CT', 0.10, 0.20, 0.25, 0.40),
+  box('CT', 0.75, 0.20, 0.90, 0.40),
+  box('M1', 0.08, 0.18, 0.27, 0.42),
+  box('M1', 0.73, 0.18, 0.92, 0.42),
+  box('CT', 0.46, -0.32, 0.54, -0.24),
+  box('M1', 0.44, -0.34, 0.56, -0.22),
+  box('ACT', 1.15, 0.2, 1.45, 0.45),
+  box('NP', 1.15, 0.2, 1.45, 0.45),
+  box('CT', 1.24, 0.27, 1.36, 0.38),
+  box('M1', 1.20, 0.22, 1.40, 0.43),
+  box('ACT', -1.2, 0.2, -0.9, 0.45),
+  box('PP', -1.2, 0.2, -0.9, 0.45),
+  box('CT', -1.11, 0.27, -0.99, 0.38),
+  box('M1', -1.15, 0.22, -0.95, 0.43)
+]
+
+# The TM2 bar is the inductor body: INDALL plus the RV terminal pads must
+# isolate the two pads even though the bar connects them geometrically.
+inductor_fixture = [
+  box('INDALL', 0, 0, 40, 20),
+  box('T4M2', 2, 7, 8, 13), box('T4M2', 32, 7, 38, 13),
+  box('T4M2', 2, 9, 38, 11),
+  box('RDL', 3, 6.5, 7, 13.5), box('RDL', 33, 6.5, 37, 13.5),
+  box('RV', 4, 8, 7, 11), box('RV', 33, 8, 36, 11),
+  label('T4M2LBL', 'PLUS', 5, 10), label('T4M2LBL', 'MINUS', 35, 10)
+]
 
 pad_m1_m5 = [
   box('M1DUM', 0, 0, 1, 1), box('M2', 0, 0, 1, 1),
@@ -176,6 +262,14 @@ fixtures = {
   'metal_resistor': metal_resistor,
   'diode_marker': diode_fixture,
   'esd_marker_only': esd_only_fixture,
+  'varactor_1p2': varactor_fixture,
+  'varactor_2p5': varactor_fixture(dgox: true),
+  'varactor_dnw_1p2': varactor_fixture(dnw: true),
+  'varactor_dnw_2p5': varactor_fixture(dnw: true, dgox: true),
+  'rf_nmos_5t': rf_nmos_fixture,
+  'rf_nmos_6t': rf_nmos_fixture(six_t: true),
+  'rf_pmos_5t': rf_pmos_fixture,
+  'inductor_1tm_alpa': inductor_fixture,
   'pad_m1_m5_bar': pad_m1_m5 + mos_fixture('NP'),
   'pad_t4_bar': pad_t4 + mos_fixture('NP'),
   'bulk_alias': mos_fixture('NP'),

@@ -1,0 +1,7 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+* cell TOP
+.SUBCKT TOP
+* device instance $1 r0 *1 -5.55,-6.1 var2p5_npd_nw_dnw_lp
+XD_$1 \$2 \$3 var2p5_npd_nw_dnw_lp PARAMS:
+.ENDS TOP

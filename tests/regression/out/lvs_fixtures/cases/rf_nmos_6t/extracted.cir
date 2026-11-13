@@ -1,0 +1,7 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+* cell TOP
+.SUBCKT TOP
+* device instance $1 r0 *1 -5.55,-6 ics55_rf_nmos_svt_6t
+XD_$1 \$2 \$3 \$1 \$4 \$5 \$6 ics55_rf_nmos_svt_6t PARAMS:
+.ENDS TOP
