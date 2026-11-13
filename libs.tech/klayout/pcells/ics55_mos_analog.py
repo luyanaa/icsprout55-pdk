@@ -20,7 +20,7 @@
 #   gate L = 0.06 um, poly pitch = 0.26 um (0.055 + CT 0.09 + 0.055),
 #   CT = 0.09 um square, active enclosure of CT 0.03 um,
 #   active beyond gate 0.17 um (rule 0.115), poly beyond active 0.15 um
-#   (rule 0.14), implant margin 0.2 um.
+#   (rule 0.14), implant margin 0.3 um (0.15 beyond the 0.15 poly overhang).
 #
 # The source/drain straps are interdigitated: one M1 island per contact, even
 # contacts to a bus below the active, odd contacts to a bus above, and a
@@ -62,7 +62,8 @@ CT_SIZE = 0.09       # fixed contact size (um)
 GATE_L = 0.06        # drawn gate length (um)
 CT_GATE = 0.055      # contact edge to gate edge (um, CT_S_4)
 ACT_OV = 0.03        # active beyond contact (um, rule 0.015)
-IMPL_M = 0.2         # implant margin around active (um)
+IMPL_M = 0.3         # implant margin around active (um): 0.15 poly
+                     # overhang + 0.15 NP_EN_3/PP_EN_3 enclosure
 POLY_OV = 0.15       # poly gate overhang beyond active (um, rule 0.14)
 M1_OV = 0.025        # M1 enclosure of contact (um, rule 0.025)
 GATE_PAD = 0.17      # poly pad for the gate contact (0.09 + 2*0.04)
