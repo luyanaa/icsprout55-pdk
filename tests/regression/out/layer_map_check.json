@@ -38,10 +38,10 @@
         "layers_def_sha256": "b50917273c0a73e65aa7943dce342fbbbae44d0f6578426f6682b63529e5a51e"
       },
       "lvs": {
-        "inputs": 82,
+        "inputs": 85,
         "documented_local_aux": [],
         "unmapped": [],
-        "layers_def_sha256": "e0347a7d0cba186d7e93267d3bb3e727f1971738a4405ea73c1c8f5041ff5f95"
+        "layers_def_sha256": "b619bba41f479e7ee69f0a0fde14d1a3ffeb8272e3c8d08812c7255eb22bdf05"
       }
     },
     "profile_coverage": {
@@ -88,7 +88,7 @@
     "icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
     "ics55.map": "3b917c0c20cf91b7fb037bd2f91b399cd939f3ffff7369c720355467f8e1932e",
     "layers_def.drc": "b50917273c0a73e65aa7943dce342fbbbae44d0f6578426f6682b63529e5a51e",
-    "layers_definitions.lvs": "e0347a7d0cba186d7e93267d3bb3e727f1971738a4405ea73c1c8f5041ff5f95"
+    "layers_definitions.lvs": "b619bba41f479e7ee69f0a0fde14d1a3ffeb8272e3c8d08812c7255eb22bdf05"
   },
   "issues": []
 }

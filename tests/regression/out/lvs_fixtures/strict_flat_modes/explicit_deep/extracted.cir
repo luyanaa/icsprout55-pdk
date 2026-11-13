@@ -1,0 +1,10 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+.SUBCKT TOP D G S
+X$1 S D G S MOS_LEAF
+.ENDS TOP
+
+.SUBCKT MOS_LEAF \$1 \$2 \$3 \$I1
+M$1 \$2 \$3 \$1 \$I1 NM1P2_SVT_LP L=0.1U W=0.6U AS=0.27P AD=0.27P PS=2.1U
++ PD=2.1U
+.ENDS MOS_LEAF

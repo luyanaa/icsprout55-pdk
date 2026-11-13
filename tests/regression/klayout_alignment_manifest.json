@@ -251,20 +251,21 @@
     "hashes_expected": "frozen_hashes section; drift fails the run unless regenerated deliberately with run_alignment.py --update-hashes"
   },
   "frozen_hashes": {
-    "lvs_runner": "c2e34ffdbf58dcb4b838b06ae62a217b364e4e3b09559ee24e8b66502da596f3",
+    "lvs_runner": "554ec66f2106c3cb566bba2d8c77b58a38d5cdaa67435b71400b89361c25afd1",
     "normalizer": "4fc842477d99a45df6385095f946e5cc7ac217918662ec8fe8be76ba0ff58715",
     "harness": "d4a96ab7890a69d787b85d862765031bf1ecfcc523107cfde2e499032bae0bda",
     "nix_shell_helper": "620b4bde416f5045cd3ec3a1f02c2751d4893fa4b89c855de7f5cce0823280fd",
     "lvs_fixture_harnesses": {
-      "tests/regression/lvs_fixture_check.py": "80bd5bc4b676915d39fbf759e4f6478f442559e201c7f7edf800f09e4cef4372",
-      "tests/regression/make_lvs_fixtures.rb": "61eeae139472c39142112485909d23a9a38188cce5c7f1060b4374a3c39688ba"
+      "tests/regression/lvs_fixture_check.py": "e0686ec7bee6c846554eb2daa594dc48200b3ba449a80f4e66dcef9bf9b71fa7",
+      "tests/regression/make_lvs_fixtures.rb": "07d6844ccce5a0fcb3a64faddaf6e746047b7ec54bda94b071c907eaa5c319ac"
     },
     "lvs_rule_decks": {
-      "ics55.lvs": "50b5fa492613b530038ad30601d6ee5b8c2e7ac14489f9ff959e3872db43eae7",
+      "ics55.lvs": "754f069c41fc9ca7442e5c13a7da2a1740029c863299b55cb6d3b71eed779ff6",
       "combine_fingers.lvs": "6f133519709e296226b5752e076ea305c003e665d4a0bc77a0d7f1da42900b7c",
       "devices_connections.lvs": "134e1b926f509cf7ac3fa6da8c3129e61dddb2563b220413e8e03654b3098812",
+      "erc.lvs": "0960894e84a04cf37bf961b6f779699baebf105aafa6f44ca99ec430beb3c9ec",
       "general_derivations.lvs": "9e54f658972ba89e7a831fcdd25f5d3dd370d033c33d8ed70d1249b60e4e4fd4",
-      "layers_definitions.lvs": "e0347a7d0cba186d7e93267d3bb3e727f1971738a4405ea73c1c8f5041ff5f95",
+      "layers_definitions.lvs": "b619bba41f479e7ee69f0a0fde14d1a3ffeb8272e3c8d08812c7255eb22bdf05",
       "min_conn.lvs": "5a76cd2af1bd41634e9a3e63a38cf12f1eb6efcb3c07bac812c4af84e6904349",
       "mos_derivations.lvs": "258bcddf0aae09111a281093f7af5d0bc3083a8981c814b6167b4b917d199bef",
       "mos_extraction.lvs": "f8b37779bc286d30e71a47954610649ae6be1507f97c7da97ef08f66d3eb0fea",

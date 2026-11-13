@@ -115,6 +115,54 @@ strict_flat_parent = mos_fixture('NP') + [
   label('M1LBL', 'G', 0.5, -0.28)
 ]
 
+# ERC smoke fixtures: one labeled CMOS inverter and single-device rail cases.
+gate_tap = [
+  box('POLY', 0.45, -0.4, 0.55, -0.05),
+  box('CT', 0.46, -0.32, 0.54, -0.24),
+  box('M1', 0.44, -0.34, 0.56, -0.22),
+  label('M1LBL', 'IN', 0.5, -0.28)
+]
+
+erc_pmos = [
+  box('ACT', 2.0, 0, 3.0, 0.6), box('POLY', 2.45, -0.1, 2.55, 0.7),
+  box('PP', 2.0, 0, 3.0, 0.6), box('NW', 2.0, 0, 3.6, 0.6),
+  box('CT', 2.10, 0.20, 2.25, 0.40), box('CT', 2.75, 0.20, 2.90, 0.40),
+  box('M1', 2.08, 0.18, 2.27, 0.42), box('M1', 2.73, 0.18, 2.92, 0.42),
+  box('M1', 0.73, 0.18, 2.27, 0.42),
+  box('POLY', 2.45, -0.4, 2.55, -0.05),
+  box('CT', 2.46, -0.32, 2.54, -0.24),
+  box('M1', 0.44, -0.34, 2.56, -0.22)
+]
+
+# Contacted n-well tie strapped to the PMOS source rail.
+erc_well_tie = [
+  box('ACT', 3.1, 0.2, 3.45, 0.45), box('NP', 3.1, 0.2, 3.45, 0.45),
+  box('CT', 3.2, 0.27, 3.35, 0.38), box('M1', 3.16, 0.22, 3.39, 0.43),
+  box('M1', 2.73, 0.18, 3.39, 0.42)
+]
+
+erc_inverter = mos_fixture('NP') + erc_pmos + erc_well_tie + gate_tap + [
+  label('M1LBL', 'VSS', 0.17, 0.3), label('M1LBL', 'VDD', 2.82, 0.3),
+  label('M1LBL', 'OUT', 1.5, 0.3)
+]
+
+erc_bad_ptap = [
+  box('ACT', 4.0, 0.2, 4.35, 0.45), box('PP', 4.0, 0.2, 4.35, 0.45),
+  box('CT', 4.1, 0.27, 4.25, 0.38), box('M1', 4.06, 0.22, 4.29, 0.43),
+  box('M1', 3.16, 0.18, 4.29, 0.42)
+]
+
+erc_bad_ntap = [
+  box('NW', -0.7, 0, -0.15, 0.6), box('ACT', -0.55, 0.2, -0.2, 0.45),
+  box('NP', -0.55, 0.2, -0.2, 0.45),
+  box('CT', -0.45, 0.27, -0.3, 0.38), box('M1', -0.49, 0.22, -0.26, 0.43),
+  box('M1', -0.49, 0.18, 0.27, 0.42),
+  # A correct p-tap keeps the P substrate on VSS while the n-tap is on VSS.
+  box('ACT', -1.6, 0.2, -1.25, 0.45), box('PP', -1.6, 0.2, -1.25, 0.45),
+  box('CT', -1.5, 0.27, -1.35, 0.38), box('M1', -1.54, 0.22, -1.31, 0.43),
+  box('M1', -1.54, 0.18, 0.27, 0.42)
+]
+
 fixtures = {
   'core_svt_n': mos_fixture('NP'),
   'core_lvt_n_ctbar': mos_fixture('NP', ['LVTN'], 'CTBAR'),
@@ -131,7 +179,19 @@ fixtures = {
   'pad_m1_m5_bar': pad_m1_m5 + mos_fixture('NP'),
   'pad_t4_bar': pad_t4 + mos_fixture('NP'),
   'bulk_alias': mos_fixture('NP'),
-  'strict_flat_parent': strict_flat_parent
+  'strict_flat_parent': strict_flat_parent,
+  'erc_clean': erc_inverter,
+  'erc_mn2pg': mos_fixture('NP') + gate_tap + [
+    label('M1LBL', 'VSS', 0.17, 0.3), label('M1LBL', 'VDD', 0.82, 0.3)
+  ],
+  'erc_pathchk_ground': mos_fixture('NP') + gate_tap + [
+    label('M1LBL', 'VSS', 0.17, 0.3), label('M1LBL', 'OUT', 0.82, 0.3)
+  ],
+  'erc_pathchk_power': mos_fixture('PP') + gate_tap + [
+    label('M1LBL', 'VDD', 0.82, 0.3), label('M1LBL', 'OUT', 0.17, 0.3)
+  ],
+  'erc_bad_ptap': erc_inverter + erc_bad_ptap,
+  'erc_bad_ntap': erc_inverter + erc_bad_ntap
 }
 
 fixtures.each do |name, shapes|

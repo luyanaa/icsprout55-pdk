@@ -1,0 +1,13 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+* cell TOP
+* pin IN
+* pin OUT
+* pin VDD
+* pin VSS
+.SUBCKT TOP IN OUT VDD VSS
+* device instance $1 r0 *1 0.5,0.3 NM1P2_SVT_LP
+M$1 OUT IN VSS VDD NM1P2_SVT_LP L=0.1U W=0.6U AS=0.27P AD=0.27P PS=2.1U PD=2.1U
+* device instance $2 r0 *1 2.5,0.3 PM1P2_SVT_LP
+M$2 VDD IN OUT VDD PM1P2_SVT_LP L=0.1U W=0.6U AS=0.27P AD=0.27P PS=2.1U PD=2.1U
+.ENDS TOP

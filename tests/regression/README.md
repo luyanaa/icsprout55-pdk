@@ -48,6 +48,15 @@ are aligned to this profile first; other profiles remain explicit gaps.
 | SOFT_CHECK | TRUE |
 | WELL_PIN | YES |
 
+`ERC_CHECK TRUE` enables the ERC section. Ten checks are named in
+`ERC SELECT CHECK`; the three bare PATHCHK statements are defined but not
+selected by the official profile. The KLayout port implements all ten
+selected checks and reports the three unselected PATHCHK statements as
+diagnostics; the diagnostics do not change `ICS55_ERC`. ERC coverage,
+differences, and the `--no-erc` switch are documented in
+`libs.tech/lvs/README.md`; this remains local self-consistency, not a Calibre
+ERC differential.
+
 ### Calibre DRC profile (frozen)
 
 Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
@@ -119,6 +128,12 @@ Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
   comparison defaults to flat extraction: omitted/explicit-flat modes match,
   explicit-deep rejects the hierarchy mismatch, and a 0.01 um W error fails
   the unchanged exact strict W/L contract.
+  An ERC smoke runs seven fixtures: a clean inverter, an NMOS tied between
+  VDD and VSS (`erc_mn2pg`), ground-only and power-only chains (diagnostics
+  only), an unlabeled device (selected `erc_pathcheck_bad` plus diagnostic),
+  and bad p-tap/n-tap layouts in `no_well_ties` mode (selected tap and well
+  checks). Each case asserts the exact compare verdict, per-check counts,
+  and the `checks=10`/`diagnostics=3` summary split.
   These validate local extraction/comparison only; Calibre equivalence stays
   `BLOCKED`.
 - `out/drc_fixtures/` and `out/lvs_fixtures/` — default fixture reports and

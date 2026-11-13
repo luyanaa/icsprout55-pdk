@@ -91,6 +91,7 @@ COMBINE_DEVICES = STRICT_TOPOLOGY || bool_check?($combine_devices)
 PURGE = !STRICT_TOPOLOGY && bool_check?($purge)
 SIMPLIFY = !STRICT_TOPOLOGY && !bool_check?($no_simplify)
 WELL_TIES = !bool_check?($no_well_ties)
+ERC_ENABLED = !bool_check?($no_erc)
 
 # Strict-flat comparison must flatten physical extraction as well as source.
 # Keep explicit modes and extraction-only/generic/hierarchical defaults intact.
@@ -187,9 +188,20 @@ def dedup_spice(path)
     end
   end
   flush_params.call
-  tmp = File.join(Dir.tmpdir, "ics55_schematic_#{File.basename(path)}")
+  # Per-process name: parallel LVS runs share Dir.tmpdir, and a fixed path
+  # lets one run truncate another's schematic mid-read.
+  tmp = File.join(Dir.tmpdir, "ics55_schematic_#{Process.pid}_#{File.basename(path)}")
   File.write(tmp, out.join)
   tmp
+end
+
+def load_schematic(path)
+  tmp = dedup_spice(path)
+  begin
+    schematic(tmp)
+  ensure
+    File.delete(tmp) if File.exist?(tmp)
+  end
 end
 
 schematic_source = $schematic
@@ -197,7 +209,7 @@ unless NET_ONLY
   if $schematic
     schematic_source = $schematic
     validate_spice_circuit_definitions(schematic_source) if STRICT_HIERARCHY
-    schematic(dedup_spice(schematic_source))
+    load_schematic(schematic_source)
   else
     exts = %w[cdl spice sp cir]
     candidates = exts.map { |ext| "#{src.cell_name}.#{ext}" }
@@ -207,7 +219,7 @@ unless NET_ONLY
     else
       schematic_source = netlists[0]
       validate_spice_circuit_definitions(schematic_source) if STRICT_HIERARCHY
-      schematic(dedup_spice(schematic_source))
+      load_schematic(schematic_source)
     end
   end
 end
@@ -307,7 +319,8 @@ LVS_MODULE_FILES = [
   'rule_decks/devices_connections.lvs',
   'rule_decks/mos_extraction.lvs',
   'rule_decks/res_diode_extraction.lvs',
-  'rule_decks/combine_fingers.lvs'
+  'rule_decks/combine_fingers.lvs',
+  'rule_decks/erc.lvs'
 ]
 
 lvs_assembled = LVS_MODULE_FILES.map { |f| File.read(File.join(SCRIPT_DIR, f)) }.join("\n")
@@ -471,6 +484,22 @@ ports.sort_by { |label, _nets| label }.each do |label, nets|
 end
 puts "PORT DEPTH 0: direct_texts=#{direct_text_count} ports=#{ports.size} previous_pins=#{old_pins.size}"
 
+# ERC runs on the pre-reduction extracted netlist, after top-level labels have
+# become pins, so path checks and tap/well probes see the physical connectivity.
+unless NET_ONLY || !ERC_ENABLED
+  run_erc(netlist, l2n_data, {
+    'P_TAP' => P_TAP,
+    'N_TAP' => N_TAP,
+    'CTS' => CTs,
+    'NW' => NW,
+    'BJT' => BJT,
+    'NW1RES' => NW1RES,
+    'SRINGBLK' => SRINGBLK,
+    'DNW' => DNW,
+    'M1S' => M1s
+  })
+end
+
 netlist.simplify if SIMPLIFY
 netlist.combine_devices if COMBINE_DEVICES
 netlist.purge if PURGE
@@ -495,7 +524,7 @@ max_branch_complexity(1024)
 # compared exactly; W uses the official 10% relative tolerance (Calibre
 # mos_err 0.1).  The released 7-track library is manually drawn and some
 # cells deviate more than 5% from the CDL widths (INVX16H7* +27%,
-# OAI33X0P5H7* +33%, INVX7H7* +14%, TBUFX8H7* 5-10%, NAND3BBX0P7H7* -14%);
+# OAI33X0P5H7* +33% NMOS / +47% PMOS, INVX7H7* +14%, TBUFX8H7* 5-10%);
 # the 5-10% band now passes with a WARNING (audit_w below), the >10% band
 # still fails.  Topology matching is exact.
 %w[NM1P2_SVT_LP NM1P2_LVT_LP NM1P2_HVT_LP PM1P2_SVT_LP PM1P2_LVT_LP PM1P2_HVT_LP NM3P3_LP PM3P3_LP].each do |cls|

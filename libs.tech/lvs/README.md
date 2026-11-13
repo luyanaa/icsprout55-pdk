@@ -50,6 +50,17 @@ and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
   extraction retain the deep default. Opt-in `strict_hierarchy=true` requires
   deep extraction, preserves the schematic hierarchy, and requires exact
   one-to-one circuit-name and named-boundary-pin sets on both sides.
+- ERC runs on the pre-reduction extracted netlist after top-level labels
+  become pins, unless `--no-erc` / `-rd no_erc=true` is given. It ports the
+  official `ERC SELECT CHECK` set: `erc_pTap_to_power`,
+  `erc_nTap_to_ground`, `erc_mp2pg`, `erc_mn2pg`, `erc_mn2pghvt`,
+  `erc_mp2pghvt`, `erc_ptap_outside_dnw_non_ground`, `erc_pathcheck_bad`,
+  `erc_nWell_not_to_power`, `erc_pWell_not_to_ground`. The bare PATHCHK
+  statements (ground-without-power, power-without-ground, unlabeled nets)
+  are not in any `ERC SELECT CHECK` list in the official profile, so they
+  are reported as diagnostics and never change `ICS55_ERC`. Power/ground
+  names follow `LVS POWER NAME "?VDD?" "?POWER?"` / `LVS GROUND NAME
+  "?VSS?" "?GND?"` plus the bulk-tie overrides.
 
 ## Usage
 
@@ -74,16 +85,21 @@ klayout -b -r ics55.lvs -rd input=macro.gds -rd top=MACRO \
 klayout -b -r ics55.lvs -rd input=macro.gds -rd top=MACRO \
     -rd schematic=macro.cdl -rd no_well_ties=true \
     -rd strict_topology=true -rd strict_hierarchy=true -z
+
+# Skip ERC (only for fixtures/diagnostics; signoff runs keep it enabled)
+python3 run_lvs.py --layout <lib>.gds --top ADDFX1H7R --netlist <lib>.cdl \
+    --no-erc
 ```
 
 `run_lvs.py` resolves relative paths from the caller's working directory,
 creates output directories, and removes prior report/netlist outputs before
 running KLayout. It returns 0 only when KLayout exits successfully, writes
-both outputs, and emits an explicit compare-pass marker; 1 means an explicit
-mismatch; 2 means a missing tool/input/output, colliding paths, or absent
-compare verdict. KLayout tool errors retain their nonzero status. Direct
-KLayout invocation prints the `ICS55_LVS_COMPARE=PASS|FAIL` marker but does
-not use this wrapper's exit-code handling.
+both outputs, and emits explicit compare-pass and ERC-pass markers; 1 means
+a compare mismatch or ERC violations; 2 means a missing tool/input/output,
+colliding paths, or an absent compare/ERC verdict. KLayout tool errors retain
+their nonzero status. Direct KLayout invocation prints the
+`ICS55_LVS_COMPARE=PASS|FAIL` and `ICS55_ERC=PASS|FAIL` markers but does not
+use this wrapper's exit-code handling.
 
 Compare is topology-based. MOS L and non-geometric parameters compare exactly;
 MOS W uses the official 10% relative tolerance (`mos_err 0.1`). W deviations
@@ -142,7 +158,9 @@ strict macro LVS launch; generic standard-cell LVS does not consume it.
 ## Known limitations
 
 - MOM capacitors, 2.5V/native MOS families, BJTs, and additional diode classes
-  are not extracted.
+  are not extracted. The released 1.2V antenna-diode cells (ANT2*, ANT4*)
+  reference one of these unsupported diode flavors and therefore report a
+  false mismatch against the ported extraction.
 - The IO library (P65_1233_*) comparison is not validated. Its wide
   multi-finger/ESD devices need further model and topology checks;
   `--combine-devices` is optional and is not a proven equivalence fix.
@@ -162,6 +180,14 @@ strict macro LVS launch; generic standard-cell LVS does not consume it.
   a synthetic `gnd|vdd` net; the same frozen GDS/reference passed after
   replacing that pass with physical-parallel reduction. Never restore
   reference-width-based net joining to make an LVS result pass.
+- The official deck sets `LVS REDUCE SPLIT GATES YES`; the port does not.
+  Series stacks drawn as two parallel diffusion fingers (each reference
+  transistor split into e.g. 0.36/0.24 um halves with private midpoint nets)
+  are not folded by `combine_devices`, which requires identical source/drain
+  nets. These cells report a false topology mismatch although the extracted
+  circuit is equivalent and the widths sum to the reference. This is stricter
+  than Calibre, not looser; it affects released AND2/AND3, AOI*/OAI*,
+  NAND2B/NAND4BB and TBUFX2 families (see the LVS comparison report).
 - NMOS and PMOS body annotations use separate virtual layers connected only
   to PSUB and NW respectively; an annotation layer must not bridge the two.
 - Foundry data inconsistencies (drawn widths deviate from the CDL; the deck
@@ -169,16 +195,31 @@ strict macro LVS launch; generic standard-cell LVS does not consume it.
   WARNING and fails beyond the official 10%):
   - INVX16H7L/H7R/H7H: NMOS drawn 3.04um vs CDL 2.4um, PMOS 2.4um vs
     3.04um (widths swapped, +27%).
-  - OAI33X0P5H7L/H7R/H7H: fingers drawn 200nm vs CDL 150nm (+33%).
+  - OAI33X0P5H7L/H7R/H7H: fingers drawn 200nm (NMOS) / 280nm (PMOS) vs CDL
+    150nm / 190nm (+33% / +47%).
   - INVX7H7L/H7R/H7H: NMOS 1.2um vs CDL 1.05um, PMOS 1.52um vs 1.33um
     (+14%).
   - TBUFX8H7L/H7R/H7H: TG output-pass NMOS drawn 460nm vs CDL 500nm
     (-8%) - passes at the official 10% tolerance with a WARNING;
     structure verified isomorphic (tristate function identical).
-  - NAND3BBX0P7H7L/H7R/H7H: PMOS drawn 190nm vs CDL 222nm (-14%) on top of
-    the stack-order issue below.
 - NAND3BBX0P5H7* / NAND3BBX0P7H7* (all three libs) draw the NMOS series stack
   reversed vs the released CDL (layout VSS-A1N-A2N-C-Y, CDL Y-A1N-A2N-C-VSS).
-  The logic is identical (a series AND is commutative) but the extracted and
-  reference netlists are not topologically equivalent, so the compare
-  truthfully reports a mismatch; matching requires corrected foundry data.
+  Extracted widths match the CDL multiset (150/175/190/222 nm); the logic is
+  identical (a series AND is commutative) but the extracted and reference
+  netlists are not topologically equivalent, so the compare truthfully reports
+  a mismatch; matching requires corrected foundry data.
+- ERC covers the ten selected official checks, not the full Calibre rule
+  set. `erc_gate_floating` and `erc_nWell_floating` are off in the vendor
+  profile and `DFM_ERC_CHECK FALSE` disables the DFM group; they are not
+  evaluated. The three unselected PATHCHK statements are diagnostics only.
+  Differences from Calibre, all stricter or equal: `erc_pathcheck_bad` omits
+  the `nw_para_diode_all` exclusion (unsupported device), so a surviving
+  unlabeled/floating island near such a diode can report where Calibre would
+  not; standard-cell global well ties make `erc_nWell_not_to_power` and
+  `erc_pWell_not_to_ground` pass by construction unless `--no-well-ties`
+  is used; tap/well checks probe the contacted conductor first, so a tap
+  merged into an unnamed soft-connected well island may be reported where
+  Calibre resolves a label. PATHCHK edges follow MOS source/drain and
+  resistor A/B terminals only; gates, MOS bulk, diode terminals and MOM
+  capacitors are not conducting paths, matching Calibre's `PATHCHK` device
+  connectivity. ERC results are still not a foundry signoff.

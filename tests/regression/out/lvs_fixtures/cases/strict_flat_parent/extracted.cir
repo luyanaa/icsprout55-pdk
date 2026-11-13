@@ -1,0 +1,21 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+* cell TOP
+* pin D
+* pin G
+* pin S
+.SUBCKT TOP D G S
+* cell instance $1 r0 *1 0,0
+X$1 S D G VSS MOS_LEAF
+.ENDS TOP
+
+* cell MOS_LEAF
+* pin 
+* pin 
+* pin 
+* pin 
+.SUBCKT MOS_LEAF \$1 \$2 \$3 \$I1
+* device instance $1 r0 *1 0.5,0.3 NM1P2_SVT_LP
+M$1 \$2 \$3 \$1 \$I1 NM1P2_SVT_LP L=0.1U W=0.6U AS=0.27P AD=0.27P PS=2.1U
++ PD=2.1U
+.ENDS MOS_LEAF

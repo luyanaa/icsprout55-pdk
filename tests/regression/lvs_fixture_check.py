@@ -56,6 +56,37 @@ FIXTURES: dict[str, dict[str, Any]] = {
 }
 
 
+# ERC smoke cases.  well-tied fixtures exercise the standard-cell convention;
+# the physical-tap cases run with no_well_ties so the contacted taps are real.
+# "checks" are the ERC SELECT CHECK set and drive ICS55_ERC; "diagnostics" are
+# the unselected bare PATHCHK statements and must never affect the verdict.
+ERC_SMOKE: dict[str, dict[str, Any]] = {
+    "erc_clean": {"no_well_ties": False, "verdict": "PASS",
+                  "checks": {}, "diagnostics": {}},
+    "erc_mn2pg": {"no_well_ties": False, "verdict": "FAIL",
+                  "checks": {"erc_mn2pg": 1}, "diagnostics": {}},
+    "erc_pathchk_ground": {"no_well_ties": False, "verdict": "PASS",
+                           "checks": {}, "diagnostics": {"erc_pathchk_ground_not_power": 1}},
+    "erc_pathchk_power": {"no_well_ties": False, "verdict": "PASS",
+                          "checks": {}, "diagnostics": {"erc_pathchk_power_not_ground": 1}},
+    "erc_unlabeled": {"gds": "core_svt_n", "no_well_ties": False, "verdict": "FAIL",
+                      "checks": {"erc_pathcheck_bad": 3},
+                      "diagnostics": {"erc_pathchk_unlabeled": 3}},
+    "erc_bad_ptap": {"no_well_ties": True, "verdict": "FAIL",
+                     "checks": {"erc_pTap_to_power": 1,
+                                "erc_pWell_not_to_ground": 1,
+                                "erc_ptap_outside_dnw_non_ground": 1},
+                     "diagnostics": {}},
+    "erc_bad_ntap": {"no_well_ties": True, "verdict": "FAIL",
+                     "checks": {"erc_nTap_to_ground": 1,
+                                "erc_nWell_not_to_power": 1},
+                     "diagnostics": {}},
+}
+
+ERC_CHECK_COUNT = 10
+ERC_DIAGNOSTIC_COUNT = 3
+
+
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -231,6 +262,7 @@ def run_compare_verdict_smoke(
             "--netlist", str(netlist),
             "--target-netlist", str(target),
             "--report", str(report),
+            "--no-erc",
         ]
         if kind == "nix":
             command = nix_shell_command(exe, command)
@@ -317,7 +349,7 @@ def run_strict_flat_mode_smoke(kind: str, exe: str, gds: Path, out: Path) -> dic
             "-rd", f"input={gds}", "-rd", "top=TOP",
             "-rd", f"schematic={schematic}", "-rd", f"target_netlist={target}",
             "-rd", f"report={report}", "-rd", "strict_topology=true",
-            "-rd", "no_well_ties=true",
+            "-rd", "no_well_ties=true", "-rd", "no_erc=true",
         ]
         if mode is not None:
             extra.extend(["-rd", f"run_mode={mode}"])
@@ -340,6 +372,125 @@ def run_strict_flat_mode_smoke(kind: str, exe: str, gds: Path, out: Path) -> dic
             cases.append({"name": name, "status": "FAIL", "error": str(error)})
     return {
         "fixture": "strict_flat_modes",
+        "status": "PASS" if all(case["status"] == "PASS" for case in cases) else "FAIL",
+        "cases": cases,
+    }
+
+
+def run_erc_smoke(
+    kind: str, exe: str, fixture_dir: Path, out: Path
+) -> dict[str, Any]:
+    """Clean and violating layouts must produce exact ERC check counts."""
+    check_pattern = re.compile(r"^ERC: (?:diagnostic )?(\w+): (\d+) violation\(s\)$", re.MULTILINE)
+    verdict_pattern = re.compile(r"^ICS55_ERC=(PASS|FAIL)$", re.MULTILINE)
+    summary_pattern = re.compile(
+        r"^ICS55_ERC_SUMMARY checks=(\d+) selected_violations=(\d+) "
+        r"diagnostics=(\d+) diagnostic_violations=(\d+)$",
+        re.MULTILINE,
+    )
+    cases = []
+    for name, expected in ERC_SMOKE.items():
+        directory = out / "erc_smoke" / name
+        directory.mkdir(parents=True, exist_ok=True)
+        gds = fixture_dir / f"{expected.get('gds', name)}.gds"
+        reference = directory / "reference.cir"
+        reference_report = directory / "reference.lvsdb"
+        target = directory / "extracted.cir"
+        report = directory / "lvs.lvsdb"
+        reference.unlink(missing_ok=True)
+        reference_report.unlink(missing_ok=True)
+        target.unlink(missing_ok=True)
+        report.unlink(missing_ok=True)
+        well_flag = ["-rd", "no_well_ties=true"] if expected["no_well_ties"] else []
+        try:
+            extraction = invoke_klayout(kind, exe, DECK, [
+                "-rd", f"input={gds}", "-rd", "top=TOP", "-rd", "net_only=true",
+                *well_flag,
+                "-rd", f"target_netlist={reference}",
+                "-rd", f"report={reference_report}",
+            ])
+            if extraction.returncode != 0 or not reference.is_file():
+                output = (extraction.stdout + "\n" + extraction.stderr).strip()
+                cases.append({
+                    "name": name, "status": "FAIL",
+                    "error": "reference extraction did not complete", "output": output,
+                })
+                continue
+            run = invoke_klayout(kind, exe, DECK, [
+                "-rd", f"input={gds}", "-rd", "top=TOP",
+                "-rd", f"schematic={reference}", "-rd", f"target_netlist={target}",
+                "-rd", f"report={report}", *well_flag,
+            ])
+        except (OSError, subprocess.TimeoutExpired) as error:
+            cases.append({"name": name, "status": "FAIL", "error": str(error)})
+            continue
+
+        output = (run.stdout + "\n" + run.stderr).strip()
+        observed = {check: int(count) for check, count in check_pattern.findall(output)}
+        verdict_match = verdict_pattern.search(output)
+        summary_match = summary_pattern.search(output)
+        issues = []
+        if run.returncode != 0:
+            issues.append(f"KLayout exited {run.returncode}")
+        if not target.is_file() or not report.is_file():
+            issues.append("extracted netlist or report was not written")
+        if "ICS55_LVS_COMPARE=PASS" not in output:
+            issues.append("ERC smoke run did not pass the netlist comparison")
+        verdict = verdict_match.group(1) if verdict_match else None
+        if verdict != expected["verdict"]:
+            issues.append(f"expected ICS55_ERC={expected['verdict']}, observed {verdict}")
+        selected_total = diagnostic_total = None
+        if not summary_match:
+            issues.append("ERC summary line missing")
+        else:
+            checks_reported = int(summary_match.group(1))
+            selected_total = int(summary_match.group(2))
+            diagnostics_reported = int(summary_match.group(3))
+            diagnostic_total = int(summary_match.group(4))
+            if checks_reported != ERC_CHECK_COUNT:
+                issues.append(f"expected {ERC_CHECK_COUNT} ERC checks, observed {checks_reported}")
+            if diagnostics_reported != ERC_DIAGNOSTIC_COUNT:
+                issues.append(
+                    f"expected {ERC_DIAGNOSTIC_COUNT} ERC diagnostics, "
+                    f"observed {diagnostics_reported}"
+                )
+        expected_counts = {**expected["checks"], **expected["diagnostics"]}
+        for check, count in expected_counts.items():
+            if observed.get(check, 0) != count:
+                issues.append(f"expected {check}={count}, observed {observed.get(check, 0)}")
+        unexpected = {
+            check: count for check, count in observed.items()
+            if count and check not in expected_counts
+        }
+        if unexpected:
+            issues.append(f"unexpected ERC violations: {unexpected}")
+        if selected_total is not None and selected_total != sum(expected["checks"].values()):
+            issues.append(
+                f"expected {sum(expected['checks'].values())} selected violations, "
+                f"observed {selected_total}"
+            )
+        if diagnostic_total is not None and diagnostic_total != sum(expected["diagnostics"].values()):
+            issues.append(
+                f"expected {sum(expected['diagnostics'].values())} diagnostic violations, "
+                f"observed {diagnostic_total}"
+            )
+        cases.append({
+            "name": name,
+            "status": "PASS" if not issues else "FAIL",
+            "no_well_ties": expected["no_well_ties"],
+            "expected_verdict": expected["verdict"],
+            "verdict": verdict,
+            "checks": observed,
+            "selected_violations": selected_total,
+            "diagnostic_violations": diagnostic_total,
+            "gds_sha256": sha256(gds),
+            "target_netlist": str(target),
+            "report": str(report),
+            "output": output,
+            "issues": issues,
+        })
+    return {
+        "fixture": "erc_smoke",
         "status": "PASS" if all(case["status"] == "PASS" for case in cases) else "FAIL",
         "cases": cases,
     }
@@ -397,6 +548,9 @@ def main() -> int:
     )
     if strict_modes["status"] != "PASS":
         failed.append(strict_modes)
+    erc_smoke = run_erc_smoke(kind, exe, fixture_dir, args.out)
+    if erc_smoke["status"] != "PASS":
+        failed.append(erc_smoke)
     report = {
         "status": "FAIL" if failed else "PASS",
         "klayout_kind": kind,
@@ -408,6 +562,7 @@ def main() -> int:
         "cases": cases,
         "verdict_smoke": verdict_smoke,
         "strict_flat_modes": strict_modes,
+        "erc_smoke": erc_smoke,
         "fixture_failed": len(fixture_failed),
         "failed": len(failed),
     }
@@ -433,9 +588,14 @@ def main() -> int:
     for case in strict_modes["cases"]:
         if case["status"] != "PASS":
             print(case.get("output", case.get("error")))
+    print(f"{erc_smoke['status']}: ERC clean/violation smoke ({len(erc_smoke['cases'])} cases)")
+    for case in erc_smoke["cases"]:
+        if case["status"] != "PASS":
+            print(f"  - {case['name']}: {'; '.join(case.get('issues', []))}")
+            print(case.get("output", case.get("error", "")))
     print(
         f"{report['status']}: {len(cases) - len(fixture_failed)}/{len(cases)} fixtures; "
-        f"verdict smoke {verdict_smoke['status']}; {report_path}"
+        f"verdict smoke {verdict_smoke['status']}; ERC smoke {erc_smoke['status']}; {report_path}"
     )
     return 1 if failed else 0
 

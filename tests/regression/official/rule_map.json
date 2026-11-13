@@ -41,12 +41,50 @@
     "IOACT now derived ACT&TGOX; IO LVS comparison still blocked (multi-finger combining)"
    ]
   },
+  "erc_checks": {
+   "official": {
+    "file": "pv/LVS/ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs",
+    "refs": "9089-9310 (definitions), 9292-9306 (ERC SELECT CHECK)",
+    "profile": "ERC_CHECK TRUE, ERC MAXIMUM RESULTS 1000, GATE_FLOATING_CHECK FALSE, NWELL_FLOATING_CHECK FALSE, NWELL_NOT_TO_POWER_CHECK TRUE, PWELL_NOT_TO_GROUND_CHECK TRUE, DFM_ERC_CHECK FALSE"
+   },
+   "klayout": {
+    "file": "libs.tech/lvs/rule_decks/erc.lvs",
+    "diagnostics": [
+     "erc_pathchk_ground_not_power",
+     "erc_pathchk_power_not_ground",
+     "erc_pathchk_unlabeled"
+    ]
+   },
+   "selected_checks": [
+    "erc_pathcheck_bad",
+    "erc_pTap_to_power",
+    "erc_nTap_to_ground",
+    "erc_mp2pg",
+    "erc_mn2pg",
+    "erc_mn2pghvt",
+    "erc_mp2pghvt",
+    "erc_ptap_outside_dnw_non_ground",
+    "erc_nWell_not_to_power",
+    "erc_pWell_not_to_ground"
+   ],
+   "equivalence": "selected set ported; diagnostics reported without verdict effect",
+   "status": "partial",
+   "gaps": [
+    "erc_pathcheck_bad omits the nw_para_diode_all exclusion (unsupported device), stricter",
+    "default global well ties satisfy erc_nWell_not_to_power/erc_pWell_not_to_ground by construction; use no_well_ties for physical taps",
+    "erc_gate_floating, erc_nWell_floating, and the DFM ERC group are disabled in the vendor profile and not evaluated",
+    "no same-input Calibre ERC differential"
+   ]
+  },
   "coverage_final": {
    "mos_families_official": "1.2V svt/lvt/hvt, 2.5V, 3.3V, 3.3V-OD, native",
    "mos_families_ported": "1.2V svt/lvt/hvt, 3.3V (8 classes)",
-   "compare": "official mos_err 10% W/L; port L exact + W 5% (stricter)",
-   "waived": "NAND3BBX0P5/X0P7H7* stack reversal (6 cells)",
-   "date": "2026-09-25"
+   "compare": "official mos_err 10% W/L, REDUCE PARALLEL/SERIES YES, REDUCE SPLIT GATES YES; port L exact + W 10% (5% warning), simplify + optional physical-parallel combine",
+   "released_sweep_2026_11_13": "746/785 PASS per library (H7CH/H7CL/H7CR); 39 identical failing families each",
+   "known_false_mismatches": "32 split-gate fold families (96 cells, Calibre REDUCE SPLIT GATES would fold; layout is electrically equivalent)",
+   "known_mismatches": "NAND3BBX0P5/X0P7 stack reversal (6 cells, foundry data); INVX7/INVX16/OAI33X0P5 width >10% (9 cells, foundry data); ANT2/ANT4 unsupported 1.2V diodes (6 cells)",
+   "erc": "official ERC_CHECK TRUE selected set (10 checks) ported in rule_decks/erc.lvs; 3 unselected PATHCHK diagnostics reported without verdict effect; no Calibre differential",
+   "date": "2026-11-13"
   }
  },
  "drc": {

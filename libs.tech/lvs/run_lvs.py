@@ -29,11 +29,15 @@ Options:
   --report PATH        LVS report database (.lvsdb); default: <top>.lvsdb
   --target-netlist P   extracted layout netlist; default: <top>_extracted.cir
   --no-well-ties       use CT-qualified physical taps, not global VSS/VDD body ties
+  --no-erc             skip the electrical rule checks
   --combine-devices    combine parallel/series devices before comparison
   --purge              purge unused nets/devices before comparison
   --run-mode MODE      deep (default) | flat
   --metal-stack MODE   auto-detect T4 stack or select m1_m5 | t4
   --klayout PATH       klayout executable; defaults to 'klayout' on PATH
+
+Exit status: 0 = match with a clean ERC, 1 = compare mismatch or ERC
+violations, 2 = tool or output failure.
 """
 
 import argparse
@@ -54,6 +58,8 @@ def main() -> int:
     ap.add_argument("--target-netlist")
     ap.add_argument("--no-well-ties", action="store_true",
                     help="use CT-qualified physical taps instead of global VSS/VDD ties")
+    ap.add_argument("--no-erc", action="store_true",
+                    help="skip the electrical rule checks")
     ap.add_argument("--combine-devices", action="store_true")
     ap.add_argument("--purge", action="store_true")
     ap.add_argument("--run-mode", default="deep", choices=["deep", "flat"])
@@ -96,6 +102,8 @@ def main() -> int:
     ]
     if args.no_well_ties:
         cmd += ["-rd", "no_well_ties=true"]
+    if args.no_erc:
+        cmd += ["-rd", "no_erc=true"]
     if args.combine_devices:
         cmd += ["-rd", "combine_devices=true"]
     if args.purge:
@@ -118,6 +126,13 @@ def main() -> int:
     if "ICS55_LVS_COMPARE=PASS" not in proc.stdout:
         print("ERROR: KLayout LVS completed without a compare verdict.", file=sys.stderr)
         return 2
+    if not args.no_erc:
+        if "ICS55_ERC=FAIL" in proc.stdout:
+            print("ERROR: ERC violations found.", file=sys.stderr)
+            return 1
+        if "ICS55_ERC=PASS" not in proc.stdout:
+            print("ERROR: KLayout LVS completed without an ERC verdict.", file=sys.stderr)
+            return 2
     return 0
 
 

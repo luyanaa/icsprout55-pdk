@@ -1,0 +1,393 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# ICsprout55 LVS electrical rule checks (ERC)
+#
+# Port of the vendor profile under ERC_CHECK TRUE.  The released deck reports
+# only the checks named by ERC SELECT CHECK (DFM_ERC_CHECK is FALSE):
+#   erc_pathcheck_bad
+#   erc_pTap_to_power, erc_nTap_to_ground
+#   erc_mp2pg, erc_mn2pg, erc_mn2pghvt, erc_mp2pghvt
+#   erc_ptap_outside_dnw_non_ground
+#   erc_nWell_not_to_power      (NWELL_NOT_TO_POWER_CHECK TRUE)
+#   erc_pWell_not_to_ground     (PWELL_NOT_TO_GROUND_CHECK TRUE)
+# GATE_FLOATING_CHECK and NWELL_FLOATING_CHECK are FALSE in that profile and are
+# not implemented.
+#
+# The three bare statements
+#   ERC PATHCHK GROUND && !POWER NOFLOAT
+#   ERC PATHCHK POWER && !GROUND NOFLOAT
+#   ERC PATHCHK !LABELED NOFLOAT
+# are not named in any ERC SELECT CHECK list, so Calibre does not write them to
+# the ERC results.  They are computed here as diagnostics only and never affect
+# ICS55_ERC.  (They flag legitimate tie/decap cells: an output that only reaches
+# one rail is exactly what these unselected checks report.)
+#
+# PATHCHK semantics: a path runs through MOS source/drain pins and resistor
+# pos/neg pins only; gates, MOS bulk, capacitors, and diodes are open.
+#
+# Net names follow LVS POWER NAME "?VDD?" "?POWER?" and LVS GROUND NAME
+# "?VSS?" "?GND?"; Calibre's '?' wildcard makes these substring tests.  Case is
+# significant (CASE_SENSITIVITY TRUE).  The selected bulk aliases are always
+# accepted so -rd bulk_power_net/-rd bulk_ground_net keep working.
+#
+# Known differences from Calibre (all strict, never silently looser):
+#   - erc_pathcheck_bad cannot evaluate the nw_para_diode_all exclusion: the
+#     port does not extract the 1.2V NW parasitic diode, so nets beside it are
+#     still reported.
+#   - With the default global well ties, the nWell/pWell rail checks are
+#     satisfied by construction; physical tap checks become meaningful with
+#     -rd no_well_ties=true.
+#=========================================================================================
+
+ERC_SELECTED_CHECKS = %w[
+  erc_pathcheck_bad
+  erc_pTap_to_power
+  erc_nTap_to_ground
+  erc_mp2pg
+  erc_mn2pg
+  erc_mn2pghvt
+  erc_mp2pghvt
+  erc_ptap_outside_dnw_non_ground
+  erc_nWell_not_to_power
+  erc_pWell_not_to_ground
+]
+
+ERC_DIAGNOSTIC_CHECKS = %w[
+  erc_pathchk_ground_not_power
+  erc_pathchk_power_not_ground
+  erc_pathchk_unlabeled
+]
+
+ERC_CHECK_NAMES = ERC_SELECTED_CHECKS + ERC_DIAGNOSTIC_CHECKS
+
+# Vendor ERC MAXIMUM RESULTS 1000.
+ERC_MAX_RESULTS = 1000
+ERC_INTERIOR_STEPS = 8
+
+ERC_MOS_RAIL_CHECKS = {
+  'NM1P2_SVT_LP' => 'erc_mn2pg',
+  'NM1P2_HVT_LP' => 'erc_mn2pghvt',
+  'PM1P2_SVT_LP' => 'erc_mp2pg',
+  'PM1P2_HVT_LP' => 'erc_mp2pghvt'
+}
+
+def erc_net_names(net)
+  return [] unless net
+  net.name.to_s.split('|').map(&:strip).reject(&:empty?)
+end
+
+def erc_power_net?(net)
+  erc_net_names(net).any? do |name|
+    name == BULK_POWER_NET.to_s || name.include?('VDD') || name.include?('POWER')
+  end
+end
+
+def erc_ground_net?(net)
+  erc_net_names(net).any? do |name|
+    name == BULK_GROUND_NET.to_s || name.include?('VSS') || name.include?('GND')
+  end
+end
+
+# A rail net is always considered labeled: in Calibre its name necessarily came
+# from a label, while the port also creates BULK_POWER_NET/BULK_GROUND_NET nets
+# through connect_global for the standard-cell convention.
+def erc_labeled_net?(net)
+  return false unless net
+  return true if erc_power_net?(net) || erc_ground_net?(net)
+  erc_net_names(net).any? { |name| name !~ /\A\$/ }
+end
+
+def erc_net_desc(net)
+  return "(no net)" unless net
+  name = net.qname.to_s
+  name = net.expanded_name.to_s if name.empty?
+  name.empty? ? "(unnamed)" : name
+end
+
+def erc_path_terminal_pair(device)
+  terminals = {}
+  device.device_class.terminal_definitions.each do |terminal|
+    terminals[terminal.name.to_s.upcase] = terminal.id
+  end
+  if terminals.key?('S') && terminals.key?('D')
+    [terminals['S'], terminals['D']]
+  elsif terminals.key?('A') && terminals.key?('B')
+    [terminals['A'], terminals['B']]
+  end
+end
+
+# KLayout Ruby recreates Net wrapper objects per call, so object_id/hash are not
+# stable.  The circuit wrapper identity plus the cluster id is the net identity.
+def erc_net_key(net)
+  cluster = net.cluster_id
+  cluster = net.object_id if cluster.nil? || cluster < 0
+  [net.circuit ? net.circuit.object_id : 0, cluster]
+end
+
+# Path connectivity over (circuit, net) nodes, including subcircuit pin links,
+# MOS channels, and resistor bodies.  Capacitors and diodes contribute no edge.
+def erc_connectivity(netlist)
+  parent = {}
+  nets = []
+  netlist.each_circuit do |circuit|
+    circuit.each_net do |net|
+      key = erc_net_key(net)
+      parent[key] = key
+      nets << net
+    end
+  end
+
+  find = lambda do |node|
+    root = node
+    root = parent[root] while parent[root] != root
+    while parent[node] != root
+      following = parent[node]
+      parent[node] = root
+      node = following
+    end
+    root
+  end
+  union = lambda do |left, right|
+    left_root = find.call(left)
+    right_root = find.call(right)
+    parent[left_root] = right_root unless left_root == right_root
+  end
+
+  netlist.each_circuit do |circuit|
+    circuit.each_subcircuit do |subcircuit|
+      child = subcircuit.circuit_ref
+      child.each_pin do |pin|
+        child_net = child.net_for_pin(pin.id)
+        parent_net = subcircuit.net_for_pin(pin.id)
+        union.call(erc_net_key(child_net), erc_net_key(parent_net)) if child_net && parent_net
+      end
+    end
+    circuit.each_device do |device|
+      pair = erc_path_terminal_pair(device)
+      next unless pair
+      left = device.net_for_terminal(pair[0])
+      right = device.net_for_terminal(pair[1])
+      union.call(erc_net_key(left), erc_net_key(right)) if left && right
+    end
+  end
+
+  components = {}
+  nets.each { |net| components[erc_net_key(net)] = find.call(erc_net_key(net)) }
+  members = Hash.new { |hash, key| hash[key] = [] }
+  nets.each { |net| members[components[erc_net_key(net)]] << net }
+  [components, members]
+end
+
+def erc_run_net_checks(netlist, report)
+  components, members = erc_connectivity(netlist)
+  properties = {}
+  members.each do |root, nets|
+    properties[root] = {
+      power: nets.any? { |net| erc_power_net?(net) },
+      ground: nets.any? { |net| erc_ground_net?(net) },
+      labeled: nets.any? { |net| erc_labeled_net?(net) }
+    }
+  end
+
+  members.each do |root, nets|
+    prop = properties[root]
+    nets.each do |net|
+      # NOFLOAT: ignore nets without any device/pin terminal.
+      next if net.is_floating?
+      desc = erc_net_desc(net)
+      if prop[:ground] && !prop[:power] && !erc_ground_net?(net)
+        report['erc_pathchk_ground_not_power'] << "#{desc}: path to ground but no path to power"
+      end
+      if prop[:power] && !prop[:ground] && !erc_power_net?(net)
+        report['erc_pathchk_power_not_ground'] << "#{desc}: path to power but no path to ground"
+      end
+      unless prop[:labeled]
+        report['erc_pathchk_unlabeled'] << "#{desc}: no path to a labeled net"
+      end
+      if !prop[:power] && !prop[:ground] && !prop[:labeled]
+        report['erc_pathcheck_bad'] << "#{desc}: no path to power, ground, or a labeled net"
+      end
+    end
+  end
+end
+
+def erc_run_mos_checks(netlist, report)
+  netlist.each_circuit do |circuit|
+    circuit.each_device do |device|
+      check = ERC_MOS_RAIL_CHECKS[device.device_class.name]
+      next unless check
+      terminals = {}
+      device.device_class.terminal_definitions.each do |terminal|
+        terminals[terminal.name.to_s.upcase] = terminal.id
+      end
+      source = device.net_for_terminal(terminals['S'])
+      drain = device.net_for_terminal(terminals['D'])
+      next unless source && drain
+      rails = [source, drain]
+      next unless rails.any? { |net| erc_power_net?(net) } && rails.any? { |net| erc_ground_net?(net) }
+      report[check] << "#{circuit.name}: #{device.name} S=#{erc_net_desc(source)} D=#{erc_net_desc(drain)}"
+    end
+  end
+end
+
+def erc_interior_point(polygon)
+  box = polygon.bbox
+  candidate = box.center
+  return candidate if polygon.inside?(candidate)
+
+  (1...ERC_INTERIOR_STEPS).each do |iy|
+    (1...ERC_INTERIOR_STEPS).each do |ix|
+      point = RBA::DPoint.new(box.left + box.width * ix / ERC_INTERIOR_STEPS,
+                              box.bottom + box.height * iy / ERC_INTERIOR_STEPS)
+      return point if polygon.inside?(point)
+    end
+  end
+  nil
+end
+
+# Probes the first layer that yields an extracted net; probe_net uses layout
+# coordinates in microns.  The net is re-resolved by cluster id because netlist
+# joins (bulk aliases, same-name labels) may have replaced the original net.
+def erc_probe_net(l2n_data, probe_layers, polygon)
+  point = erc_interior_point(polygon)
+  return [nil, nil] unless point
+  probe_layers.each do |layer|
+    physical = l2n_data.probe_net(layer.data, point)
+    next unless physical
+    circuit = physical.circuit
+    resolved = circuit && circuit.net_by_cluster_id(physical.cluster_id)
+    return [point, resolved || physical]
+  end
+  [point, nil]
+end
+
+def erc_position(point)
+  return "(unknown position)" unless point
+  "(#{format('%.3f,%.3f', point.x, point.y)})"
+end
+
+def erc_tap_entries(layer, probe_layers, l2n_data)
+  entries = []
+  layer.each do |polygon|
+    point, net = erc_probe_net(l2n_data, probe_layers, polygon)
+    entries << [point, net]
+  end
+  entries
+end
+
+def erc_run_tap_checks(l2n_data, layers, report)
+  p_tap = layers['P_TAP']
+  n_tap = layers['N_TAP']
+  contacts = layers['CTS']
+  m1 = layers['M1S']
+  sringblk = layers['SRINGBLK']
+  dnw = layers['DNW']
+  nw = layers['NW']
+  bjt = layers['BJT']
+  nw1res = layers['NW1RES']
+
+  # Probe the contacted conductor first: the tap/well layers resolve to the
+  # well side of the soft body connection, while the CT/M1 net is the actual
+  # electrical tap net.
+  p_tap_probes = [m1, contacts, p_tap]
+  n_tap_probes = [m1, contacts, n_tap]
+
+  erc_tap_entries(p_tap, p_tap_probes, l2n_data).each do |point, net|
+    next unless erc_power_net?(net)
+    report['erc_pTap_to_power'] << "pTap at #{erc_position(point)} on #{erc_net_desc(net)}"
+  end
+
+  erc_tap_entries(n_tap, n_tap_probes, l2n_data).each do |point, net|
+    next unless erc_ground_net?(net)
+    report['erc_nTap_to_ground'] << "nTap at #{erc_position(point)} on #{erc_net_desc(net)}"
+  end
+
+  p_tap_valid = p_tap.not(p_tap.interacting(sringblk))
+  erc_tap_entries(p_tap_valid, p_tap_probes, l2n_data).each do |point, net|
+    next if erc_ground_net?(net)
+    report['erc_pWell_not_to_ground'] << "pTap at #{erc_position(point)} on #{erc_net_desc(net)}"
+  end
+
+  p_tap_outside_dnw = p_tap_valid.not(p_tap_valid.interacting(dnw))
+  erc_tap_entries(p_tap_outside_dnw, p_tap_probes, l2n_data).each do |point, net|
+    next if erc_ground_net?(net)
+    report['erc_ptap_outside_dnw_non_ground'] << "pTap at #{erc_position(point)} on #{erc_net_desc(net)}"
+  end
+
+  # Official: nWell_check = (nWell NOT INTERACT BJT) NOT INTERACT NW1res;
+  # nWell_with_nTap = nWell_check interact nTap; report when its net is not power.
+  nw_no_bjt = nw.not(nw.interacting(bjt))
+  nwell_check = nw_no_bjt.not(nw_no_bjt.interacting(nw1res))
+  nwell_with_ntap = nwell_check.interacting(n_tap)
+  probe_polygons = []
+  nwell_with_ntap.and(n_tap).each { |polygon| probe_polygons << polygon }
+  nwell_with_ntap.each { |polygon| probe_polygons << polygon } if probe_polygons.empty?
+
+  seen = {}
+  probe_polygons.each do |polygon|
+    point, net = erc_probe_net(l2n_data, n_tap_probes + [nw], polygon)
+    next if erc_power_net?(net)
+    key = net ? erc_net_desc(net) : "unconnected #{erc_position(point)}"
+    next if seen[key]
+    seen[key] = true
+    report['erc_nWell_not_to_power'] << "N-well at #{erc_position(point)} on #{erc_net_desc(net)}"
+  end
+end
+
+def run_erc(netlist, l2n_data, layers)
+  report = Hash.new { |hash, key| hash[key] = [] }
+  erc_run_net_checks(netlist, report)
+  erc_run_mos_checks(netlist, report)
+  erc_run_tap_checks(l2n_data, layers, report)
+
+  lines = []
+  selected_total = 0
+  diagnostic_total = 0
+  printed = 0
+  ERC_SELECTED_CHECKS.each do |check|
+    violations = report[check]
+    selected_total += violations.size
+    lines << "ERC: #{check}: #{violations.size} violation(s)"
+    violations.each do |message|
+      break if printed >= ERC_MAX_RESULTS
+      lines << "ERC: #{check}: #{message}"
+      printed += 1
+    end
+  end
+  ERC_DIAGNOSTIC_CHECKS.each do |check|
+    violations = report[check]
+    diagnostic_total += violations.size
+    lines << "ERC: diagnostic #{check}: #{violations.size} violation(s)"
+    violations.each do |message|
+      break if printed >= ERC_MAX_RESULTS
+      lines << "ERC: diagnostic #{check}: #{message}"
+      printed += 1
+    end
+  end
+  total = selected_total + diagnostic_total
+  lines << "ERC: #{total - printed} further violation(s) not listed (ERC MAXIMUM RESULTS #{ERC_MAX_RESULTS})" if total > printed
+  lines << "ICS55_ERC_SUMMARY checks=#{ERC_SELECTED_CHECKS.size} selected_violations=#{selected_total} " \
+           "diagnostics=#{ERC_DIAGNOSTIC_CHECKS.size} diagnostic_violations=#{diagnostic_total}"
+  lines << "ICS55_ERC=#{selected_total.zero? ? 'PASS' : 'FAIL'}"
+  if selected_total.positive?
+    lines << "ERROR: ERC violations found (the LVS comparison verdict is unaffected)."
+  elsif diagnostic_total.positive?
+    lines << "WARNING: unselected ERC diagnostic violations found (they do not affect the verdict)."
+  end
+  lines.each { |line| puts line }
+  File.write($erc_report, lines.join("\n") + "\n") if $erc_report
+  selected_total
+end
