@@ -21,8 +21,9 @@
 #   - AA edges:   the default shielded separation to AA (only AA edges outside
 #                 the marker face the marker boundary, so enclosing markers
 #                 are governed by the EX enclosure checks).
-# The far-poly EX_3b branch (0.12 um) is folded into the tighter 0.15 um
-# EX_3a enclosure. ABUT/SINGULAR/OPPOSITE qualifiers are not reproduced.
+# EX_3a checks the AA edge portions near the gate at 0.15 um; EX_3b checks the
+# same edge family outside a 0.20 um gate halo at 0.12 um.
+# ABUT/SINGULAR/OPPOSITE qualifiers are not reproduced.
 #=========================================================================================
 
 if FEOL
@@ -67,6 +68,20 @@ if FEOL
   ACT.edges.inside_part(ULLD).and(GATE.edges).extended_out(ulld_aa_gate_ext.um).not(ULLD)
     .not_inside(NODRC).output('ULLD_EX_3a',
       "ULLD_EX_3a: ULLD extension outside AA along the poly direction must be at least #{ulld_aa_gate_ext} um outside NODRC [Calibre source]")
+
+  # ULLD_EX_3b: the far-poly branch of the same AA-edge family, beyond the
+  # 0.20 um gate-edge extension built by the source. The Calibre X2/X3/X4 edge
+  # constructs are approximated with the AA long edges that pass under the
+  # gate, clipped outside a 0.20 um gate halo. Only edges inside the ULLD
+  # marker are measured, matching Calibre ENC (no marker region => no check).
+  ulld_aa_far_ext = rval('ulld_aa_far_ext')
+  aa_under_gate_edges = ACT.edges.inside_part(POLY)
+  aa_long_edges = ACT.edges.interacting(aa_under_gate_edges)
+  gate_far_halo = GATE.sized(0.20.um, 0).or(GATE.sized(0, 0.20.um))
+  aa_far_edges = aa_long_edges.outside_part(gate_far_halo).inside_part(ULLD)
+  aa_far_edges.extended_out(ulld_aa_far_ext.um).not(ULLD)
+    .not_inside(NODRC).output('ULLD_EX_3b',
+      "ULLD_EX_3b: ULLD extension outside AA along the poly direction must be at least #{ulld_aa_far_ext} um when the related poly is farther than 0.20 um, outside NODRC [Calibre source]")
 
   ulld_area = rval('ulld_area')
   ULLD.not(ULLD.with_area(ulld_area.um2, 1e9.um2)).not_inside(NODRC).output('ULLD_A_1',

@@ -13,16 +13,19 @@ KLayout is selected from PATH / `--klayout`, or from the LibreLane nix shell
 Usage:
   python3 drc_fixture_check.py [--librelane ~/Documents/librelane]
                                [--klayout PATH] [--out tests/regression/out]
+                               [--jobs N]
 
 Exit codes: 0 exact fixture match, 1 category mismatch, 2 blocked/harness error.
 """
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 from nix_shell import command as nix_shell_command
@@ -38,28 +41,43 @@ MAKE_FIXTURES = Path(__file__).resolve().parent / "make_fixtures.rb"
 DRC_PROFILES = {
     "main": {
         "tables": "main", "no_feol": False, "no_beol": False,
-        "check_grid": False, "advanced": False, "no_density": True,
+        "no_density": True,
         "no_mom": True, "cell_exclusion": False, "run_mode": "deep",
     },
     "density": {
         "tables": "density", "no_feol": False, "no_beol": False,
-        "check_grid": False, "advanced": False, "no_density": False,
+        "no_density": False,
         "no_mom": True, "cell_exclusion": False, "run_mode": "deep",
     },
     "mom": {
         "tables": "mom", "no_feol": False, "no_beol": False,
-        "check_grid": False, "advanced": False, "no_density": True,
+        "no_density": True,
         "no_mom": False, "cell_exclusion": False, "run_mode": "deep",
     },
     "beol": {
         "tables": "beol", "no_feol": True, "no_beol": False,
-        "check_grid": False, "advanced": False, "no_density": True,
+        "no_density": True,
         "no_mom": True, "cell_exclusion": False, "run_mode": "deep",
     },
     "special": {
         "tables": "special", "no_feol": True, "no_beol": True,
-        "check_grid": False, "advanced": False, "no_density": True,
+        "no_density": True,
         "no_mom": True, "cell_exclusion": False, "run_mode": "deep",
+    },
+    # Off-profile thick-metal switch: T4M1 selected with vendor top_metal=2.
+    "t4m1": {
+        "tables": "main", "no_feol": True, "no_beol": False,
+        "no_density": True,
+        "no_mom": True, "cell_exclusion": False, "run_mode": "deep",
+        "total_metal": 6, "top_metal": 2,
+        "T4V1_T4M1": True, "T4V2_T4M2": False,
+    },
+    # Recommended rules as report categories (default mode is warn).
+    "recommended": {
+        "tables": "main", "no_feol": False, "no_beol": False,
+        "no_density": True,
+        "no_mom": True, "cell_exclusion": False, "run_mode": "deep",
+        "recommended": "error",
     },
     # Antenna ratios need netlist extraction, so they live in a separate deck.
     "antenna": {
@@ -108,13 +126,39 @@ FIXTURES: dict[str, frozenset[str]] = {
     "act_implant_coverage_bad": frozenset({"active.act.implant_coverage"}),
     "act_implant_coverage_nw1res_waived": frozenset(),
     "act_channel_width_bad": frozenset({
-        "active.act.u_space", "active.gate.channel_width", "implant.np.gate_aa.enclosure",
+        "active.act.u_space",
+        "active.gate.channel_width",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.lshape_aa",
+        "poly.po.lshape_po",
+        "poly.po.sti_space",
     }),
-    "act_channel_width_at_limit": frozenset({"active.act.u_space", "implant.np.gate_aa.enclosure"}),
+    "act_channel_width_at_limit": frozenset({
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.lshape_aa",
+        "poly.po.lshape_po",
+        "poly.po.sti_space",
+    }),
     "act_io_channel_width_bad": frozenset({
-        "active.act.u_space", "active.gate.io_channel_width", "implant.np.gate_aa.enclosure",
+        "active.act.u_space",
+        "active.gate.io_channel_width",
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.dg",
+        "poly.po.sti_space",
     }),
-    "act_io_channel_width_at_limit": frozenset({"active.act.u_space", "implant.np.gate_aa.enclosure"}),
+    "act_io_channel_width_at_limit": frozenset({
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.dg",
+        "poly.po.sti_space",
+    }),
     "act_angle_width_bad": frozenset({"active.act.angle_width"}),
     "act_angle_width_at_limit": frozenset(),
     "act_angle_space_bad": frozenset({"active.act.angle_space"}),
@@ -224,22 +268,92 @@ FIXTURES: dict[str, frozenset[str]] = {
     "psub_nw_space_at_limit": frozenset({"well.nw.floating"}),
     "psub_mos_space_bad": frozenset({"implant.psub.mos_space"}),
     "psub_mos_space_at_limit": frozenset(),
-    "psub_channel_width_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.channel_width_min"}),
-    "psub_channel_width_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "psub_channel_width_max_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.channel_width_max"}),
-    "psub_core_length_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.core_length_min"}),
-    "psub_core_length_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "psub_core_length_max_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.core_length_max"}),
-    "psub_io1_length_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.io1_length_min"}),
-    "psub_io1_length_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "psub_io1_length_max_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.io1_length_max"}),
-    "psub_io2_length_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.io2_length"}),
-    "psub_io2_length_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "psub_gate_ext_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.gate_ext"}),
-    "psub_gate_ext_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
+    "psub_channel_width_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.channel_width_min",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_channel_width_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_channel_width_max_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.channel_width_max",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_core_length_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.core_length_min",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_core_length_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_core_length_max_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.core_length_max",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_io1_length_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.io1_length_min",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_io1_length_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_io1_length_max_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.io1_length_max",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_io2_length_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.io2_length",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_io2_length_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_gate_ext_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.gate_ext",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
+    "psub_gate_ext_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
     "psub_dnw_overlap_bad": frozenset({"implant.psub.dnw.overlap"}),
     "psub_dnw_coincident_bad": frozenset({"implant.psub.dnw.coincident"}),
-    "psub_pp_gate_overlap_bad": frozenset({"implant.np.gate_aa.enclosure", "implant.psub.pp_gate.overlap"}),
+    "psub_pp_gate_overlap_bad": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.psub.pp_gate.overlap",
+        "latchup.s2_ptap",
+        "poly.po.sti_space",
+    }),
     "psub_multi_aa_bad": frozenset({"implant.psub.multi_aa"}),
     "psub_multi_aa_indall_waived": frozenset(),
     "ct_outside_required_layers": frozenset({
@@ -257,32 +371,82 @@ FIXTURES: dict[str, frozenset[str]] = {
     "ct_width_grid_ring_waived": frozenset({"SRCK_13a"}),
     "ct_bar_width_bad": frozenset({"cont.ct.width", "cont.ct.bar.width"}),
     "ct_bar_at_limit": frozenset(),
-    "ct_spacing_bad": frozenset({"cont.ct.spacing"}),
-    "ct_spacing_at_limit": frozenset(),
+    "ct_spacing_bad": frozenset({
+        "cont.ct.spacing",
+        "cont.ct.spacing.diff_net",
+    }),
+    "ct_spacing_at_limit": frozenset({
+        "cont.ct.spacing.diff_net",
+    }),
     "ct_s1a_bad": frozenset({"cont.ct.spacing.neighbor"}),
     "ct_s1a_at_limit": frozenset(),
     "ct_en4d_bad": frozenset({"cont.ct.m1.enclosure.wide"}),
     "ct_en4d_at_limit": frozenset(),
     # The field-poly stub is only 0.05 um inside NP, so NP_EN_3 also fires.
     "ct_poly_active_space_bad": frozenset({
-        "cont.ct.poly.aa.space", "implant.np.po.enclosure",
+        "cont.ct.poly.aa.space",
+        "implant.np.po.enclosure",
+        "poly.po.implant",
+        "poly.po.sti_space",
     }),
-    "ct_poly_active_space_at_limit": frozenset({"implant.np.po.enclosure"}),
-    "ct_core_gate_space_bad": frozenset({"cont.ct.core_gate.space", "implant.np.gate_aa.enclosure"}),
-    "ct_core_gate_space_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "ct_io_gate_space_bad": frozenset({"cont.ct.io_gate.space", "implant.np.gate_aa.enclosure"}),
-    "ct_io_gate_space_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
+    "ct_poly_active_space_at_limit": frozenset({
+        "implant.np.po.enclosure",
+        "poly.po.implant",
+        "poly.po.sti_space",
+    }),
+    "ct_core_gate_space_bad": frozenset({
+        "cont.ct.core_gate.space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "ct_core_gate_space_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "ct_io_gate_space_bad": frozenset({
+        "cont.ct.io_gate.space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.dg",
+    }),
+    "ct_io_gate_space_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.dg",
+    }),
     "ct_active_coverage_bad": frozenset({"cont.ct.active.coverage"}),
-    "ct_poly_coverage_bad": frozenset({"cont.ct.poly.coverage"}),
-    "ct_poly_enclosure_bad": frozenset({"cont.ct.poly.enclosure", "cont.ct.poly.enclosure.all"}),
-    "ct_poly_enclosure_at_limit": frozenset(),
-    "ct_poly_enclosure_directional_ok": frozenset(),
-    "ct_poly_enclosure_all_bad": frozenset({"cont.ct.poly.enclosure.all"}),
+    "ct_poly_coverage_bad": frozenset({
+        "cont.ct.poly.coverage",
+        "poly.po.implant",
+    }),
+    "ct_poly_enclosure_bad": frozenset({
+        "cont.ct.poly.enclosure",
+        "cont.ct.poly.enclosure.all",
+        "poly.po.implant",
+    }),
+    "ct_poly_enclosure_at_limit": frozenset({
+        "poly.po.implant",
+    }),
+    "ct_poly_enclosure_directional_ok": frozenset({
+        "poly.po.implant",
+    }),
+    "ct_poly_enclosure_all_bad": frozenset({
+        "cont.ct.poly.enclosure.all",
+        "poly.po.implant",
+    }),
     "ct_m1_enclosure_directional_ok": frozenset(),
     "ct_m1_enclosure_all_bad": frozenset({"cont.ct.m1.enclosure"}),
     "ct_m1_coverage_bad": frozenset({"cont.ct.inside", "cont.ct.m1.coverage"}),
     "ct_m1_not_interacting": frozenset({"cont.ct.m1.not_interacting"}),
-    "ct_on_gate": frozenset({"cont.ct.on_gate", "implant.np.gate_aa.enclosure", "implant.np.po.enclosure"}),
+    "ct_on_gate": frozenset({
+        "cont.ct.on_gate",
+        "implant.np.gate_aa.enclosure",
+        "implant.np.po.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
     "ct_sab": frozenset({"SAB_A_1", "SAB_W_1", "cont.ct.sab"}),
     "ct_rotated": frozenset({"cont.ct.width", "cont.ct.rotated"}),
     "ct_rotated_sring_waived": frozenset({"SRCK_14a_CT"}),
@@ -290,12 +454,22 @@ FIXTURES: dict[str, frozenset[str]] = {
     "ct_tap_with_ct": frozenset({"well.nw.floating"}),
     "nw_area": frozenset({"well.nw.area"}),
     "nw_area_at_limit": frozenset(),
-    "nw_hole": frozenset({"well.nw.enclosed_area"}),
-    "nw_hole_at_limit": frozenset(),
+    "nw_hole": frozenset({
+        "well.nw.enclosed_area",
+        "well.nw.lv.space",
+    }),
+    "nw_hole_at_limit": frozenset({
+        "well.nw.lv.space",
+    }),
     "nw_width_bad": frozenset({"well.nw.width"}),
     "nw_width_at_limit": frozenset(),
-    "nw_space_bad": frozenset({"well.nw.space"}),
-    "nw_space_at_limit": frozenset(),
+    "nw_space_bad": frozenset({
+        "well.nw.lv.space",
+        "well.nw.space",
+    }),
+    "nw_space_at_limit": frozenset({
+        "well.nw.lv.space",
+    }),
     "nw_floating": frozenset({"well.nw.floating"}),
     "nw_floating_tapped": frozenset(),
     "dnw_clean": frozenset(),
@@ -315,10 +489,17 @@ FIXTURES: dict[str, frozenset[str]] = {
     # The P+ pickup is 0.19 um from the NMOS gate, so PP_S_5 (not NP_S_5)
     # co-fires with the DNW enclosure check.
     "dnw_nact_enclosure_bad": frozenset({
-        "implant.np.gate_aa.enclosure", "implant.pp.gate_space", "well.dnw.nact.enclosure", "well.dnw.nw.coverage",
+        "implant.np.gate_aa.enclosure",
+        "implant.pp.gate_space",
+        "poly.po.endcap",
+        "well.dnw.nact.enclosure",
+        "well.dnw.nw.coverage",
     }),
     "dnw_nact_enclosure_at_limit": frozenset({
-        "implant.np.gate_aa.enclosure", "implant.pp.gate_space", "well.dnw.nw.coverage",
+        "implant.np.gate_aa.enclosure",
+        "implant.pp.gate_space",
+        "poly.po.endcap",
+        "well.dnw.nw.coverage",
     }),
     "m1_area": frozenset({"metal.m1.area"}),
     "m1_area_at_limit": frozenset(),
@@ -372,8 +553,15 @@ FIXTURES: dict[str, frozenset[str]] = {
     "v1_diagonal_edges": frozenset({"via.v1.width", "via.v1.rotated"}),
     "v1_diagonal_sringblk_waived": frozenset({"SRCK_13b_13c"}),
     "v1_grid_exclusion": frozenset(),
-    "v1_spacing_bad": frozenset({"via.v1.spacing"}),
-    "v1_spacing_at_limit": frozenset(),
+    "v1_spacing_bad": frozenset({
+        "via.v1.s2_spacing",
+        "via.v1.s3_spacing",
+        "via.v1.spacing",
+    }),
+    "v1_spacing_at_limit": frozenset({
+        "via.v1.s2_spacing",
+        "via.v1.s3_spacing",
+    }),
     "v1_upper_enclosure_bad": frozenset({"via.v1.enclosure.upper"}),
     "v1_upper_enclosure_at_limit": frozenset(),
     "t4v2_spacing_bad": frozenset({"via.tv2.spacing"}),
@@ -516,9 +704,13 @@ FIXTURES: dict[str, frozenset[str]] = {
     "mom_v1_m1mom": frozenset({"mom.MOM_R_1.V1.MET1MOM"}),
     "mom_v1bar_m1mom": frozenset({"mom.MOM_R_1.V1.MET1MOM"}),
     "mom_v1_nodrc_waived": frozenset(),
-    "mom_forbidden_m1_cap23": frozenset({"mom.MOM_R_2.forbidden_stack.MET1MOM.23"}),
+    "mom_forbidden_m1_cap23": frozenset({
+        "mom.MOM_R_2.forbidden_stack.MET1MOM.23",
+        "mom.MOM_R_2.missing_marker.23",
+    }),
     "mom_cap12_missing_label": frozenset({"mom.MOM_R_2.label_stack.12"}),
     "mom_cap12_valid_label": frozenset(),
+    "mom_cap12_missing_marker": frozenset({"mom.MOM_R_2.missing_marker.12"}),
 
     # Batch 5 dummy spacing / slot rules. The dummy-only S_6 fixtures leave a
     # floating NW, the AADUM_S_7 fixture uses bare FUSEALL, and the T4M2DUM
@@ -651,14 +843,26 @@ FIXTURES: dict[str, frozenset[str]] = {
     "tg_space_at_limit": frozenset(),
     "tg_mos_space_bad": frozenset({"TG_S_2"}),
     "tg_mos_space_at_limit": frozenset(),
-    "tg_gate_space_bad": frozenset({"TG_S_3", "implant.np.gate_aa.enclosure"}),
-    "tg_gate_space_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
+    "tg_gate_space_bad": frozenset({
+        "TG_S_3",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "tg_gate_space_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "tg_nw_space_bad": frozenset({"TG_S_4"}),
     "tg_nw_space_at_limit": frozenset(),
     "tg_psub_space_bad": frozenset({"TG_S_5"}),
     "tg_psub_space_at_limit": frozenset(),
-    "tg_nw_ext_bad": frozenset({"TG_EX_1"}),
-    "tg_nw_ext_at_limit": frozenset(),
+    "tg_nw_ext_bad": frozenset({
+        "TG_EX_1",
+        "well.nw.lv.space",
+    }),
+    "tg_nw_ext_at_limit": frozenset({
+        "well.nw.lv.space",
+    }),
     "tg_nw_ext2_bad": frozenset({"TG_EX_2"}),
     "tg_nw_ext2_at_limit": frozenset(),
     "tg_psub_ext_bad": frozenset({"TG_EX_3"}),
@@ -667,24 +871,63 @@ FIXTURES: dict[str, frozenset[str]] = {
     "tg_nw_overlap_at_limit": frozenset(),
     "tg_psub_overlap_bad": frozenset({"TG_O_2"}),
     "tg_psub_overlap_at_limit": frozenset(),
-    "tg_aa_enc_bad": frozenset({"TG_EN_1", "TG_EN_2", "implant.np.gate_aa.enclosure"}),
-    "tg_aa_enc_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "tg_aa_gate_enc_bad": frozenset({"TG_EN_3", "implant.np.gate_aa.enclosure", "implant.np.gate_ext"}),
-    "tg_aa_gate_enc_at_limit": frozenset({"implant.np.gate_aa.enclosure", "implant.np.gate_ext"}),
+    "tg_aa_enc_bad": frozenset({
+        "TG_EN_1",
+        "TG_EN_2",
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.tg_n",
+    }),
+    "tg_aa_enc_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.tg_n",
+    }),
+    "tg_aa_gate_enc_bad": frozenset({
+        "TG_EN_3",
+        "implant.np.gate_aa.enclosure",
+        "implant.np.gate_ext",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.length.tg_n",
+    }),
+    "tg_aa_gate_enc_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.np.gate_ext",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.length.tg_n",
+    }),
     "dg_width_bad": frozenset({"DG_W_1"}),
     "dg_width_at_limit": frozenset(),
     "dg_space_bad": frozenset({"DG_S_1"}),
     "dg_space_at_limit": frozenset(),
     "dg_mos_space_bad": frozenset({"DG_S_2"}),
     "dg_mos_space_at_limit": frozenset(),
-    "dg_gate_space_bad": frozenset({"DG_S_3", "implant.np.gate_aa.enclosure"}),
-    "dg_gate_space_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
+    "dg_gate_space_bad": frozenset({
+        "DG_S_3",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "dg_gate_space_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "dg_nw_space_bad": frozenset({"DG_S_4"}),
     "dg_nw_space_at_limit": frozenset(),
     "dg_psub_space_bad": frozenset({"DG_S_5"}),
     "dg_psub_space_at_limit": frozenset(),
-    "dg_nw_ext_bad": frozenset({"DG_EX_1"}),
-    "dg_nw_ext_at_limit": frozenset(),
+    "dg_nw_ext_bad": frozenset({
+        "DG_EX_1",
+        "well.nw.lv.space",
+    }),
+    "dg_nw_ext_at_limit": frozenset({
+        "well.nw.lv.space",
+    }),
     "dg_nw_ext2_bad": frozenset({"DG_EX_2"}),
     "dg_nw_ext2_at_limit": frozenset(),
     "dg_psub_ext_bad": frozenset({"DG_EX_3"}),
@@ -693,10 +936,37 @@ FIXTURES: dict[str, frozenset[str]] = {
     "dg_nw_overlap_at_limit": frozenset(),
     "dg_psub_overlap_bad": frozenset({"DG_O_2"}),
     "dg_psub_overlap_at_limit": frozenset(),
-    "dg_aa_enc_bad": frozenset({"DG_EN_1", "DG_EN_2", "implant.np.gate_aa.enclosure"}),
-    "dg_aa_enc_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "dg_aa_gate_enc_bad": frozenset({"DG_EN_3", "implant.np.gate_aa.enclosure", "implant.np.gate_ext"}),
-    "dg_aa_gate_enc_at_limit": frozenset({"implant.np.gate_aa.enclosure", "implant.np.gate_ext"}),
+    "dg_aa_enc_bad": frozenset({
+        "DG_EN_1",
+        "DG_EN_2",
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.dg",
+    }),
+    "dg_aa_enc_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.length.dg",
+    }),
+    "dg_aa_gate_enc_bad": frozenset({
+        "DG_EN_3",
+        "implant.np.gate_aa.enclosure",
+        "implant.np.gate_ext",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.length.dg",
+    }),
+    "dg_aa_gate_enc_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "implant.np.gate_ext",
+        "latchup.guard_ring",
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.length.dg",
+    }),
     # The shared TG-to-DG space and overlap checks both report TG_S_6.
     "tg_dg_space_bad": frozenset({"TG_S_6"}),
     "tg_dg_space_at_limit": frozenset(),
@@ -711,8 +981,15 @@ FIXTURES: dict[str, frozenset[str]] = {
     "sab_po_space_at_limit": frozenset(),
     "sab_aa_space_bad": frozenset({"SAB_S_3"}),
     "sab_aa_space_at_limit": frozenset(),
-    "sab_gate_space_bad": frozenset({"SAB_S_4", "implant.np.gate_aa.enclosure"}),
-    "sab_gate_space_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
+    "sab_gate_space_bad": frozenset({
+        "SAB_S_4",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "sab_gate_space_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "sab_aa_ext_bad": frozenset({"SAB_EX_1"}),
     "sab_aa_ext_at_limit": frozenset(),
     "sab_aa_ext_outside_bad": frozenset({"SAB_EX_2"}),
@@ -728,7 +1005,14 @@ FIXTURES: dict[str, frozenset[str]] = {
     "sab_hole_bad": frozenset({"SAB_A_2"}),
     "sab_hole_at_limit": frozenset(),
     # SAB over GATE trips both the overlap clause of S_4 and R_2.
-    "sab_gate_overlap_bad": frozenset({"SAB_R_2", "SAB_S_4", "implant.np.gate_aa.enclosure"}),
+    "sab_gate_overlap_bad": frozenset({
+        "SAB_R_2",
+        "SAB_S_4",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.endcap",
+    }),
     # Coincident SAB edges intentionally trip the whole coupled family.
     "sab_coincident_poly_bad": frozenset({"SAB_EX_3", "SAB_R_1", "SAB_S_5"}),
     "sab_coincident_aa_bad": frozenset({"SAB_EX_1", "SAB_EX_2", "SAB_R_1", "SAB_S_3"}),
@@ -740,10 +1024,22 @@ FIXTURES: dict[str, frozenset[str]] = {
     "hrp_space_at_limit": frozenset(),
     "hrp_poly_width_bad": frozenset({"HRP_W_2"}),
     "hrp_poly_width_at_limit": frozenset(),
-    "hrp_po_space_bad": frozenset({"HRP_S_2", "implant.np.gate_aa.enclosure"}),
-    "hrp_po_space_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
-    "hrp_sab_ct_space_bad": frozenset({"HRP_S_3"}),
-    "hrp_sab_ct_space_at_limit": frozenset(),
+    "hrp_po_space_bad": frozenset({
+        "HRP_S_2",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "hrp_po_space_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
+    "hrp_sab_ct_space_bad": frozenset({
+        "HRP_S_3",
+        "poly.po.implant",
+    }),
+    "hrp_sab_ct_space_at_limit": frozenset({
+        "poly.po.implant",
+    }),
     "hrp_pp_sab_ovl_bad": frozenset({"HRP_O_1"}),
     "hrp_pp_sab_ovl_at_limit": frozenset(),
     "hrp_po_enc_bad": frozenset({"HRP_EN_1"}),
@@ -759,14 +1055,44 @@ FIXTURES: dict[str, frozenset[str]] = {
     "ulld_width_at_limit": frozenset(),
     "ulld_space_bad": frozenset({"ULLD_S_1"}),
     "ulld_space_at_limit": frozenset(),
-    "ulld_gate_space_bad": frozenset({"ULLD_S_5", "active.act.u_space", "implant.pp.gate_aa.enclosure"}),
-    "ulld_gate_space_at_limit": frozenset({"active.act.u_space", "implant.pp.gate_aa.enclosure"}),
+    "ulld_gate_space_bad": frozenset({
+        "ULLD_EX_3b",
+        "ULLD_S_5",
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
+    "ulld_gate_space_at_limit": frozenset({
+        "ULLD_EX_3b",
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
     "ulld_ex1_bad": frozenset({"ULLD_EX_1"}),
     "ulld_ex1_at_limit": frozenset(),
-    "ulld_ex2_bad": frozenset({"ULLD_EX_2", "active.act.u_space", "implant.pp.gate_aa.enclosure"}),
-    "ulld_ex2_at_limit": frozenset({"active.act.u_space", "implant.pp.gate_aa.enclosure"}),
-    "ulld_ex3a_bad": frozenset({"ULLD_EX_3a", "active.act.u_space", "implant.pp.gate_aa.enclosure"}),
-    "ulld_ex3a_at_limit": frozenset({"active.act.u_space", "implant.pp.gate_aa.enclosure"}),
+    "ulld_ex2_bad": frozenset({
+        "ULLD_EX_2",
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
+    "ulld_ex2_at_limit": frozenset({
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
+    "ulld_ex3a_bad": frozenset({
+        "ULLD_EX_3a",
+        "ULLD_EX_3b",
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
+    "ulld_ex3a_at_limit": frozenset({
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
     "ulld_area_bad": frozenset({"ULLD_A_1"}),
     "ulld_area_at_limit": frozenset(),
     "ulld_hole_bad": frozenset({"ULLD_A_2"}),
@@ -783,35 +1109,93 @@ FIXTURES: dict[str, frozenset[str]] = {
     "nvt1_width_bad": frozenset({"NVT1_W_1"}),
     "nvt1_space_bad": frozenset({"NVT1_S_1"}),
     "nvt1_aa_space_bad": frozenset({"NVT1_S_3"}),
-    "nvt1_gate_space_bad": frozenset({"NVT1_S_2", "active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "nvt1_gate_ext_bad": frozenset({"NVT1_EX_1", "active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "nvt1_aa_gate_ext_bad": frozenset({"NVT1_EX_2", "implant.np.gate_aa.enclosure"}),
+    "nvt1_gate_space_bad": frozenset({
+        "NVT1_S_2",
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "nvt1_gate_ext_bad": frozenset({
+        "NVT1_EX_1",
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "nvt1_aa_gate_ext_bad": frozenset({
+        "NVT1_EX_2",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "nvt1_area_bad": frozenset({"NVT1_A_1"}),
     "nvt1_hole_bad": frozenset({"NVT1_A_2"}),
     "nvt1_psub_overlap_bad": frozenset({"NVT1_R_1"}),
     "nvt3_width_bad": frozenset({"NVT3_W_1"}),
     "nvt3_space_bad": frozenset({"NVT3_S_1"}),
     "nvt3_aa_space_bad": frozenset({"NVT3_S_3"}),
-    "nvt3_gate_space_bad": frozenset({"NVT3_S_2", "active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "nvt3_gate_ext_bad": frozenset({"NVT3_EX_1", "active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "nvt3_aa_gate_ext_bad": frozenset({"NVT3_EX_2", "implant.np.gate_aa.enclosure"}),
+    "nvt3_gate_space_bad": frozenset({
+        "NVT3_S_2",
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "nvt3_gate_ext_bad": frozenset({
+        "NVT3_EX_1",
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "nvt3_aa_gate_ext_bad": frozenset({
+        "NVT3_EX_2",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "nvt3_area_bad": frozenset({"NVT3_A_1"}),
     "nvt3_hole_bad": frozenset({"NVT3_A_2"}),
     "nvt3_psub_overlap_bad": frozenset({"NVT3_R_1"}),
     "pvt1_width_bad": frozenset({"PVT1_W_1"}),
     "pvt1_space_bad": frozenset({"PVT1_S_1"}),
     "pvt1_aa_space_bad": frozenset({"PVT1_S_3"}),
-    "pvt1_gate_space_bad": frozenset({"PVT1_S_2", "active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "pvt1_gate_ext_bad": frozenset({"PVT1_EX_1", "active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "pvt1_aa_gate_ext_bad": frozenset({"PVT1_EX_2", "implant.np.gate_aa.enclosure"}),
+    "pvt1_gate_space_bad": frozenset({
+        "PVT1_S_2",
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "pvt1_gate_ext_bad": frozenset({
+        "PVT1_EX_1",
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "pvt1_aa_gate_ext_bad": frozenset({
+        "PVT1_EX_2",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "pvt1_area_bad": frozenset({"PVT1_A_1"}),
     "pvt1_hole_bad": frozenset({"PVT1_A_2"}),
     "pvt1_psub_overlap_bad": frozenset({"PVT1_R_1"}),
     "pvt3_width_bad": frozenset({"PVT3_W_1"}),
     "pvt3_space_bad": frozenset({"PVT3_S_1"}),
     "pvt3_aa_space_bad": frozenset({"PVT3_S_3"}),
-    "pvt3_gate_space_bad": frozenset({"PVT3_S_2", "active.act.u_space", "implant.pp.gate_aa.enclosure"}),
-    "pvt3_gate_ext_bad": frozenset({"PVT3_EX_1", "active.act.u_space", "implant.pp.gate_aa.enclosure"}),
+    "pvt3_gate_space_bad": frozenset({
+        "PVT3_S_2",
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
+    "pvt3_gate_ext_bad": frozenset({
+        "PVT3_EX_1",
+        "active.act.u_space",
+        "implant.pp.gate_aa.enclosure",
+        "poly.po.endcap",
+    }),
     "pvt3_aa_gate_ext_bad": frozenset({"PVT3_EX_2", "implant.pp.gate_aa.enclosure"}),
     "pvt3_area_bad": frozenset({"PVT3_A_1"}),
     "pvt3_hole_bad": frozenset({"PVT3_A_2"}),
@@ -824,9 +1208,22 @@ FIXTURES: dict[str, frozenset[str]] = {
     "nvt1_width_at_limit": frozenset(),
     "nvt1_space_at_limit": frozenset(),
     "nvt1_aa_space_at_limit": frozenset(),
-    "nvt1_gate_space_at_limit": frozenset({"active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "nvt1_gate_ext_at_limit": frozenset({"active.act.u_space", "implant.np.gate_aa.enclosure"}),
-    "nvt1_aa_gate_ext_at_limit": frozenset({"implant.np.gate_aa.enclosure"}),
+    "nvt1_gate_space_at_limit": frozenset({
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "nvt1_gate_ext_at_limit": frozenset({
+        "active.act.u_space",
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+        "poly.po.endcap",
+    }),
+    "nvt1_aa_gate_ext_at_limit": frozenset({
+        "implant.np.gate_aa.enclosure",
+        "latchup.s2_ptap",
+    }),
     "nvt1_sab_aa_space_bad": frozenset({"NVT1_S_4"}),
     "nvt1_sab_aa_space_at_limit": frozenset(),
     "nvt1_area_at_limit": frozenset(),
@@ -848,12 +1245,37 @@ FIXTURES: dict[str, frozenset[str]] = {
     "act_l1_end_at_limit": frozenset(),
     "act_l2_bad": frozenset({"active.act.sd_length"}),
     "act_l2_at_limit": frozenset(),
-    "po_l1_ct_bad": frozenset({"poly.po.ct_length"}),
-    "po_l1_ct_at_limit": frozenset(),
-    "po_l1_end_bad": frozenset({"poly.po.length"}),
-    "po_l1_end_at_limit": frozenset(),
-    "po_l1_gate_bad": frozenset({"poly.po.gate_length"}),
-    "po_l1_gate_at_limit": frozenset(),
+    "po_l1_ct_bad": frozenset({
+        "poly.po.ct_length",
+        "poly.po.implant",
+        "poly.po.wide_space",
+    }),
+    "po_l1_ct_at_limit": frozenset({
+        "poly.po.implant",
+        "poly.po.wide_space",
+    }),
+    "po_l1_end_bad": frozenset({
+        "poly.po.implant",
+        "poly.po.length",
+        "poly.po.wide_space",
+    }),
+    "po_l1_end_at_limit": frozenset({
+        "poly.po.implant",
+        "poly.po.wide_space",
+    }),
+    "po_l1_gate_bad": frozenset({
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.endcap",
+        "poly.po.gate_length",
+        "poly.po.implant",
+    }),
+    "po_l1_gate_at_limit": frozenset({
+        "latchup.s2_ptap",
+        "poly.po.aa_ext",
+        "poly.po.endcap",
+        "poly.po.implant",
+    }),
     "np_s6_bad": frozenset({"implant.np.ptap_gate.space",
                             "implant.pp.gate_space",
                             "implant.np.gate_ext"}),
@@ -866,24 +1288,42 @@ FIXTURES: dict[str, frozenset[str]] = {
     "np_ex1_at_limit": frozenset(),
     "pp_ex1_bad": frozenset({"implant.pp.gate_aa.enclosure"}),
     "pp_ex1_at_limit": frozenset(),
-    "np_ex1a_bad": frozenset({"implant.np.gate_ext"}),
+    "np_ex1a_bad": frozenset({
+        "implant.np.gate_ext",
+        "poly.po.aa_ext",
+    }),
     "np_ex1a_at_limit": frozenset(),
-    "pp_ex1a_bad": frozenset({"implant.pp.gate_ext"}),
+    "pp_ex1a_bad": frozenset({
+        "implant.pp.gate_ext",
+        "poly.po.aa_ext",
+    }),
     "pp_ex1a_at_limit": frozenset(),
     "pp_r3_bad": frozenset({"implant.np_pp.sab_coincident"}),
     "pp_r3_at_limit": frozenset(),
-    "dnw_s3_bad": frozenset({"well.dnw.tpw.space",
-                             "well.dnw.tpw.floating",
-                             "well.dnw.nw.coverage"}),
-    "dnw_s3_at_limit": frozenset({"well.dnw.tpw.floating",
-                                  "well.dnw.nw.coverage"}),
-    "dnw_s4_bad": frozenset({"well.dnw.tpw.space",
-                             "well.dnw.tpw.floating",
-                             "well.dnw.nw.coverage",
-                             "well.dnw.tpw_dgtg.space",
-                             "well.dnw.pw_dgtg.space"}),
-    "dnw_s4_at_limit": frozenset({"well.dnw.tpw.floating",
-                                  "well.dnw.nw.coverage"}),
+    "dnw_s3_bad": frozenset({
+        "well.dnw.nw.coverage",
+        "well.dnw.nw.space",
+        "well.dnw.tpw.floating",
+        "well.dnw.tpw.space",
+    }),
+    "dnw_s3_at_limit": frozenset({
+        "well.dnw.nw.coverage",
+        "well.dnw.nw.space",
+        "well.dnw.tpw.floating",
+    }),
+    "dnw_s4_bad": frozenset({
+        "well.dnw.nw.coverage",
+        "well.dnw.nw.space",
+        "well.dnw.pw_dgtg.space",
+        "well.dnw.tpw.floating",
+        "well.dnw.tpw.space",
+        "well.dnw.tpw_dgtg.space",
+    }),
+    "dnw_s4_at_limit": frozenset({
+        "well.dnw.nw.coverage",
+        "well.dnw.nw.space",
+        "well.dnw.tpw.floating",
+    }),
     "mom_s1_bad": frozenset({"mom.MOM_S_1.V1.MET1MOM"}),
     "mom_s1_at_limit": frozenset(),
     # Antenna ratios (separate netlist-extraction deck). Two cumulative-via
@@ -935,6 +1375,76 @@ FIXTURES: dict[str, frozenset[str]] = {
     "ant_m1_diode_waived": frozenset(),
     "ant_m1_diode_boundary": frozenset({"antenna.AR_5_10_M1"}),
     "ant_stage_split": frozenset({"antenna.AR_5_10_M1", "antenna.AR_5_10_M2"}),
+    # Batch 10: resistor, latch-up, via-hbar, thick-metal and recommended.
+    "resistor_aa_width_bad": frozenset({"resistor.aa.width"}),
+    "via_v1_hbar_bad": frozenset({"via.v1.hbar"}),
+    "latchup_guard_width_bad": frozenset({"latchup.guard_width"}),
+    "thick_t4m1_width_bad": frozenset({"T4M1_W_1"}),
+    "recommended_act_spacing_bad": frozenset({"ACT_S_1_R"}),
+    # Batch 11: PO/well/via/resistor/latch-up fixtures for the batch-10 rules.
+    # Minimal geometry also trips unrelated implant coverage, gate-extension,
+    # CT-coverage and latch-up tap rules; those incidental categories are
+    # recorded rather than waived.
+    "po_core_length_bad": frozenset({
+        "active.act.implant_coverage", "poly.po.length.core", "poly.poly.width"}),
+    "po_dg_length_bad": frozenset({"active.act.implant_coverage", "poly.po.length.dg"}),
+    "po_tg_length_bad": frozenset({"implant.np.gate_aa.enclosure", "poly.po.length.tg_n"}),
+    "po_field45_bad": frozenset({"poly.po.field45.space", "poly.po.field45.width"}),
+    "po_wide_space_bad": frozenset({"poly.po.wide_space"}),
+    "po_aa_space_bad": frozenset({
+        "active.act.implant_coverage", "poly.po.aa_space", "poly.poly.spacing"}),
+    "po_endcap_bad": frozenset({"active.act.implant_coverage", "poly.po.endcap"}),
+    "po_bent_bad": frozenset({"active.act.implant_coverage", "poly.po.bent"}),
+    "po_implant_bad": frozenset({
+        "active.act.implant_coverage", "cont.ct.active.coverage",
+        "cont.ct.poly.aa.space", "poly.po.implant"}),
+    "po_sab_space_bad": frozenset({"SAB_EX_3", "poly.po.sab_space"}),
+    "po_line_end_bad": frozenset({"poly.po.line_end"}),
+    "po_large_space_bad": frozenset({
+        "implant.np.gate_aa.enclosure", "latchup.s2_ptap", "poly.po.large_space"}),
+    "po_aa_ext_bad": frozenset({"active.act.implant_coverage", "poly.po.aa_ext"}),
+    "po_sti_space_bad": frozenset({"poly.po.sti_space"}),
+    "po_tg_space_bad": frozenset({
+        "TG_EN_1", "implant.np.gate_aa.enclosure",
+        "poly.po.length.tg_n", "poly.po.tg_space"}),
+    "well_nw_lv_bad": frozenset({"well.nw.floating", "well.nw.lv.space"}),
+    "well_nw_hv_bad": frozenset({
+        "TG_EX_2", "TG_S_1", "well.nw.floating",
+        "well.nw.hv.diff_space", "well.nw.hv.space"}),
+    "well_nw_lv_hv_bad": frozenset({
+        "TG_EX_2", "TG_S_4", "well.nw.floating", "well.nw.lv_hv.space"}),
+    "well_dnw_nw_bad": frozenset({
+        "well.dnw.nw.coverage", "well.dnw.nw.space", "well.dnw.tpw.floating",
+        "well.dnw.width", "well.nw.floating"}),
+    "via_tv2_no_upper_bad": frozenset({"via.tv2.cover.upper"}),
+    "via_tv2_no_lower_bad": frozenset({"via.tv2.cover.lower"}),
+    "via_tv2_rotated_bad": frozenset({"via.tv2.rotated", "via.tv2.width"}),
+    "ct_diff_net_space_bad": frozenset({"cont.ct.spacing.diff_net"}),
+    "podum_ct_bad": frozenset({"PODUM_R_1", "cont.ct.inside"}),
+    "thick_t4m2_dummy_bad": frozenset({"T4M2DUM_W_1"}),
+    "resistor_aa_body_bad": frozenset({
+        "SAB_EX_2", "SAB_W_1", "implant.np.act.overlap",
+        "implant.np.nact_pw.enclosure", "resistor.aa.implant_enc",
+        "resistor.aa.marker_ext", "resistor.aa.width"}),
+    "resistor_aa_silicide_bad": frozenset({"resistor.aa.silicide_ct"}),
+    "resistor_aa_pp_nw_bad": frozenset({"SAB_EX_2", "resistor.aa.pp_nw"}),
+    "resistor_aa_dogbone_bad": frozenset({"SAB_EX_2", "resistor.aa.dogbone"}),
+    "resistor_nw_width_bad": frozenset({
+        "cont.ct.sab", "resistor.nw.count",
+        "resistor.nw.width", "resistor.nw_sti.marker_ext"}),
+    "resistor_nw_sti_width_bad": frozenset({
+        "resistor.nw.sab_cover", "resistor.nw_sti.aa_touch", "resistor.nw_sti.width"}),
+    "resistor_poly_width_bad": frozenset({"SAB_EX_3", "resistor.poly.width"}),
+    "resistor_poly_squares_bad": frozenset({"SAB_EX_3", "resistor.poly.squares"}),
+    "latchup_s2_ntap_bad": frozenset({
+        "implant.pp.gate_aa.enclosure", "latchup.s2_ntap", "well.nw.floating"}),
+    "latchup_s2_ptap_bad": frozenset({"implant.np.gate_aa.enclosure", "latchup.s2_ptap"}),
+    "latchup_s1_bad": frozenset({
+        "TG_EN_3", "active.act.implant_coverage",
+        "implant.np.gate_aa.enclosure", "implant.pp.gate_aa.enclosure",
+        "latchup.guard_ring", "latchup.s1a", "latchup.s1c", "latchup.s1d",
+        "poly.po.length.tg_n", "poly.po.length.tg_p"}),
+    "density_t4m2_high_bad": frozenset({"T4M2_D_1_max"}),
 }
 FIXTURE_PROFILES = {
     name: (
@@ -948,6 +1458,14 @@ FIXTURE_PROFILES = {
     if name.startswith(("density_", "mom_", "srck_", "esd_nmos_", "esd_pmos_",
                         "esd_hv_", "ant_"))
 }
+FIXTURE_PROFILES.update({
+    "via_v1_hbar_bad": "beol",
+    "via_tv2_no_upper_bad": "beol",
+    "via_tv2_no_lower_bad": "beol",
+    "via_tv2_rotated_bad": "beol",
+    "thick_t4m1_width_bad": "t4m1",
+    "recommended_act_spacing_bad": "recommended",
+})
 
 RULE_INPUTS = [
     DRC_DECK,
@@ -1033,6 +1551,8 @@ def main() -> int:
     ap.add_argument("--librelane", default=Path.home() / "Documents" / "librelane")
     ap.add_argument("--klayout", default=None)
     ap.add_argument("--out", default=ROOT / "tests" / "regression" / "out" / "drc_fixtures")
+    ap.add_argument("--jobs", type=int, default=min(4, os.cpu_count() or 1),
+                    help="parallel fixture runs (default: min(4, CPUs))")
     args = ap.parse_args()
     args.librelane = str(Path(args.librelane).expanduser()) if args.librelane else None
 
@@ -1073,11 +1593,14 @@ def main() -> int:
         print("BLOCKED (fixture generation failed)")
         return 2
 
-    results = []
-    rc = 0
-    for name, expected in FIXTURES.items():
+    def check_fixture(item: tuple[str, frozenset[str]]) -> dict[str, Any]:
+        name, expected = item
         profile_name = FIXTURE_PROFILES.get(name, "main")
         profile = DRC_PROFILES[profile_name]
+        # KLayout itself is multithreaded; one thread per process avoids
+        # oversubscription when several fixtures run at once.
+        if args.jobs > 1:
+            profile = dict(profile, threads=1)
         gds = fx_dir / f"{name}.gds"
         report = fx_dir / f"{name}.lyrdb"
         # Do not let a prior run's report mask a failed or incomplete run.
@@ -1094,17 +1617,13 @@ def main() -> int:
             rec["status"] = "BLOCKED"
             detail = r.stderr.strip().splitlines()[-3:] or ["no stderr"]
             rec["reason"] = f"DRC run failed (rc={r.returncode}): {' | '.join(detail)}"
-            results.append(rec)
-            rc = 2
-            continue
+            return rec
         try:
             cats = read_violation_categories(report)
         except Exception as e:
             rec["status"] = "BLOCKED"
             rec["reason"] = f"lyrdb parse failed: {e}"
-            results.append(rec)
-            rc = 2
-            continue
+            return rec
         rec["categories"] = cats
         expected_categories = set(expected or ())
         actual_categories = set(cats)
@@ -1117,8 +1636,16 @@ def main() -> int:
                 rec["issues"].append(f"expected categories absent: {missing}")
             if unexpected:
                 rec["issues"].append(f"unexpected categories present: {unexpected}")
-            rc = 1
-        results.append(rec)
+        return rec
+
+    with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+        results = list(pool.map(check_fixture, FIXTURES.items()))
+    if any(r["status"] == "BLOCKED" for r in results):
+        rc = 2
+    elif any(r["status"] == "FAIL" for r in results):
+        rc = 1
+    else:
+        rc = 0
 
     profile_sha256 = hashlib.sha256(
         json.dumps(DRC_PROFILES, sort_keys=True, separators=(",", ":")).encode()
@@ -1127,6 +1654,7 @@ def main() -> int:
         "schema": "ics55-drc-fixture-check/1.3",
         "status": "PASS" if rc == 0 else ("FAIL" if rc == 1 else "BLOCKED"),
         "profiles": DRC_PROFILES,
+        "jobs": args.jobs,
         "klayout": {"kind": kind, "executable": exe, "version": version},
         "profile_sha256": profile_sha256,
         "rule_inputs_sha256": {

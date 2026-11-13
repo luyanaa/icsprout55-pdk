@@ -54,8 +54,6 @@ DRC_MAIN_PROFILE = {
     "tables": "main",
     "no_feol": False,
     "no_beol": False,
-    "check_grid": False,
-    "advanced": False,
     "no_density": False,
     "no_mom": False,
     "cell_exclusion": False,

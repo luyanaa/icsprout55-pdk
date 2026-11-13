@@ -103,6 +103,27 @@ if BEOL
     t4m2_inner.drc(width < inner_width.um).output('SRCK_6_T4M2',
       "SRCK_6_T4M2: T4M2 inner seal-ring metal width must be at least #{inner_width} um [Calibre source]")
 
+    # Alternate stacked top metals (off-stack profiles): the same SRCK_3/4/5/6
+    # ring checks on each profile's top metal, enabled only by its switch.
+    [
+      ['T2M1', T2M1, T2M1SLOT, CHECK_T2M1],
+      ['T2M2', T2M2, T2M2SLOT, CHECK_T2M2],
+      ['T4M1', T4M1, T4M1SLOT, CHECK_T4M1],
+      ['T8M1', T8M1, T8M1SLOT, CHECK_T8M1],
+      ['T8M2', T8M2, T8M2SLOT, CHECK_T8M2]
+    ].each do |name, metal, slot, enabled|
+      next unless enabled
+      inner, outer = seal_rings.call(metal.not(slot))
+      seal_extent_space.call(outer, outer_edge_space, "SRCK_3_#{name}",
+        "#{name} outer seal-ring metal")
+      outer.drc(separation(inner, transparent) < ring_space.um).output("SRCK_4_#{name}",
+        "SRCK_4_#{name}: #{name} inner/outer seal-ring metal spacing must be at least #{ring_space} um [Calibre source]")
+      outer.drc(width < outer_width.um).output("SRCK_5_#{name}",
+        "SRCK_5_#{name}: #{name} outer seal-ring metal width must be at least #{outer_width} um [Calibre source]")
+      inner.drc(width < inner_width.um).output("SRCK_6_#{name}",
+        "SRCK_6_#{name}: #{name} inner seal-ring metal width must be at least #{inner_width} um [Calibre source]")
+    end
+
     # RDL / RV seal-ring rings (source SRCK_7_RDL..SRCK_10_RV).
     _, rdl_outer = seal_rings.call(RDL)
     seal_extent_space.call(rdl_outer, rval('srck_rdl_edge_space'), 'SRCK_7_RDL',
@@ -203,5 +224,15 @@ if BEOL
       "SRCK_15d_15e_15f: T4M2 enclosure of seal-ring T4V2 must be at least #{rval('srck_tv_ring_enc')} um [Calibre source]")
     tv2_bars.drc(separation(tv2_squares, transparent) < rval('srck_tv_bar_square_space').um).output('SRCK_16d_16e_16f',
       "SRCK_16d_16e_16f: seal-ring T4V2 bar-to-square spacing must be at least #{rval('srck_tv_bar_square_space')} um [Calibre source]")
+
+    # SRCK_11c / SRCK_13d: T2V1/T2V2 seal-ring bars must be 0.20 um wide and
+    # squares must be 0.20 x 0.20 um (2X option profile only).
+    if CHECK_T2V1 || CHECK_T2V2
+      t2_seal = T2V1.or(T2V1BAR).or(T2V2).or(T2V2BAR).and(seal_ring)
+      t2_bars, t2_squares = bar_and_square.call(t2_seal, 0.2, 0.6)
+      t2_bars.drc(width < 0.2.um).output('SRCK_11c',
+        'SRCK_11c: seal-ring T2V1/T2V2 bar width must be at least 0.2 um [Calibre source]')
+      square_errors.call(t2_squares, 0.2, 'SRCK_13d', 'seal-ring T2V1/T2V2 square')
+    end
   end
 end

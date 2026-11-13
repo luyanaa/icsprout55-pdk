@@ -21,14 +21,18 @@
 #
 # NW1_S_1 is checked on the low-voltage NW construction LVNW0 = (NW NOT NW1res)
 # intersect ((NW NOT (NW AND TG)) NOT (NW AND DG)), with resistor NW subtracted
-# from the markers. NW1_S_2 through NW1_S_5 are omitted because they require
-# CONNECTED/NOT CONNECTED net classes.
+# from the markers. NW1_S_2 through NW1_S_5 split same-net (CONNECTED) from
+# different-net (NOT CONNECTED) spacing; without net classes the stricter
+# different-net thresholds are applied to all pairs. Sub-regions of one NW
+# polygon that touch across a DG/TG boundary are one well and stay excluded;
+# the source *_RE coincident-edge statements cover those touching boundaries.
 #
-# DNW_S_2a (different-net spacing) is omitted because it requires CONNECTED
-# net classes. DNW_S_3/DNW_S_4 run on the derived PW (drawn extent outside
-# NW/PSUB, source PWi = DRC:1 NOT (NW1i OR PSUBi)); the DNW_S_4 DG/TG
-# condition is reproduced by intersecting DG/TG instead of the source's
-# connected-region predicate.
+# DNW_S_2a applies the vendor different-net threshold to every DNW/NW pair
+# because CONNECTED net classes are unavailable; nested DNW-in-NW is covered
+# by DNW_EN_1 and is not reported as a spacing violation. DNW_S_3/DNW_S_4 run
+# on the derived PW (drawn extent outside NW/PSUB, source PWi = DRC:1 NOT
+# (NW1i OR PSUBi)); the DNW_S_4 DG/TG condition is reproduced by intersecting
+# DG/TG instead of the source's connected-region predicate.
 # DNW_R_1 is an active rule, but its "DNW enclosed by NW" marker set is a
 # subset of the DNW_EN_1 enclosure, coincident-edge and coverage outputs.
 #=========================================================================================
@@ -57,6 +61,43 @@ if FEOL
   lv_nw0.drc(space < nw_space.um).polygons.not(nw_res).not_inside(NODRC).output('well.nw.space',
     "NW1_S_1: low-voltage NW spacing must be at least #{nw_space} um outside NW resistor and NODRC [Calibre source]")
 
+  # NW1_S_2: low-voltage NW to low-voltage NW, different nets. The different-net
+  # threshold applies to all pairs (same-net pairs are flagged too, tighter).
+  nw_lv_space = rval('nw_lv_space')
+  lv_nw0.drc(space < nw_lv_space.um).polygons.not(nw_res).not_inside(NODRC).output('well.nw.lv.space',
+    "NW1_S_2: low-voltage NW to low-voltage NW different-net spacing must be at least #{nw_lv_space} um outside NW resistor and NODRC [Calibre source]")
+
+  # NW1_S_3: low-voltage NW to MV/HV NW. Touching sub-regions of one NW polygon
+  # are the same well and are excluded from the cross-layer measurement.
+  hv_nw0 = NW.not(NW1RES).and(HVNW)
+  mv_nw0 = NW.not(NW1RES).and(MVNW)
+  lv_nw0_cross = lv_nw0.not(lv_nw0.interacting(hv_nw0)).not(lv_nw0.interacting(mv_nw0))
+  hv_nw0_cross = hv_nw0.not(hv_nw0.interacting(lv_nw0))
+  mv_nw0_cross = mv_nw0.not(mv_nw0.interacting(lv_nw0))
+  nw_mv_lv_space = rval('nw_mv_lv_space')
+  (lv_nw0_cross.drc(separation(hv_nw0_cross) < nw_mv_lv_space.um) +
+   lv_nw0_cross.drc(separation(mv_nw0_cross) < nw_mv_lv_space.um))
+    .not_inside(NODRC).output('well.nw.lv_hv.space',
+      "NW1_S_3: low-voltage NW to MV/HV NW different-net spacing must be at least #{nw_mv_lv_space} um outside NODRC [Calibre source]")
+
+  # NW1_S_4: MV/HV NW to MV/HV NW, same nets. Without net classes the 0.47 um
+  # threshold is applied to all pairs; the 1.2 um NW1_S_5 check below is the
+  # tighter different-net requirement.
+  nw_hv_space = rval('nw_hv_space')
+  (mv_nw0.drc(space < nw_hv_space.um).polygons +
+   hv_nw0.drc(space < nw_hv_space.um).polygons +
+   mv_nw0_cross.drc(separation(hv_nw0_cross) < nw_hv_space.um).polygons)
+    .not(nw_res).not_inside(NODRC).output('well.nw.hv.space',
+      "NW1_S_4: MV/HV NW spacing must be at least #{nw_hv_space} um outside NW resistor and NODRC [Calibre source]")
+
+  # NW1_S_5: MV/HV NW to MV/HV NW, different nets.
+  nw_hv_diff_space = rval('nw_hv_diff_space')
+  (mv_nw0.drc(space < nw_hv_diff_space.um).polygons +
+   hv_nw0.drc(space < nw_hv_diff_space.um).polygons +
+   mv_nw0_cross.drc(separation(hv_nw0_cross) < nw_hv_diff_space.um).polygons)
+    .not(nw_res).not_inside(NODRC).output('well.nw.hv.diff_space',
+      "NW1_S_5: MV/HV NW different-net spacing must be at least #{nw_hv_diff_space} um outside NW resistor and NODRC [Calibre source]")
+
   # NW1_R_1: floating NW. The source selects taps that enclose a CT (Calibre
   # CT = CTi OR CTbar); KLayout Region#inside supplies the same whole-polygon
   # containment.
@@ -72,6 +113,14 @@ if FEOL
   dnw_space = rval('dnw_space')
   DNW.drc(space < dnw_space.um).not_inside(NODRC).output('well.dnw.space',
     "DNW_S_1: DNW spacing must be at least #{dnw_space} um outside NODRC [Calibre source]")
+
+  # DNW_S_2a: DNW to NW of a different net. Without net classes the 2.35 um
+  # threshold is applied to all external DNW/NW pairs (same-net pairs are also
+  # flagged, tighter). Nested DNW-in-NW is not external spacing and is covered
+  # by DNW_EN_1 instead.
+  dnw_nw_space = rval('dnw_nw_space')
+  DNW.drc(separation(NW) < dnw_nw_space.um).not_inside(NODRC).output('well.dnw.nw.space',
+    "DNW_S_2a: DNW to NW different-net spacing must be at least #{dnw_nw_space} um outside NODRC [Calibre source]")
 
   # DNW_S_5: DNW to N+ source/drain (NACT NOT NGATE NOT NW).
   nsdi = NACT.not(NGATE).not(NW)

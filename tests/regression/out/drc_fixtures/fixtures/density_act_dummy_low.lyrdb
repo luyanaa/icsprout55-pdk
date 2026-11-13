@@ -26,6 +26,12 @@
    </categories>
   </category>
   <category>
+   <name>ACT_D_3</name>
+   <description>AA_all density gradient &gt; 20.0% between adjacent 100.0um windows</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>ACT_D_4_min</name>
    <description>ACT_D_4_min: global AA_all density &lt; 25.0% over the drawn-layout extent [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
    <categories>
@@ -40,6 +46,12 @@
   <category>
    <name>PO_D_2_max</name>
    <description>PO_D_2_max: PO_all density &gt; 65.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PO_D_3</name>
+   <description>PO_all density gradient &gt; 20.0% between adjacent 100.0um windows</description>
    <categories>
    </categories>
   </category>
@@ -62,6 +74,12 @@
    </categories>
   </category>
   <category>
+   <name>MET1_D_3</name>
+   <description>metal density gradient &gt; 20.0% between adjacent 100.0um windows; exclude GRID/SRINGBLK/INDALL/NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>M2_D_1_min</name>
    <description>M2_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
    <categories>
@@ -76,6 +94,12 @@
   <category>
    <name>M2_D_2</name>
    <description>M2_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2_D_3</name>
+   <description>metal density gradient &gt; 20.0% between adjacent 100.0um windows; exclude GRID/SRINGBLK/INDALL/NODRC</description>
    <categories>
    </categories>
   </category>
@@ -98,6 +122,12 @@
    </categories>
   </category>
   <category>
+   <name>M3_D_3</name>
+   <description>metal density gradient &gt; 20.0% between adjacent 100.0um windows; exclude GRID/SRINGBLK/INDALL/NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>M4_D_1_min</name>
    <description>M4_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
    <categories>
@@ -112,6 +142,12 @@
   <category>
    <name>M4_D_2</name>
    <description>M4_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4_D_3</name>
+   <description>metal density gradient &gt; 20.0% between adjacent 100.0um windows; exclude GRID/SRINGBLK/INDALL/NODRC</description>
    <categories>
    </categories>
   </category>
@@ -134,6 +170,12 @@
    </categories>
   </category>
   <category>
+   <name>M5_D_3</name>
+   <description>metal density gradient &gt; 20.0% between adjacent 100.0um windows; exclude GRID/SRINGBLK/INDALL/NODRC</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>T4M2_D_1_min</name>
    <description>T4M2_D_1_min: T4M2ALLi density &lt; 20.0% in 100.0um windows, 50.0um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]</description>
    <categories>
@@ -148,6 +190,12 @@
   <category>
    <name>T4M2_D_2</name>
    <description>T4M2_D_2: T4M2ALLi density &lt; 10.0% in 100.0um windows, 50.0um step, inside T4M2DUMB sized by 2.5um [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2_D_3</name>
+   <description>T4M2ALLi density gradient &gt; 20.0% between adjacent 100.0um windows; exclude GRID/SRINGBLK/INDALL/NODRC</description>
    <categories>
    </categories>
   </category>
@@ -171,7 +219,7 @@
    <comment/>
    <image/>
    <values>
-    <value>polygon: (0,50;0,150;100,150;100,50)</value>
+    <value>polygon: (0,0;0,100;100,100;100,0)</value>
    </values>
   </item>
   <item>
@@ -183,7 +231,7 @@
    <comment/>
    <image/>
    <values>
-    <value>polygon: (0,0;0,100;100,100;100,0)</value>
+    <value>polygon: (0,50;0,150;100,150;100,50)</value>
    </values>
   </item>
   <item>

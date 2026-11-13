@@ -88,6 +88,15 @@ if FEOL
     .output('cont.ct.spacing.neighbor',
       "CT_S_1a: CT spacing in 3-neighbor arrays must be at least #{ct_neighbor_space} um outside NODRC [Calibre source]")
 
+  # CT_S_2: different-net contact spacing. The source NOT CONNECTED qualifier
+  # needs net extraction, which this port does not perform; applying the
+  # threshold to every CT pair is slightly stricter than the source.
+  ct_diff_net_space = rval('ct_s2_space')
+  cts.drc(space < ct_diff_net_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC)
+    .output('cont.ct.spacing.diff_net',
+      "CT_S_2: CT/CTbar different-net spacing must be at least #{ct_diff_net_space} um outside SRAMALL/NODRC [Calibre source]")
+
   # CT_S_3: contact-on-poly to active spacing.
   ct_on_poly = cts.and(POLY)
   ct_poly_active_space = rval('ct_s3_space')
@@ -212,12 +221,54 @@ if FEOL
   ct_taps.not(NODRC).output('cont.ct.tap',
     'CT_R_5: butted well tap/source region must contain a CT outside NODRC [Calibre source]')
 
-  # Omitted active rules:
-  # CT_S_2 (NOT CONNECTED) and CT_S_6 (edge-layer enclosure with COIN/INSIDE
-  # EDGE) have no faithful KLayout primitive representation, and the
-  # directional output and COIN EDGE clauses of CT_EN_3/EN_4a_4b_4c are not
-  # reproduced (the directional configurations themselves are evaluated as the
-  # erosion alternatives above). CT_EN_2_R, CT_EN_3_R, CT_EN_4a_R_4b_R,
-  # CT_S_4_R and CT_R_4 are recommended rules compiled out by
-  # OPEN_RECOMMENDED_ON=NO.
+  #---------------------------------------------------------------------------
+  # Recommended CT rules (vendor OPEN_RECOMMENDED_ON block, default NO). They
+  # are always evaluated here and surface as KLayout log warnings unless
+  # recommended=error (report categories) or recommended=off (skipped).
+  #---------------------------------------------------------------------------
+  ct_s4_r = rval('ct_s4_r')
+  recommended_output.call('CT_S_4_R',
+    AA_CT.separation(core_gate_poly, ct_s4_r.um).polygons
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended core-gate POLY to CT-on-AA space >= #{ct_s4_r} um outside SRAMALL/NODRC")
+
+  ct_en2_r = rval('ct_en2_r')
+  recommended_output.call('CT_EN_2_R',
+    ct_active.drc(enclosed(ACT) < ct_en2_r.um).polygons
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended CT enclosure by AA >= #{ct_en2_r} um outside SRAMALL/NODRC")
+
+  ct_en3_r = rval('ct_en3_r')
+  recommended_output.call('CT_EN_3_R',
+    ct_poly.drc(enclosed(POLY) < ct_en3_r.um).polygons
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended CT enclosure by POLY >= #{ct_en3_r} um outside SRAMALL/NODRC")
+
+  # The source also re-measures the failing enclosure edges against 0.06 um on
+  # opposite sides; that line-end clause is subsumed by the 0.06 pair
+  # requirement below for fully covered contacts. Edge-coincident contacts are
+  # covered by the source COIN EDGE markers, which are omitted.
+  ct_en4_r_all = rval('ct_en4_r_all')
+  ct_en4_r_dir = rval('ct_en4_r_dir')
+  m1_rec_ok = M1.sized(-ct_en4_r_all.um).and(
+    M1.sized(-ct_en4_r_dir.um, 0).or(M1.sized(0, -ct_en4_r_dir.um)))
+  recommended_output.call('CT_EN_4a_R_4b_R',
+    (cts.inside(M1.sized(-1.dbu)).not(m1_rec_ok)
+       .not_inside(SRAMALL).not_inside(SRINGBLK_SRC).not_inside(NODRC) +
+     cts.interacting(M1).not(M1).not_inside(SRAMALL)),
+    "recommended M1 enclosure of CT >= #{ct_en4_r_all} um on all sides with one opposite pair >= #{ct_en4_r_dir} um, and full M1 coverage outside SRAMALL")
+
+  # CT_R_4: a single contact on a source/drain, tap or poly is reported.
+  single_ct_connection = cts.and(NSD.or(NTAP).interacting(cts, 1, 1))
+    .or(cts.and(PSD.or(PTAP).interacting(cts, 1, 1)))
+    .or(cts.and(POLY.interacting(cts, 1, 1)))
+  recommended_output.call('CT_R_4',
+    single_ct_connection.not(NODRC).not_inside(SRAMALL),
+    'recommended at least two contacts per source/drain, tap or poly connection outside SRAMALL/NODRC')
+
+  # Omitted active rules: CT_S_6 (edge-layer enclosure with COIN/INSIDE EDGE)
+  # has no faithful KLayout primitive representation, and the directional
+  # output and COIN EDGE clauses of CT_EN_3/EN_4a_4b_4c are not reproduced (the
+  # directional configurations themselves are evaluated as the erosion
+  # alternatives above).
 end

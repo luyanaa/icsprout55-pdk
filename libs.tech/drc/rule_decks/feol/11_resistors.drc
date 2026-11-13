@@ -1,0 +1,311 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 11 - AA / NW / poly resistors
+#
+# Source groups GAAres, GNWresAA, GNWresSTI and GPOLYres (54 rules).  Layer
+# aliases follow the source: AAR = AA INTERACT AARES, NWR = NW INTERACT
+# NW1res, POR = PO INTERACT PORES.  The source EXT/ENC qualifiers
+# ABUT<90/SINGULAR REGION and the DFM PROPERTY squares operator are not
+# reproduced; width/area/square tests are measured on whole polygons.
+# AAres_R_3's CONVEX EDGE == 1 dog-bone selector is approximated by a
+# non-rectangle test.  NWresAA_EN_3's SAB-hole construction is approximated
+# with the directly expressible enclosure and coverage terms.
+#=========================================================================================
+
+if FEOL
+  aa_res_width = rval('aa_res_width')
+  aa_res_space = rval('aa_res_space')
+  aa_res_sab_ct = rval('aa_res_sab_ct')
+  aa_res_enc = rval('aa_res_enc')
+  aa_res_ext = rval('aa_res_ext')
+
+  sab_full = SAB.or(SAB.holes)
+  aar_sa = AAR.and(SAB)
+  aar_ns = AAR.not_interacting(SAB)
+
+  # AAres_W_1: non-silicide AA resistor width. The source measures the width
+  # of the SAB-covered resistor body clipped to the AA edge.
+  aa_res_body = ACT.and(AARES).and(SAB)
+  aa_res_body.drc(width < aa_res_width.um).not_inside(NODRC).output('resistor.aa.width',
+    "AAres_W_1: non-silicide AA resistor width must be at least #{aa_res_width} um outside NODRC [Calibre source]")
+
+  # AAres_S_1_*: spacing from each unrelated implant to the resistor body.
+  {
+    'NP' => NP, 'PP' => PP, 'NVT3' => HVTN, 'PVT3' => HVTP,
+    'NVT1' => LVTN, 'PVT1' => LVTP, 'ESD' => ESD, 'HRP' => HRP
+  }.each do |suffix, implant|
+    implant.not_interacting(AARES).drc(separation(aar_sa) < aa_res_space.um)
+      .not_inside(NODRC).output("resistor.aa.s1_#{suffix.downcase}",
+        "AAres_S_1_#{suffix}: non-silicide AA resistor to unrelated #{suffix} spacing must be at least #{aa_res_space} um outside NODRC [Calibre source]")
+  end
+
+  # AAres_S_2: contacts inside the AAR marker must lie within 0.21 um of the
+  # SAB-covered resistor body (source SIZE ... NOT TOUCH construction).
+  CT.and(AAR.interacting(SAB)).sized(aa_res_sab_ct.um).not_interacting(aar_sa)
+    .not_inside(NODRC).output('resistor.aa.sab_ct',
+      "AAres_S_2: CT inside an AA resistor marker must be within #{aa_res_sab_ct} um of the SAB-covered resistor outside NODRC [Calibre source]")
+
+  # AAres_EN_1: NP/PP enclosure of resistor AA.
+  ACT.and(AARES).drc(enclosed(NP.or(PP)) < aa_res_enc.um).not_inside(NODRC).output('resistor.aa.implant_enc',
+    "AAres_EN_1: NP/PP enclosure of resistor AA must be at least #{aa_res_enc} um outside NODRC [Calibre source]")
+
+  # AAres_EX_1: AARES extension outside the non-silicide resistor body.
+  aar_sa.drc(enclosed(AARES) < aa_res_ext.um).not_inside(NODRC).output('resistor.aa.marker_ext',
+    "AAres_EX_1: AARES extension outside the non-silicide AA resistor must be at least #{aa_res_ext} um outside NODRC [Calibre source]")
+
+  # AAres_R_1: resistor AA must be covered by SAB and implanted NP or PP.
+  AAR.interacting(SAB).not(NP.or(PP)).not_inside(NODRC).output('resistor.aa.implant_cover',
+    'AAres_R_1: non-silicide AA resistor must be covered by SAB and implanted by NP or PP outside NODRC [Calibre source]')
+
+  # AAres_R_2: PP-type AA resistor must be inside NW.
+  ACT.and(AARES).and(SAB).and(PP).not_inside(NW).not_inside(NODRC).output('resistor.aa.pp_nw',
+    'AAres_R_2: PP-type non-silicide AA resistor must be inside NW outside NODRC [Calibre source]')
+
+  # AAres_R_3: no dog-bone resistor ends. Non-rectangularity is the KLayout
+  # stand-in for the source CONVEX EDGE == 1 selector.
+  aar_sa.non_rectangles.not_inside(NODRC).output('resistor.aa.dogbone',
+    'AAres_R_3: non-silicide AA resistor must not use dog-bone ends outside NODRC [Calibre source]')
+
+  # AAres_R_4: for a silicide resistor, the marker must touch the contact.
+  aa_res_ns = AARES.not_interacting(SAB)
+  aa_res_ct = CT.and(aar_ns)
+  aa_res_ns.not_interacting(aa_res_ct).not_inside(NODRC).output('resistor.aa.silicide_ct',
+    'AAres_R_4: silicide AA resistor marker must touch a contact outside NODRC [Calibre source]')
+
+  #---------------------------------------------------------------------------
+  # NWresAA
+  #---------------------------------------------------------------------------
+  nw_res_width = rval('nw_res_width')
+  nw_res_space = rval('nw_res_space')
+  nw_res_sab_ct = rval('nw_res_sab_ct')
+  nw_res_nw_space = rval('nw_res_nw_space')
+  nw_res_enc = rval('nw_res_enc')
+  nw_res_sab_enc = rval('nw_res_sab_enc')
+  nw_res_sab_nw_enc = rval('nw_res_sab_nw_enc')
+  nw_res_ct_enc = rval('nw_res_ct_enc')
+  nw_res_ext = rval('nw_res_ext')
+  nw_res_np_overlap = rval('nw_res_np_overlap')
+
+  nw_res_int = NW.and(NW1RES)
+  nw_res_body = NW1RES.and(ACT).and(NW).and(SAB)
+
+  # NWresAA_W_1: NW resistor width.
+  nw_res_body.drc(width < nw_res_width.um).not_inside(NODRC).output('resistor.nw.width',
+    "NWresAA_W_1: NW-resistor width must be at least #{nw_res_width} um outside NODRC [Calibre source]")
+
+  # NWresAA_S_1: resistor NW around a SAB hole to each unrelated layer.
+  nwr_sab_hole = NWR.interacting(SAB.holes)
+  nw_res_s1 = nil
+  [['NW', NW], ['NVT3', HVTN], ['PVT3', HVTP], ['NVT1', LVTN], ['PVT1', LVTP],
+   ['NP', NP], ['PP', PP], ['NPR', NPR], ['ESD', ESD], ['HRP', HRP]].each do |_name, layer|
+    marker = nwr_sab_hole.drc(separation(layer.not_interacting(NWR)) < nw_res_space.um)
+    nw_res_s1 = nw_res_s1 ? nw_res_s1 + marker : marker
+  end
+  nw_res_s1.not_inside(NODRC).output('resistor.nw.s1',
+    "NWresAA_S_1: NW-resistor NW to unrelated implant/NW spacing must be at least #{nw_res_space} um outside NODRC [Calibre source]")
+
+  # NWresAA_S_2: SAB in the resistor NW must touch the 0.28 um contact halo.
+  nw_res_ct_halo = CT.and(ACT.interacting(NW1RES)).sized(nw_res_sab_ct.um)
+  SAB.inside(NW.interacting(NW1RES)).not_interacting(nw_res_ct_halo)
+    .not_inside(NODRC).output('resistor.nw.sab_ct',
+      "NWresAA_S_2: SAB of an NW resistor must be within #{nw_res_sab_ct} um of its contacts outside NODRC [Calibre source]")
+
+  # NWresAA_S_3: resistor NW to NW spacing.
+  NWR.drc(separation(NW) < nw_res_nw_space.um).not_inside(NODRC).output('resistor.nw.nw_space',
+    "NWresAA_S_3: NW resistor to NW spacing must be at least #{nw_res_nw_space} um outside NODRC [Calibre source]")
+
+  # NWresAA_S_4: NW1res (on NW, implant NP) must touch NP.
+  nw_res_int.not_interacting(NP).not_inside(NODRC).output('resistor.nw.np_touch',
+    'NWresAA_S_4: NW resistor marker must touch NP outside NODRC [Calibre source]')
+
+  # NWresAA_EN_1: AA enclosure of the NW resistor body.
+  nw_res_body.drc(enclosed(ACT) < nw_res_enc.um).not_inside(NODRC).output('resistor.nw.aa_enc',
+    "NWresAA_EN_1: AA enclosure of the NW-resistor body must be at least #{nw_res_enc} um outside NODRC [Calibre source]")
+
+  # NWresAA_EN_2: SAB enclosure of the resistor AA.
+  ACT.covering(nw_res_body).drc(enclosed(SAB) < nw_res_sab_enc.um).not_inside(NODRC).output('resistor.nw.sab_enc',
+    "NWresAA_EN_2: SAB enclosure of NW-resistor AA must be at least #{nw_res_sab_enc} um outside NODRC [Calibre source]")
+
+  # NWresAA_EN_3: SAB-hole and NW coverage terms.
+  sab_holes_nwr = SAB.holes.interacting(NWR)
+  nw_res_en3 = NWR.drc(enclosed(sab_holes_nwr) < nw_res_sab_nw_enc.um).polygons
+  nw_res_en3 = nw_res_en3 + NWR.interacting(sab_holes_nwr).not(sab_holes_nwr).not(SAB)
+  nw_res_en3.not_inside(NODRC).output('resistor.nw.sab_nw_enc',
+    "NWresAA_EN_3: SAB and enclosing NW of an NW resistor must extend at least #{nw_res_sab_nw_enc} um outside NODRC [Calibre source]")
+
+  # NWresAA_EN_4: NW enclosure of contacts in SAB holes.
+  nw_res_ct = CT.and(SAB.holes).interacting(NWR)
+  nw_res_ct.drc(enclosed(NWR) < nw_res_ct_enc.um).not_inside(NODRC).output('resistor.nw.ct_nw_enc',
+    "NWresAA_EN_4: NW enclosure of NW-resistor contacts must be at least #{nw_res_ct_enc} um outside NODRC [Calibre source]")
+
+  # NWresAA_EX_1: NW1res extension outside AA.
+  ACT.drc(enclosed(NW1RES.interacting(SAB)) < nw_res_ext.um).not_inside(NODRC).output('resistor.nw.marker_ext',
+    "NWresAA_EX_1: NW1res extension outside AA must be at least #{nw_res_ext} um outside NODRC [Calibre source]")
+
+  # NWresAA_O_1: NP/SAB overlap inside the resistor NW.
+  NP.and(SAB).and(NW).drc(width < nw_res_np_overlap.um).not_inside(NODRC).output('resistor.nw.np_sab_overlap',
+    "NWresAA_O_1: NP/SAB overlap inside an NW resistor must be at least #{nw_res_np_overlap} um wide outside NODRC [Calibre source]")
+
+  # NWresAA_R_1: resistor NW must be covered by SAB.
+  nw_res_int.not_inside(sab_full).not_inside(NODRC).output('resistor.nw.sab_cover',
+    'NWresAA_R_1: NW resistor must be covered by SAB outside NODRC [Calibre source]')
+
+  # NWresAA_R_2: resistor NW should be rectangular.
+  nw_res_int.non_rectangles.not_inside(NODRC).output('resistor.nw.rect',
+    'NWresAA_R_2: NW resistor should be rectangular outside NODRC [Calibre source]')
+
+  # NWresAA_R_4: one NW, at most two NP and two SAB holes per resistor AA.
+  nw_res_aa = ACT.covering(nw_res_body)
+  sab_holes_in_res = SAB.holes.interacting(nw_res_aa)
+  nw_res_r4 = nw_res_aa.interacting(NW, 2) +
+              nw_res_aa.interacting(NP, 3) +
+              nw_res_aa.interacting(NP, 1, 1) +
+              nw_res_aa.interacting(sab_holes_in_res, 3)
+  nw_res_r4.not_inside(NODRC).output('resistor.nw.count',
+    'NWresAA_R_4: NW resistor must use one NW, at most two NP and two SAB holes outside NODRC [Calibre source]')
+
+  #---------------------------------------------------------------------------
+  # NWresSTI
+  #---------------------------------------------------------------------------
+  nw_sti_width = rval('nw_sti_width')
+  nw_sti_aa_space = rval('nw_sti_aa_space')
+  nw_sti_nw_space = rval('nw_sti_nw_space')
+  nw_sti_ct_space = rval('nw_sti_ct_space')
+  nw_sti_np_enc = rval('nw_sti_np_enc')
+  nw_sti_ct_enc = rval('nw_sti_ct_enc')
+  nw_sti_ext = rval('nw_sti_ext')
+  nw_sti_aa_ext = rval('nw_sti_aa_ext')
+
+  nwrsti = NWR.not_interacting(SAB)
+  nw_sti_body = NW1RES.and(NW).not_interacting(SAB)
+
+  # NWresSTI_W_1: NW STI resistor width.
+  nw_sti_body.drc(width < nw_sti_width.um).not_inside(NODRC).output('resistor.nw_sti.width',
+    "NWresSTI_W_1: NW STI-resistor width must be at least #{nw_sti_width} um outside NODRC [Calibre source]")
+
+  # NWresSTI_S_1: NW STI resistor to adjacent AA.
+  nwrsti.drc(separation(ACT) < nw_sti_aa_space.um).not_inside(NODRC).output('resistor.nw_sti.aa_space',
+    "NWresSTI_S_1: NW STI resistor to AA spacing must be at least #{nw_sti_aa_space} um outside NODRC [Calibre source]")
+
+  # NWresSTI_S_2: zero-spacing marker where resistor NW meets adjacent AA.
+  nw_res_int.and(ACT.interacting(nwrsti)).not_inside(NODRC).output('resistor.nw_sti.aa_touch',
+    'NWresSTI_S_2: NW1res to silicided AA spacing must be at least 0 um outside NODRC [Calibre source]')
+
+  # NWresSTI_S_3: NW STI resistor to NW.
+  NW.interacting(nwrsti).drc(separation(NW) < nw_sti_nw_space.um).not_inside(NODRC).output('resistor.nw_sti.nw_space',
+    "NWresSTI_S_3: NW STI resistor to NW spacing must be at least #{nw_sti_nw_space} um outside NODRC [Calibre source]")
+
+  # NWresSTI_EN_1: contacts in the STI resistor must touch their 0.28 halo.
+  nw_sti_ct_halo = CT.and(nwrsti).sized(nw_sti_ct_space.um)
+  ACT.interacting(nw_sti_ct_halo).inside(nwrsti).not_interacting(nw_sti_ct_halo)
+    .not_inside(NODRC).output('resistor.nw_sti.ct_space',
+      "NWresSTI_EN_1: AA around STI-resistor contacts must be within #{nw_sti_ct_space} um of the contacts outside NODRC [Calibre source]")
+
+  # NWresSTI_EN_2: NP enclosure of resistor AA.
+  ACT.and(nwrsti).drc(enclosed(NP.interacting(nwrsti)) < nw_sti_np_enc.um).not_inside(NODRC).output('resistor.nw_sti.np_enc',
+    "NWresSTI_EN_2: NP enclosure of NW STI-resistor AA must be at least #{nw_sti_np_enc} um outside NODRC [Calibre source]")
+
+  # NWresSTI_EN_3: NW enclosure of STI-resistor contacts.
+  CT.drc(enclosed(nwrsti) < nw_sti_ct_enc.um).not_inside(NODRC).output('resistor.nw_sti.ct_enc',
+    "NWresSTI_EN_3: NW enclosure of STI-resistor contacts must be at least #{nw_sti_ct_enc} um outside NODRC [Calibre source]")
+
+  # NWresSTI_EX_1: NW1res extension outside NW.
+  NW.drc(enclosed(NW1RES) < nw_sti_ext.um).not_inside(NODRC).output('resistor.nw_sti.marker_ext',
+    "NWresSTI_EX_1: NW1res extension outside NW must be at least #{nw_sti_ext} um outside NODRC [Calibre source]")
+
+  # NWresSTI_EX_2: AA extension outside the STI resistor NW.
+  NW.interacting(nwrsti).drc(enclosed(ACT.interacting(nwrsti)) < nw_sti_aa_ext.um)
+    .not_inside(NODRC).output('resistor.nw_sti.aa_ext',
+      "NWresSTI_EX_2: AA extension outside the NW STI resistor must be at least #{nw_sti_aa_ext} um outside NODRC [Calibre source]")
+
+  # NWresSTI_R_1: STI resistor NW must be covered by SAB except at contacts.
+  nw_sti_body.and(ACT.not_interacting(CT)).not_inside(NODRC).output('resistor.nw_sti.sab_cover',
+    'NWresSTI_R_1: NW STI resistor must be covered by SAB except the contact area outside NODRC [Calibre source]')
+
+  # NWresSTI_R_2: forbidden implant/dummy overlaps on NW1res.
+  nw_sti_r2 = NW1RES.interacting(NP).and(ACTDUM) +
+              NW1RES.interacting(NP).and(POLYDUM) +
+              NW1RES.and(HVTN) + NW1RES.and(ULLD) + NW1RES.and(HVTP) +
+              NW1RES.and(LVTN) + NW1RES.and(LVTP) + NW1RES.and(PP) +
+              NW1RES.and(NPR) + NW1RES.and(ESD) + NW1RES.and(HRP)
+  nw_sti_r2.not_inside(NODRC).output('resistor.nw_sti.overlap',
+    'NWresSTI_R_2: NW1res must not overlap AA/POLY dummy, other implants, NPR, ESD or HRP outside NODRC [Calibre source]')
+
+  # NWresSTI_R_3: resistor NW should be rectangular.
+  nw_res_int.non_rectangles.not_inside(NODRC).output('resistor.nw_sti.rect',
+    'NWresSTI_R_3: NW resistor should be rectangular outside NODRC [Calibre source]')
+
+  #---------------------------------------------------------------------------
+  # POLYres
+  #---------------------------------------------------------------------------
+  poly_res_width = rval('poly_res_width')
+  poly_res_space = rval('poly_res_space')
+  poly_res_sab_ct = rval('poly_res_sab_ct')
+  poly_res_enc = rval('poly_res_enc')
+  poly_res_ext = rval('poly_res_ext')
+  poly_res_sab_ext = rval('poly_res_sab_ext')
+
+  por_sa = POR.and(SAB)
+  por_ns = POR.not_interacting(SAB)
+  poly_res_body = POLY.and(PPO).and(SAB)
+
+  # POLYres_W_1: width and at least one square. The source DFM squares
+  # property is evaluated per polygon from the bounding-box narrow dimension.
+  poly_res_body.drc(width < poly_res_width.um).not_inside(NODRC).output('resistor.poly.width',
+    "POLYres_W_1: non-silicide poly resistor width must be at least #{poly_res_width} um outside NODRC [Calibre source]")
+  poly_res_squares = RBA::Region::new
+  poly_res_body.data.each do |polygon|
+    narrow = [polygon.bbox.width, polygon.bbox.height].min
+    poly_res_squares.insert(polygon) if narrow > 0 && polygon.area < narrow * narrow
+  end
+  wrap_region.call(poly_res_squares).not_inside(NODRC).output('resistor.poly.squares',
+    'POLYres_W_1: non-silicide poly resistor must have at least 1 square outside NODRC [Calibre source]')
+
+  # POLYres_S_1*: spacing from unrelated implants to the poly resistor.
+  {
+    'pp' => PP, 'np' => NP, 'esd' => ESD, 'hrp' => HRP, 'npr' => NPR
+  }.each do |suffix, implant|
+    implant.not_interacting(PORES).drc(separation(por_sa) < poly_res_space.um)
+      .not_inside(NODRC).output("resistor.poly.s1_#{suffix}",
+        "POLYres_S_1_#{suffix.upcase}: non-silicide poly resistor to unrelated implant spacing must be at least #{poly_res_space} um outside NODRC [Calibre source]")
+  end
+
+  # POLYres_S_2: contacts in the POR marker must lie within 0.21 of the
+  # SAB-covered poly body.
+  CT.and(POR.interacting(SAB)).sized(poly_res_sab_ct.um).not_interacting(por_sa)
+    .not_inside(NODRC).output('resistor.poly.sab_ct',
+      "POLYres_S_2: CT inside a poly resistor marker must be within #{poly_res_sab_ct} um of the SAB-covered body outside NODRC [Calibre source]")
+
+  # POLYres_EN_1: NP/PP enclosure of the poly resistor.
+  POLY.and(PPO).drc(enclosed(NP.or(PP)) < poly_res_enc.um).not_inside(NODRC).output('resistor.poly.implant_enc',
+    "POLYres_EN_1: NP/PP enclosure of a poly resistor must be at least #{poly_res_enc} um outside NODRC [Calibre source]")
+
+  # POLYres_EX_1: PORES extension outside the non-silicide poly resistor.
+  por_sa.drc(enclosed(PPO) < poly_res_ext.um).not_inside(NODRC).output('resistor.poly.marker_ext',
+    "POLYres_EX_1: PORES extension outside the non-silicide poly resistor must be at least #{poly_res_ext} um outside NODRC [Calibre source]")
+
+  # POLYres_EX_2: SAB extension outside the poly resistor.
+  POR.drc(enclosed(SAB) < poly_res_sab_ext.um).not_inside(NODRC).output('resistor.poly.sab_ext',
+    "POLYres_EX_2: SAB extension outside the poly resistor must be at least #{poly_res_sab_ext} um outside NODRC [Calibre source]")
+
+  # POLYres_R_1: poly resistor must be covered by SAB and implanted NP or PP.
+  POR.interacting(SAB).not(NP.or(PP)).not_inside(NODRC).output('resistor.poly.implant_cover',
+    'POLYres_R_1: non-silicide poly resistor must be covered by SAB and implanted by NP or PP outside NODRC [Calibre source]')
+
+  # POLYres_R_3: silicide poly resistor marker must touch a contact.
+  PPO.not_interacting(SAB).not_interacting(CT.and(por_ns)).not_inside(NODRC).output('resistor.poly.silicide_ct',
+    'POLYres_R_3: silicide poly resistor marker must touch a contact outside NODRC [Calibre source]')
+end

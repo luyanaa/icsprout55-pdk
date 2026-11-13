@@ -24,8 +24,11 @@
 # zero-density padding. Global density uses the source-described full-chip
 # extent as its denominator.
 #
-# The source's GRADIENT statements omit STEP; D_3 rules are intentionally not
-# emitted because the exact neighboring-window selection is not established.
+# The source's GRADIENT statements omit STEP; Calibre then steps by one full
+# window, so D_3 uses step = window.  KLayout exposes no per-window density
+# value, so D_3 is evaluated numerically on the origin-anchored regular window
+# grid and compares each window with its right/upper neighbour.  BACKUP
+# windows are not part of the comparison grid.
 #=========================================================================================
 
 if DENSITY
@@ -137,6 +140,55 @@ if DENSITY
       end
     end
 
+    # Source DENSITY ... GRADIENT ... ABSOLUTE compares each window against its
+    # step-neighbours.  KLayout exposes no per-window density value, so the
+    # regular (origin-anchored) window grid is evaluated numerically from the
+    # region area per window; a window is reported when its density differs
+    # from the right or upper neighbour by more than the limit.  BACKUP windows
+    # are not part of the comparison grid.
+    density_gradient_limit = rval('density_gradient_limit')
+    density_gradient_rule = lambda do |layer, window, step, limit, rule_id, description, inside_region|
+      ratio = window / step
+      next if (ratio - ratio.round).abs > 1e-6
+      region = layer.data
+      x_starts = []
+      x = density_x0
+      while x + window <= density_x1 + dbu * 0.5
+        x_starts << x
+        x += step
+      end
+      y_starts = []
+      y = density_y0
+      while y + window <= density_y1 + dbu * 0.5
+        y_starts << y
+        y += step
+      end
+      next if x_starts.empty? || y_starts.empty?
+      to_box = lambda do |left, bottom, right, top|
+        RBA::Box.new((left / dbu).round, (bottom / dbu).round,
+          (right / dbu).round, (top / dbu).round)
+      end
+      norm = (window / dbu).round ** 2
+      densities = x_starts.map do |xx|
+        strip = region.and(to_box.call(xx, density_y0, xx + window, density_y1))
+        y_starts.map do |yy|
+          strip.and(to_box.call(xx, yy, xx + window, yy + window)).area.to_f / norm
+        end
+      end
+      epsilon = 1.0e-9
+      markers = RBA::Region.new
+      x_starts.each_with_index do |xx, i|
+        y_starts.each_with_index do |yy, j|
+          density = densities[i][j]
+          gradient = (i + 1 < x_starts.length && (density - densities[i + 1][j]).abs > limit + epsilon) ||
+                     (j + 1 < y_starts.length && (density - densities[i][j + 1]).abs > limit + epsilon)
+          markers.insert(to_box.call(xx, yy, xx + window, yy + window)) if gradient
+        end
+      end
+      markers = markers.inside(inside_region.data) if inside_region
+      wrap_region.call(markers).not_inside(NODRC).output(rule_id, description)
+    end
+
     # Density includes dummy shapes. Metal slot geometry is removed before
     # dummy is added, matching the manual's §3.2.6 density convention.
     density_aa_all = ACT.or(ACTDUM)
@@ -146,6 +198,9 @@ if DENSITY
     density_m3_all = M3.not(MET3SLOT).or(MET3DUM)
     density_m4_all = M4.not(MET4SLOT).or(MET4DUM)
     density_m5_all = M5.not(MET5SLOT).or(MET5DUM)
+    density_m6_all = M6.not(MET6SLOT).or(MET6DUM)
+    density_m7_all = M7.not(MET7SLOT).or(MET7DUM)
+    density_m8_all = M8.not(MET8SLOT).or(MET8DUM)
     density_t4m2_all = TM2.not(T4M2SLOT).or(T4M2DUM)
 
     # AA_D_1: 100um windows, 50um step; AA_all includes active dummy.
@@ -161,7 +216,11 @@ if DENSITY
       'ACT_D_2', "AA_all density < #{density_dummy_min * 100}% in #{density_act_dummy_window}um windows, #{density_act_dummy_step}um step, inside ACTDUMB sized by #{density_dummy_margin}um",
       density_act_d2_region)
 
-    # ACT_D_3 is intentionally unsupported: its source GRADIENT omits STEP.
+    # AA_D_3: 100um gradient windows (source GRADIENT omits STEP -> step 100).
+    density_gradient_rule.call(density_aa_all, density_window, density_window,
+      density_gradient_limit, 'ACT_D_3',
+      "AA_all density gradient > #{density_gradient_limit * 100}% between adjacent #{density_window}um windows", BULK)
+
     # AA_D_4: whole-chip density, with the drawn extent as denominator.
     density_global_rule.call(density_aa_all, :lt, density_act_global_min,
       'ACT_D_4_min', "global AA_all density < #{density_act_global_min * 100}% over the drawn-layout extent")
@@ -179,19 +238,26 @@ if DENSITY
     density_window_rule.call(density_po_all, :gt, density_poly_window_max, density_window, density_step,
       'PO_D_2_max', "PO_all density > #{density_poly_window_max * 100}% in #{density_window}um windows, #{density_step}um step", nil)
 
-    # PO_D_3 is intentionally unsupported: its source GRADIENT omits STEP.
+    # PO_D_3: 100um gradient windows (source GRADIENT omits STEP -> step 100).
+    density_gradient_rule.call(density_po_all, density_window, density_window,
+      density_gradient_limit, 'PO_D_3',
+      "PO_all density gradient > #{density_gradient_limit * 100}% between adjacent #{density_window}um windows", BULK)
 
     # M1/Mn D_1 checks are limited to windows inside the source check_region_1.
     # The source expression excludes GRID, SRINGBLK, INDALL, then NODRC.
     density_check_region_1 = density_chip.not(GRID_SRC).not(SRINGBLK_SRC).not(INDALL).not(NODRC)
     density_metal_rules = [
-      ['MET1', density_m1_all, MET1DUMB],
-      ['M2', density_m2_all, MET2DUMB],
-      ['M3', density_m3_all, MET3DUMB],
-      ['M4', density_m4_all, MET4DUMB],
-      ['M5', density_m5_all, MET5DUMB]
+      ['MET1', density_m1_all, MET1DUMB, CHECK_M[1]],
+      ['M2', density_m2_all, MET2DUMB, CHECK_M[2]],
+      ['M3', density_m3_all, MET3DUMB, CHECK_M[3]],
+      ['M4', density_m4_all, MET4DUMB, CHECK_M[4]],
+      ['M5', density_m5_all, MET5DUMB, CHECK_M[5]],
+      ['M6', density_m6_all, MET6DUMB, CHECK_M[6]],
+      ['M7', density_m7_all, MET7DUMB, CHECK_M[7]],
+      ['M8', density_m8_all, MET8DUMB, CHECK_M[8]]
     ]
-    density_metal_rules.each do |name, metal_all, dummy_block|
+    density_metal_rules.each do |name, metal_all, dummy_block, enabled|
+      next unless enabled
       prefix = name == 'MET1' ? 'MET1' : name
       density_window_tiles.call(metal_all, :lt, density_metal_min, density_window, density_step)
         .inside(density_check_region_1)
@@ -211,8 +277,12 @@ if DENSITY
         .not_inside(NODRC)
         .output("#{prefix}_D_2",
           "#{prefix}_D_2: metal density < #{density_dummy_min * 100}% in #{density_window}um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]")
-      # MET1_D_3/Mn_D_3 are intentionally unsupported: source GRADIENT omits
-      # STEP, so the exact neighboring-window selection is not established.
+      # Source GRADIENT omits STEP -> step = window; the source also excludes
+      # GRID/SRINGBLK/INDALL, which density_check_region_1 already removes.
+      density_gradient_rule.call(metal_all, density_window, density_window,
+        density_gradient_limit, "#{prefix}_D_3",
+        "metal density gradient > #{density_gradient_limit * 100}% between adjacent #{density_window}um windows; exclude GRID/SRINGBLK/INDALL/NODRC",
+        density_check_region_1)
     end
 
     # The selected top metal is T4M2 (TM2), not T4M1/T8M. T4M2_D_1 uses
@@ -235,7 +305,77 @@ if DENSITY
       'T4M2_D_2', "T4M2ALLi density < #{density_dummy_min * 100}% in #{density_window}um windows, #{density_step}um step, inside T4M2DUMB sized by #{density_dummy_margin}um",
       density_t4m2_dummy_region)
 
-    # T4M2_D_3 is intentionally unsupported because its source GRADIENT omits
-    # STEP, so the exact neighboring-window selection is not established.
+    # T4M2_D_3: 100um gradient windows, source GRADIENT omits STEP -> step 100.
+    density_gradient_rule.call(density_t4m2_all, density_window, density_window,
+      density_gradient_limit, 'T4M2_D_3',
+      "T4M2ALLi density gradient > #{density_gradient_limit * 100}% between adjacent #{density_window}um windows; exclude GRID/SRINGBLK/INDALL/NODRC",
+      density_check_region_1)
+
+    # Off-stack thick-metal density rules follow the vendor switch profile.
+    # T2M1/T2M2 share the Mn 10%/80% limits; T4M1/T4M2 share 20%/85%; all use
+    # the 100um window / 50um step, a 2.5um dummy-block halo for D_2, and a
+    # 100um-step gradient for D_3.
+    if CHECK_T2M1 || CHECK_T2M2 || CHECK_T4M1
+      density_thick_metal_rules = [
+        ['T2M1', T2M1.not(T2M1SLOT).or(T2M1DUM), T2M1DUMB,
+         density_metal_min, density_metal_max, CHECK_T2M1],
+        ['T2M2', T2M2.not(T2M2SLOT).or(T2M2DUM), T2M2DUMB,
+         density_metal_min, density_metal_max, CHECK_T2M2],
+        ['T4M1', T4M1.not(T4M1SLOT).or(T4M1DUM), T4M1DUMB,
+         density_t4m2_min, density_t4m2_max, CHECK_T4M1]
+      ]
+      density_thick_metal_rules.each do |name, metal_all, dummy_block, min_limit, max_limit, enabled|
+        next unless enabled
+        density_window_rule.call(metal_all, :lt, min_limit, density_window, density_step,
+          "#{name}_D_1_min",
+          "#{name} density < #{min_limit * 100}% in #{density_window}um windows, #{density_step}um step; exclude GRID/SRINGBLK/INDALL/NODRC",
+          density_check_region_1)
+        # T2M1/T2M2_D_1_max only clip to density_checkarea; T4M1_D_1_max also
+        # excludes GRID/SRINGBLK/INDALL like the min check.
+        max_region = name.start_with?('T4') ? density_check_region_1 : density_t4m2_checkarea
+        density_window_rule.call(metal_all, :gt, max_limit, density_window, density_step,
+          "#{name}_D_1_max",
+          "#{name} density > #{max_limit * 100}% in #{density_window}um windows, #{density_step}um step; inside density_checkarea/NODRC",
+          max_region)
+        thick_dummy_region = dummy_block.sized(density_dummy_margin.um)
+        density_window_rule.call(metal_all, :lt, density_dummy_min, density_window, density_step,
+          "#{name}_D_2",
+          "#{name} density < #{density_dummy_min * 100}% in #{density_window}um windows, #{density_step}um step, inside #{name}DUMB sized by #{density_dummy_margin}um",
+          thick_dummy_region)
+        density_gradient_rule.call(metal_all, density_window, density_window,
+          density_gradient_limit, "#{name}_D_3",
+          "#{name} density gradient > #{density_gradient_limit * 100}% between adjacent #{density_window}um windows; exclude GRID/SRINGBLK/INDALL/NODRC",
+          density_check_region_1)
+      end
+    end
+
+    # T8M1/T8M2: whole-chip 20% (recommended) / 55% (mandatory), plus the
+    # 400um-window 70% cap on ALLi excluding DEUPAD.
+    if CHECK_T8M1 || CHECK_T8M2
+      density_t8_min = rval('density_t8_min')
+      density_t8_max = rval('density_t8_max')
+      density_t8_window = rval('density_t8_window')
+      density_t8_window_max = rval('density_t8_window_max')
+      density_t8_rules = [
+        ['T8M1', T8M1.not(T8M1SLOT).or(T8M1DUM), CHECK_T8M1],
+        ['T8M2', T8M2.not(T8M2SLOT).or(T8M2DUM), CHECK_T8M2]
+      ]
+      density_t8_rules.each do |name, metal_all, enabled|
+        next unless enabled
+        chip_area = density_chip.area
+        next unless chip_area > 0
+        density = metal_all.area.to_f / chip_area
+        recommended_output.call("#{name}_D_1_R", density_chip.not_inside(NODRC),
+          "#{name} density < #{density_t8_min * 100}% over the drawn-layout extent") if density < density_t8_min
+        if density > density_t8_max
+          density_output.call(density_chip.not_inside(NODRC), "#{name}_D_2",
+            "#{name} density > #{density_t8_max * 100}% over the drawn-layout extent")
+        end
+        density_window_rule.call(metal_all.not(DEUPAD), :gt, density_t8_window_max,
+          density_t8_window, density_t8_window, "#{name}_D_3",
+          "#{name} density > #{density_t8_window_max * 100}% in #{density_t8_window}um windows, #{density_t8_window}um step, excluding DEUPAD",
+          nil)
+      end
+    end
   end
 end

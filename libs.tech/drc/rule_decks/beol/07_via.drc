@@ -13,10 +13,12 @@
 # limitations under the License.
 
 #=========================================================================================
-# BEOL 07 - Vias (V1..V4, T4V2)
+# BEOL 07 - Vias (V1..V7, T4V2)
 #
 # VIAn W_1 predicates follow the official ordinary/bar union at ALLOW_V01=NO;
 # datatype-7 bar W_2 checks remain separate from those square predicates.
+# V5-V7 are off-stack in the released total_metal=6 profile and are gated by
+# their CHECK_V switches.
 #=========================================================================================
 
 if BEOL
@@ -27,13 +29,27 @@ if BEOL
   via_bar_width = 0.09.um
   via_upper_min_enclosure = rval('via_drc_enc_upper')
 
+  # Polygon-level "wider than" selection built from KLayout width markers: a
+  # metal polygon is wide when no part of it is thinner than the threshold.
+  metal_wider_than = lambda do |region, width_um|
+    thin_markers = region.width_check((width_um / grid).round).polygons
+    region.not(region.interacting(thin_markers))
+  end
+
+  stack_via_layers = [V1.or(V1BAR), V2.or(V2BAR), V3.or(V3BAR), V4.or(V4BAR),
+    V5.or(V5BAR), V6.or(V6BAR), V7.or(V7BAR)]
+
 
   [
-    ['V1', V1.or(V1BAR), V1BAR, 'v1', M1.not(MET1SLOT), M2.not(MET2SLOT)],
-    ['V2', V2.or(V2BAR), V2BAR, 'v2', M2.not(MET2SLOT), M3.not(MET3SLOT)],
-    ['V3', V3.or(V3BAR), V3BAR, 'v3', M3.not(MET3SLOT), M4.not(MET4SLOT)],
-    ['V4', V4.or(V4BAR), V4BAR, 'v4', M4.not(MET4SLOT), M5.not(MET5SLOT)]
-  ].each do |name, source_via, via_bar, key, lower_metal, upper_metal|
+    ['V1', V1.or(V1BAR), V1BAR, 'v1', M1.not(MET1SLOT), M2.not(MET2SLOT), CHECK_V[1]],
+    ['V2', V2.or(V2BAR), V2BAR, 'v2', M2.not(MET2SLOT), M3.not(MET3SLOT), CHECK_V[2]],
+    ['V3', V3.or(V3BAR), V3BAR, 'v3', M3.not(MET3SLOT), M4.not(MET4SLOT), CHECK_V[3]],
+    ['V4', V4.or(V4BAR), V4BAR, 'v4', M4.not(MET4SLOT), M5.not(MET5SLOT), CHECK_V[4]],
+    ['V5', V5.or(V5BAR), V5BAR, 'v5', M5.not(MET5SLOT), M6.not(MET6SLOT), CHECK_V[5]],
+    ['V6', V6.or(V6BAR), V6BAR, 'v6', M6.not(MET6SLOT), M7.not(MET7SLOT), CHECK_V[6]],
+    ['V7', V7.or(V7BAR), V7BAR, 'v7', M7.not(MET7SLOT), M8.not(MET8SLOT), CHECK_V[7]]
+  ].each do |name, source_via, via_bar, key, lower_metal, upper_metal, enabled|
+    next unless enabled
     # VIAn_W_1 checks the source union Vn_org = ordinary Vn OR datatype-7
     # VnBAR (ALLOW_V01=NO), with the source GRID/SRINGBLK/NODRC waiver.
     square_size = 0.09
@@ -49,6 +65,21 @@ if BEOL
     source_via.drc(space < min_space.um).not_inside(NODRC).output("via.#{key}.spacing",
       "#{name}_S_1: #{name} spacing must be at least #{min_space} um outside NODRC [Calibre source]")
 
+    # VIAn_S_2 builds a 0.14 x 0.48 cluster envelope out of the via layer and
+    # checks 0.13 um spacing on the vias inside it. Every via lies inside its
+    # own envelope, so the INSIDE selection returns the full via layer and the
+    # source reduces to a general 0.13 um spacing check.
+    via_s2_space = rval('via_s2_space')
+    source_via.drc(space < via_s2_space.um).not_inside(NODRC).output("via.#{key}.s2_spacing",
+      "#{name}_S_2: #{name} spacing must be at least #{via_s2_space} um outside NODRC [Calibre source]")
+
+    # VIAn_S_3 is limited to different-net neighbors. KLayout has no
+    # connectivity, so all pairs are checked, which can only add markers
+    # (tighter than the source).
+    via_s3_space = rval('via_s3_space')
+    source_via.drc(space < via_s3_space.um).not_inside(NODRC).output("via.#{key}.s3_spacing",
+      "#{name}_S_3: #{name} spacing must be at least #{via_s3_space} um outside NODRC [Calibre source]")
+
 
     # VIAn_W_2 separately checks datatype-7 bar width < or > 0.09 um.
     # Keep the literal source INSIDE mask and do not apply the square test to
@@ -63,6 +94,48 @@ if BEOL
     rotated.not_inside(SRINGBLK_SRC).not_inside(NODRC).output("via.#{key}.rotated",
       "#{name}_R_5: 45-degree #{name} edges are not allowed outside SRINGBLK/NODRC [Calibre source]")
 
+    # Vn_R_3: single via in an H-shaped upper-metal bar. The source
+    # via_in_H_bar macro selects upper-metal polygons that enclose two small
+    # rectangular holes (area and edge length <= 5 um) and then flags a lone
+    # via on the short center bar (bar length <= 1 um, width <= 3 um). This
+    # port keeps the two-small-hole selection and drops the center-bar
+    # filters, so every lone via in such a polygon is reported (tighter than
+    # the source).
+    hbar_metal = RBA::Region.new
+    upper_metal.data.merged.each do |metal_polygon|
+      small_holes = 0
+      metal_polygon.holes.times do |hole_index|
+        points = []
+        metal_polygon.each_point_hole(hole_index) { |point| points << point }
+        hole = RBA::Polygon.new(points)
+        next unless hole.is_box?
+        bbox = hole.bbox
+        next if bbox.width > (5.0 / dbu).round || bbox.height > (5.0 / dbu).round
+        next if hole.area.to_f * dbu * dbu > 5.0
+        small_holes += 1
+      end
+      hbar_metal.insert(metal_polygon) if small_holes == 2
+    end
+    hbar_single = source_via.data.and(hbar_metal.interacting(source_via.data, 1, 1))
+    wrap_region.call(hbar_single).not_inside(NODRC).output("via.#{key}.hbar",
+      "#{name}_R_3: a single #{name} in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]")
+
+    # Vn_R_4_R: recommended; a via stack deeper than four layers must be
+    # redundant. The source selects square Vn in the metal-overlap stack and
+    # walks four via layers upward; this port walks the same four layers
+    # spatially and reports every participating via (tighter than the
+    # source, which only reports non-redundant stacks).
+    via_index = key[1..].to_i
+    if via_index <= INNER_METALS - 5
+      stack = stack_via_layers[via_index - 1].data
+      4.times do |offset|
+        stack = stack.interacting(stack_via_layers[via_index + offset].data)
+      end
+      recommended_output.call("#{name}_R_4_R",
+        wrap_region.call(stack).not_inside(NODRC),
+        "#{name} stacks deeper than four layers need redundant vias outside NODRC")
+    end
+
     # The separate OUTLAYER in VIAn_EN_2a_2b_2c flags via geometry outside
     # its lower metal; this clause has only the NODRC waiver.
     source_via.not(lower_metal).not_inside(NODRC).output("via.#{key}.cover.lower",
@@ -71,6 +144,39 @@ if BEOL
       "#{name}_EN_5a_5b: #{name} must be covered by its upper metal outside NODRC [Calibre source]")
     source_via.drc(enclosed(upper_metal) < via_upper_min_enclosure.um).not_inside(NODRC).output("via.#{key}.enclosure.upper",
       "#{name}_EN_5a_5b: #{name} upper-metal enclosure must be at least #{via_upper_min_enclosure} um [Calibre source]")
+
+    # VIAn_2a_R_2b_R: recommended 0.04 um lower-metal enclosure on all sides
+    # (the source alternative allows 0.07 um on two opposite sides, so the
+    # all-sides 0.04 minimum is the necessary condition of both branches).
+    via_enc_r = rval('via_drc_enc_lower_r')
+    recommended_output.call("#{name}_2a_R_2b_R",
+      source_via.drc(enclosed(lower_metal) < via_enc_r.um)
+        .not_inside(NODRC.or(SRINGBLK_SRC)).not_inside(SRAMALL),
+      "recommended #{name} lower-metal enclosure >= #{via_enc_r} um outside NODRC/SRINGBLK/SRAMALL")
+
+    # VIAn_R_2a_2b: redundant vias at wide metal intersections. The source
+    # requires 2 vias with space <= 0.2 um or 4 with space <= 0.25 um where
+    # either metal is wider than 0.3 um, and 4 vias with space <= 0.2 um or
+    # 9 with space <= 0.55 um where either metal is wider than 0.7 um. Only
+    # intersections carrying a via are selected (source ENCLOSE clause).
+    # Clusters are modelled by growing each via by half the allowed spacing
+    # and requiring the grown halo to touch the minimum via count.
+    via_data = source_via.data
+    via_intersection = lower_metal.data.and(upper_metal.data).interacting(via_data)
+    wide07 = via_intersection.interacting(metal_wider_than.call(lower_metal.data, 0.7))
+      .or(via_intersection.interacting(metal_wider_than.call(upper_metal.data, 0.7)))
+    wide03 = via_intersection.interacting(metal_wider_than.call(lower_metal.data, 0.3))
+      .or(via_intersection.interacting(metal_wider_than.call(upper_metal.data, 0.3)))
+      .not(wide07)
+    v2 = via_data.sized((0.1 / grid).round).and(wide03).interacting(via_data, 2)
+    v4 = via_data.sized((0.125 / grid).round).and(wide03).interacting(via_data, 4)
+    v4_07 = via_data.sized((0.1 / grid).round).and(wide07).interacting(via_data, 4)
+    v9 = via_data.sized((0.275 / grid).round).and(wide07).interacting(via_data, 9)
+    redundant_errors = wrap_region.call(
+      wide03.not_interacting(v2.or(v4)).or(wide07.not_interacting(v4_07.or(v9))))
+    recommended_output.call("#{name}_R_2a_2b",
+      redundant_errors.not_inside(NODRC),
+      "wide #{name} lower/upper metal intersections need redundant vias outside NODRC")
   end
 
   tv2_source = TV2.or(TV2BAR)
@@ -138,11 +244,31 @@ if BEOL
     "T4V2_S_2: T4V2 spacing within a 3x3-or-larger array must be at least #{rval('tv2_s2_space')} um [Calibre source]")
 
 
-  # Omitted active rules: V1-V4_S_2/_S_3 (array-neighbor, OPPOSITE/NOT
-  # CONNECTED), V1-V4_R_3 (H-shaped arrays), and the conditional opposite-side
-  # enclosure clauses in V1-V4_EN_2a_2b_2c / EN_5a_5b and T4V2_EN_2_EN_3.
-  # Generic spacing/enclosure operators do not preserve Calibre's
-  # ABUT<90/SINGULAR or directional GOOD qualifiers; conditional 0.02um upper
-  # and 0.05um lower via margins remain omitted.
-  # Recommended rules T4V2_R_1_R/R_4_R are inactive for OPEN_RECOMMENDED_ON=NO.
+  # T4V2 recommended redundancy rules (source OPEN_RECOMMENDED_ON block).
+  tv2_intersection = wrap_region.call(M5.data.and(TM2.data))
+  tv2_exact_squares = tv2_source.not(TV2BAR)
+    .with_bbox_width(rval('tv2_width').um).with_bbox_height(rval('tv2_width').um)
+  tv2_wide_metal = lambda do |layer|
+    region = layer.data
+    wrap_region.call(region.interacting(
+      region.sized(-((0.5 / 2.0 - grid) / grid).round)))
+  end
+  recommended_output.call('T4V2_R_1_R',
+    tv2_intersection.interacting(tv2_exact_squares, 1, 1)
+      .interacting(tv2_wide_metal.call(M5).or(tv2_wide_metal.call(TM2))),
+    'at least two square T4V2 vias are recommended where either metal width is >= 0.5 um')
+  recommended_output.call('T4V2_R_4_R',
+    tv2_intersection.interacting(tv2_source, 1, 1),
+    'redundant T4V2 vias are recommended (single-via intersection reported)')
+
+  # Implemented with approximations: V1-V4_S_2 reduces to a general 0.13 um
+  # spacing (every via lies inside its own cluster envelope) and V1-V4_S_3 is
+  # evaluated as all-pairs spacing because KLayout has no connectivity; both
+  # can only add markers (tighter).  V1-V4_R_3 (H-shaped arrays) is emitted
+  # from the source bar-array geometry.
+  # Omitted: the conditional opposite-side enclosure clauses in
+  # V1-V4_EN_2a_2b_2c / EN_5a_5b and T4V2_EN_2_EN_3.  Generic spacing/
+  # enclosure operators do not preserve Calibre's ABUT<90/SINGULAR or
+  # directional GOOD qualifiers; conditional 0.02um upper and 0.05um lower via
+  # margins remain omitted.
 end

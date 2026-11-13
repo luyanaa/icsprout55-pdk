@@ -59,14 +59,19 @@ LVS_LAYERS = ROOT / "libs.tech" / "lvs" / "rule_decks" / "layers_definitions.lvs
 CROSSWALK: dict[str, tuple[str, str]] = {
     "M1": ("MET1", "drawing"), "M2": ("MET2", "drawing"),
     "M3": ("MET3", "drawing"), "M4": ("MET4", "drawing"),
-    "M5": ("MET5", "drawing"),
+    "M5": ("MET5", "drawing"), "M6": ("MET6", "drawing"),
+    "M7": ("MET7", "drawing"), "M8": ("MET8", "drawing"),
     "M1LBL": ("MET1", "text"), "M2LBL": ("MET2", "text"),
     "M3LBL": ("MET3", "text"), "M4LBL": ("MET4", "text"),
     "M5LBL": ("MET5", "text"),
     "V1": ("VIA1", "drawing"), "V2": ("VIA2", "drawing"),
     "V3": ("VIA3", "drawing"), "V4": ("VIA4", "drawing"),
+    "V5": ("VIA5", "drawing"), "V6": ("VIA6", "drawing"),
+    "V7": ("VIA7", "drawing"),
     "V1BAR": ("VIA1", "bar"), "V2BAR": ("VIA2", "bar"),
     "V3BAR": ("VIA3", "bar"), "V4BAR": ("VIA4", "bar"),
+    "V5BAR": ("VIA5", "bar"), "V6BAR": ("VIA6", "bar"),
+    "V7BAR": ("VIA7", "bar"),
     # TM2/TV2 are the IO top-metal layers (T4M2/T4V2), per the IO pad LEFs.
     "TM2": ("T4M2", "drawing"), "TM2LBL": ("T4M2", "text"),
     "TV2": ("T4V2", "drawing"), "TV2BAR": ("T4V2", "bar"),
@@ -80,6 +85,8 @@ CROSSWALK: dict[str, tuple[str, str]] = {
     "PPO": ("POLY", "res"),
     "ALPADRES": ("ALPAD", "res"),
     "MET5RES": ("MET5", "res"),
+    "MET6RES": ("MET6", "res"), "MET7RES": ("MET7", "res"),
+    "MET8RES": ("MET8", "res"),
     "T4M2RES": ("T4M2", "res"),
     "ACTRES": ("ACT", "res"),
     "ALPADLBL": ("ALPAD", "text"), "RDLLBL": ("RDL", "text"),
@@ -101,6 +108,12 @@ for i in range(1, 9):
     CROSSWALK[f"{layer}MOM"] = (layer, "mom")
 for name, purpose in (("DUM", "dm"), ("DUMB", "dmblk"), ("SLOT", "slot")):
     CROSSWALK[f"T4M2{name}"] = ("T4M2", purpose)
+for layer in ("T2M1", "T2M2", "T8M1", "T8M2"):
+    for name, purpose in (("DUM", "dm"), ("DUMB", "dmblk"),
+                          ("SLOT", "slot"), ("RES", "res")):
+        CROSSWALK[f"{layer}{name}"] = (layer, purpose)
+for layer in ("T2V1", "T2V2", "T8V1", "T8V2"):
+    CROSSWALK[f"{layer}BAR"] = (layer, "bar")
 
 # GDS layer pairs with no techfile layermap entry. The Calibre DRC source
 # uses 354/13 for SRINGBLK; the manual separately lists GRID as 179/40.

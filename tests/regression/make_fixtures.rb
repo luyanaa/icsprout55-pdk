@@ -16,9 +16,9 @@ Dir.mkdir(OUT) unless Dir.exist?(OUT)
 RULES = JSON.parse(File.read(File.join(ROOT, 'libs.tech/drc/rule_decks/ics55_rules.json')))['drc_rules']
 
 LAYERS = {
-  'ACT' => [2, 1], 'ACTDUM' => [2, 2], 'ACTDUMB' => [2, 3],
+  'ACT' => [2, 1], 'ACTDUM' => [2, 2], 'ACTDUMB' => [2, 3], 'AARES' => [2, 4],
   'NW' => [9, 1], 'DNW' => [7, 1], 'DGOX' => [27, 1], 'TGOX' => [28, 1],
-  'POLY' => [41, 1], 'POLYDUM' => [41, 2], 'POLYDUMB' => [41, 3],
+  'POLY' => [41, 1], 'POLYDUM' => [41, 2], 'POLYDUMB' => [41, 3], 'PPO' => [41, 4],
   'NP' => [52, 1], 'PP' => [53, 1], 'ESD' => [55, 1], 'ESDIOE' => [232, 12],
   'NW1RES' => [9, 4], 'PSUB' => [261, 12], 'LDMOS' => [211, 12],
   'LVTN' => [17, 1], 'LVTP' => [18, 1], 'HVTN' => [21, 1], 'HVTP' => [22, 1],
@@ -33,6 +33,7 @@ LAYERS = {
   'V1' => [91, 1], 'V1BAR' => [91, 7], 'V2' => [92, 1], 'V3' => [93, 1],
   'V4' => [94, 1], 'V4BAR' => [94, 7],
   'T4M2' => [103, 1], 'T4M2DUM' => [103, 2], 'T4M2DUMB' => [103, 3], 'T4M2SLOT' => [103, 8],
+  'T4M1' => [102, 1],
   'TV2' => [113, 1], 'TV2BAR' => [113, 7], 'T4V2' => [113, 1],
   'RV' => [120, 1], 'CB' => [121, 1], 'ALPAD' => [122, 1], 'ALPADRES' => [122, 4],
   'RDL' => [123, 1], 'COVER' => [124, 1],
@@ -40,6 +41,7 @@ LAYERS = {
   'M4MOM' => [84, 10], 'M5MOM' => [85, 10], 'MOMLVS1' => [323, 12],
   'FUSEALL' => [292, 12], 'EFUSEALL' => [293, 12], 'POEFUSEBLK' => [294, 12],
   'GRBLK' => [353, 12], 'SRINGBLK_SRC' => [354, 13], 'NODRC' => [357, 12],
+  'LATCHUP' => [316, 12],
   'INDALL' => [302, 12], 'SRAMALL' => [171, 12],
   'CHIPBLK' => [351, 12], 'DEUPAD' => [381, 12],
   'LOGO' => [355, 12], 'DMYBLK' => [359, 12], 'BMIM' => [140, 1],
@@ -1349,6 +1351,7 @@ FIXTURES = {
   'mom_forbidden_m1_cap23' => [box('MOMLVS1', 0, 0, 1, 1), box('M1MOM', 0, 0, 1, 1), label('MOMLVS1', 'momcap23', 0.5, 0.5)],
   'mom_cap12_missing_label' => [box('MOMLVS1', 0, 0, 1, 1), box('M1MOM', 0, 0, 1, 1), box('M2MOM', 0, 0, 1, 1)],
   'mom_cap12_valid_label' => [box('MOMLVS1', 0, 0, 1, 1), box('M1MOM', 0, 0, 1, 1), box('M2MOM', 0, 0, 1, 1), label('MOMLVS1', 'momcap12', 0.5, 0.5)],
+  'mom_cap12_missing_marker' => [box('MOMLVS1', 0, 0, 1, 1), box('M1MOM', 0, 0, 1, 1), label('MOMLVS1', 'momcap12', 0.5, 0.5)],
 
   # AADUM size-class spacing, cross-layer spacing/overlap, and boundary enclosure.
   'aadum_s1_bad' => [box('ACTDUM', 0, 0, 3, 3), box('ACTDUM', 4.9, 0, 7.9, 3)],
@@ -2412,6 +2415,347 @@ FIXTURES['ant_stage_split'] = [
   box('V2', 10.05, 28.95, 10.35, 29.25),
   box('M3', 0.0, 28.9, 10.4, 29.4),
 ]
+
+# --- Batch 10: resistor, latch-up, via-hbar, thick-metal and recommended ---
+
+# AAres_W_1: the 0.3 um AA body is inside AARES and SAB, with the source
+# 0.2 um marker extension, 0.21 um SAB extension and a 0.3 um NP enclosure,
+# so only the width fires.
+FIXTURES['resistor_aa_width_bad'] = [
+  box('ACT', 0, 0, 0.3, 2.0),
+  box('NP', -0.3, -0.3, 0.6, 2.3),
+  box('AARES', -0.2, -0.2, 0.5, 2.2),
+  box('SAB', -0.21, -0.21, 0.51, 2.21),
+]
+
+# Vn_R_3: one V1 inside an H-shaped M2 polygon with exactly two small
+# rectangular holes (1x1 um each). The H centre bar carries a single via.
+FIXTURES['via_v1_hbar_bad'] = [
+  box('M2', 0, 0, 5, 0.5),
+  box('M2', 0, 1.5, 5, 2),
+  box('M2', 0, 0.5, 1, 1.5),
+  box('M2', 2, 0.5, 3, 1.5),
+  box('M2', 4, 0.5, 5, 1.5),
+  box('M1', 2.2, 0.7, 2.8, 1.3),
+  box('V1', 2.455, 0.955, 2.545, 1.045),
+]
+
+# LU_W_1: a 0.1 um P+ guard ring surrounds an N+ I/O device (TGOX). The
+# 0.7 um TG is enclosed 0.25 um by 1.2 um AA, and NP/PP are spaced from the
+# opposite tap so only the guard width fires.
+FIXTURES['latchup_guard_width_bad'] = [
+  # ACT guard ring, outer 2.2 um / hole 2.0 um.
+  box('ACT', -1.1, -1.1, 1.1, -1.0),
+  box('ACT', -1.1, 1.0, 1.1, 1.1),
+  box('ACT', -1.1, -1.0, -1.0, 1.0),
+  box('ACT', 1.0, -1.0, 1.1, 1.0),
+  # PP ring, outer 2.5 um / hole 1.7 um -> PTAP width 0.1 um.
+  box('PP', -1.25, -1.25, 1.25, -0.85),
+  box('PP', -1.25, 0.85, 1.25, 1.25),
+  box('PP', -1.25, -0.85, -0.85, 0.85),
+  box('PP', 0.85, -0.85, 1.25, 0.85),
+  # N+ I/O device: 1.2 um AA, 1.66 um NP, 0.7 um TGOX (0.25 um enclosure).
+  box('ACT', -0.6, -0.6, 0.6, 0.6),
+  box('NP', -0.83, -0.83, 0.83, 0.83),
+  box('TGOX', -0.35, -0.35, 0.35, 0.35),
+]
+
+# T4M1_W_1 under the T4V1/T4M1 profile: 0.3 um wide, area above the 0.4 um^2
+# minimum, no via or dummy geometry.
+FIXTURES['thick_t4m1_width_bad'] = [
+  box('T4M1', 0, 0, 0.3, 2.0),
+]
+
+# ACT_S_1_R under recommended=error: 0.13 um AA space passes the normal
+# 0.11 um rule but fails the 0.16 um recommended rule; NP merges safely.
+FIXTURES['recommended_act_spacing_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  box('ACT', 1.13, 0, 2.13, 1.0),
+  box('NP', -0.15, -0.15, 2.28, 1.15),
+]
+
+# --- Batch 10 follow-up: PO, well, via, dummy, resistor and latch-up ---
+
+# PO_W_2a: 0.05 um core channel length.
+FIXTURES['po_core_length_bad'] = [
+  box('ACT', 0, 0, 0.8, 1.0),
+  box('POLY', 0.3, -0.2, 0.35, 1.2),
+]
+
+# PO_W_2b: 0.15 um DG channel length.
+FIXTURES['po_dg_length_bad'] = [
+  box('ACT', 0, 0, 0.8, 1.0),
+  box('POLY', 0.3, -0.2, 0.45, 1.2),
+  box('DGOX', -0.3, -0.3, 1.1, 1.3),
+]
+
+# PO_W_2d: 0.30 um TG NMOS channel length. LATCHUP waives the guard-ring
+# proxy for this bare IO device.
+FIXTURES['po_tg_length_bad'] = [
+  box('ACT', 0, 0, 0.8, 1.0),
+  box('NP', -0.15, -0.15, 0.95, 1.15),
+  box('POLY', 0.3, -0.2, 0.6, 1.2),
+  box('TGOX', -0.3, -0.3, 1.1, 1.3),
+  box('LATCHUP', -2, -2, 3, 3),
+]
+
+# PO_W_3/PO_S_6: two 45-degree field-PO bars with a 0.127 um width and a
+# 0.170 um space, both below the 0.18 um thresholds.
+FIXTURES['po_field45_bad'] = [
+  ['POLY', :polygon, bar45(5000, 5000, 2000, 90)],
+  ['POLY', :polygon, bar45(5000 - (90 + 120), 5000 + (90 + 120), 2000, 90)],
+]
+
+# PO_S_2: two 0.20 um wide field POs 0.15 um apart.
+FIXTURES['po_wide_space_bad'] = [
+  box('POLY', 0, 0, 0.2, 1.0),
+  box('POLY', 0.35, 0, 0.55, 1.0),
+]
+
+# PO_S_3: two 0.10 um gates on the same AA, 0.10 um apart.
+FIXTURES['po_aa_space_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  box('POLY', 0.2, -0.2, 0.3, 1.2),
+  box('POLY', 0.4, -0.2, 0.5, 1.2),
+]
+
+# PO_EX_2: 0.10 um PO end-cap beyond AA.
+FIXTURES['po_endcap_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  box('POLY', 0.3, -0.1, 0.4, 1.1),
+]
+
+# PO_R_1: bent (L-shaped) PO on AA.
+FIXTURES['po_bent_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  ['POLY', :polygon, [[0.2, -0.2], [0.4, -0.2], [0.4, 0.8], [1.2, 0.8],
+                      [1.2, 1.2], [0.2, 1.2]]],
+]
+
+# PO_R_2: contacted PO with no NP/PP cover.
+FIXTURES['po_implant_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  box('POLY', 0.2, -0.2, 0.35, 1.2),
+  box('CT', 0.22, 1.0, 0.31, 1.09),
+  box('M1', 0.1, 0.9, 0.5, 1.2),
+]
+
+# PO_S_12: two field POs inside SAB, 0.20 um apart.
+FIXTURES['po_sab_space_bad'] = [
+  box('POLY', 0, 0, 0.3, 1.0),
+  box('POLY', 0.5, 0, 0.8, 1.0),
+  box('SAB', -0.1, -0.1, 0.9, 1.1),
+]
+
+# PO_S_9: two 0.08 um wide field POs 0.13 um apart.
+FIXTURES['po_line_end_bad'] = [
+  box('POLY', 0.2, 0, 0.28, 1.0),
+  box('POLY', 0.41, 0, 0.49, 1.0),
+]
+
+# PO_S_16: a 630 um^2 field PO 0.90 um from a 0.07 um gate.
+FIXTURES['po_large_space_bad'] = [
+  box('POLY', 0, 0, 30, 22),
+  box('ACT', 30.6, 0, 31.9, 1.0),
+  box('NP', 30.45, -0.15, 32.05, 1.15),
+  box('POLY', 30.9, -0.2, 30.97, 1.2),
+  *ct_pad(30.65, 0.40),
+  *ct_pad(31.60, 0.40),
+]
+
+# PO_EX_1: 0.05 um AA extension outside PO.
+FIXTURES['po_aa_ext_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  box('POLY', 0.05, -0.2, 0.15, 1.2),
+]
+
+# PO_S_11: 0.03 um AA-to-PO space on STI.
+FIXTURES['po_sti_space_bad'] = [
+  box('ACT', 0, 0, 1.0, 1.0),
+  box('NP', -0.15, -0.15, 1.15, 1.15),
+  box('POLY', 1.03, 0, 1.3, 0.3),
+]
+
+# PO_S_5: two TG gates 0.20 um apart with a contact between them.
+FIXTURES['po_tg_space_bad'] = [
+  box('ACT', 0, 0, 1.0, 0.6),
+  box('NP', -0.15, -0.15, 1.15, 0.75),
+  box('POLY', 0.25, -0.2, 0.35, 0.8),
+  box('POLY', 0.55, -0.2, 0.65, 0.8),
+  box('TGOX', -0.2, -0.25, 1.2, 0.85),
+  box('CT', 0.45, 0.25, 0.54, 0.34),
+  box('M1', 0.35, 0.15, 0.64, 0.44),
+  box('LATCHUP', -2, -2, 3, 3),
+]
+
+# NW1_S_2: two 0.6 um low-voltage NW islands 0.6 um apart.
+FIXTURES['well_nw_lv_bad'] = [
+  box('NW', 0, 0, 0.6, 0.6),
+  box('NW', 1.2, 0, 1.8, 0.6),
+]
+
+# NW1_S_4/NW1_S_5: two HV NW islands (TGOX-covered) 0.3 um apart.
+FIXTURES['well_nw_hv_bad'] = [
+  box('NW', 0, 0, 0.6, 0.6), box('TGOX', -0.1, -0.1, 0.7, 0.7),
+  box('NW', 0.9, 0, 1.5, 0.6), box('TGOX', 0.8, -0.1, 1.6, 0.7),
+]
+
+# NW1_S_3: low-voltage NW 0.5 um from an HV NW.
+FIXTURES['well_nw_lv_hv_bad'] = [
+  box('NW', 0, 0, 0.6, 0.6),
+  box('NW', 1.1, 0, 1.7, 0.6), box('TGOX', 1.0, -0.1, 1.8, 0.7),
+]
+
+# DNW_S_2a: DNW 1.0 um from NW.
+FIXTURES['well_dnw_nw_bad'] = [
+  box('DNW', 0, 0, 2.0, 2.0),
+  box('NW', 3.0, 0, 3.6, 0.6),
+]
+
+# T4V2 coverage: the via has no top metal / no bottom metal.
+FIXTURES['via_tv2_no_upper_bad'] = [
+  box('M5', 0, 0, 2.0, 1.5),
+  box('TV2', 0.3, 0.3, 0.66, 0.66),
+]
+FIXTURES['via_tv2_no_lower_bad'] = [
+  box('T4M2', 0, 0, 2.0, 1.5),
+  box('TV2', 0.3, 0.3, 0.66, 0.66),
+]
+
+# T4V2 rotated-via check: a 45-degree diamond inside both plates.
+FIXTURES['via_tv2_rotated_bad'] = [
+  box('M5', 0, 0, 2.0, 1.5),
+  box('T4M2', 0, 0, 2.0, 1.5),
+  diamond('TV2', 0.5, 0.5, 0.25),
+]
+
+# CT_S_2: 0.115 um contact space (above the 0.11 base rule, below 0.12).
+FIXTURES['ct_diff_net_space_bad'] = [
+  box('ACT', 0, 0, 1.2, 1.0),
+  box('NP', -0.15, -0.15, 1.35, 1.15),
+  *ct_pad(0.2, 0.3), *ct_pad(0.405, 0.3),
+]
+
+# PODUM_R_1: a legal 0.381 um poly dummy with a contact on top.
+FIXTURES['podum_ct_bad'] = [
+  box('POLYDUM', 0, 0, 0.381, 0.381),
+  box('CT', 0.1, 0.1, 0.19, 0.19),
+  box('M1', 0.03, 0.03, 0.28, 0.28),
+]
+
+# T4M2DUM_W_1: a 3x3 dummy that is not a source-defined rectangle.
+FIXTURES['thick_t4m2_dummy_bad'] = [
+  box('T4M2DUM', 0, 0, 3.0, 3.0),
+]
+
+# AAres: 0.3 um body with 0.1 um NP enclosure and 0.1 um AARES extension.
+FIXTURES['resistor_aa_body_bad'] = [
+  box('ACT', 0, 0, 0.3, 2.0),
+  box('NP', -0.1, -0.1, 0.4, 2.1),
+  box('AARES', -0.1, -0.1, 0.4, 2.1),
+  box('SAB', -0.05, -0.05, 0.35, 2.05),
+]
+
+# AAres_R_4: silicide resistor marker with no contact.
+FIXTURES['resistor_aa_silicide_bad'] = [
+  box('ACT', 0, 0, 0.5, 2.0),
+  box('NP', -0.2, -0.2, 0.7, 2.2),
+  box('AARES', 0, 0, 0.5, 2.0),
+]
+
+# AAres_R_2: PP-type AA resistor outside NW.
+FIXTURES['resistor_aa_pp_nw_bad'] = [
+  box('ACT', 0, 0, 0.5, 2.0),
+  box('PP', -0.2, -0.2, 0.7, 2.2),
+  box('AARES', -0.2, -0.2, 0.7, 2.2),
+  box('SAB', -0.2, -0.2, 0.7, 2.2),
+]
+
+# AAres_R_3: L-shaped non-silicide resistor body.
+FIXTURES['resistor_aa_dogbone_bad'] = [
+  ['ACT', :polygon, [[0, 0], [0.5, 0], [0.5, 0.5], [1.0, 0.5],
+                     [1.0, 1.0], [0, 1.0]]],
+  box('NP', -0.2, -0.2, 1.2, 1.2),
+  box('AARES', -0.2, -0.2, 1.2, 1.2),
+  box('SAB', -0.2, -0.2, 1.2, 1.2),
+]
+
+# NWresAA_W_1: 1.5 um NW-resistor body, 0.9 um AA enclosure, tapped NW.
+FIXTURES['resistor_nw_width_bad'] = [
+  box('NW', 0, 0, 3.5, 1.5),
+  box('ACT', -0.9, -0.9, 4.4, 2.4),
+  box('NW1RES', 0, 0, 3.5, 1.5),
+  box('SAB', 0, 0, 3.5, 1.5),
+  box('NP', -1.05, -1.05, 4.55, 2.55),
+  box('CT', 0.3, 0.3, 0.39, 0.39),
+  box('M1', 0.15, 0.15, 0.54, 0.54),
+]
+
+# NWresSTI_W_1: 1.5 um STI-resistor body without SAB.
+FIXTURES['resistor_nw_sti_width_bad'] = [
+  box('NW', 0, 0, 3.5, 1.5),
+  box('ACT', -0.9, -0.9, 4.4, 2.4),
+  box('NW1RES', -0.2, -0.2, 3.7, 1.7),
+  box('NP', -1.05, -1.05, 4.55, 2.55),
+  box('CT', 0.3, 0.3, 0.39, 0.39),
+  box('M1', 0.15, 0.15, 0.54, 0.54),
+]
+
+# POLYres_W_1: 0.3 um non-silicide poly resistor.
+FIXTURES['resistor_poly_width_bad'] = [
+  box('POLY', 0, 0, 0.3, 2.0),
+  box('PPO', -0.2, -0.2, 0.5, 2.2),
+  box('SAB', -0.2, -0.2, 0.5, 2.2),
+  box('NP', -0.2, -0.2, 0.5, 2.2),
+]
+
+# POLYres_W_1 squares clause: L-shaped body with area below narrow^2.
+FIXTURES['resistor_poly_squares_bad'] = [
+  ['POLY', :polygon, [[0, 0], [0.5, 0], [0.5, 0.5], [1.0, 0.5],
+                      [1.0, 1.0], [0, 1.0]]],
+  box('PPO', -0.2, -0.2, 1.2, 1.2),
+  box('SAB', -0.2, -0.2, 1.2, 1.2),
+  box('NP', -0.2, -0.2, 1.2, 1.2),
+]
+
+# LU_S_2_NTAP / PTAP: an untapped PMOS in NW and an untapped NMOS.
+FIXTURES['latchup_s2_ntap_bad'] = mos_device(implant: 'PP') + [
+  box('NW', -0.3, -0.3, 2.3, 1.3),
+]
+FIXTURES['latchup_s2_ptap_bad'] = mos_device
+
+# LU_S_1: an NMOS strip with a core and a TG gate 3 um from a PMOS strip
+# with a core and a TG gate; core-gate and I/O spacing checks both fire.
+FIXTURES['latchup_s1_bad'] = [
+  box('ACT', 0, 0, 7.0, 1.0),
+  box('NP', -0.15, -0.15, 3.15, 1.15),
+  box('PP', 3.85, -0.15, 7.15, 1.15),
+  box('POLY', 0.5, -0.2, 0.6, 1.2),
+  box('POLY', 2.0, -0.2, 2.1, 1.2),
+  box('POLY', 4.5, -0.2, 4.6, 1.2),
+  box('POLY', 6.0, -0.2, 6.1, 1.2),
+  box('TGOX', 1.75, -0.3, 2.35, 1.3),
+  box('TGOX', 5.75, -0.3, 6.35, 1.3),
+  box('CT', 0.10, 0.40, 0.19, 0.49),
+  box('CT', 3.10, 0.40, 3.19, 0.49),
+  box('CT', 3.90, 0.40, 3.99, 0.49),
+  box('CT', 6.60, 0.40, 6.69, 0.49),
+  box('M1', 0.03, 0.33, 0.25, 0.55),
+  box('M1', 3.03, 0.33, 3.25, 0.55),
+  box('M1', 3.83, 0.33, 4.05, 0.55),
+  box('M1', 6.53, 0.33, 6.75, 0.55),
+]
+
+# T4M2_D_1_max: 10 um T4M2 stripes at 11 um pitch exceed the 85% window limit.
+FIXTURES['density_t4m2_high_bad'] = begin
+  shapes = density_base(150, 150, top_metal: :empty)
+  x = 0.0
+  while x < 150
+    shapes << box('T4M2', x, 0, [x + 10, 150].min, 150)
+    x += 11
+  end
+  shapes
+end
 
 FIXTURES.each do |name, shapes|
   ly = RBA::Layout.new

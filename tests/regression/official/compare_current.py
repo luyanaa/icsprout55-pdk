@@ -17,6 +17,7 @@ Calibre differential: no Calibre run/report is available on this machine.
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import re
 from collections import Counter
@@ -26,17 +27,87 @@ HERE = Path(__file__).resolve().parent
 DEFAULT_ROOT = HERE.parent.parent.parent
 
 
+RESERVED_BLOCKS = {"if", "else", "elseif", "while", "foreach", "for", "proc",
+                   "switch", "namespace", "VERBATIM", "skew_edge_check"}
+
+
+def expand_loops(text: str) -> str:
+    """Expand ${metal_layer}/${via_layer} inside foreach blocks.
+
+    The vendor deck generates the metal, via, dummy and density rule names
+    from Tcl loops.  Track the most recent list definition and foreach
+    variable so each template is expanded with the list that is in scope,
+    matching how the source deck is actually unrolled by Calibre.
+    """
+    lists: dict[str, list[str]] = {}
+    scope: dict[str, list[str]] = {}
+    out = []
+    for line in text.splitlines():
+        m = re.match(r"\s*set\s+(\w+)\s+\{([^}]*)\}", line)
+        if m:
+            lists[m.group(1)] = m.group(2).split()
+        m = re.search(r"\bforeach\s+(\w+)\s+\$(\w+)", line)
+        if m:
+            scope[m.group(1)] = lists.get(m.group(2), [])
+
+        def repl(mm: re.Match[str]) -> str:
+            values = scope.get(mm.group(1))
+            return mm.group(0) if not values else "{" + " ".join(values) + "}"
+
+        if "RULECHECK" in line and "${" in line:
+            var_names = re.findall(r"\$\{(\w+)\}", line)
+            if all(scope.get(v) for v in var_names):
+                for combo in itertools.product(*(scope[v] for v in var_names)):
+                    rendered = line
+                    for var, value in zip(var_names, combo):
+                        rendered = rendered.replace("${" + var + "}", value)
+                    out.append(rendered)
+                continue
+        out.append(re.sub(r"\$\{(\w+)\}", repl, line))
+    return "\n".join(out)
+
+
 def parse_vendor(path: Path) -> tuple[set[str], set[str]]:
-    text = path.read_text(encoding="utf8", errors="replace")
+    text = expand_loops(path.read_text(encoding="utf8", errors="replace"))
     # Anchor at the line start so disabled "#RULECHECK ..." stubs are excluded.
     ruled = set(re.findall(r"^[ \t]*RULECHECK\s+([A-Za-z0-9_.]+)\s*\{", text,
                            re.M))
     blocks = set()
-    for m in re.finditer(r"^([A-Z][A-Z0-9_]*(?:_[A-Za-z0-9]+)*)\s*\{\s*$",
+    for m in re.finditer(r"^([A-Za-z][A-Za-z0-9_]*(?:_[A-Za-z0-9]+)*)\s*\{\s*$",
                          text, re.M):
-        if m.group(1) != "VERBATIM":
-            blocks.add(m.group(1))
+        name = m.group(1)
+        if name not in RESERVED_BLOCKS:
+            blocks.add(name)
     return ruled, blocks - ruled
+
+
+def strip_ruby_comments(text: str) -> str:
+    """Drop Ruby comments but keep ``#`` inside string literals.
+
+    Rule IDs mentioned only in comments must not count as emitted categories;
+    ``#{}`` interpolation inside strings is preserved because quote state is
+    tracked per line.
+    """
+    out = []
+    for line in text.splitlines():
+        quote = None
+        escaped = False
+        cut = len(line)
+        for i, ch in enumerate(line):
+            if quote:
+                if escaped:
+                    escaped = False
+                elif ch == "\\":
+                    escaped = True
+                elif ch == quote:
+                    quote = None
+            elif ch in "'\"":
+                quote = ch
+            elif ch == "#":
+                cut = i
+                break
+        out.append(line[:cut])
+    return "\n".join(out)
 
 
 def parse_klayout(root: Path) -> tuple[dict[str, str], set[str], list[re.Pattern[str]]]:
@@ -44,15 +115,18 @@ def parse_klayout(root: Path) -> tuple[dict[str, str], set[str], list[re.Pattern
 
     Returns ``(output_categories, literals, templates)``.  ``output_categories``
     counts literal ``.output('name', ...)`` calls.  ``literals``/``templates``
-    also include names passed indirectly (``output(rule_id)`` with the literal
-    at the call site) and Ruby-interpolated names (``"metal.#{key}.area"``),
-    which are matched as full-name regex templates.
+    include names passed indirectly (``output(rule_id)`` with the literal at a
+    helper call site) and Ruby-interpolated names (``"metal.#{key}.area"``),
+    which are matched as full-name regex templates.  Ruby comments are ignored
+    so a rule ID that survives only as documentation does not count.
     """
     out: dict[str, str] = {}
     literals: set[str] = set()
     patterns: list[re.Pattern[str]] = []
     for f in sorted((root / "libs.tech/drc").rglob("*.drc")):
-        text = f.read_text(encoding="utf8", errors="replace")
+        if f.name.startswith("."):
+            continue
+        text = strip_ruby_comments(f.read_text(encoding="utf8", errors="replace"))
         for m in re.finditer(r"\.output\(\s*(['\"])(.+?)\1", text):
             if "#{" not in m.group(2):
                 out.setdefault(m.group(2), str(f.relative_to(root)))

@@ -32,10 +32,10 @@
     },
     "deck_usage_vs_map": {
       "drc": {
-        "inputs": 108,
+        "inputs": 169,
         "documented_local_aux": [],
         "unmapped": [],
-        "layers_def_sha256": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a"
+        "layers_def_sha256": "b50917273c0a73e65aa7943dce342fbbbae44d0f6578426f6682b63529e5a51e"
       },
       "lvs": {
         "inputs": 82,
@@ -86,8 +86,8 @@
     "ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc": "e979fded0bef271f4635736163b03b7db2071569a88feb7cab211413feb7f1db",
     "ICsprout_CalLVS_55LLULP1233_REV1_0_OS.lvs": "da10271332e64f12b0da845eaa9807f503c6279dd955e63727b53d8731ea7748",
     "icsprout55.layermap": "513a9aefb48de2b3eadec1dd2fa1fb1c84bb0460cf40bf32cc56797b86a8b05d",
-    "ics55.map": "8e89d6f45583d5c95e3f5241b9d07843102e1c99c1db1f72e7dddc1fae310187",
-    "layers_def.drc": "325bfb97e0f146fba58675170554c94b7d6f1c786a7c940e0af7b55572ce312a",
+    "ics55.map": "3b917c0c20cf91b7fb037bd2f91b399cd939f3ffff7369c720355467f8e1932e",
+    "layers_def.drc": "b50917273c0a73e65aa7943dce342fbbbae44d0f6578426f6682b63529e5a51e",
     "layers_definitions.lvs": "e0347a7d0cba186d7e93267d3bb3e727f1971738a4405ea73c1c8f5041ff5f95"
   },
   "issues": []

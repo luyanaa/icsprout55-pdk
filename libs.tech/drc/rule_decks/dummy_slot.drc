@@ -147,12 +147,15 @@ if DUMMY_SLOT
   space_to.call(POLYDUM, DMYBLK, podum_dmyblk_space).output('PODUM_S_12',
     "PODUM_S_12: POLYDUM to DMYBLK spacing must be at least #{podum_dmyblk_space} um [Calibre source]")
 
-  # M1-M5 dummy shape whitelists.
+  # M1-M8 dummy shape whitelists. M6-M8 are off-stack and gated by CHECK_M.
   metal_dummies = [
-    ['M1', MET1DUM], ['M2', MET2DUM], ['M3', MET3DUM],
-    ['M4', MET4DUM], ['M5', MET5DUM]
+    ['M1', MET1DUM, CHECK_M[1]], ['M2', MET2DUM, CHECK_M[2]],
+    ['M3', MET3DUM, CHECK_M[3]], ['M4', MET4DUM, CHECK_M[4]],
+    ['M5', MET5DUM, CHECK_M[5]], ['M6', MET6DUM, CHECK_M[6]],
+    ['M7', MET7DUM, CHECK_M[7]], ['M8', MET8DUM, CHECK_M[8]]
   ]
-  metal_dummies.each do |name, dummy|
+  metal_dummies.each do |name, dummy, enabled|
+    next unless enabled
     special = exact_rectangle.call(dummy, metal_dummy_rect_width, metal_dummy_rect_length)
       .or(exact_rectangle.call(dummy, metal_dummy_rect_length, metal_dummy_rect_width))
     allowed = exact_rectangle.call(dummy, metal_dummy_2, metal_dummy_2)
@@ -162,6 +165,114 @@ if DUMMY_SLOT
     dummy.not(allowed).output(rule_id,
       "#{rule_id}: #{name} dummy must be a source-defined 2x2, 1x1, or " \
       "#{metal_dummy_rect_width}x#{metal_dummy_rect_length} um rectangle")
+  end
+
+  # MnDUM_S_1..S_15 from the vendor metal_list loop: size-class spacing,
+  # wide-run spacing, 45-degree spacing and blocking-layer clearances. The
+  # size-class filters accept the 0.22x0.89 rectangle in both orientations.
+  metal_dum_space_2x2 = rval('metal_dum_space_2x2')
+  metal_dum_metal_space_2x2 = rval('metal_dum_metal_space_2x2')
+  metal_dum_space_1x1 = rval('metal_dum_space_1x1')
+  metal_dum_metal_space_1x1 = rval('metal_dum_metal_space_1x1')
+  metal_dum_space_0p22x0p89 = rval('metal_dum_space_0p22x0p89')
+  metal_dum_metal_space_0p22x0p89 = rval('metal_dum_metal_space_0p22x0p89')
+  metal_dum_wide_width = rval('metal_dum_wide_width')
+  metal_dum_wide_run = rval('metal_dum_wide_run')
+  metal_dum_wide_space = rval('metal_dum_wide_space')
+  metal_dum_angle_space = rval('metal_dum_angle_space')
+  metal_dum_fuse_space = rval('metal_dum_fuse_space')
+  metal_dum_mim_space = rval('metal_dum_mim_space')
+  metal_dum_logo_space = rval('metal_dum_logo_space')
+  metal_dum_indall_space = rval('metal_dum_indall_space')
+  metal_dum_chipblk_space = rval('metal_dum_chipblk_space')
+  metal_dum_dumb_space = rval('metal_dum_dumb_space')
+  metal_dum_dmyblk_space = rval('metal_dum_dmyblk_space')
+
+  [
+    ['M1', MET1DUM, MET1DUMB, M1.not(MET1SLOT), CHECK_M[1]],
+    ['M2', MET2DUM, MET2DUMB, M2.not(MET2SLOT), CHECK_M[2]],
+    ['M3', MET3DUM, MET3DUMB, M3.not(MET3SLOT), CHECK_M[3]],
+    ['M4', MET4DUM, MET4DUMB, M4.not(MET4SLOT), CHECK_M[4]],
+    ['M5', MET5DUM, MET5DUMB, M5.not(MET5SLOT), CHECK_M[5]],
+    ['M6', MET6DUM, MET6DUMB, M6.not(MET6SLOT), CHECK_M[6]],
+    ['M7', MET7DUM, MET7DUMB, M7.not(MET7SLOT), CHECK_M[7]],
+    ['M8', MET8DUM, MET8DUMB, M8.not(MET8SLOT), CHECK_M[8]]
+  ].each do |name, dummy, dumb, metal, enabled|
+    next unless enabled
+    dum_2 = exact_rectangle.call(dummy, metal_dummy_2, metal_dummy_2)
+    dum_1 = exact_rectangle.call(dummy, metal_dummy_1, metal_dummy_1)
+    dum_special = exact_rectangle.call(dummy, metal_dummy_rect_width, metal_dummy_rect_length)
+      .or(exact_rectangle.call(dummy, metal_dummy_rect_length, metal_dummy_rect_width))
+
+    # S_1/S_3/S_5 carry the source INDALL and NODRC waivers; the dummy-to-metal
+    # clauses S_2/S_4/S_6 have no waiver in the source.
+    dum_2.drc(space < metal_dum_space_2x2.um).not_inside(INDALL).not_inside(NODRC)
+      .output("#{name}DUM_S_1",
+        "#{name}DUM_S_1: 2x2 um #{name} dummy spacing must be at least #{metal_dum_space_2x2} um outside INDALL/NODRC [Calibre source]")
+    space_to.call(dum_2, metal, metal_dum_metal_space_2x2)
+      .output("#{name}DUM_S_2",
+        "#{name}DUM_S_2: 2x2 um #{name} dummy to #{name} spacing must be at least #{metal_dum_metal_space_2x2} um [Calibre source]")
+    dum_1.drc(space < metal_dum_space_1x1.um).not_inside(INDALL).not_inside(NODRC)
+      .output("#{name}DUM_S_3",
+        "#{name}DUM_S_3: 1x1 um #{name} dummy spacing must be at least #{metal_dum_space_1x1} um outside INDALL/NODRC [Calibre source]")
+    space_to.call(dum_1, metal, metal_dum_metal_space_1x1)
+      .output("#{name}DUM_S_4",
+        "#{name}DUM_S_4: 1x1 um #{name} dummy to #{name} spacing must be at least #{metal_dum_metal_space_1x1} um [Calibre source]")
+    dum_special.drc(space < metal_dum_space_0p22x0p89.um).not_inside(INDALL).not_inside(NODRC)
+      .output("#{name}DUM_S_5",
+        "#{name}DUM_S_5: 0.22x0.89 um #{name} dummy spacing must be at least #{metal_dum_space_0p22x0p89} um outside INDALL/NODRC [Calibre source]")
+    space_to.call(dum_special, metal, metal_dum_metal_space_0p22x0p89)
+      .output("#{name}DUM_S_6",
+        "#{name}DUM_S_6: 0.22x0.89 um #{name} dummy to #{name} spacing must be at least #{metal_dum_metal_space_0p22x0p89} um [Calibre source]")
+
+    # S_7: Mn_2c_DUM wide-run spacing, approximated by shape erosion and
+    # marker bbox filtering (same idiom as T4M2DUM_S_7).
+    dum_all_region = metal.or(dummy).data
+    dum_wide = dum_all_region.interacting(
+      dum_all_region.sized(-((metal_dum_wide_width / 2.0 - grid) / grid).round))
+    dum_markers = dum_all_region.space_check((metal_dum_wide_space / grid).round).polygons
+    dum_markers = dum_markers.interacting(dum_wide)
+    dum_markers = bbox_longer_than.call(dum_markers, (metal_dum_wide_run / grid).round)
+    dum_markers = dum_markers.interacting(dummy.data)
+    wrap_region.call(dum_markers).not_inside(NODRC).output("#{name}DUM_S_7",
+      "#{name}DUM_S_7: #{name} dummy spacing must be at least #{metal_dum_wide_space} um when " \
+      "width/length >= #{metal_dum_wide_width} um and run >= #{metal_dum_wide_run} um [Calibre source]")
+
+    # S_8: dummy to 45-degree metal spacing.
+    dum_angle_pairs = metal.data.separation_check(dummy.data,
+      (metal_dum_angle_space / grid).round)
+    dum_angle_selected = RBA::EdgePairs.new
+    dum_angle_pairs.each do |pair|
+      [pair.first, pair.second].each do |edge|
+        dx = (edge.p2.x - edge.p1.x).abs
+        dy = (edge.p2.y - edge.p1.y).abs
+        if dx != 0 && dx == dy
+          dum_angle_selected.insert(pair)
+          break
+        end
+      end
+    end
+    wrap_region.call(dum_angle_selected.polygons).not_inside(NODRC).output("#{name}DUM_S_8",
+      "#{name}DUM_S_8: #{name} dummy to 45-degree #{name} spacing must be at least #{metal_dum_angle_space} um [Calibre source]")
+
+    # S_9..S_13: EXT plus ENC against neighboring blocking layers.
+    [
+      ['FUSEALL', FUSEALL, metal_dum_fuse_space, 'S_9'],
+      ['BMIM', BMIM, metal_dum_mim_space, 'S_10'],
+      ['LOGO', LOGO, metal_dum_logo_space, 'S_11'],
+      ['INDALL', INDALL, metal_dum_indall_space, 'S_12'],
+      ['CHIPBLK', CHIPBLK, metal_dum_chipblk_space, 'S_13']
+    ].each do |layer_name, layer, limit, suffix|
+      rule_id = "#{name}DUM_#{suffix}"
+      space_to.call(dummy, layer, limit).polygons.or(enclose_by.call(dummy, layer, limit))
+        .output(rule_id,
+          "#{rule_id}: #{name} dummy to #{layer_name} spacing/enclosure must be at least #{limit} um [Calibre source]")
+    end
+
+    space_to.call(dummy, dumb, metal_dum_dumb_space).output("#{name}DUM_S_14",
+      "#{name}DUM_S_14: #{name} dummy to #{name}DUMB spacing must be at least #{metal_dum_dumb_space} um [Calibre source]")
+    space_to.call(dummy, DMYBLK, metal_dum_dmyblk_space).output("#{name}DUM_S_15",
+      "#{name}DUM_S_15: #{name} dummy to DMYBLK spacing must be at least #{metal_dum_dmyblk_space} um [Calibre source]")
   end
 
   # T4M2 dummy shape whitelist and size-class spacing. The class filters accept

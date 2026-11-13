@@ -13,23 +13,29 @@
 # limitations under the License.
 
 #=========================================================================================
-# BEOL 06 - Metals (M1..M5, T4M2)
+# BEOL 06 - Metals (M1..M8, T4M2)
 #
-# Area/hole predicates and baseline M1-M5 S_1 thresholds use source values
-# with represented masks. Generic KLayout spacing omits source
-# ABUT/SINGULAR and marker-specific qualifiers; width rules remain omitted.
+# Area/hole predicates, width, wide-metal spacing classes, baseline S_1
+# thresholds, EOL/void, dummy-adjacency and 45-degree checks use source values
+# with represented masks. Generic KLayout spacing omits source ABUT/SINGULAR
+# and marker-specific qualifiers. M6-M8 are off-stack in the released
+# total_metal=6 profile and are gated by their CHECK_M switches.
 #=========================================================================================
 
 if BEOL
   metal_area_rules = [
-    ['M1', M1.not(MET1SLOT), 'm1', 'm1_area', 'm1_min_hole', 'MET1_A_1', 'MET1_A_2', true],
-    ['M2', M2.not(MET2SLOT), 'm2', 'm2_area', 'm2_min_hole', 'M2_A_1', 'M2_A_2', true],
-    ['M3', M3.not(MET3SLOT), 'm3', 'm3_area', 'm3_min_hole', 'M3_A_1', 'M3_A_2', false],
-    ['M4', M4.not(MET4SLOT), 'm4', 'm4_area', 'm4_min_hole', 'M4_A_1', 'M4_A_2', false],
-    ['M5', M5.not(MET5SLOT), 'm5', 'm5_area', 'm5_min_hole', 'M5_A_1', 'M5_A_2', false]
+    ['M1', M1.not(MET1SLOT), 'm1', 'm1_area', 'm1_min_hole', 'MET1_A_1', 'MET1_A_2', true, CHECK_M[1]],
+    ['M2', M2.not(MET2SLOT), 'm2', 'm2_area', 'm2_min_hole', 'M2_A_1', 'M2_A_2', true, CHECK_M[2]],
+    ['M3', M3.not(MET3SLOT), 'm3', 'm3_area', 'm3_min_hole', 'M3_A_1', 'M3_A_2', false, CHECK_M[3]],
+    ['M4', M4.not(MET4SLOT), 'm4', 'm4_area', 'm4_min_hole', 'M4_A_1', 'M4_A_2', false, CHECK_M[4]],
+    ['M5', M5.not(MET5SLOT), 'm5', 'm5_area', 'm5_min_hole', 'M5_A_1', 'M5_A_2', false, CHECK_M[5]],
+    ['M6', M6.not(MET6SLOT), 'm6', 'm6_area', 'm6_min_hole', 'M6_A_1', 'M6_A_2', false, CHECK_M[6]],
+    ['M7', M7.not(MET7SLOT), 'm7', 'm7_area', 'm7_min_hole', 'M7_A_1', 'M7_A_2', false, CHECK_M[7]],
+    ['M8', M8.not(MET8SLOT), 'm8', 'm8_area', 'm8_min_hole', 'M8_A_1', 'M8_A_2', false, CHECK_M[8]]
   ]
 
-  metal_area_rules.each do |name, layer, key, area_key, hole_key, area_rule, hole_rule, sramall_waiver|
+  metal_area_rules.each do |name, layer, key, area_key, hole_key, area_rule, hole_rule, sramall_waiver, enabled|
+    next unless enabled
     min_area = rval(area_key)
     # Source AREA checks use strict "<"; subtracting the inclusive >= range
     # keeps exact-threshold polygons legal.
@@ -57,13 +63,17 @@ if BEOL
       "T4M2_A_2: T4M2 enclosed area must be at least #{min_hole_area} um^2 [Calibre source]")
 
   metal_spacing_rules = [
-    ['M1', M1.not(MET1SLOT), 'm1', true, true],
-    ['M2', M2.not(MET2SLOT), 'm2', true, false],
-    ['M3', M3.not(MET3SLOT), 'm3', false, false],
-    ['M4', M4.not(MET4SLOT), 'm4', false, false],
-    ['M5', M5.not(MET5SLOT), 'm5', false, false]
+    ['M1', M1.not(MET1SLOT), 'm1', true, true, CHECK_M[1]],
+    ['M2', M2.not(MET2SLOT), 'm2', true, false, CHECK_M[2]],
+    ['M3', M3.not(MET3SLOT), 'm3', false, false, CHECK_M[3]],
+    ['M4', M4.not(MET4SLOT), 'm4', false, false, CHECK_M[4]],
+    ['M5', M5.not(MET5SLOT), 'm5', false, false, CHECK_M[5]],
+    ['M6', M6.not(MET6SLOT), 'm6', false, false, CHECK_M[6]],
+    ['M7', M7.not(MET7SLOT), 'm7', false, false, CHECK_M[7]],
+    ['M8', M8.not(MET8SLOT), 'm8', false, false, CHECK_M[8]]
   ]
-  metal_spacing_rules.each do |name, layer, key, sramall_waiver, indall_waiver|
+  metal_spacing_rules.each do |name, layer, key, sramall_waiver, indall_waiver, enabled|
+    next unless enabled
     min_space = rval("#{key}_space")
     spacing_errors = layer.drc(space < min_space.um)
     spacing_errors = spacing_errors.not_inside(INDALL) if indall_waiver
@@ -76,6 +86,34 @@ if BEOL
   # source ABUT<90/SINGULAR qualifiers. M1_S_1's ABUT<89 branch inside INDALL
   # is omitted.
 
+  # MET1_S_1_R: recommended M1 space >= 0.12 um outside SRAMALL/NODRC.
+  m1_space_r = rval('m1_space_r')
+  recommended_output.call('MET1_S_1_R',
+    M1.not(MET1SLOT).drc(space < m1_space_r.um)
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended M1 space >= #{m1_space_r} um outside SRAMALL/NODRC")
+
+  # M2_S_1_R / M3_S_1_R / M4_S_1_R / M5_S_1_R: recommended 0.13 um space.
+  # The source waives SRAMALL for M2/M3 only and NODRC for all four.
+  metal_spacing_r_rules = [
+    ['M2', M2.not(MET2SLOT), 'm2', true, CHECK_M[2]],
+    ['M3', M3.not(MET3SLOT), 'm3', true, CHECK_M[3]],
+    ['M4', M4.not(MET4SLOT), 'm4', false, CHECK_M[4]],
+    ['M5', M5.not(MET5SLOT), 'm5', false, CHECK_M[5]],
+    ['M6', M6.not(MET6SLOT), 'm6', false, CHECK_M[6]],
+    ['M7', M7.not(MET7SLOT), 'm7', false, CHECK_M[7]],
+    ['M8', M8.not(MET8SLOT), 'm8', false, CHECK_M[8]]
+  ]
+  metal_spacing_r_rules.each do |name, layer, key, sramall_waiver, enabled|
+    next unless enabled
+    min_space = rval("#{key}_space_r")
+    spacing_errors = layer.drc(space < min_space.um)
+    spacing_errors = spacing_errors.not_inside(SRAMALL) if sramall_waiver
+    recommended_output.call("#{name}_S_1_R",
+      spacing_errors.not_inside(NODRC),
+      "recommended #{name} space >= #{min_space} um outside #{sramall_waiver ? 'SRAMALL/' : ''}NODRC")
+  end
+
   # ---------------------------------------------------------------------
   # Width, 45-degree, wide-metal, dense line-end and huge-void rules.
   # Calibre predicates that select individual edges cannot be expressed with
@@ -86,16 +124,23 @@ if BEOL
   # manufacturing grid are defined in layers_def.drc.
   # ---------------------------------------------------------------------
 
-  # MET1_W_1 and M2-M5_W_1a/W_1b. Maximum width uses the source's minimum
+  # MET1_W_1 and M2-M8_W_1a/W_1b. Maximum width uses the source's minimum
   # width metric: a shape is too wide only when every cross-section > max.
+  # The source exempts DEUPAD from the maximum-width clause only on the TM-1
+  # layer (M[total_metal - top_metal]) when top_metal == 1.
+  tm1_name = TOP_METAL == 1 ? "M#{TOTAL_METAL - TOP_METAL}" : nil
   metal_width_rules = [
-    ['M1', M1, 'm1', 'MET1_W_1', 'MET1_W_1', true, false],
-    ['M2', M2, 'm2', 'M2_W_1a', 'M2_W_1b', false, false],
-    ['M3', M3, 'm3', 'M3_W_1a', 'M3_W_1b', false, false],
-    ['M4', M4, 'm4', 'M4_W_1a', 'M4_W_1b', false, false],
-    ['M5', M5, 'm5', 'M5_W_1a', 'M5_W_1b', false, true]
+    ['M1', M1, 'm1', 'MET1_W_1', 'MET1_W_1', true, false, CHECK_M[1]],
+    ['M2', M2, 'm2', 'M2_W_1a', 'M2_W_1b', false, false, CHECK_M[2]],
+    ['M3', M3, 'm3', 'M3_W_1a', 'M3_W_1b', false, false, CHECK_M[3]],
+    ['M4', M4, 'm4', 'M4_W_1a', 'M4_W_1b', false, false, CHECK_M[4]],
+    ['M5', M5, 'm5', 'M5_W_1a', 'M5_W_1b', false, tm1_name == 'M5', CHECK_M[5]],
+    ['M6', M6, 'm6', 'M6_W_1a', 'M6_W_1b', false, tm1_name == 'M6', CHECK_M[6]],
+    ['M7', M7, 'm7', 'M7_W_1a', 'M7_W_1b', false, tm1_name == 'M7', CHECK_M[7]],
+    ['M8', M8, 'm8', 'M8_W_1a', 'M8_W_1b', false, tm1_name == 'M8', CHECK_M[8]]
   ]
-  metal_width_rules.each do |name, layer, key, min_rule, max_rule, sramall_waiver, deupad_max|
+  metal_width_rules.each do |name, layer, key, min_rule, max_rule, sramall_waiver, deupad_max, enabled|
+    next unless enabled
     min_width = rval("#{key}_width")
     width_errors = layer.drc(width < min_width.um)
     width_errors = width_errors.not_inside(SRAMALL) if sramall_waiver
@@ -115,13 +160,17 @@ if BEOL
   # exempts the area within 0.1um of a bending point and has a corner-to-edge
   # clause for M2-M5; those qualifiers are not represented.
   metal_angle_rules = [
-    ['M1', M1, 'm1', 'MET1_W_2', 'MET1_S_4'],
-    ['M2', M2, 'm2', 'M2_W_2', 'M2_S_4'],
-    ['M3', M3, 'm3', 'M3_W_2', 'M3_S_4'],
-    ['M4', M4, 'm4', 'M4_W_2', 'M4_S_4'],
-    ['M5', M5, 'm5', 'M5_W_2', 'M5_S_4']
+    ['M1', M1, 'm1', 'MET1_W_2', 'MET1_S_4', CHECK_M[1]],
+    ['M2', M2, 'm2', 'M2_W_2', 'M2_S_4', CHECK_M[2]],
+    ['M3', M3, 'm3', 'M3_W_2', 'M3_S_4', CHECK_M[3]],
+    ['M4', M4, 'm4', 'M4_W_2', 'M4_S_4', CHECK_M[4]],
+    ['M5', M5, 'm5', 'M5_W_2', 'M5_S_4', CHECK_M[5]],
+    ['M6', M6, 'm6', 'M6_W_2', 'M6_S_4', CHECK_M[6]],
+    ['M7', M7, 'm7', 'M7_W_2', 'M7_S_4', CHECK_M[7]],
+    ['M8', M8, 'm8', 'M8_W_2', 'M8_S_4', CHECK_M[8]]
   ]
-  metal_angle_rules.each do |name, layer, key, width_rule, space_rule|
+  metal_angle_rules.each do |name, layer, key, width_rule, space_rule, enabled|
+    next unless enabled
     region = layer.data
     angle_width = rval("#{key}_45_width")
     wrap_region.call(
@@ -144,13 +193,17 @@ if BEOL
   # markers that touch a wide shape, and filtering markers by bbox run. The
   # source's EDGE and NOT INSIDE EDGE qualifiers are not represented.
   metal_wide_rules = [
-    ['M1', M1.not(MET1SLOT).or(MET1DUM), 'm1', 'wide'],
-    ['M2', M2.not(MET2SLOT).or(MET2DUM), 'm2', 'wide'],
-    ['M3', M3.not(MET3SLOT).or(MET3DUM), 'm3', 'wide'],
-    ['M4', M4.not(MET4SLOT).or(MET4DUM), 'm4', 'wide'],
-    ['M5', M5.not(MET5SLOT).or(MET5DUM), 'm5', 'wide']
+    ['M1', M1.not(MET1SLOT).or(MET1DUM), 'm1', 'wide', CHECK_M[1]],
+    ['M2', M2.not(MET2SLOT).or(MET2DUM), 'm2', 'wide', CHECK_M[2]],
+    ['M3', M3.not(MET3SLOT).or(MET3DUM), 'm3', 'wide', CHECK_M[3]],
+    ['M4', M4.not(MET4SLOT).or(MET4DUM), 'm4', 'wide', CHECK_M[4]],
+    ['M5', M5.not(MET5SLOT).or(MET5DUM), 'm5', 'wide', CHECK_M[5]],
+    ['M6', M6.not(MET6SLOT).or(MET6DUM), 'm6', 'wide', CHECK_M[6]],
+    ['M7', M7.not(MET7SLOT).or(MET7DUM), 'm7', 'wide', CHECK_M[7]],
+    ['M8', M8.not(MET8SLOT).or(MET8DUM), 'm8', 'wide', CHECK_M[8]]
   ]
-  metal_wide_rules.each do |name, layer, key, _tag|
+  metal_wide_rules.each do |name, layer, key, _tag, enabled|
+    next unless enabled
     region = layer.data
     [
       ['metal_wide_width', 'metal_wide_run', 'metal_wide_space', 'wide_space',
@@ -177,13 +230,17 @@ if BEOL
   # source's adjacent-edge and INTERSECTING ONLY conditions are not
   # represented. M1 additionally waives SRAMALL.
   metal_eol_rules = [
-    ['M1', M1, 'm1', 'MET1_S_5', true],
-    ['M2', M2, 'm2', 'M2_S_5', false],
-    ['M3', M3, 'm3', 'M3_S_5', false],
-    ['M4', M4, 'm4', 'M4_S_5', false],
-    ['M5', M5, 'm5', 'M5_S_5', false]
+    ['M1', M1, 'm1', 'MET1_S_5', true, CHECK_M[1]],
+    ['M2', M2, 'm2', 'M2_S_5', false, CHECK_M[2]],
+    ['M3', M3, 'm3', 'M3_S_5', false, CHECK_M[3]],
+    ['M4', M4, 'm4', 'M4_S_5', false, CHECK_M[4]],
+    ['M5', M5, 'm5', 'M5_S_5', false, CHECK_M[5]],
+    ['M6', M6, 'm6', 'M6_S_5', false, CHECK_M[6]],
+    ['M7', M7, 'm7', 'M7_S_5', false, CHECK_M[7]],
+    ['M8', M8, 'm8', 'M8_S_5', false, CHECK_M[8]]
   ]
-  metal_eol_rules.each do |name, layer, key, rule_id, sramall_waiver|
+  metal_eol_rules.each do |name, layer, key, rule_id, sramall_waiver, enabled|
+    next unless enabled
     region = layer.data
     eol_len = rval("#{key}_dense_eol_len")
     eol_space = rval("#{key}_dense_eol_space")
@@ -208,16 +265,20 @@ if BEOL
   # at least 0.35um wide. The source CHECK_REGION is built with ENCLOSE
   # RECTANGLE on that region; a 0.35um halo is used here.
   metal_void_rules = [
-    ['M1', M1, MET1DUM, 'm1', 'MET1_W_3'],
-    ['M2', M2, MET2DUM, 'm2', 'M2_W_3'],
-    ['M3', M3, MET3DUM, 'm3', 'M3_W_3'],
-    ['M4', M4, MET4DUM, 'm4', 'M4_W_3'],
-    ['M5', M5, MET5DUM, 'm5', 'M5_W_3']
+    ['M1', M1, MET1DUM, 'm1', 'MET1_W_3', CHECK_M[1]],
+    ['M2', M2, MET2DUM, 'm2', 'M2_W_3', CHECK_M[2]],
+    ['M3', M3, MET3DUM, 'm3', 'M3_W_3', CHECK_M[3]],
+    ['M4', M4, MET4DUM, 'm4', 'M4_W_3', CHECK_M[4]],
+    ['M5', M5, MET5DUM, 'm5', 'M5_W_3', CHECK_M[5]],
+    ['M6', M6, MET6DUM, 'm6', 'M6_W_3', CHECK_M[6]],
+    ['M7', M7, MET7DUM, 'm7', 'M7_W_3', CHECK_M[7]],
+    ['M8', M8, MET8DUM, 'm8', 'M8_W_3', CHECK_M[8]]
   ]
   void_area_min = rval('metal_void_area_min')
   void_band = rval('metal_void_band')
   void_width = rval('metal_void_width')
-  metal_void_rules.each do |name, layer, dummy, key, rule_id|
+  metal_void_rules.each do |name, layer, dummy, key, rule_id, enabled|
+    next unless enabled
     huge_void = extent.not(layer.or(dummy)).with_area(void_area_min.um2, 1e9.um2)
     check_mal = layer.interacting(huge_void.sized(void_band.um))
     check_mal.drc(width < void_width.um).not_inside(NODRC).output("metal.#{key}.void_width",

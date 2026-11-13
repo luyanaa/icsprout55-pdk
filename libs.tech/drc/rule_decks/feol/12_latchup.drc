@@ -1,0 +1,111 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# FEOL 12 - Latch-up (LU_R_2, LU_W_1, LU_S_1a-d, LU_S_2_NTAP/PTAP)
+#
+# The source selects I/O-pad devices by net connectivity (NET AREA RATIO on
+# MD_IO_PAD).  This port has no net tracing, so "connected to an I/O pad" is
+# approximated by active under IO gate oxide (TGOX or DGOX).  Every such device
+# is checked; devices connected to a pad net through core gate oxide are not
+# identified and stay unchecked.  Both the FAST (SIZE ... BEVEL) and ACCURATE
+# (EXT < limit) variants of LU_S_1 exist in the source; the port implements the
+# ACCURATE spacing form, which is the direct rule statement.
+#
+# LU_S_2_NTAP/PTAP use the source 5 um + 30 um = 35 um reach.  The source limits
+# the growth with SIZE ... INSIDE OF a filtered well region; the port applies a
+# 35 um halo to all taps and intersects the checked device region with the
+# well.  Native-device well fragments therefore behave as connected, matching
+# the source intent, while unrelated wells within 35 um may also mask a marker
+# (looser than the per-well restriction in that corner case).
+#=========================================================================================
+
+if FEOL
+  lu_guard_width = rval('lu_guard_width')
+  lu_npmos_space_lv = rval('lu_npmos_space_lv')
+  lu_npmos_space_mv = rval('lu_npmos_space_mv')
+  lu_npmos_space_hv = rval('lu_npmos_space_hv')
+  lu_npmos_space_3v3 = rval('lu_npmos_space_3v3')
+  lu_tap_distance = rval('lu_tap_distance')
+
+  # I/O-pad device proxy: active under IO gate oxide (no net tracing).
+  io_act = ACT.and(TGOX.or(DGOX))
+  nact_io = NACT.and(io_act)
+  pact_io = PACT.and(io_act)
+  nmos_io = NMOS1.interacting(nact_io)
+  pmos_io = PMOS1.interacting(pact_io)
+  nmos_dev = NGATE.or(NSD)
+  pmos_dev = PGATE.or(PSD)
+  gate_lv = GATE.not(DGOX.or(TGOX))
+  gate_mv = GATE.and(DGOX)
+  gate_hv = GATE.and(TGOX)
+
+  # LU_R_2: an I/O injector touching PO must sit inside the opposite-type
+  # tap ring (N+ injector in a P+ guard ring and vice versa).
+  n_guard_ring = NTAP.holes
+  p_guard_ring = PTAP.holes
+  lu_r2 = nact_io.interacting(POLY).not_inside(p_guard_ring) +
+          pact_io.interacting(POLY).not_inside(n_guard_ring)
+  lu_r2.not_inside(LATCHUP.or(SRINGBLK_SRC)).not_inside(NODRC).output('latchup.guard_ring',
+    'LU_R_2: I/O injector touching PO must be inside the opposite-type tap guard ring outside LATCHUP/SRINGBLK/NODRC [Calibre source]')
+
+  # LU_W_1: guard-ring width around an I/O injector.
+  ntap_guard = NTAP.interacting(NTAP.holes.covering(pact_io))
+  ptap_guard = PTAP.interacting(PTAP.holes.covering(nact_io))
+  (ntap_guard.drc(width < lu_guard_width.um) +
+   ptap_guard.drc(width < lu_guard_width.um))
+    .not_inside(SRINGBLK_SRC).not_inside(LATCHUP).not_inside(NODRC).output('latchup.guard_width',
+      "LU_W_1: guard-ring width around an I/O injector must be at least #{lu_guard_width} um outside SRINGBLK/LATCHUP/NODRC [Calibre source]")
+
+  # LU_S_1a: core-gate I/O devices, 2.0 um NMOS/PMOS spacing.  X/N and M/Y are
+  # the two source statements; M and N cover all core devices of each type.
+  lu_s1a = nmos_io.covering(gate_lv).drc(separation(pmos_dev.covering(gate_lv)) < lu_npmos_space_lv.um) +
+           nmos_dev.covering(gate_lv).drc(separation(pmos_io.covering(gate_lv)) < lu_npmos_space_lv.um)
+  lu_s1a.not_inside(SRINGBLK_SRC).not_inside(LATCHUP.or(NODRC)).output('latchup.s1a',
+    "LU_S_1a: core-gate I/O NMOS/PMOS spacing must be at least #{lu_npmos_space_lv} um outside SRINGBLK/LATCHUP/NODRC [Calibre source]")
+
+  # LU_S_1b: 1.8V (DG) I/O devices, 2.3 um.
+  gate_lv_mv = gate_lv.or(gate_mv)
+  lu_s1b = nmos_io.covering(gate_mv).drc(separation(pmos_dev.covering(gate_lv_mv)) < lu_npmos_space_mv.um) +
+           nmos_dev.covering(gate_lv_mv).drc(separation(pmos_io.covering(gate_mv)) < lu_npmos_space_mv.um)
+  lu_s1b.not_inside(SRINGBLK_SRC).not_inside(LATCHUP.or(NODRC)).output('latchup.s1b',
+    "LU_S_1b: 1.8V I/O NMOS/PMOS spacing must be at least #{lu_npmos_space_mv} um outside SRINGBLK/LATCHUP/NODRC [Calibre source]")
+
+  # LU_S_1c: 2.5V (TG) I/O devices, 3.2 um.
+  gate_lv_hv = gate_lv.or(gate_hv)
+  lu_s1c = nmos_io.covering(gate_hv).drc(separation(pmos_dev.covering(gate_lv_hv)) < lu_npmos_space_hv.um) +
+           nmos_dev.covering(gate_lv_hv).drc(separation(pmos_io.covering(gate_hv)) < lu_npmos_space_hv.um)
+  lu_s1c.not_inside(SRINGBLK_SRC).not_inside(LATCHUP.or(NODRC)).output('latchup.s1c',
+    "LU_S_1c: 2.5V I/O NMOS/PMOS spacing must be at least #{lu_npmos_space_hv} um outside SRINGBLK/LATCHUP/NODRC [Calibre source]")
+
+  # LU_S_1d: 3.3V (TG) I/O devices, 5.0 um.
+  lu_s1d = nmos_io.covering(gate_hv).drc(separation(pmos_dev.covering(gate_lv_hv)) < lu_npmos_space_3v3.um) +
+           nmos_dev.covering(gate_lv_hv).drc(separation(pmos_io.covering(gate_hv)) < lu_npmos_space_3v3.um)
+  lu_s1d.not_inside(SRINGBLK_SRC).not_inside(LATCHUP.or(NODRC)).output('latchup.s1d',
+    "LU_S_1d: 3.3V I/O NMOS/PMOS spacing must be at least #{lu_npmos_space_3v3} um outside SRINGBLK/LATCHUP/NODRC [Calibre source]")
+
+  # LU_S_2_NTAP: PMOS source/drain in NW must be within 35 um of an N tap.
+  ntap_halo = NTAP.sized(lu_tap_distance.um)
+  PMOS1.and(NW).not(ntap_halo).not_inside(SRINGBLK_SRC).not_inside(NODRC).output('latchup.s2_ntap',
+    "LU_S_2_NTAP: PMOS in NW must be within #{lu_tap_distance} um of an NTAP pickup outside SRINGBLK/NODRC [Calibre source]")
+
+  # LU_S_2_PTAP: NMOS source/drain in PW, and native NMOS in PSUB (with or
+  # without DNW), must be within 35 um of a P tap.
+  ptap_halo = PTAP.sized(lu_tap_distance.um)
+  lu_s2_ptap = NMOS1.and(PW).not(ptap_halo) +
+               NMOS1.and(PSUB).not_interacting(DNW).not(ptap_halo) +
+               NMOS1.and(PSUB).interacting(DNW).not(ptap_halo)
+  lu_s2_ptap.not_inside(SRINGBLK_SRC).not_inside(NODRC).output('latchup.s2_ptap',
+    "LU_S_2_PTAP: NMOS in PW/PSUB must be within #{lu_tap_distance} um of a PTAP pickup outside SRINGBLK/NODRC [Calibre source]")
+end

@@ -221,8 +221,38 @@ if FEOL
     .not_inside(SRAMALL).not_inside(NODRC).output('active.act.sd_length',
       "ACT_L_2: thin butted source/drain AA length must be at most #{act_l2_len} um outside SRAMALL/NODRC [Calibre source]")
 
-  # ACT_R_3 is a recommended rule (inactive for OPEN_RECOMMENDED_ON=NO); the
-  # 45-degree width/space, wide-AA space, and NW_DNW rules above approximate
-  # the source edge qualifiers with RBA edge geometry.
+  # ACT_R_3 is a recommended rule (vendor OPEN_RECOMMENDED_ON, default NO).
+  # Calibre CUT selects polygons of the first layer that partially overlap the
+  # second, so an N+ AA that crosses the regular-NW boundary is reported while
+  # taps fully inside NW and AA outside NW are not.
+  nw_regular = NW.not_interacting(LDMOS.or(NW1RES))
+  act_r3_straddle = NACT.interacting(nw_regular)
+    .not(NACT.inside(nw_regular)).not(NACT.covering(nw_regular))
+  recommended_output.call('ACT_R_3', act_r3_straddle.not_inside(NODRC),
+    'recommended N+ AA must not straddle the regular NW boundary; waived inside NODRC')
+
+  #---------------------------------------------------------------------------
+  # Recommended ACT rules (vendor OPEN_RECOMMENDED_ON block).
+  #---------------------------------------------------------------------------
+  act_channel_width_r = rval('act_channel_width_r')
+  recommended_output.call('ACT_W_3a_R',
+    GATE_core.edges.extended_out(1.dbu).not(POLY)
+      .with_area(0, act_channel_width_r.um * 1.dbu)
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended core-gate channel width >= #{act_channel_width_r} um outside SRAMALL/NODRC")
+
+  act_space_r = rval('act_space_r')
+  recommended_output.call('ACT_S_1_R',
+    ACT.drc(space < act_space_r.um).not_inside(NODRC.or(SRAMALL)),
+    "recommended AA to AA space >= #{act_space_r} um outside NODRC/SRAMALL")
+
+  act_huge_area = rval('act_huge_area')
+  act_huge_space_r = rval('act_huge_space_r')
+  act_huge = ACT.with_area(act_huge_area.um2, 1e12.um2)
+  recommended_output.call('ACT_S_2a_R',
+    ACT.drc(separation(act_huge, transparent) < act_huge_space_r.um)
+      .not_inside(NODRC.or(SRAMALL)),
+    "recommended AA to AA wider than #{act_huge_area} um^2 space >= #{act_huge_space_r} um outside NODRC/SRAMALL")
+
   # ACT_D_* density rules live in density.drc.
 end

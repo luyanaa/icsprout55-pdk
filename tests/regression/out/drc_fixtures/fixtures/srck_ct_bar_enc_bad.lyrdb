@@ -386,6 +386,18 @@
    </categories>
   </category>
   <category>
+   <name>via.v1.s2_spacing</name>
+   <description>V1_S_2: V1 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.s3_spacing</name>
+   <description>V1_S_3: V1 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v1.bar.width</name>
    <description>V1_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
@@ -394,6 +406,12 @@
   <category>
    <name>via.v1.rotated</name>
    <description>V1_R_5: 45-degree V1 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.hbar</name>
+   <description>V1_R_3: a single V1 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
    <categories>
    </categories>
   </category>
@@ -428,6 +446,18 @@
    </categories>
   </category>
   <category>
+   <name>via.v2.s2_spacing</name>
+   <description>V2_S_2: V2 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.s3_spacing</name>
+   <description>V2_S_3: V2 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v2.bar.width</name>
    <description>V2_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
@@ -436,6 +466,12 @@
   <category>
    <name>via.v2.rotated</name>
    <description>V2_R_5: 45-degree V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.hbar</name>
+   <description>V2_R_3: a single V2 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
    <categories>
    </categories>
   </category>
@@ -470,6 +506,18 @@
    </categories>
   </category>
   <category>
+   <name>via.v3.s2_spacing</name>
+   <description>V3_S_2: V3 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.s3_spacing</name>
+   <description>V3_S_3: V3 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v3.bar.width</name>
    <description>V3_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
@@ -478,6 +526,12 @@
   <category>
    <name>via.v3.rotated</name>
    <description>V3_R_5: 45-degree V3 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.hbar</name>
+   <description>V3_R_3: a single V3 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
    <categories>
    </categories>
   </category>
@@ -512,6 +566,18 @@
    </categories>
   </category>
   <category>
+   <name>via.v4.s2_spacing</name>
+   <description>V4_S_2: V4 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.s3_spacing</name>
+   <description>V4_S_3: V4 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>via.v4.bar.width</name>
    <description>V4_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
    <categories>
@@ -520,6 +586,12 @@
   <category>
    <name>via.v4.rotated</name>
    <description>V4_R_5: 45-degree V4 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.hbar</name>
+   <description>V4_R_3: a single V4 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
    <categories>
    </categories>
   </category>

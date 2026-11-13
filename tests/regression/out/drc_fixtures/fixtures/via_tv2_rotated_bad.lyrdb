@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>metal.m1.area</name>
+   <description>MET1_A_1: M1 area must be at least 0.042 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.min_hole</name>
+   <description>MET1_A_2: M1 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.area</name>
+   <description>M2_A_1: M2 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.min_hole</name>
+   <description>M2_A_2: M2 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.area</name>
+   <description>M3_A_1: M3 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.min_hole</name>
+   <description>M3_A_2: M3 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.area</name>
+   <description>M4_A_1: M4 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.min_hole</name>
+   <description>M4_A_2: M4 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.area</name>
+   <description>M5_A_1: M5 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.min_hole</name>
+   <description>M5_A_2: M5 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.area</name>
+   <description>T4M2_A_1: T4M2 area must be at least 0.4 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.min_hole</name>
+   <description>T4M2_A_2: T4M2 enclosed area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.spacing</name>
+   <description>M1_S_1: M1 spacing must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.spacing</name>
+   <description>M2_S_1: M2 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.spacing</name>
+   <description>M3_S_1: M3 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.spacing</name>
+   <description>M4_S_1: M4 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.spacing</name>
+   <description>M5_S_1: M5 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.width</name>
+   <description>MET1_W_1: M1 width must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.max_width</name>
+   <description>MET1_W_1: M1 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.width</name>
+   <description>M2_W_1a: M2 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.max_width</name>
+   <description>M2_W_1b: M2 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.width</name>
+   <description>M3_W_1a: M3 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.max_width</name>
+   <description>M3_W_1b: M3 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.width</name>
+   <description>M4_W_1a: M4 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.max_width</name>
+   <description>M4_W_1b: M4 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.width</name>
+   <description>M5_W_1a: M5 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.max_width</name>
+   <description>M5_W_1b: M5 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.angle_width</name>
+   <description>MET1_W_2: M1 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.angle_space</name>
+   <description>MET1_S_4: M1 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.angle_width</name>
+   <description>M2_W_2: M2 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.angle_space</name>
+   <description>M2_S_4: M2 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.angle_width</name>
+   <description>M3_W_2: M3 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.angle_space</name>
+   <description>M3_S_4: M3 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.angle_width</name>
+   <description>M4_W_2: M4 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.angle_space</name>
+   <description>M4_S_4: M4 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.angle_width</name>
+   <description>M5_W_2: M5 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.angle_space</name>
+   <description>M5_S_4: M5 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.wide_space</name>
+   <description>MET1_S_2: M1 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.wider_space</name>
+   <description>MET1_S_3: M1 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.wide_space</name>
+   <description>M2_S_2: M2 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.wider_space</name>
+   <description>M2_S_3: M2 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.wide_space</name>
+   <description>M3_S_2: M3 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.wider_space</name>
+   <description>M3_S_3: M3 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.wide_space</name>
+   <description>M4_S_2: M4 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.wider_space</name>
+   <description>M4_S_3: M4 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.wide_space</name>
+   <description>M5_S_2: M5 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.wider_space</name>
+   <description>M5_S_3: M5 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.eol_space</name>
+   <description>MET1_S_5: M1 dense line-end spacing must be at least 0.11 um (line-end edges &lt; 0.11 um, jogs &lt; 0.09 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.eol_space</name>
+   <description>M2_S_5: M2 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.eol_space</name>
+   <description>M3_S_5: M3 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.eol_space</name>
+   <description>M4_S_5: M4 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.eol_space</name>
+   <description>M5_S_5: M5 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.void_width</name>
+   <description>MET1_W_3: M1 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.void_width</name>
+   <description>M2_W_3: M2 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.void_width</name>
+   <description>M3_W_3: M3 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.void_width</name>
+   <description>M4_W_3: M4 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m5.void_width</name>
+   <description>M5_W_3: M5 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.width</name>
+   <description>T4M2_W_1: T4M2 width must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.max_width</name>
+   <description>T4M2_W_1: T4M2 width must be at most 20.0 um (DEUPAD/PA exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.spacing</name>
+   <description>T4M2_S_1: T4M2 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.wide_space</name>
+   <description>T4M2_S_2: T4M2 spacing must be at least 0.5 um when width/length &gt;= 2.0 um and run &gt;= 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.width</name>
+   <description>V1_W_1: V1 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.spacing</name>
+   <description>V1_S_1: V1 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.s2_spacing</name>
+   <description>V1_S_2: V1 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.s3_spacing</name>
+   <description>V1_S_3: V1 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.bar.width</name>
+   <description>V1_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.rotated</name>
+   <description>V1_R_5: 45-degree V1 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.hbar</name>
+   <description>V1_R_3: a single V1 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.lower</name>
+   <description>V1_EN_2a_2b_2c: V1 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.upper</name>
+   <description>V1_EN_5a_5b: V1 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.enclosure.upper</name>
+   <description>V1_EN_5a_5b: V1 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.width</name>
+   <description>V2_W_1: V2 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.spacing</name>
+   <description>V2_S_1: V2 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.s2_spacing</name>
+   <description>V2_S_2: V2 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.s3_spacing</name>
+   <description>V2_S_3: V2 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.bar.width</name>
+   <description>V2_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.rotated</name>
+   <description>V2_R_5: 45-degree V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.hbar</name>
+   <description>V2_R_3: a single V2 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.lower</name>
+   <description>V2_EN_2a_2b_2c: V2 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.upper</name>
+   <description>V2_EN_5a_5b: V2 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.enclosure.upper</name>
+   <description>V2_EN_5a_5b: V2 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.width</name>
+   <description>V3_W_1: V3 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.spacing</name>
+   <description>V3_S_1: V3 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.s2_spacing</name>
+   <description>V3_S_2: V3 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.s3_spacing</name>
+   <description>V3_S_3: V3 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.bar.width</name>
+   <description>V3_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.rotated</name>
+   <description>V3_R_5: 45-degree V3 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.hbar</name>
+   <description>V3_R_3: a single V3 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.lower</name>
+   <description>V3_EN_2a_2b_2c: V3 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.upper</name>
+   <description>V3_EN_5a_5b: V3 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.enclosure.upper</name>
+   <description>V3_EN_5a_5b: V3 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.width</name>
+   <description>V4_W_1: V4 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.spacing</name>
+   <description>V4_S_1: V4 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.s2_spacing</name>
+   <description>V4_S_2: V4 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.s3_spacing</name>
+   <description>V4_S_3: V4 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.bar.width</name>
+   <description>V4_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.rotated</name>
+   <description>V4_R_5: 45-degree V4 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.hbar</name>
+   <description>V4_R_3: a single V4 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.cover.lower</name>
+   <description>V4_EN_2a_2b_2c: V4 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.cover.upper</name>
+   <description>V4_EN_5a_5b: V4 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v4.enclosure.upper</name>
+   <description>V4_EN_5a_5b: V4 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.spacing</name>
+   <description>T4V2_S_1: T4V2 spacing must be at least 0.34 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.bar.width</name>
+   <description>T4V2_W_2: datatype-7 T4V2bar width must equal 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.rotated</name>
+   <description>T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 must be covered by source-selected M5 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 lower-metal enclosure must be at least 0.01 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 must be covered by T4M2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least 0.02 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.width</name>
+   <description>T4V2_W_1: T4V2 must be a 0.36x0.36 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.array.spacing</name>
+   <description>T4V2_S_2: T4V2 spacing within a 3x3-or-larger array must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.width</name>
+   <description>RV_W_1: RV must be a 3x3 um rectangle after source fuse/grid exclusions [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.space</name>
+   <description>RV_S_1: RV spacing must be at least 3.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cb.space</name>
+   <description>RV_S_2: RV to CB spacing must be at least 6.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.metal</name>
+   <description>RV_EN_1_2: RV enclosure by T4M2 must be at least 1.5 um outside LOGO/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cover.rdl</name>
+   <description>RV_EN_3_4: RV must be covered by RDL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.rdl</name>
+   <description>RV_EN_3_4: RV enclosure by RDL must be at least 1.5 um outside LOGO/SRINGBLK/FUTR/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.single</name>
+   <description>RV_R_1: a T4M2/RDL island should carry more than one RV [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.alpa_full</name>
+   <description>RDL_EN_1: COVER must be fully covered by ALPA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.alpad_full</name>
+   <description>RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.width</name>
+   <description>RDL_W_1: RDL width must be at most 35.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.space</name>
+   <description>RDL_S_1: ALPA spacing must be at least 2.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wide.space</name>
+   <description>RDL_S_2: ALPA spacing with one ALPA wider than 10.0 um must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wider.space</name>
+   <description>RDL_S_3: ALPA spacing with one ALPA wider than 35.0 um must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.width</name>
+   <description>CB_W_1: CB width must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.space</name>
+   <description>CB_S_1: CB spacing must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.enclosure</name>
+   <description>CB_EN_1_EN_2: CB enclosure by T4M2 must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.width</name>
+   <description>COVER_W_1: COVER width must be at least 40.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.length</name>
+   <description>COVER_L_1: COVER must enclose a 40.0x65.0 um rectangle outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.space</name>
+   <description>COVER_S_1: COVER spacing must be at least 5.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.enc.alpa</name>
+   <description>COVER_EN_1: COVER enclosure by ALPA must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m1.pad.space</name>
+   <description>COVER_S_2: M1 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m2.pad.space</name>
+   <description>COVER_S_2: M2 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m3.pad.space</name>
+   <description>COVER_S_2: M3 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m4.pad.space</name>
+   <description>COVER_S_2: M4 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m5.pad.space</name>
+   <description>COVER_S_2: M5 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.t4m2.pad.space</name>
+   <description>COVER_S_2: T4M2 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>'via.tv2.rotated'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0.5,0.25;0.25,0.5;0.5,0.75;0.75,0.5)</value>
+   </values>
+  </item>
+  <item>
+   <tags/>
+   <category>'via.tv2.width'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0.5,0.25;0.25,0.5;0.5,0.75;0.75,0.5)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

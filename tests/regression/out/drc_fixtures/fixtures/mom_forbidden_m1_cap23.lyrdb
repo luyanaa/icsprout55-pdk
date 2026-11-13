@@ -782,8 +782,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.12</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap12 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.12</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap12 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.13</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap13 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -794,8 +806,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.14</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap14 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.14</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap14 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.15</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap15 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -806,8 +830,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.16</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap16 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.16</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap16 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.17</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap17 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -818,8 +854,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.18</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap18 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.18</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap18 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.23</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap23 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -830,8 +878,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.24</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap24 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.24</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap24 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.25</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap25 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -842,8 +902,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.26</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap26 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.26</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap26 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.27</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap27 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -854,8 +926,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.28</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap28 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.28</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap28 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.34</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap34 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -866,8 +950,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.35</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap35 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.35</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap35 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.36</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap36 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -878,8 +974,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.37</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap37 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.37</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap37 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.38</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap38 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -890,8 +998,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.45</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap45 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.45</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap45 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.46</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap46 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -902,8 +1022,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.47</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap47 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.47</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap47 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.48</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap48 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -914,8 +1046,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.56</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap56 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.56</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap56 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.57</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap57 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -926,8 +1070,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.58</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap58 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.58</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap58 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.67</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap67 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -938,8 +1094,20 @@
    </categories>
   </category>
   <category>
+   <name>mom.MOM_R_2.missing_marker.68</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap68 must touch all required MxMOM markers [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>mom.MOM_R_2.label_stack.68</name>
    <description>MOM_R_2: MOMLVS1 stack must carry matching momcap68 label [ICsprout Calibre]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>mom.MOM_R_2.missing_marker.78</name>
+   <description>MOM_R_2: MOMLVS1 labelled momcap78 must touch all required MxMOM markers [ICsprout Calibre]</description>
    <categories>
    </categories>
   </category>
@@ -963,6 +1131,18 @@
   <item>
    <tags/>
    <category>'mom.MOM_R_2.forbidden_stack.MET1MOM.23'</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>polygon: (0,0;0,1;1,1;1,0)</value>
+   </values>
+  </item>
+  <item>
+   <tags/>
+   <category>'mom.MOM_R_2.missing_marker.23'</category>
    <cell>TOP</cell>
    <visited>false</visited>
    <multiplicity>1</multiplicity>

@@ -89,24 +89,64 @@ M2     = clip_layer.call(input(82, 1))
 M3     = clip_layer.call(input(83, 1))
 M4     = clip_layer.call(input(84, 1))
 M5     = clip_layer.call(input(85, 1))
+M6     = clip_layer.call(input(86, 1))
+M7     = clip_layer.call(input(87, 1))
+M8     = clip_layer.call(input(88, 1))
 V1     = clip_layer.call(input(91, 1))
 V2     = clip_layer.call(input(92, 1))
 V3     = clip_layer.call(input(93, 1))
 V4     = clip_layer.call(input(94, 1))
+V5     = clip_layer.call(input(95, 1))
+V6     = clip_layer.call(input(96, 1))
+V7     = clip_layer.call(input(97, 1))
 V1BAR  = clip_layer.call(input(91, 7))
 V2BAR  = clip_layer.call(input(92, 7))
 V3BAR  = clip_layer.call(input(93, 7))
 V4BAR  = clip_layer.call(input(94, 7))
+V5BAR  = clip_layer.call(input(95, 7))
+V6BAR  = clip_layer.call(input(96, 7))
+V7BAR  = clip_layer.call(input(97, 7))
+T2M1   = clip_layer.call(input(100, 1))
+T2M2   = clip_layer.call(input(101, 1))
+T4M1   = clip_layer.call(input(102, 1))
+T8M1   = clip_layer.call(input(104, 1))
+T8M2   = clip_layer.call(input(105, 1))
+T2V1   = clip_layer.call(input(110, 1))
+T2V2   = clip_layer.call(input(111, 1))
+T4V1   = clip_layer.call(input(112, 1))
+T8V1   = clip_layer.call(input(114, 1))
+T8V2   = clip_layer.call(input(115, 1))
+T2V1BAR = clip_layer.call(input(110, 7))
+T2V2BAR = clip_layer.call(input(111, 7))
+T4V1BAR = clip_layer.call(input(112, 7))
+T8V1BAR = clip_layer.call(input(114, 7))
+T8V2BAR = clip_layer.call(input(115, 7))
 TM2    = clip_layer.call(input(103, 1))
 TV2    = clip_layer.call(input(113, 1))
 TV2BAR = clip_layer.call(input(113, 7))
 ALPAD  = clip_layer.call(input(122, 1))  # official 122/1 aluminium pad (was 121/1)
 ALPADRES = clip_layer.call(input(122, 4))
+AARES    = clip_layer.call(input(2, 4))
 MET5RES = clip_layer.call(input(85, 4))
 T4M2RES = clip_layer.call(input(103, 4))
+MET1RES = clip_layer.call(input(81, 4))
+MET2RES = clip_layer.call(input(82, 4))
+MET3RES = clip_layer.call(input(83, 4))
+MET4RES = clip_layer.call(input(84, 4))
+MET6RES = clip_layer.call(input(86, 4))
+MET7RES = clip_layer.call(input(87, 4))
+MET8RES = clip_layer.call(input(88, 4))
+T2M1RES = clip_layer.call(input(100, 4))
+T2M2RES = clip_layer.call(input(101, 4))
+T4M1RES = clip_layer.call(input(102, 4))
+T8M1RES = clip_layer.call(input(104, 4))
+T8M2RES = clip_layer.call(input(105, 4))
 DNW      = clip_layer.call(input(7, 1))
 NW1RES   = clip_layer.call(input(9, 4))
 BMIM     = clip_layer.call(input(140, 1))
+# IO 2.5V under-drive / over-drive marks (official GDS 153/12 and 154/12).
+UD       = clip_layer.call(input(153, 12))
+OD       = clip_layer.call(input(154, 12))
 
 ACTDUM   = clip_layer.call(input(2, 2))
 ACTDUMB  = clip_layer.call(input(2, 3))
@@ -147,6 +187,21 @@ MET8MOM  = clip_layer.call(input(88, 10))
 T4M2DUM  = clip_layer.call(input(103, 2))
 T4M2DUMB = clip_layer.call(input(103, 3))
 T4M2SLOT = clip_layer.call(input(103, 8))
+T2M1DUM  = clip_layer.call(input(100, 2))
+T2M1DUMB = clip_layer.call(input(100, 3))
+T2M1SLOT = clip_layer.call(input(100, 8))
+T2M2DUM  = clip_layer.call(input(101, 2))
+T2M2DUMB = clip_layer.call(input(101, 3))
+T2M2SLOT = clip_layer.call(input(101, 8))
+T4M1DUM  = clip_layer.call(input(102, 2))
+T4M1DUMB = clip_layer.call(input(102, 3))
+T4M1SLOT = clip_layer.call(input(102, 8))
+T8M1DUM  = clip_layer.call(input(104, 2))
+T8M1DUMB = clip_layer.call(input(104, 3))
+T8M1SLOT = clip_layer.call(input(104, 8))
+T8M2DUM  = clip_layer.call(input(105, 2))
+T8M2DUMB = clip_layer.call(input(105, 3))
+T8M2SLOT = clip_layer.call(input(105, 8))
 
 HRP      = clip_layer.call(input(54, 1))  # official HRPi (high-res poly)
 HPR      = clip_layer.call(input(385, 12))  # official HPR (high-precision resistor mark)
@@ -213,6 +268,23 @@ TG        = TGOX
 GATE_core = GATE.not(DGOX.or(TGOX))
 GATE_io1  = GATE.and(DGOX).not(TGOX)
 GATE_io2  = GATE.and(TGOX).not(DGOX)
+
+# Well/device splits used by the latch-up and resistor rules (source
+# definitions: HVNW = NW AND TG, MVNW = NW AND DG, PW = chip NOT (NW OR PSUB)).
+PW    = extent.not(NW).not(PSUB)
+HVNW  = NW.and(TG)
+MVNW  = NW.and(DG)
+LVNW  = NW.not(HVNW).not(MVNW)
+NMOS1 = NACT.covering(GATE)
+PMOS1 = PACT.covering(GATE)
+AAR   = ACT.interacting(AARES)
+NWR   = NW.interacting(NW1RES)
+PORES = PPO
+POR   = POLY.interacting(PORES)
+
+# Source DRC:1 is the drawn extent; BULK is that extent sized by 1.0 um.
+BULK  = extent.sized(1.0.um)
+
 EFU       = POLY.interacting(EFUSEALL)   # PO INTERACT EFUSEALL
 RCT       = CT.or(CTbar).interacting(EFU)  # CT INTERACT EFU
 AA_CT     = CT.or(CTbar).and(ACT)        # CT AND AA
@@ -225,7 +297,7 @@ NSDI      = NACT.not(NGATE).not(NW)
 PSDI      = PACT.not(PGATE).and(NW)
 
 # all drawing layers for the off-grid check
-DRAWING = ACT + NW + LVTN + LVTP + HVTN + HVTP + TGOX + DGOX + POLY + PPO + NP + PP + ESD + SAB + IOACT + CT + CTbar + CTopcblk + M1 + M2 + M3 + M4 + M5 + V1 + V2 + V3 + V4 + TM2 + TV2 + RV + CB + ALPAD + RDL + COVER + DIODE
+DRAWING = ACT + NW + LVTN + LVTP + HVTN + HVTP + TGOX + DGOX + POLY + PPO + NP + PP + ESD + SAB + IOACT + CT + CTbar + CTopcblk + M1 + M2 + M3 + M4 + M5 + M6 + M7 + M8 + V1 + V2 + V3 + V4 + V5 + V6 + V7 + T2M1 + T2M2 + T4M1 + T8M1 + T8M2 + T2V1 + T2V2 + T4V1 + T8V1 + T8V2 + TM2 + TV2 + RV + CB + ALPAD + RDL + COVER + DIODE
 
 # Shared helpers for rules that need raw RBA edge geometry. Calibre predicates
 # that select individual edges are translated with RBA edges and wrapped back
@@ -256,4 +328,22 @@ edge_pair_overlap = lambda do |pair|
   b2 = (e2.p2.x - e1.p1.x) * ux + (e2.p2.y - e1.p1.y) * uy
   overlap = [len, [b1, b2].max].min - [0.0, [b1, b2].min].max
   overlap.negative? ? 0.0 : overlap
+end
+
+# Recommended rules follow OPEN_RECOMMENDED_ON in the source, whose default is
+# NO.  This port reports them as KLayout log warnings unless recommended=error
+# (report categories) or recommended=off (skipped entirely).
+recommended_output = lambda do |rule_id, layer, message|
+  if RECOMMENDED_ERROR
+    layer.output(rule_id, "[R] #{message}")
+  elsif RECOMMENDED
+    count = layer.count
+    unless count.zero?
+      box = layer.bbox
+      where = box.empty? ? '' : format(' near (%.3f, %.3f)-(%.3f, %.3f) um',
+        box.left * grid, box.bottom * grid, box.right * grid, box.top * grid)
+      warn "#{rule_id}: [R] #{message} - #{count} marker(s)#{where}"
+    end
+  end
+  layer
 end

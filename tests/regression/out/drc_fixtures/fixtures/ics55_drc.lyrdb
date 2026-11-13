@@ -2,7 +2,7 @@
 <report-database>
  <description>ICsprout55 DRC</description>
  <original-file/>
- <generator>drc: script='ics55_drc.drc'</generator>
+ <generator>drc: script='/tmp/drc_backtrace.drc'</generator>
  <top-cell>TOP</top-cell>
  <tags>
  </tags>
@@ -32,6 +32,30 @@
    </categories>
   </category>
   <category>
+   <name>well.nw.lv.space</name>
+   <description>NW1_S_2: low-voltage NW to low-voltage NW different-net spacing must be at least 1.0 um outside NW resistor and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.lv_hv.space</name>
+   <description>NW1_S_3: low-voltage NW to MV/HV NW different-net spacing must be at least 1.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.hv.space</name>
+   <description>NW1_S_4: MV/HV NW spacing must be at least 0.47 um outside NW resistor and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.nw.hv.diff_space</name>
+   <description>NW1_S_5: MV/HV NW different-net spacing must be at least 1.2 um outside NW resistor and NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>well.nw.floating</name>
    <description>NW1_R_1: NW must interact a tap enclosing CT outside NODRC [Calibre source]</description>
    <categories>
@@ -46,6 +70,12 @@
   <category>
    <name>well.dnw.space</name>
    <description>DNW_S_1: DNW spacing must be at least 3.5 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.nw.space</name>
+   <description>DNW_S_2a: DNW to NW different-net spacing must be at least 2.35 um outside NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -88,6 +118,24 @@
   <category>
    <name>well.dnw.tpw.floating</name>
    <description>DNW_R_3: PW inside DNW must interact a CT on P+ tap [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.tpw.space</name>
+   <description>DNW_S_3: TPW to PW spacing must be at least 0.8 um outside LDMOS/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.tpw_dgtg.space</name>
+   <description>DNW_S_4: TPW with DG/TG to TPW spacing must be at least 1.2 um outside LDMOS/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>well.dnw.pw_dgtg.space</name>
+   <description>DNW_S_4: PW with DG/TG to TPW spacing must be at least 1.2 um outside LDMOS/NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -170,6 +218,18 @@
    </categories>
   </category>
   <category>
+   <name>active.act.u_space</name>
+   <description>ACT_S_4: U-shape AA inner-edge spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.o_space</name>
+   <description>ACT_S_4: O-shape AA hole width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>active.nw_dnw.nact.space</name>
    <description>ACT_S_7: N+ active to DNW-enclosing NW spacing must be at least 0.32 um outside DNW/NODRC [Calibre source]</description>
    <categories>
@@ -200,6 +260,24 @@
    </categories>
   </category>
   <category>
+   <name>active.act.max_length_ct</name>
+   <description>ACT_L_1: thin AA contact-to-contact length must be at most 25.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.max_length_end</name>
+   <description>ACT_L_1: thin AA contact-to-line-end length must be at most 25.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>active.act.sd_length</name>
+   <description>ACT_L_2: thin butted source/drain AA length must be at most 0.5 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>poly.poly.area</name>
    <description>PO_A_1: POLY minimum area 0.04 um^2; waived inside SRAMALL and NODRC</description>
    <categories>
@@ -220,6 +298,24 @@
   <category>
    <name>poly.poly.spacing</name>
    <description>PO_S_1: POLY spacing must be at least 0.12 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.po.ct_length</name>
+   <description>PO_L_1: thin PO contact-to-contact length must be at most 25.0 um outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.po.length</name>
+   <description>PO_L_1: thin PO contact-to-line-end length must be at most 25.0 um outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>poly.po.gate_length</name>
+   <description>PO_L_1: thin-channel gate must lie within 25.0 um of a contact outside ESDIOE/NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -302,6 +398,12 @@
    </categories>
   </category>
   <category>
+   <name>implant.np_pp.sab_coincident</name>
+   <description>PP_R_3: NP and PP must not share an edge on unsilicided AA/PO outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>implant.np.pact_space</name>
    <description>NP_S_2: NP to P+ source/drain AA inside NW spacing must be at least 0.12 um outside SRAMALL/NODRC [Calibre source]</description>
    <categories>
@@ -334,6 +436,42 @@
   <category>
    <name>implant.pp.gate_space</name>
    <description>PP_S_5: PP to NMOS gate spacing must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.ptap_gate.space</name>
+   <description>NP_S_6: butted P+ pickup to NMOS gate spacing must be at least 0.3 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.ntap_gate.space</name>
+   <description>PP_S_6: butted N+ pickup to PMOS gate spacing must be at least 0.3 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.gate_aa.enclosure</name>
+   <description>NP_EX_1: NP enclosure of N+ AA at the gate must be at least 0.16 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.np.gate_ext</name>
+   <description>NP_EX_1a: NP extension beyond the NMOS gate in the source/drain direction must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.gate_aa.enclosure</name>
+   <description>PP_EX_1: PP enclosure of P+ AA at the gate must be at least 0.16 um outside SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>implant.pp.gate_ext</name>
+   <description>PP_EX_1a: PP extension beyond the PMOS gate in the source/drain direction must be at least 0.3 um outside SRAMALL/NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -652,6 +790,1020 @@
   <category>
    <name>cont.ct.tap</name>
    <description>CT_R_5: butted well tap/source region must contain a CT outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_W_1</name>
+   <description>TG_W_1: TG width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_W_1</name>
+   <description>DG_W_1: DG width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_1</name>
+   <description>TG_S_1: TG spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_1</name>
+   <description>DG_S_1: DG spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_2</name>
+   <description>TG_S_2: TG to MOS AA spacing must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_2</name>
+   <description>DG_S_2: DG to LDMOS AA spacing must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_3</name>
+   <description>TG_S_3: TG to GATE spacing must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_3</name>
+   <description>DG_S_3: DG to GATE spacing must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_4</name>
+   <description>TG_S_4: TG to NW spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_4</name>
+   <description>DG_S_4: DG to NW spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_5</name>
+   <description>TG_S_5: TG to PSUB spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_S_5</name>
+   <description>DG_S_5: DG to PSUB spacing must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_S_6</name>
+   <description>TG_S_6: TG and DG must not overlap outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EN_1</name>
+   <description>TG_EN_1: TG enclosure of MOS AA must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EN_1</name>
+   <description>DG_EN_1: DG enclosure of non-tap AA must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EN_2</name>
+   <description>TG_EN_2: TG enclosure of GATE along the poly direction must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EN_2</name>
+   <description>DG_EN_2: DG enclosure of GATE along the poly direction must be at least 0.25 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EN_3</name>
+   <description>TG_EN_3: TG enclosure of GATE along the source/drain direction must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EN_3</name>
+   <description>DG_EN_3: DG enclosure of GATE along the source/drain direction must be at least 0.32 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EX_1</name>
+   <description>TG_EX_1: NW extension on TG must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EX_2</name>
+   <description>TG_EX_2: TG extension on NW must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EX_1</name>
+   <description>DG_EX_1: NW extension on DG must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EX_2</name>
+   <description>DG_EX_2: DG extension on NW must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_EX_3</name>
+   <description>TG_EX_3: TG extension on PSUB must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_EX_3</name>
+   <description>DG_EX_3: DG extension on PSUB must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_O_1</name>
+   <description>TG_O_1: TG/NW overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_O_1</name>
+   <description>DG_O_1: DG/NW overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>TG_O_2</name>
+   <description>TG_O_2: TG/PSUB overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DG_O_2</name>
+   <description>DG_O_2: DG/PSUB overlap width must be at least 0.47 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DGR_3</name>
+   <description>DGR_3: drawn base-layer edges must be orthogonal or 45 degrees (+/-0.1) outside INDDMY [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_W_1</name>
+   <description>SAB_W_1: SAB width must be at least 0.42 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_1</name>
+   <description>SAB_S_1: SAB spacing must be at least 0.42 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_2</name>
+   <description>SAB_S_2: SAB spacing with one SAB interacting PO must be at least 0.44 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_3</name>
+   <description>SAB_S_3: SAB to AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_4</name>
+   <description>SAB_S_4: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_5</name>
+   <description>SAB_S_5: SAB to field poly spacing must be at least 0.3 um outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_S_6</name>
+   <description>SAB_S_6: SAB to CT spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_EX_1</name>
+   <description>SAB_EX_1: AA extension outside SAB must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_EX_2</name>
+   <description>SAB_EX_2: SAB extension outside AA must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_EX_3</name>
+   <description>SAB_EX_3: SAB extension outside field poly must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_A_1</name>
+   <description>SAB_A_1: SAB area must be at least 0.8 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_A_2</name>
+   <description>SAB_A_2: SAB enclosed hole area must be at least 0.8 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_R_1</name>
+   <description>SAB_R_1: SAB must not share coincident edges with AA outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SAB_R_2</name>
+   <description>SAB_R_2: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_W_1</name>
+   <description>HRP_W_1: HRP width must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_W_2</name>
+   <description>HRP_W_2: high-resistance poly width must be at least 2.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_S_1</name>
+   <description>HRP_S_1: HRP spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_S_2</name>
+   <description>HRP_S_2: HRP to MOS poly spacing must be at least 0.16 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_S_3</name>
+   <description>HRP_S_3: SAB to CT spacing inside HRP must be fixed at 0.21 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_EN_1</name>
+   <description>HRP_EN_1: HRP enclosure of high-resistance poly must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_EX_1</name>
+   <description>HRP_EX_1: SAB extension outside high-resistance poly must be at least 0.22 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_O_1</name>
+   <description>HRP_O_1: PP overlap of SAB inside RES_HRP must be at least 0.3 um outside SRINGBLK/SRAMALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_R_1</name>
+   <description>HRP_R_1: NP/PP must not overlap the HPR resistor middle (0.3 um end zones removed) outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRP_R_2</name>
+   <description>HRP_R_2: HPR edges must align with the SAB edge on poly outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_W_1</name>
+   <description>ULLD_W_1: ULLD width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_1</name>
+   <description>ULLD_S_1: ULLD spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_2</name>
+   <description>ULLD_S_2: ULLD to AA spacing must be at least 0.02 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_4</name>
+   <description>ULLD_S_4: ULLD to N+ AA spacing must be at least 0.055 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_5</name>
+   <description>ULLD_S_5: ULLD to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_S_6</name>
+   <description>ULLD_S_6: ULLD to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_EX_1</name>
+   <description>ULLD_EX_1: ULLD extension outside AA must be at least 0.02 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_EX_2</name>
+   <description>ULLD_EX_2: ULLD extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_EX_3a</name>
+   <description>ULLD_EX_3a: ULLD extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_A_1</name>
+   <description>ULLD_A_1: ULLD area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_A_2</name>
+   <description>ULLD_A_2: ULLD enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_R_1</name>
+   <description>ULLD_R_1: ULLD must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ULLD_R_2</name>
+   <description>ULLD_R_2: ULLD must interact PVT3 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_W_1</name>
+   <description>NVT1_W_1: NVT1 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_1</name>
+   <description>NVT1_S_1: NVT1 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_2</name>
+   <description>NVT1_S_2: NVT1 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_3</name>
+   <description>NVT1_S_3: NVT1 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_S_4</name>
+   <description>NVT1_S_4: NVT1 to non-silicide AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_EX_1</name>
+   <description>NVT1_EX_1: NVT1 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_EX_2</name>
+   <description>NVT1_EX_2: NVT1 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_A_1</name>
+   <description>NVT1_A_1: NVT1 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_A_2</name>
+   <description>NVT1_A_2: NVT1 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT1_R_1</name>
+   <description>NVT1_R_1: NVT1 must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_W_1</name>
+   <description>NVT3_W_1: NVT3 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_1</name>
+   <description>NVT3_S_1: NVT3 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_2</name>
+   <description>NVT3_S_2: NVT3 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_3</name>
+   <description>NVT3_S_3: NVT3 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_S_4</name>
+   <description>NVT3_S_4: NVT3 to non-silicide AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_EX_1</name>
+   <description>NVT3_EX_1: NVT3 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_EX_2</name>
+   <description>NVT3_EX_2: NVT3 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_A_1</name>
+   <description>NVT3_A_1: NVT3 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_A_2</name>
+   <description>NVT3_A_2: NVT3 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NVT3_R_1</name>
+   <description>NVT3_R_1: NVT3 must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_W_1</name>
+   <description>PVT1_W_1: PVT1 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_S_1</name>
+   <description>PVT1_S_1: PVT1 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_S_2</name>
+   <description>PVT1_S_2: PVT1 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_S_3</name>
+   <description>PVT1_S_3: PVT1 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_EX_1</name>
+   <description>PVT1_EX_1: PVT1 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_EX_2</name>
+   <description>PVT1_EX_2: PVT1 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_A_1</name>
+   <description>PVT1_A_1: PVT1 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_A_2</name>
+   <description>PVT1_A_2: PVT1 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT1_R_1</name>
+   <description>PVT1_R_1: PVT1 must not overlap PSUB outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_W_1</name>
+   <description>PVT3_W_1: PVT3 width must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_1</name>
+   <description>PVT3_S_1: PVT3 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_2</name>
+   <description>PVT3_S_2: PVT3 to gate spacing along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_3</name>
+   <description>PVT3_S_3: PVT3 to AA spacing along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_S_4</name>
+   <description>PVT3_S_4: PVT3 to non-silicide AA spacing must be at least 0.21 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_EX_1</name>
+   <description>PVT3_EX_1: PVT3 extension outside GATE along the source/drain direction must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_EX_2</name>
+   <description>PVT3_EX_2: PVT3 extension outside AA along the poly direction must be at least 0.15 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_A_1</name>
+   <description>PVT3_A_1: PVT3 area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_A_2</name>
+   <description>PVT3_A_2: PVT3 enclosed hole area must be at least 0.18 um^2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PVT3_R_1</name>
+   <description>PVT3_R_1: PVT3 must not overlap TG outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.width</name>
+   <description>AAres_W_1: non-silicide AA resistor width must be at least 0.4 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_np</name>
+   <description>AAres_S_1_NP: non-silicide AA resistor to unrelated NP spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_pp</name>
+   <description>AAres_S_1_PP: non-silicide AA resistor to unrelated PP spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_nvt3</name>
+   <description>AAres_S_1_NVT3: non-silicide AA resistor to unrelated NVT3 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_pvt3</name>
+   <description>AAres_S_1_PVT3: non-silicide AA resistor to unrelated PVT3 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_nvt1</name>
+   <description>AAres_S_1_NVT1: non-silicide AA resistor to unrelated NVT1 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_pvt1</name>
+   <description>AAres_S_1_PVT1: non-silicide AA resistor to unrelated PVT1 spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_esd</name>
+   <description>AAres_S_1_ESD: non-silicide AA resistor to unrelated ESD spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.s1_hrp</name>
+   <description>AAres_S_1_HRP: non-silicide AA resistor to unrelated HRP spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.sab_ct</name>
+   <description>AAres_S_2: CT inside an AA resistor marker must be within 0.21 um of the SAB-covered resistor outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.implant_enc</name>
+   <description>AAres_EN_1: NP/PP enclosure of resistor AA must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.marker_ext</name>
+   <description>AAres_EX_1: AARES extension outside the non-silicide AA resistor must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.implant_cover</name>
+   <description>AAres_R_1: non-silicide AA resistor must be covered by SAB and implanted by NP or PP outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.pp_nw</name>
+   <description>AAres_R_2: PP-type non-silicide AA resistor must be inside NW outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.dogbone</name>
+   <description>AAres_R_3: non-silicide AA resistor must not use dog-bone ends outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.aa.silicide_ct</name>
+   <description>AAres_R_4: silicide AA resistor marker must touch a contact outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.width</name>
+   <description>NWresAA_W_1: NW-resistor width must be at least 1.8 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.s1</name>
+   <description>NWresAA_S_1: NW-resistor NW to unrelated implant/NW spacing must be at least 0.6 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.sab_ct</name>
+   <description>NWresAA_S_2: SAB of an NW resistor must be within 0.28 um of its contacts outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.nw_space</name>
+   <description>NWresAA_S_3: NW resistor to NW spacing must be at least 1.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.np_touch</name>
+   <description>NWresAA_S_4: NW resistor marker must touch NP outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.aa_enc</name>
+   <description>NWresAA_EN_1: AA enclosure of the NW-resistor body must be at least 0.9 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.sab_enc</name>
+   <description>NWresAA_EN_2: SAB enclosure of NW-resistor AA must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.sab_nw_enc</name>
+   <description>NWresAA_EN_3: SAB and enclosing NW of an NW resistor must extend at least 0.28 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.ct_nw_enc</name>
+   <description>NWresAA_EN_4: NW enclosure of NW-resistor contacts must be at least 0.28 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.marker_ext</name>
+   <description>NWresAA_EX_1: NW1res extension outside AA must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.np_sab_overlap</name>
+   <description>NWresAA_O_1: NP/SAB overlap inside an NW resistor must be at least 0.38 um wide outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.sab_cover</name>
+   <description>NWresAA_R_1: NW resistor must be covered by SAB outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.rect</name>
+   <description>NWresAA_R_2: NW resistor should be rectangular outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw.count</name>
+   <description>NWresAA_R_4: NW resistor must use one NW, at most two NP and two SAB holes outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.width</name>
+   <description>NWresSTI_W_1: NW STI-resistor width must be at least 1.8 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.aa_space</name>
+   <description>NWresSTI_S_1: NW STI resistor to AA spacing must be at least 0.5 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.aa_touch</name>
+   <description>NWresSTI_S_2: NW1res to silicided AA spacing must be at least 0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.nw_space</name>
+   <description>NWresSTI_S_3: NW STI resistor to NW spacing must be at least 1.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.ct_space</name>
+   <description>NWresSTI_EN_1: AA around STI-resistor contacts must be within 0.28 um of the contacts outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.np_enc</name>
+   <description>NWresSTI_EN_2: NP enclosure of NW STI-resistor AA must be at least 0.38 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.ct_enc</name>
+   <description>NWresSTI_EN_3: NW enclosure of STI-resistor contacts must be at least 0.28 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.marker_ext</name>
+   <description>NWresSTI_EX_1: NW1res extension outside NW must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.aa_ext</name>
+   <description>NWresSTI_EX_2: AA extension outside the NW STI resistor must be at least 0.28 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.sab_cover</name>
+   <description>NWresSTI_R_1: NW STI resistor must be covered by SAB except the contact area outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.overlap</name>
+   <description>NWresSTI_R_2: NW1res must not overlap AA/POLY dummy, other implants, NPR, ESD or HRP outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.nw_sti.rect</name>
+   <description>NWresSTI_R_3: NW resistor should be rectangular outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.width</name>
+   <description>POLYres_W_1: non-silicide poly resistor width must be at least 0.4 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.squares</name>
+   <description>POLYres_W_1: non-silicide poly resistor must have at least 1 square outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.s1_pp</name>
+   <description>POLYres_S_1_PP: non-silicide poly resistor to unrelated implant spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.s1_np</name>
+   <description>POLYres_S_1_NP: non-silicide poly resistor to unrelated implant spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.s1_esd</name>
+   <description>POLYres_S_1_ESD: non-silicide poly resistor to unrelated implant spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.s1_hrp</name>
+   <description>POLYres_S_1_HRP: non-silicide poly resistor to unrelated implant spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.s1_npr</name>
+   <description>POLYres_S_1_NPR: non-silicide poly resistor to unrelated implant spacing must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.sab_ct</name>
+   <description>POLYres_S_2: CT inside a poly resistor marker must be within 0.21 um of the SAB-covered body outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.implant_enc</name>
+   <description>POLYres_EN_1: NP/PP enclosure of a poly resistor must be at least 0.18 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.marker_ext</name>
+   <description>POLYres_EX_1: PORES extension outside the non-silicide poly resistor must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.sab_ext</name>
+   <description>POLYres_EX_2: SAB extension outside the poly resistor must be at least 0.2 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.implant_cover</name>
+   <description>POLYres_R_1: non-silicide poly resistor must be covered by SAB and implanted by NP or PP outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>resistor.poly.silicide_ct</name>
+   <description>POLYres_R_3: silicide poly resistor marker must touch a contact outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.guard_ring</name>
+   <description>LU_R_2: I/O injector touching PO must be inside the opposite-type tap guard ring outside LATCHUP/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.guard_width</name>
+   <description>LU_W_1: guard-ring width around an I/O injector must be at least 0.12 um outside SRINGBLK/LATCHUP/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.s1a</name>
+   <description>LU_S_1a: core-gate I/O NMOS/PMOS spacing must be at least 2.0 um outside SRINGBLK/LATCHUP/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.s1b</name>
+   <description>LU_S_1b: 1.8V I/O NMOS/PMOS spacing must be at least 2.3 um outside SRINGBLK/LATCHUP/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.s1c</name>
+   <description>LU_S_1c: 2.5V I/O NMOS/PMOS spacing must be at least 3.2 um outside SRINGBLK/LATCHUP/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.s1d</name>
+   <description>LU_S_1d: 3.3V I/O NMOS/PMOS spacing must be at least 5.0 um outside SRINGBLK/LATCHUP/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.s2_ntap</name>
+   <description>LU_S_2_NTAP: PMOS in NW must be within 35.0 um of an NTAP pickup outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>latchup.s2_ptap</name>
+   <description>LU_S_2_PTAP: NMOS in PW/PSUB must be within 35.0 um of a PTAP pickup outside SRINGBLK/NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -1250,8 +2402,38 @@
    </categories>
   </category>
   <category>
+   <name>pad.rv.space</name>
+   <description>RV_S_1: RV spacing must be at least 3.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cb.space</name>
+   <description>RV_S_2: RV to CB spacing must be at least 6.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.metal</name>
+   <description>RV_EN_1_2: RV enclosure by T4M2 must be at least 1.5 um outside LOGO/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
    <name>pad.rv.cover.rdl</name>
    <description>RV_EN_3_4: RV must be covered by RDL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.rdl</name>
+   <description>RV_EN_3_4: RV enclosure by RDL must be at least 1.5 um outside LOGO/SRINGBLK/FUTR/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.single</name>
+   <description>RV_R_1: a T4M2/RDL island should carry more than one RV [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -1264,6 +2446,30 @@
   <category>
    <name>pad.cb.alpad_full</name>
    <description>RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.width</name>
+   <description>RDL_W_1: RDL width must be at most 35.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.space</name>
+   <description>RDL_S_1: ALPA spacing must be at least 2.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wide.space</name>
+   <description>RDL_S_2: ALPA spacing with one ALPA wider than 10.0 um must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wider.space</name>
+   <description>RDL_S_3: ALPA spacing with one ALPA wider than 35.0 um must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -1300,6 +2506,12 @@
   <category>
    <name>pad.cover.space</name>
    <description>COVER_S_1: COVER spacing must be at least 5.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.enc.alpa</name>
+   <description>COVER_EN_1: COVER enclosure by ALPA must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -1658,1044 +2870,6 @@
    </categories>
   </category>
   <category>
-   <name>ACT_D_1_min</name>
-   <description>ACT_D_1_min: AA_all density &lt; 20.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>ACT_D_1_max</name>
-   <description>ACT_D_1_max: AA_all density &gt; 80.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>ACT_D_2</name>
-   <description>ACT_D_2: AA_all density &lt; 10.0% in 20.0um windows, 10.0um step, inside ACTDUMB sized by 2.5um [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>ACT_D_4_min</name>
-   <description>ACT_D_4_min: global AA_all density &lt; 25.0% over the drawn-layout extent [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>PO_D_1_min</name>
-   <description>PO_D_1_min: global PO_all density &lt; 14.000000000000002% over the drawn-layout extent [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>PO_D_2_min</name>
-   <description>PO_D_2_min: PO_all density &lt; 20.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>PO_D_2_max</name>
-   <description>PO_D_2_max: PO_all density &gt; 65.0% in 100.0um windows, 50.0um step [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>MET1_D_1_min</name>
-   <description>MET1_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>MET1_D_1_max</name>
-   <description>MET1_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>MET1_D_2</name>
-   <description>MET1_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M2_D_1_min</name>
-   <description>M2_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M2_D_1_max</name>
-   <description>M2_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M2_D_2</name>
-   <description>M2_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M3_D_1_min</name>
-   <description>M3_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M3_D_1_max</name>
-   <description>M3_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M3_D_2</name>
-   <description>M3_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M4_D_1_min</name>
-   <description>M4_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M4_D_1_max</name>
-   <description>M4_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M4_D_2</name>
-   <description>M4_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M5_D_1_min</name>
-   <description>M5_D_1_min: metal density &lt; 10.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M5_D_1_max</name>
-   <description>M5_D_1_max: metal density &gt; 80.0% in 100.0um windows, 50.0um step; inside source check_region_1 [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>M5_D_2</name>
-   <description>M5_D_2: metal density &lt; 10.0% in 100.0um windows, intersected with source-sized dummy-block region [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>T4M2_D_1_min</name>
-   <description>T4M2_D_1_min: T4M2ALLi density &lt; 20.0% in 100.0um windows, 50.0um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>T4M2_D_1_max</name>
-   <description>T4M2_D_1_max: T4M2ALLi density &gt; 85.0% in 100.0um windows, 50.0um step; exclude GRID/SRINGBLK/INDALL/NODRC [KLayout translation; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>T4M2_D_2</name>
-   <description>T4M2_D_2: T4M2ALLi density &lt; 10.0% in 100.0um windows, 50.0um step, inside T4M2DUMB sized by 2.5um [KLayout translation of supplied ICsprout Calibre source; not Calibre-verified]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V1.MET1MOM</name>
-   <description>MOM_R_1: V1 intersects MET1MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V1.MET2MOM</name>
-   <description>MOM_R_1: V1 intersects MET2MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V2.MET2MOM</name>
-   <description>MOM_R_1: V2 intersects MET2MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V2.MET3MOM</name>
-   <description>MOM_R_1: V2 intersects MET3MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V3.MET3MOM</name>
-   <description>MOM_R_1: V3 intersects MET3MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V3.MET4MOM</name>
-   <description>MOM_R_1: V3 intersects MET4MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V4.MET4MOM</name>
-   <description>MOM_R_1: V4 intersects MET4MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.V4.MET5MOM</name>
-   <description>MOM_R_1: V4 intersects MET5MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_1.T4V2.MET5MOM</name>
-   <description>MOM_R_1: T4V2 intersects MET5MOM outside NODRC [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.12</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.12</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.12</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.12</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.12</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.12</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap12 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.13</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.13</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.13</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.13</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.13</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap13 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.14</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.14</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.14</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.14</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap14 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.15</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap15 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.15</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap15 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.15</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap15 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.16</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap16 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.16</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap16 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.17</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap17 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.23</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.23</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.23</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.23</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.23</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.23</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap23 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.24</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.24</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.24</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.24</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.24</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap24 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.25</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.25</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.25</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.25</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap25 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.26</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap26 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.26</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap26 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.27</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap27 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.27</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap27 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.28</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap28 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.34</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.34</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.34</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.34</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.34</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.34</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap34 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.35</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.35</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.35</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.35</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.35</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap35 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.36</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.36</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.36</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.36</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap36 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.37</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap37 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.37</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap37 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.37</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap37 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.38</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap38 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.38</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap38 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.45</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.45</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.45</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.45</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.45</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.45</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap45 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.46</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.46</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.46</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.46</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.46</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap46 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.47</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.47</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.47</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.47</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap47 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.48</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap48 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.48</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap48 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.48</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap48 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.56</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.56</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.56</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.56</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET7MOM.56</name>
-   <description>MOM_R_2: MET7MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.56</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap56 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.57</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.57</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.57</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.57</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.57</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap57 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.58</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.58</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.58</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.58</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap58 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.67</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.67</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.67</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.67</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.67</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET8MOM.67</name>
-   <description>MOM_R_2: MET8MOM is forbidden for MOMLVS1 momcap67 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.68</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.68</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.68</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.68</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.68</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap68 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET1MOM.78</name>
-   <description>MOM_R_2: MET1MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET2MOM.78</name>
-   <description>MOM_R_2: MET2MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET3MOM.78</name>
-   <description>MOM_R_2: MET3MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET4MOM.78</name>
-   <description>MOM_R_2: MET4MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET5MOM.78</name>
-   <description>MOM_R_2: MET5MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.forbidden_stack.MET6MOM.78</name>
-   <description>MOM_R_2: MET6MOM is forbidden for MOMLVS1 momcap78 [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.12</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap12 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.13</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap13 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.14</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap14 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.15</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap15 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.16</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap16 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.17</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap17 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.18</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap18 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.23</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap23 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.24</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap24 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.25</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap25 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.26</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap26 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.27</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap27 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.28</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap28 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.34</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap34 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.35</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap35 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.36</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap36 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.37</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap37 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.38</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap38 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.45</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap45 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.46</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap46 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.47</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap47 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.48</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap48 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.56</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap56 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.57</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap57 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.58</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap58 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.67</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap67 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.68</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap68 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
-   <name>mom.MOM_R_2.label_stack.78</name>
-   <description>MOM_R_2: MOMLVS1 stack must carry matching momcap78 label [ICsprout Calibre]</description>
-   <categories>
-   </categories>
-  </category>
-  <category>
    <name>EFU_1b_G</name>
    <description>EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]</description>
    <categories>
@@ -2763,13 +2937,97 @@
   </category>
   <category>
    <name>ESD_W_1</name>
-   <description>ESD_W_1: ESD1 width must be at least 0.4 um [Calibre source]</description>
+   <description>ESD_W_1: ESD1 width must be at least 0.47 um [Calibre source]</description>
    <categories>
    </categories>
   </category>
   <category>
    <name>ESD_S_1</name>
    <description>ESD_S_1: ESD1 spacing must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_1_SEDP_1</name>
+   <description>ESDN_1_SEDP_1: source contacts must be enclosed by source active by 0.15 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_2_ESDP_2</name>
+   <description>ESDN_2_ESDP_2: source contacts must be at least 0.15 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_4_ESDP_4</name>
+   <description>ESDN_4_ESDP_4: drain SAB must overlap the gate by at least 0.05 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_5_ESDP_5</name>
+   <description>ESDN_5_ESDP_5: the drain SAB hole must be at least 1.29 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_6_ESDP_6</name>
+   <description>ESDN_6_ESDP_6: drain contacts must be enclosed by the drain SAB hole by 0.21 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_7_ESDP_7</name>
+   <description>ESDN_7_ESDP_7: drain SAB must extend 0.21 um beyond the drain active on non-gate sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_8_ESDP_8</name>
+   <description>ESDN_8_ESDP_8: the drain SAB hole must be enclosed by the drain active by 1.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_9</name>
+   <description>ESDN_9: the ESD implant must be at least 0.4 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_10</name>
+   <description>ESDN_10: the ESD implant must be enclosed by the drain active by 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_11</name>
+   <description>ESDN_11: the ESD implant must not overlap the ESD gate poly [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_12</name>
+   <description>ESDN_12: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_9</name>
+   <description>ESDP_9: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_3</name>
+   <description>ESDN_3: 3.3V ESD NMOS channel length must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_3</name>
+   <description>ESDP_3: 3.3V ESD PMOS channel length must be 0.4..0.5 um [Calibre source]</description>
    <categories>
    </categories>
   </category>
@@ -2784,53 +3042,5 @@
   </cell>
  </cells>
  <items>
-  <item>
-   <tags/>
-   <category>ACT_D_1_min</category>
-   <cell>TOP</cell>
-   <visited>false</visited>
-   <multiplicity>1</multiplicity>
-   <comment/>
-   <image/>
-   <values>
-    <value>polygon: (0,0;0,100;100,100;100,0)</value>
-   </values>
-  </item>
-  <item>
-   <tags/>
-   <category>ACT_D_4_min</category>
-   <cell>TOP</cell>
-   <visited>false</visited>
-   <multiplicity>1</multiplicity>
-   <comment/>
-   <image/>
-   <values>
-    <value>polygon: (0,0;0,1;2,1;2,0)</value>
-   </values>
-  </item>
-  <item>
-   <tags/>
-   <category>PO_D_1_min</category>
-   <cell>TOP</cell>
-   <visited>false</visited>
-   <multiplicity>1</multiplicity>
-   <comment/>
-   <image/>
-   <values>
-    <value>polygon: (0,0;0,1;2,1;2,0)</value>
-   </values>
-  </item>
-  <item>
-   <tags/>
-   <category>PO_D_2_min</category>
-   <cell>TOP</cell>
-   <visited>false</visited>
-   <multiplicity>1</multiplicity>
-   <comment/>
-   <image/>
-   <values>
-    <value>polygon: (0,0;0,100;100,100;100,0)</value>
-   </values>
-  </item>
  </items>
 </report-database>

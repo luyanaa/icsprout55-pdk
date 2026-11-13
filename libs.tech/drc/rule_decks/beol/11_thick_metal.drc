@@ -1,0 +1,449 @@
+# Copyright 2026 Yan Lu with DeepSeek V4 Flash and GPT-5.6-Luna
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#=========================================================================================
+# BEOL 11 - Thick top metals and vias (T2M1/T2V1, T2M2/T2V2,
+#           T4M1/T4V1, T8M1/T8V1, T8M2/T8V2) and their dummy rules
+#
+# The released profile is total_metal=6, top_metal=1, T4V2_T4M2=1, so every
+# family in this file is disabled by its CHECK_* switch.  T4M2/T4V2 mandatory
+# rules live in 06_metal.drc, 07_via.drc and dummy_slot.drc; only the missing
+# T4M2/T4V2 density and recommended rules are handled elsewhere.
+#
+# Calibre qualifiers ABUT<90/SINGULAR REGION, the directional GOOD/OPPOSITE
+# enclosure branches, and the exact DFM square-via group operator are not
+# reproduced.  Enclosure minima use the source's base threshold on all sides
+# (tighter than the conditional branch for T2/T8 vias, equal for T4), and the
+# square-via redundancy rules count square vias inside the metal intersection
+# without the source 0.4 um grouping qualifier.  The bottom metal of each via
+# family is selected with the source CHECK_* priority list.
+#=========================================================================================
+
+if BEOL
+  thick_exact_rectangle = lambda do |layer, width, height|
+    area = (width * height).um2
+    layer.with_bbox_width(width.um).with_bbox_height(height.um).with_area(area)
+  end
+
+  thick_space = lambda do |a, b, limit|
+    a.drc(separation(b, transparent) < limit.um)
+  end
+
+  thick_enclosure = lambda do |a, b, limit|
+    a.edges.inside_part(b).extended_out(limit.um).not(b)
+  end
+
+  thick_selected_bottom = lambda do |entries|
+    hit = entries.find { |enabled, _layer| enabled }
+    hit.nil? ? nil : hit[1]
+  end
+
+  thick_wide_markers = lambda do |region, width, run, space|
+    wide = region.interacting(region.sized(-((width / 2.0 - grid) / grid).round))
+    markers = region.space_check((space / grid).round).polygons
+    markers = markers.interacting(wide)
+    bbox_longer_than.call(markers, (run / grid).round)
+  end
+
+  thick_angle_space_markers = lambda do |metal, dummy, limit|
+    pairs = metal.separation_check(dummy, (limit / grid).round)
+    selected = RBA::EdgePairs.new
+    pairs.each do |pair|
+      [pair.first, pair.second].each do |edge|
+        dx = (edge.p2.x - edge.p1.x).abs
+        dy = (edge.p2.y - edge.p1.y).abs
+        if dx != 0 && dx == dy
+          selected.insert(pair)
+          break
+        end
+      end
+    end
+    selected.polygons
+  end
+
+  #---------------------------------------------------------------------------
+  # Thick vias
+  #---------------------------------------------------------------------------
+  via_families = []
+  add_via_family = lambda do |spec|
+    unless spec[:enabled]
+      next
+    end
+    if spec[:lower].nil?
+      warn "#{spec[:name]}: no enabled bottom metal in this profile; rules skipped"
+      next
+    end
+    via_families << spec
+  end
+
+  t2_bottom = thick_selected_bottom.call([
+    [CHECK_M[7], M8], [CHECK_M[6], M7], [CHECK_M[5], M6],
+    [CHECK_M[4], M5], [CHECK_M[3], M4], [CHECK_M[2], M3]
+  ])
+  t2v2_bottom = thick_selected_bottom.call([
+    [CHECK_T2M1, T2M1], [CHECK_M[7], M8], [CHECK_M[6], M7],
+    [CHECK_M[5], M6], [CHECK_M[4], M5], [CHECK_M[3], M4], [CHECK_M[2], M3]
+  ])
+  t8v2_bottom = thick_selected_bottom.call([
+    [CHECK_T2M1, T2M1], [CHECK_T4M1, T4M1], [CHECK_T8M1, T8M1],
+    [CHECK_M[7], M8], [CHECK_M[6], M7], [CHECK_M[5], M6],
+    [CHECK_M[4], M5], [CHECK_M[3], M4], [CHECK_M[2], M3]
+  ])
+  t4v1_bottom = thick_selected_bottom.call([
+    [CHECK_M[7], M8], [CHECK_M[6], M7], [CHECK_M[5], M6],
+    [CHECK_M[4], M5], [CHECK_M[3], M4], [CHECK_M[2], M3]
+  ])
+
+  add_via_family.call(name: 'T2V1', enabled: CHECK_T2V1, via: T2V1, bar: T2V1BAR,
+    size: 0.2, space: 0.2, detect: 0.14, grow: 0.495, array_space: 0.25,
+    lower: t2_bottom, upper: T2M1, lower_enc: 0.05, upper_enc: 0.05,
+    lower_rule: 'EN_2a_EN_2b', upper_rule: 'EN_4a_EN_4b', rotated_rule: true,
+    waiver: NODRC, recommended_enclosure: true, redundancy_width: 0.6,
+    four_via_width: 1.4, mandatory_redundancy: true)
+  add_via_family.call(name: 'T4V1', enabled: CHECK_T4V1, via: T4V1, bar: T4V1BAR,
+    size: 0.36, space: 0.34, detect: 0.28, grow: 0.855, array_space: 0.5,
+    lower: t4v1_bottom, upper: T4M1, lower_enc: 0.01, upper_enc: 0.02,
+    lower_rule: 'EN_2_EN_3', upper_rule: 'EN_5_EN_6', rotated_rule: true,
+    waiver: SRINGBLK_SRC.or(NODRC), recommended_enclosure: false,
+    redundancy_width: 0.5, four_via_width: nil, mandatory_redundancy: false)
+  add_via_family.call(name: 'T2V2', enabled: CHECK_T2V2, via: T2V2, bar: T2V2BAR,
+    size: 0.2, space: 0.2, detect: 0.14, grow: 0.495, array_space: 0.25,
+    lower: t2v2_bottom, upper: T2M2, lower_enc: 0.05, upper_enc: 0.05,
+    lower_rule: 'EN_2a_EN_2b', upper_rule: 'EN_4a_EN_4b', rotated_rule: true,
+    waiver: SRINGBLK_SRC.or(NODRC), recommended_enclosure: true,
+    redundancy_width: 0.6, four_via_width: 1.4, mandatory_redundancy: true)
+  add_via_family.call(name: 'T8V1', enabled: CHECK_T8V1, via: T8V1, bar: T8V1BAR,
+    size: 0.36, space: 0.34, detect: 0.28, grow: 1.22, array_space: 0.5,
+    lower: t4v1_bottom, upper: T8M1, lower_enc: 0.01, upper_enc: 0.3,
+    lower_rule: 'EN_2_EN_3', upper_rule: 'EN_5_EN_6', rotated_rule: false,
+    waiver: SRINGBLK_SRC.or(NODRC), recommended_enclosure: false,
+    redundancy_width: 0.5, four_via_width: nil, mandatory_redundancy: true)
+  add_via_family.call(name: 'T8V2', enabled: CHECK_T8V2, via: T8V2, bar: T8V2BAR,
+    size: 0.36, space: 0.34, detect: 0.28, grow: 1.22, array_space: 0.5,
+    lower: t8v2_bottom, upper: T8M2, lower_enc: 0.01, upper_enc: 0.3,
+    lower_rule: 'EN_2_EN_3', upper_rule: 'EN_5_6', rotated_rule: false,
+    waiver: SRINGBLK_SRC.or(NODRC), recommended_enclosure: false,
+    redundancy_width: 0.5, four_via_width: nil, mandatory_redundancy: true)
+
+  via_families.each do |spec|
+    name = spec[:name]
+    source_via = spec[:via].or(spec[:bar])
+    bar = spec[:bar]
+    size = spec[:size]
+    waiver = spec[:waiver]
+    lower = spec[:lower]
+    upper = spec[:upper]
+
+    # W_1: fixed square outside GRID; inside GRID only rectangles of the fixed
+    # size are accepted (source second OUTLAYER).
+    via_squares = source_via.not(bar)
+    rectangles = via_squares.rectangles
+    wrong_rectangles = rectangles.without_bbox_width(size.um)
+      .or(rectangles.without_bbox_height(size.um))
+    width_errors = via_squares.non_rectangles.or(wrong_rectangles).not(GRID_SRC)
+    grid_rectangles = via_squares.and(GRID_SRC).rectangles
+    grid_errors = grid_rectangles.without_bbox_width(size.um)
+      .or(grid_rectangles.without_bbox_height(size.um))
+    width_errors.or(grid_errors).not_inside(waiver).output("#{name}_W_1",
+      "#{name}_W_1: #{name} must be a #{size}x#{size} um square outside GRID (bar geometry separate) [Calibre source]")
+
+    # W_2: datatype-7 bar width is fixed.
+    bar_errors = bar.drc(width < size.um) + bar.drc(width > size.um)
+    bar_errors.output("#{name}_W_2",
+      "#{name}_W_2: datatype-7 #{name}bar width must equal #{size} um [Calibre source]")
+
+    # S_1: minimum spacing.
+    source_via.drc(space < spec[:space].um).not_inside(NODRC).output("#{name}_S_1",
+      "#{name}_S_1: #{name} spacing must be at least #{spec[:space]} um outside NODRC [Calibre source]")
+
+    # S_2: array spacing. Two vias within 2*detect are one array; only clusters
+    # surviving the grow shrink are checked.
+    detect = spec[:detect].um
+    grow = spec[:grow].um
+    clusters = source_via.sized(detect).sized(-detect)
+    arrays = clusters.sized(-grow).sized(grow)
+    array_vias = source_via.inside(arrays)
+    array_vias.drc(space < spec[:array_space].um).not_inside(NODRC).output("#{name}_S_2",
+      "#{name}_S_2: #{name} spacing inside a via array must be at least #{spec[:array_space]} um [Calibre source]")
+
+    # EN_2a_EN_2b / EN_4a_EN_4b / EN_5_EN_6: coverage and enclosure by the
+    # selected bottom and top metals.
+    lower_enc = spec[:lower_enc].um
+    lower_errors = source_via.not(lower).or(
+      source_via.drc(enclosed(lower) < lower_enc).polygons)
+    lower_errors.not_inside(waiver).output("#{name}_#{spec[:lower_rule]}",
+      "#{name}_#{spec[:lower_rule]}: #{name} must be covered by its bottom metal and enclosed by at least #{spec[:lower_enc]} um [Calibre source]")
+
+    upper_enc = spec[:upper_enc].um
+    upper_errors = source_via.not(upper).or(
+      source_via.drc(enclosed(upper) < upper_enc).polygons)
+    upper_errors.not_inside(waiver).output("#{name}_#{spec[:upper_rule]}",
+      "#{name}_#{spec[:upper_rule]}: #{name} must be covered by its top metal and enclosed by at least #{spec[:upper_enc]} um [Calibre source]")
+
+    # Square-via redundancy on the lower/top metal intersection.
+    intersection = wrap_region.call(lower.data.and(upper.data))
+    exact_squares = via_squares.with_bbox_width(size.um).with_bbox_height(size.um)
+    redundancy_width = spec[:redundancy_width]
+    wide = lambda do |layer, width|
+      region = layer.data
+      wrap_region.call(region.interacting(
+        region.sized(-((width / 2.0 - grid) / grid).round)))
+    end
+    wide_metal = wide.call(lower, redundancy_width).or(wide.call(upper, redundancy_width))
+    two_via_markers = intersection.interacting(exact_squares, 1, 1)
+    if spec[:mandatory_redundancy]
+      two_via_markers.interacting(wide_metal).output("#{name}_R_1",
+        "#{name}_R_1: at least two square #{name} vias are required where either metal width is >= #{redundancy_width} um [Calibre source]")
+    else
+      recommended_output.call("#{name}_R_1_R", two_via_markers.interacting(wide_metal),
+        "at least two square #{name} vias are recommended where either metal width is >= #{redundancy_width} um")
+    end
+
+    if spec[:four_via_width]
+      four_width = spec[:four_via_width]
+      wide4 = wide.call(lower, four_width).or(wide.call(upper, four_width))
+      # "0..3 square vias" cannot be passed as min_count 0; select the
+      # intersections touching fewer than four squares explicitly.
+      few_vias = intersection.not(intersection.interacting(exact_squares, 4))
+      few_vias.interacting(wide4).output("#{name}_R_2",
+        "#{name}_R_2: at least four square #{name} vias are required where either metal width is > #{four_width} um [Calibre source]")
+    end
+
+    # R_3 / R_4_R: 45-degree vias, and the recommended single-via warning.
+    if spec[:rotated_rule]
+      rotated = source_via.interacting(source_via.edges.with_angle(45, absolute))
+      rotated.not_inside(SRINGBLK_SRC).not_inside(NODRC).output("#{name}_R_3",
+        "#{name}_R_3: 45-degree #{name} edges are not allowed outside SRINGBLK/NODRC [Calibre source]")
+    end
+    unless name.start_with?('T8')
+      recommended_output.call("#{name}_R_4_R", intersection.interacting(source_via, 1, 1),
+        "redundant #{name} vias are recommended (single-via intersection reported)")
+    end
+
+    if spec[:recommended_enclosure]
+      recommended_output.call("#{name}_EN_2a_R_EN_2b_R",
+        source_via.drc(enclosed(lower) < 0.05.um),
+        "recommended bottom-metal enclosure of #{name} is at least 0.05 um")
+    end
+  end
+
+  #---------------------------------------------------------------------------
+  # Thick metals
+  #---------------------------------------------------------------------------
+  thick_metal_family = lambda do |name, layer, dummy, slot, width_min, width_max,
+                                   min_waivers, max_waivers, space_min, area_min,
+                                   hole_min, wide_specs, angle_width, angle_space,
+                                   void_band, void_width|
+    base = slot.nil? ? layer : layer.not(slot)
+
+    width_errors = base.drc(width < width_min.um)
+    min_waivers.each { |waiver| width_errors = width_errors.not_inside(waiver) }
+    width_errors.not_inside(NODRC).output("#{name}_W_1",
+      "#{name}_W_1: #{name} width must be at least #{width_min} um [Calibre source]")
+
+    wide_shapes = base.interacting(base.sized(-((width_max / 2.0 - grid) / grid).round))
+    max_waivers.each { |waiver| wide_shapes = wide_shapes.not(waiver) }
+    wide_shapes.not_inside(INDALL).not_inside(NODRC).output("#{name}_W_1",
+      "#{name}_W_1: #{name} width must be at most #{width_max} um (source exemptions applied) [Calibre source]")
+
+    base.drc(space < space_min.um).not_inside(INDALL).not_inside(NODRC).output("#{name}_S_1",
+      "#{name}_S_1: #{name} spacing must be at least #{space_min} um outside INDALL/NODRC [Calibre source]")
+
+    base.not(base.with_area(area_min.um2, 1e9.um2)).not_inside(NODRC).output("#{name}_A_1",
+      "#{name}_A_1: #{name} area must be at least #{area_min} um^2 [Calibre source]")
+    holes = base.holes.not(base)
+    holes.not(holes.with_area(hole_min.um2, 1e9.um2)).not_inside(NODRC).output("#{name}_A_2",
+      "#{name}_A_2: #{name} enclosed area must be at least #{hole_min} um^2 [Calibre source]")
+
+    # Mn_2b wide-metal spacing classes, approximated by erosion and marker bbox.
+    wide_specs.each_with_index do |(wide_width, run_length, min_space), index|
+      markers = thick_wide_markers.call(base.data, wide_width, run_length, min_space)
+      rule = index.zero? ? 'S_2' : "S_#{index + 2}"
+      wrap_region.call(markers).not_inside(NODRC).output("#{name}_#{rule}",
+        "#{name}_#{rule}: #{name} spacing must be at least #{min_space} um when width >= #{wide_width} um and run >= #{run_length} um [Calibre source]")
+    end
+
+    if angle_width
+      region = base.data
+      wrap_region.call(
+        region.edges.with_abs_angle(45, false).width_check((angle_width / grid).round).polygons
+      ).not_inside(NODRC).output("#{name}_W_2",
+        "#{name}_W_2: #{name} 45-degree width must be at least #{angle_width} um [Calibre source]")
+      wrap_region.call(
+        region.edges.with_abs_angle(45, false)
+          .space_check((angle_space / grid).round, region.edges).polygons
+      ).not_inside(NODRC).output("#{name}_S_5",
+        "#{name}_S_5: #{name} space to 45-degree metal must be at least #{angle_space} um [Calibre source]")
+    end
+
+    if void_width
+      huge_void = extent.not(base.or(dummy)).with_area(2_000_000.um2, 1e12.um2)
+      check_metal = base.interacting(huge_void.sized(void_band.um))
+      check_metal.drc(width < void_width.um).not_inside(NODRC).output("#{name}_W_3",
+        "#{name}_W_3: #{name} width must be at least #{void_width} um next to a non-metal area above 2000000 um^2 [Calibre source]")
+    end
+
+    base
+  end
+
+  if CHECK_T2M1
+    thick_metal_family.call('T2M1', T2M1, T2M1DUM, T2M1SLOT,
+      0.20, 10.0, [], [DEUPAD, PA], 0.20, 0.14, 0.26,
+      [[0.39, 1.0, 0.24], [1.5, 1.5, 0.5], [4.5, 4.5, 1.5]],
+      0.39, 0.39, 10.0, 0.35)
+  end
+  if CHECK_T2M2
+    thick_metal_family.call('T2M2', T2M2, T2M2DUM, T2M2SLOT,
+      0.20, 10.0, [INDALL], [DEUPAD, PA], 0.20, 0.14, 0.26,
+      [[0.39, 1.0, 0.24], [1.5, 1.5, 0.5], [4.5, 4.5, 1.5]],
+      0.39, 0.39, 10.0, 0.35)
+  end
+  if CHECK_T4M1
+    thick_metal_family.call('T4M1', T4M1, T4M1DUM, T4M1SLOT,
+      0.40, 20.0, [INDALL, DEUPAD], [INDALL, DEUPAD], 0.40, 0.40, 0.60,
+      [[2.0, 2.0, 0.5]],
+      nil, nil, nil, nil)
+  end
+  if CHECK_T8M1
+    thick_metal_family.call('T8M1', T8M1, T8M1DUM, T8M1SLOT,
+      1.50, 50.0, [INDALL], [DEUPAD, PA, INDALL], 1.50, 6.00, 6.00,
+      [[16.0, 2.001, 2.0]],
+      nil, nil, nil, nil)
+  end
+  if CHECK_T8M2
+    thick_metal_family.call('T8M2', T8M2, T8M2DUM, T8M2SLOT,
+      1.50, 50.0, [INDALL], [DEUPAD, PA, INDALL], 1.50, 6.00, 6.00,
+      [[16.0, 2.001, 2.0]],
+      nil, nil, nil, nil)
+  end
+
+  # T8 inductor rules: EXT (T8Mx AND INDALL) (T8Mx NOT INDALL) >= 30 and
+  # INDALL extension of T8Mx >= 15.
+  [['T8M1', T8M1, T8M1SLOT], ['T8M2', T8M2, T8M2SLOT]].each do |name, layer, slot|
+    enabled = name == 'T8M1' ? CHECK_T8M1 : CHECK_T8M2
+    next unless enabled
+    base = layer.not(slot)
+    base.and(INDALL).drc(separation(base.not(INDALL)) < 30.um).not_inside(NODRC)
+      .output("#{name}_S_3",
+        "#{name}_S_3: inductor #{name} must be at least 30 um from other #{name} [Calibre source]")
+    base.interacting(INDALL).drc(enclosed(INDALL) < 15.um).not_inside(NODRC)
+      .output("#{name}_EX_1",
+        "#{name}_EX_1: INDALL extension of #{name} must be at least 15 um and INDALL must not be cut [Calibre source]")
+  end
+
+  # T8M1/T8M2: no active or passive device inside INDALL. T8M1_R_2 is
+  # recommended in the source; T8M2_R_2 is unconditional.
+  thick_device_marks = DIODE.or(MOMLVS1).or(PORES).or(AARES).or(NW1RES)
+    .or(MET1RES).or(MET2RES).or(MET3RES).or(MET4RES).or(MET5RES)
+    .or(MET6RES).or(MET7RES).or(MET8RES).or(T4M1RES)
+  if CHECK_T8M1
+    recommended_output.call('T8M1_R_2', thick_device_marks.or(T8M1RES).and(INDALL),
+      'active and passive devices are not allowed inside INDALL')
+  end
+  if CHECK_T8M2
+    thick_device_marks.or(T8M2RES).and(INDALL).not_inside(NODRC).output('T8M2_R_2',
+      'T8M2_R_2: active and passive devices are not allowed inside INDALL [Calibre source]')
+  end
+
+  #---------------------------------------------------------------------------
+  # Thick dummy rules
+  #---------------------------------------------------------------------------
+  thick_dummy_family = lambda do |name, dummy, dummy_block, metal, sizes, class_limits|
+    dummy_allowed = sizes.map { |width, height|
+      thick_exact_rectangle.call(dummy, width, height) +
+        thick_exact_rectangle.call(dummy, height, width)
+    }.reduce { |all, part| all.or(part) }
+    dummy.not(dummy_allowed).output("#{name}DUM_W_1",
+      "#{name}DUM_W_1: #{name} dummy must use a source-defined size (#{sizes.map { |w, h| "#{w}x#{h}" }.join(', ')} um)")
+
+    size_class = lambda do |width, height|
+      thick_exact_rectangle.call(dummy, width, height) +
+        thick_exact_rectangle.call(dummy, height, width)
+    end
+
+    # Size-class spacing rules S_1..S_6 (T8 dummies only have the 2.8 class).
+    class_rules = sizes.each_with_index.map do |(width, height), index|
+      [size_class.call(width, height), index]
+    end
+    class_rules.each do |class_layer, index|
+      next if index >= 3
+      own_limit, metal_limit = class_limits[index]
+      width, height = sizes[index]
+      class_layer.drc(space < own_limit.um).not_inside(INDALL).not_inside(NODRC)
+        .output("#{name}DUM_S_#{index * 2 + 1}",
+          "#{name}DUM_S_#{index * 2 + 1}: #{width}x#{height} um #{name} dummy spacing must be at least #{own_limit} um outside INDALL/NODRC [Calibre source]")
+      thick_space.call(class_layer, metal, metal_limit).not_inside(INDALL).not_inside(NODRC)
+        .output("#{name}DUM_S_#{index * 2 + 2}",
+          "#{name}DUM_S_#{index * 2 + 2}: #{width}x#{height} um #{name} dummy to metal spacing must be at least #{metal_limit} um outside INDALL/NODRC [Calibre source]")
+    end
+
+    # S_7: Mn_2b_DUM wide-run spacing on the metal-or-dummy union.
+    region = metal.data
+    wide = region.interacting(region.sized(-((1.5 / 2.0 - grid) / grid).round))
+    markers = region.space_check((0.6 / grid).round).polygons
+    markers = markers.interacting(wide)
+    markers = bbox_longer_than.call(markers, (1.5 / grid).round)
+    markers = markers.interacting(dummy.data)
+    wrap_region.call(markers).not_inside(NODRC).output("#{name}DUM_S_7",
+      "#{name}DUM_S_7: #{name} dummy/metal spacing must be at least 0.6 um when width >= 1.5 um and run >= 1.5 um [Calibre source]")
+
+    # S_8: 45-degree metal to dummy spacing.
+    thick_angle_space_markers.call(metal.data, dummy.data, 0.4)
+      .then { |m| wrap_region.call(m) }.not_inside(NODRC).output("#{name}DUM_S_8",
+        "#{name}DUM_S_8: #{name} dummy to 45-degree metal spacing must be at least 0.4 um [Calibre source]")
+
+    # S_9..S_13: EXT and ENC against fuse, MIM, logo, inductor and chip edge.
+    [
+      ['FUSEALL', FUSEALL, 3.0, 9],
+      ['BMIM', BMIM, 2.0, 10],
+      ['LOGO', LOGO, 0.1, 11],
+      ['INDALL', INDALL, 3.0, 12],
+      ['CHIPBLK', CHIPBLK, 2.5, 13]
+    ].each do |target_name, target, limit, index|
+      thick_space.call(dummy, target, limit).polygons
+        .or(thick_enclosure.call(dummy, target, limit))
+        .output("#{name}DUM_S_#{index}",
+          "#{name}DUM_S_#{index}: #{name} dummy to #{target_name} spacing/enclosure must be at least #{limit} um [Calibre source]")
+    end
+
+    thick_space.call(dummy, dummy_block, 2.0).output("#{name}DUM_S_14",
+      "#{name}DUM_S_14: #{name} dummy to its block marker spacing must be at least 2 um [Calibre source]")
+    thick_space.call(dummy, DMYBLK, 2.0).output("#{name}DUM_S_15",
+      "#{name}DUM_S_15: #{name} dummy to DMYBLK spacing must be at least 2 um [Calibre source]")
+  end
+
+  if CHECK_T2M1
+    thick_dummy_family.call('T2M1', T2M1DUM, T2M1DUMB, T2M1.not(T2M1SLOT).or(T2M1DUM),
+      [[2.0, 2.0], [1.0, 1.0], [0.6, 1.2]],
+      [[0.8, 10.0], [0.4, 0.6], [0.4, 0.6]])
+  end
+  if CHECK_T2M2
+    thick_dummy_family.call('T2M2', T2M2DUM, T2M2DUMB, T2M2.not(T2M2SLOT).or(T2M2DUM),
+      [[2.0, 2.0], [1.0, 1.0], [0.6, 1.2]],
+      [[0.8, 10.0], [0.4, 0.6], [0.4, 0.6]])
+  end
+  if CHECK_T4M1
+    thick_dummy_family.call('T4M1', T4M1DUM, T4M1DUMB, T4M1.not(T4M1SLOT).or(T4M1DUM),
+      [[2.0, 2.0], [1.0, 1.0], [0.6, 1.2]],
+      [[0.8, 10.0], [0.4, 0.6], [0.4, 0.6]])
+  end
+  if CHECK_T8M1
+    thick_dummy_family.call('T8M1', T8M1DUM, T8M1DUMB, T8M1.not(T8M1SLOT).or(T8M1DUM),
+      [[2.8, 2.8]], [[2.8, 2.8]])
+  end
+  if CHECK_T8M2
+    thick_dummy_family.call('T8M2', T8M2DUM, T8M2DUMB, T8M2.not(T8M2SLOT).or(T8M2DUM),
+      [[2.8, 2.8]], [[2.8, 2.8]])
+  end
+end

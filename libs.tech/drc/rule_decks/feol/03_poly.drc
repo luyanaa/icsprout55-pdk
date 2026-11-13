@@ -15,9 +15,12 @@
 #=========================================================================================
 # FEOL 03 - Poly
 #
-# Port source area checks that map directly to KLayout regions.  Rules whose
-# Calibre definition depends on edge classes, connectivity, density windows,
-# or directional enclosure remain disabled instead of using geometric proxies.
+# Ports the PO_A/PO_D/PO_EX/PO_L/PO_R/PO_S/PO_W family, the gate-length
+# voltage-class checks PO_W_2a..2f, and the OPEN_RECOMMENDED_ON=NO rules as
+# recommended log warnings.  Rules whose Calibre definition depends on
+# connectivity, merged-polygon shape classes, or directional edge selection
+# use the documented approximations (slightly tighter, never looser); the few
+# clauses that cannot be rebuilt are called out next to each rule.
 #=========================================================================================
 
 if FEOL
@@ -62,11 +65,358 @@ if FEOL
     .not_inside(ESDIOE).not_inside(NODRC).output('poly.po.gate_length',
       "PO_L_1: thin-channel gate must lie within #{po_l1_len} um of a contact outside ESDIOE/NODRC [Calibre source]")
 
-  # Unsupported source rules: PO_W_2a through PO_W_2f, PO_W_3, PO_S_2,
-  # PO_S_3, PO_S_5 through PO_S_7, PO_S_9, PO_S_11, PO_S_12,
-  # PO_S_14 through PO_S_16, PO_EX_1, PO_EX_2, PO_R_1, PO_R_2.
-  # PO_S_4_R, PO_S_7a_R, PO_S_8_R, PO_S_13_R, PO_S_14a_R,
-  # PO_EN_1_R through PO_EN_3_R, PO_EX_1_R, PO_EX_3_R, PO_L_2_R,
-  # and PO_A_1_R remain disabled (OPEN_RECOMMENDED_ON=NO).
+  #---------------------------------------------------------------------------
+  # Channel-length, field-poly, spacing and enclosure rules.
+  #
+  # The gate-foot edges coincident with POLY are the source/drain (W) edges;
+  # their 1-DBU outward slivers are not covered by POLY and have area
+  # W x 1 DBU. The gate-foot edges on the AA boundary are the line-end (L)
+  # edges; their slivers are outside ACT and have area L x 1 DBU.
+  # Region#with_area includes min and excludes max.
+  #---------------------------------------------------------------------------
+  gate_wider_than = lambda do |gate_layer, min_width_um|
+    gate_layer.interacting(
+      gate_layer.edges.extended_out(1.dbu).not(POLY)
+        .with_area(min_width_um.um * 1.dbu, 1e9.um2))
+  end
+  gate_shorter_than = lambda do |gate_layer, limit_um|
+    gate_layer.interacting(
+      gate_layer.edges.extended_out(1.dbu).not(ACT)
+        .with_area(0, limit_um.um * 1.dbu))
+  end
+
+  # PO_W_2a: core (0.9/1.2V) channel length >= 0.06 um.
+  po_w2_core_len = rval('po_w2_core_len')
+  po_core_foot = POLY.and(ACT).not(DGOX.or(TGOX))
+  gate_shorter_than.call(po_core_foot, po_w2_core_len)
+    .not_inside(NODRC).output('poly.po.length.core',
+      "PO_W_2a: core channel length must be at least #{po_w2_core_len} um outside NODRC [Calibre source]")
+
+  # PO_W_2b: 1.8V (DG) channel length >= 0.20 um.
+  po_w2_dg_len = rval('po_w2_dg_len')
+  po_dg_foot = POLY.and(ACT).and(DGOX)
+  gate_shorter_than.call(po_dg_foot, po_w2_dg_len)
+    .not_inside(SRAMALL).not_inside(NODRC).output('poly.po.length.dg',
+      "PO_W_2b: 1.8V channel length must be at least #{po_w2_dg_len} um outside SRAMALL/NODRC [Calibre source]")
+
+  # PO_W_2d: 3.3V (TG) NMOS/PMOS channel length >= 0.38 um.
+  po_w2_tg_len = rval('po_w2_tg_len')
+  po_tg_foot = POLY.and(ACT).and(TGOX)
+  [['poly.po.length.tg_n', po_tg_foot.and(NP), 'NMOS'],
+   ['poly.po.length.tg_p', po_tg_foot.and(PP), 'PMOS']].each do |category, foot, label|
+    gate_shorter_than.call(foot, po_w2_tg_len)
+      .not_inside(SRAMALL).not_inside(NODRC).output(category,
+        "PO_W_2d: 3.3V #{label} channel length must be at least #{po_w2_tg_len} um outside SRAMALL/NODRC [Calibre source]")
+  end
+
+  if IO_1825
+    # PO_W_2c: 2.5V (IO 1825) channel length >= 0.28 um outside UD.
+    po_w2c_len = rval('po_w2c_len')
+    po_tg_25 = POLY.and(ACT).and(TGOX).not_interacting(UD)
+    gate_shorter_than.call(po_tg_25, po_w2c_len)
+      .not_inside(SRAMALL).not_inside(NODRC).output('poly.po.length.tg25',
+        "PO_W_2c: 2.5V channel length must be at least #{po_w2c_len} um outside SRAMALL/NODRC [Calibre source]")
+
+    # PO_W_2e: under-drive 2.5V channel length >= 0.22 um.
+    po_w2e_len = rval('po_w2e_len')
+    po_tg_ud = POLY.and(ACT).and(TGOX).and(UD)
+    gate_shorter_than.call(po_tg_ud, po_w2e_len)
+      .not_inside(SRAMALL).not_inside(NODRC).output('poly.po.length.tg_ud',
+        "PO_W_2e: under-drive 2.5V channel length must be at least #{po_w2e_len} um outside SRAMALL/NODRC [Calibre source]")
+
+    # PO_W_2f: over-drive 2.5V NMOS >= 0.50 um, PMOS >= 0.40 um.
+    po_w2f_n_len = rval('po_w2f_n_len')
+    po_w2f_p_len = rval('po_w2f_p_len')
+    po_tg_od = POLY.and(ACT).and(TGOX).and(OD)
+    [['poly.po.length.tg_od_n', po_tg_od.and(NP), po_w2f_n_len, 'NMOS'],
+     ['poly.po.length.tg_od_p', po_tg_od.and(PP), po_w2f_p_len, 'PMOS']].each do |category, foot, limit, label|
+      gate_shorter_than.call(foot, limit)
+        .not_inside(SRAMALL).not_inside(NODRC).output(category,
+          "PO_W_2f: over-drive 2.5V #{label} channel length must be at least #{limit} um outside SRAMALL/NODRC [Calibre source]")
+    end
+  end
+
+  # PO_W_3 / PO_S_6: 45-degree field PO. The source measures the space across
+  # 45-degree edges; the polygon width check also covers any narrower part of
+  # the same polygon (tighter).
+  po_w3_width = rval('po_w3_width')
+  po_s6_space = rval('po_s6_space')
+  po_field = POLY.not_inside(ACT).not_inside(ACTDUM)
+  po_field_45 = po_field.interacting(po_field.edges.with_angle(45, absolute))
+  po_field_45.drc(width < po_w3_width.um).not_inside(NODRC).output('poly.po.field45.width',
+    "PO_W_3: 45-degree field PO width must be at least #{po_w3_width} um outside NODRC [Calibre source]")
+  po_field_45.drc(separation(POLY.not_inside(EFUSEALL), transparent) < po_s6_space.um)
+    .not_inside(EFUSEALL).not_inside(FUSEALL).not_inside(NODRC).output('poly.po.field45.space',
+      "PO_S_6: 45-degree field PO to PO space must be at least #{po_s6_space} um outside EFUSEALL/FUSEALL/NODRC [Calibre source]")
+
+  # PO_S_2: 0.18 um space where either PO is wider than 0.13 um. The source
+  # parallel-run > 0.18 um and PARA ONLY qualifiers are dropped, which reports
+  # more markers (tighter).
+  po_s2_width = rval('po_s2_width')
+  po_s2_space = rval('po_s2_space')
+  po_thin_s2 = wrap_region.call(
+    POLY.data.width_check(((po_s2_width + grid / 2.0) / grid).round).polygons)
+  POLY.not(po_thin_s2).drc(separation(POLY, transparent) < po_s2_space.um)
+    .not_inside(NODRC).output('poly.po.wide_space',
+      "PO_S_2: PO space must be at least #{po_s2_space} um where either PO is wider than #{po_s2_width} um outside NODRC [Calibre source]")
+
+  # PO_S_3: PO-on-AA space >= 0.13 um.
+  po_s3_space = rval('po_s3_space')
+  po_on_aa = POLY.and(ACT)
+  po_on_aa.drc(space < po_s3_space.um).not_inside(INDALL).not_inside(NODRC).output('poly.po.aa_space',
+    "PO_S_3: PO-on-AA spacing must be at least #{po_s3_space} um outside INDALL/NODRC [Calibre source]")
+
+  # PO_S_5: PO-on-AA space inside TG >= 0.24 um where a contact lies between.
+  po_s5_space = rval('po_s5_space')
+  po_on_tg_aa = POLY.and(ACT).and(TGOX)
+  po_on_tg_aa.drc(space < po_s5_space.um).polygons.interacting(CT.or(CTbar))
+    .not_inside(INDALL).not_inside(SRAMALL).not_inside(NODRC).output('poly.po.tg_space',
+      "PO_S_5: PO-on-AA space inside TG must be at least #{po_s5_space} um where a contact lies between the POs outside INDALL/SRAMALL/NODRC [Calibre source]")
+
+  # PO_S_9: narrow (width < 0.09 um) PO in a dense line-end configuration.
+  # The source additionally requires two adjacent close neighbors; checking
+  # every close space of a narrow PO reports more markers (tighter).
+  po_s9_width = rval('po_s9_width')
+  po_s9_space = rval('po_s9_space')
+  po_narrow = POLY.interacting(
+    wrap_region.call(POLY.data.width_check((po_s9_width / grid).round).polygons))
+  po_narrow.drc(separation(POLY, transparent) < po_s9_space.um)
+    .not_inside(SRAMALL).not_inside(NODRC).output('poly.po.line_end',
+      "PO_S_9: narrow PO line-end spacing must be at least #{po_s9_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  # PO_S_11: AA-to-PO space on STI >= 0.05 um. The source ABUT<90 qualifier is
+  # not reproduced, so coincident AA/PO edges also produce zero-distance
+  # markers (slightly stricter at abutting edges).
+  po_s11_space = rval('po_s11_space')
+  ACT.drc(separation(POLY, transparent) < po_s11_space.um)
+    .not_inside(ACT).not_inside(ACTDUM).not_inside(SRAMALL.or(INDALL))
+    .not_inside(NODRC).output('poly.po.sti_space',
+      "PO_S_11: AA-to-PO space on STI must be at least #{po_s11_space} um outside SRAMALL/INDALL/NODRC [Calibre source]")
+
+  # PO_S_12: PO-to-PO space inside SAB >= 0.25 um.
+  po_s12_space = rval('po_s12_space')
+  po_sab = POLY.not(POLY.not_inside(SAB))
+  po_sab.drc(space < po_s12_space.um).not_inside(NODRC).output('poly.po.sab_space',
+    "PO_S_12: PO space inside SAB must be at least #{po_s12_space} um outside NODRC [Calibre source]")
+
+  # PO_S_14 / PO_S_15: L-shape AA/PO space < 0.1 um in the same narrow-channel
+  # MOS (W < 0.15 um). The source AA/PO corner and connectivity filters are
+  # dropped (tighter). PO_S_14 and PO_S_15 are the two sides of the same gap
+  # and share the marker set.
+  po_s14_width = rval('po_s14_width')
+  po_s14_space = rval('po_s14_space')
+  narrow_gate0 = GATE0.not(gate_wider_than.call(GATE0, po_s14_width - grid / 2.0))
+  narrow_lshape = POLY.drc(separation(ACT, transparent) < po_s14_space.um)
+    .interacting(narrow_gate0).not_inside(SRAMALL).not_inside(NODRC)
+  narrow_lshape.output('poly.po.lshape_aa',
+    "PO_S_14: L-shape AA-to-PO space inside a narrow-channel MOS must be at least #{po_s14_space} um outside SRAMALL/NODRC [Calibre source]")
+  narrow_lshape.output('poly.po.lshape_po',
+    "PO_S_15: L-shape PO-to-AA space inside a narrow-channel MOS must be at least #{po_s14_space} um outside SRAMALL/NODRC [Calibre source]")
+
+  # PO_S_16: large PO (>= 630 um^2) to narrow gate (L <= 0.08 um) space
+  # >= 1.0 um. The source density-window qualifier on Large_PO is dropped
+  # (stricter).
+  po_s16_area = rval('po_s16_area')
+  po_s16_le = rval('po_s16_le')
+  po_s16_space = rval('po_s16_space')
+  large_po = POLY.with_area(po_s16_area.um2, 1e12.um2)
+  short_gate = gate_shorter_than.call(GATE, po_s16_le + grid / 2.0)
+  large_po.drc(separation(short_gate, transparent) < po_s16_space.um)
+    .not_inside(NODRC).output('poly.po.large_space',
+      "PO_S_16: large PO to narrow gate space must be at least #{po_s16_space} um outside NODRC [Calibre source]")
+
+  # PO_EX_1: AA extension outside PO >= 0.11 um. The source LDMOSSTI touch
+  # qualifier is not available and is dropped (tighter).
+  po_ex1_ext = rval('po_ex1_ext')
+  POLY.drc(enclosed(ACT) < po_ex1_ext.um)
+    .not_inside(SRAMALL).not_inside(INDALL).not_inside(NODRC).output('poly.po.aa_ext',
+      "PO_EX_1: AA extension outside PO must be at least #{po_ex1_ext} um outside SRAMALL/INDALL/NODRC [Calibre source]")
+
+  # PO_EX_2: PO end-cap extension outside AA >= 0.14 um. The source NOT TOUCH
+  # filter for 90-degree poly bends is dropped; bent gates are already
+  # forbidden by PO_R_1, so the remaining markers are true line ends (tighter).
+  po_ex2_ext = rval('po_ex2_ext')
+  ACT.drc(enclosed(POLY) < po_ex2_ext.um)
+    .not_inside(SRAMALL).not_inside(LDMOS).not_inside(NODRC).output('poly.po.endcap',
+      "PO_EX_2: PO end-cap extension of AA must be at least #{po_ex2_ext} um outside SRAMALL/LDMOS/NODRC [Calibre source]")
+
+  # PO_R_1: no bent or rotated PO on AA. The source checks POEIAA1 convex-edge
+  # counts; non-rectangular and 45-degree gate feet are selected directly.
+  po_r1_width = rval('po_r1_width')
+  po_on_aa_wide = po_on_aa.not(wrap_region.call(
+    po_on_aa.data.width_check(((po_r1_width + grid / 2.0) / grid).round).polygons))
+  po_bent = po_on_aa_wide.non_rectangles
+    .or(po_on_aa_wide.rectangles.interacting(
+      po_on_aa_wide.rectangles.edges.with_angle(45, absolute)))
+  po_bent.not_inside(INDALL.or(SRAMALL)).not_inside(NODRC).output('poly.po.bent',
+    "PO_R_1: PO on AA must be an orthogonal rectangle outside INDALL/SRAMALL/NODRC [Calibre source]")
+
+  # PO_R_2: PO with contacts must be covered by NP and/or PP, except the body
+  # of a high-res poly resistor (HPR/HRP) and MOM LVS1 shapes. The source
+  # selects whole PO polygons touching HPR before removing the resistor body,
+  # so the resistor heads stay checked.
+  po_r2_hrp_end = rval('po_r2_hrp_end')
+  hrpr = POLY.interacting(HPR)
+  hrp_end = wrap_region.call(hrpr.data.not(HPR.data).sized(po_r2_hrp_end.um))
+  po_mid = POLY.interacting(HPR.or(HRP)).not(hrp_end)
+  POLY.interacting(CT.or(CTbar)).not(po_mid)
+    .not(POLY.and(NP)).not(POLY.and(PP)).not_interacting(MOMLVS1)
+    .not_inside(SRAMALL).not_inside(NODRC).output('poly.po.implant',
+      "PO_R_2: PO with contacts must be enclosed by NP and/or PP outside SRAMALL/NODRC [Calibre source]")
+
+  #---------------------------------------------------------------------------
+  # Recommended PO rules (vendor OPEN_RECOMMENDED_ON block, default NO). They
+  # are always evaluated here and surface as KLayout log warnings unless
+  # recommended=error (report categories) or recommended=off (skipped).
+  #---------------------------------------------------------------------------
+  wide_gate = lambda do |min_width_um|
+    # The GATE edges inside AA are the channel-width edges; sweeping them 1 DBU
+    # outward and subtracting POLY leaves one edge_length x 1 DBU sliver each,
+    # so the area bound is the channel-width bound.
+    GATE.interacting(
+      GATE.edges.extended_out(1.dbu).not(POLY)
+        .with_area(min_width_um.um * 1.dbu, 1e9.um2))
+  end
+
+  # PO_S_4_R: PO-on-AA space where a contact lies between the POs. The source
+  # CONNECT PO_EMPTY AA_EMPTY + CONNECTED qualifier keeps same-AA pairs only;
+  # checking every PO-on-AA pair is slightly stricter.
+  po_s4_r_space = rval('po_s4_r_space')
+  po_on_aa = POLY.and(ACT)
+  recommended_output.call('PO_S_4_R',
+    po_on_aa.drc(space < po_s4_r_space.um).polygons
+      .interacting(CT.or(CTbar))
+      .not_inside(INDALL).not_inside(SRAMALL).not_inside(NODRC),
+    "recommended PO-on-AA space >= #{po_s4_r_space} um where a contact lies between the POs outside INDALL/SRAMALL/NODRC")
+
+  # PO_S_8_R: short-channel gates (L <= 0.08 um) need a neighboring poly
+  # within 1.0 um. The source expands the channel-width edges of the gate into
+  # a 1 um halo and counts interacting PO polygons; the gate length is taken
+  # from the AA-coincident GATE edges.
+  po_s8_len = rval('po_s8_len')
+  po_s8_space = rval('po_s8_space')
+  short_channel_gates = GATE.interacting(
+    GATE.edges.extended_out(1.dbu).not(ACT)
+      .with_area(0, po_s8_len.um * 1.dbu)).not_inside(SRAMALL)
+  po_region = POLY.data
+  po_s8_markers = RBA::Region.new
+  short_channel_gates.data.each do |gate|
+    gate_region = RBA::Region.new(gate)
+    w_edges = gate_region.edges.and(POLY.data.edges)
+    next if w_edges.count.zero?
+    halo = w_edges.extended_out(po_s8_space.um)
+    po_s8_markers.insert(gate) if po_region.interacting(halo).count <= 1
+  end
+  recommended_output.call('PO_S_8_R',
+    wrap_region.call(po_s8_markers).not_inside(NODRC),
+    "recommended short-channel gate (L <= #{po_s8_len} um) must have neighboring poly within #{po_s8_space} um outside SRAMALL/NODRC")
+
+  # PO_S_13_R: sensitive 0.06 um gates need 0.19 um to neighboring poly. The
+  # equality selection uses the width-check markers just below and just above
+  # the target width; the source OPPOSITE qualifier is not reproduced.
+  po_s13_width = rval('po_s13_width')
+  po_s13_space = rval('po_s13_space')
+  gate_below_high = GATE.interacting(wrap_region.call(
+    GATE.data.width_check(((po_s13_width + 0.0005) / grid).round).polygons))
+  gate_below_low = GATE.interacting(wrap_region.call(
+    GATE.data.width_check(((po_s13_width - 0.0005) / grid).round).polygons))
+  gates_006 = gate_below_high.not(gate_below_low)
+  recommended_output.call('PO_S_13_R',
+    gates_006.drc(separation(POLY, transparent) < po_s13_space.um).polygons
+      .not_inside(NODRC),
+    "recommended #{po_s13_width} um gate to neighboring poly space >= #{po_s13_space} um outside NODRC")
+
+  # PO_S_14a_R: AA-to-PO space < 0.1 um inside the same wide-channel MOS. The
+  # source EXT AA_CP PO_CP CONNECTED pair is measured here as the AA enclosure
+  # of PO edges inside AA, which is the same gap for a connected MOS. The
+  # source AA-corner filter is dropped, which reports more markers (tighter).
+  po_s14_space = rval('po_s14_space')
+  po_ex3_r_width = rval('po_ex3_r_width')
+  aa_po_gap = POLY.drc(enclosed(ACT) < po_s14_space.um).polygons
+  recommended_output.call('PO_S_14a_R',
+    aa_po_gap.interacting(wide_gate.call(po_ex3_r_width))
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended L-shape AA-to-PO space inside a wide-channel MOS must be at least #{po_s14_space} um outside SRAMALL/NODRC")
+
+  # PO_S_18_R: core NMOS gates must be >= 1.0 um from TG/NW/PSUB boundaries.
+  po_s18_space = rval('po_s18_space')
+  po_s18_gate = GATE_core.and(NP)
+  po_s18_well = TG.or(NW).or(PSUB)
+  recommended_output.call('PO_S_18_R',
+    po_s18_gate.drc(separation(po_s18_well, transparent) < po_s18_space.um).polygons
+      .not_interacting(SRAMALL).not_inside(NODRC),
+    "recommended core NMOS gate to TG/NW/PSUB space >= #{po_s18_space} um outside SRAMALL/NODRC")
+
+  # PO_EN_1_R: core PMOS gate enclosed by NW outside TG >= 1.0 um.
+  po_en1_r = rval('po_en1_r')
+  recommended_output.call('PO_EN_1_R',
+    GATE_core.and(PP).drc(enclosed(NW.not(TG)) < po_en1_r.um).polygons
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended core PMOS gate enclosure by NW outside TG >= #{po_en1_r} um outside SRAMALL/NODRC")
+
+  # PO_EN_2_R / PO_EN_3_R: IO gate enclosure by the TG well >= 2.0 um.
+  po_en2_r = rval('po_en2_r')
+  recommended_output.call('PO_EN_2_R',
+    GATE.and(NP).and(TG).drc(enclosed(TG.not(NW)) < po_en2_r.um).polygons
+      .not_inside(NODRC),
+    "recommended IO NMOS gate enclosure by TG outside NW >= #{po_en2_r} um outside NODRC")
+  po_en3_r = rval('po_en3_r')
+  recommended_output.call('PO_EN_3_R',
+    GATE.and(PP).and(TG).drc(enclosed(TG.and(NW)) < po_en3_r.um).polygons
+      .not_inside(NODRC),
+    "recommended IO PMOS gate enclosure by TG inside NW >= #{po_en3_r} um outside NODRC")
+
+  # PO_EX_1_R: AA extension beyond wide-gate POLY >= 0.18 um. PO edges inside
+  # AA are the channel-width edges; sweeping them outward by the threshold and
+  # subtracting AA leaves a sliver where the AA enclosure is short. The source
+  # LDMOSSTI touch qualifier is not available in this deck and is dropped.
+  po_ex1_r_width = rval('po_ex1_r_width')
+  po_ex1_r_ext = rval('po_ex1_r_ext')
+  wide_po = POLY.interacting(
+    GATE.edges.extended_out(1.dbu).not(POLY)
+      .with_area(po_ex1_r_width.um * 1.dbu, 1e9.um2))
+  recommended_output.call('PO_EX_1_R',
+    wide_po.edges.inside_part(ACT).extended_out(po_ex1_r_ext.um).not(ACT)
+      .not_inside(SRAMALL).not_inside(INDALL).not_inside(NODRC),
+    "recommended AA extension outside wide-gate POLY >= #{po_ex1_r_ext} um outside SRAMALL/INDALL/NODRC")
+
+  # PO_EX_3_R: PO end-cap extension beyond AA >= 0.16 um for wide-channel
+  # gates. The source ENC AA PO measures exactly the AA-to-PO enclosure at the
+  # gate ends; the source L-shape-space qualifier is dropped, so every wide
+  # gate end-cap is checked (tighter).
+  po_ex3_r_ext = rval('po_ex3_r_ext')
+  aa_in_wide_po = ACT.drc(enclosed(POLY) < po_ex3_r_ext.um).polygons
+    .interacting(wide_gate.call(po_ex3_r_width))
+  recommended_output.call('PO_EX_3_R',
+    aa_in_wide_po.not_inside(SRAMALL).not_inside(NODRC),
+    "recommended PO end-cap extension of AA >= #{po_ex3_r_ext} um outside SRAMALL/NODRC")
+
+  # PO_L_2_R: maximum L-shape AA leg length near PO. The source builds the
+  # leg from convex merged PO/AA edges touching an AA corner; the port uses
+  # the same AA-PO gap proxy as PO_S_14a_R and keeps markers interacting an AA
+  # edge longer than the limit at a wide-channel gate. Dropping the merged-
+  # shape/corner filters is tighter.
+  po_l2_r_len = rval('po_l2_r_len')
+  po_l2_r_space = rval('po_l2_r_space')
+  po_l2_r_width = rval('po_l2_r_width')
+  long_aa_edge_halo = ACT.edges.with_length((po_l2_r_len.um + grid), 1e9.um)
+    .extended_out(1.dbu)
+  long_aa_po_gap = POLY.drc(enclosed(ACT) < po_l2_r_space.um).polygons
+    .interacting(long_aa_edge_halo)
+    .interacting(wide_gate.call(po_l2_r_width))
+  recommended_output.call('PO_L_2_R',
+    long_aa_po_gap.not_inside(SRAMALL).not_inside(NODRC),
+    "recommended L-shape AA leg length near PO must be at most #{po_l2_r_len} um outside SRAMALL/NODRC")
+
+  # PO_A_1_R: non-gate POLY area >= 0.05 um^2.
+  po_a1_r_area = rval('po_a1_r_area')
+  po_nongate = POLY.not_interacting(GATE)
+  recommended_output.call('PO_A_1_R',
+    po_nongate.not(po_nongate.with_area(po_a1_r_area.um2, 1e9.um2))
+      .not_inside(SRAMALL).not_inside(NODRC),
+    "recommended non-gate POLY area >= #{po_a1_r_area} um^2 outside SRAMALL/NODRC")
+
+  # PO_S_7a_R uses AA_LS, which the supplied source deck never defines (only
+  # referenced next to PO_LS); it cannot be ported faithfully and is omitted.
   # PO_D_* require density-window/gradient operators not represented here.
 end

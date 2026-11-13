@@ -1,0 +1,1726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>ICsprout55 DRC</description>
+ <original-file/>
+ <generator>drc: script='/grid/icsprout55-pdk/libs.tech/drc/ics55_drc.drc'</generator>
+ <top-cell>TOP</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>metal.m1.area</name>
+   <description>MET1_A_1: M1 area must be at least 0.042 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.min_hole</name>
+   <description>MET1_A_2: M1 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.area</name>
+   <description>M2_A_1: M2 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.min_hole</name>
+   <description>M2_A_2: M2 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.area</name>
+   <description>M3_A_1: M3 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.min_hole</name>
+   <description>M3_A_2: M3 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.area</name>
+   <description>M4_A_1: M4 area must be at least 0.052 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.min_hole</name>
+   <description>M4_A_2: M4 enclosed dielectric area must be at least 0.18 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.area</name>
+   <description>T4M2_A_1: T4M2 area must be at least 0.4 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.min_hole</name>
+   <description>T4M2_A_2: T4M2 enclosed area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.spacing</name>
+   <description>M1_S_1: M1 spacing must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.spacing</name>
+   <description>M2_S_1: M2 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.spacing</name>
+   <description>M3_S_1: M3 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.spacing</name>
+   <description>M4_S_1: M4 spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.width</name>
+   <description>MET1_W_1: M1 width must be at least 0.09 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.max_width</name>
+   <description>MET1_W_1: M1 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.width</name>
+   <description>M2_W_1a: M2 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.max_width</name>
+   <description>M2_W_1b: M2 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.width</name>
+   <description>M3_W_1a: M3 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.max_width</name>
+   <description>M3_W_1b: M3 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.width</name>
+   <description>M4_W_1a: M4 width must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.max_width</name>
+   <description>M4_W_1b: M4 width must be at most 12.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.angle_width</name>
+   <description>MET1_W_2: M1 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.angle_space</name>
+   <description>MET1_S_4: M1 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.angle_width</name>
+   <description>M2_W_2: M2 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.angle_space</name>
+   <description>M2_S_4: M2 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.angle_width</name>
+   <description>M3_W_2: M3 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.angle_space</name>
+   <description>M3_S_4: M3 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.angle_width</name>
+   <description>M4_W_2: M4 45-degree width must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.angle_space</name>
+   <description>M4_S_4: M4 space to 45-degree metal must be at least 0.19 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.wide_space</name>
+   <description>MET1_S_2: M1 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.wider_space</name>
+   <description>MET1_S_3: M1 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.wide_space</name>
+   <description>M2_S_2: M2 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.wider_space</name>
+   <description>M2_S_3: M2 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.wide_space</name>
+   <description>M3_S_2: M3 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.wider_space</name>
+   <description>M3_S_3: M3 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.wide_space</name>
+   <description>M4_S_2: M4 spacing to wide metal must be at least 0.15 um when width &gt;= 0.42 um and run &gt;= 0.42 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.wider_space</name>
+   <description>M4_S_3: M4 spacing to wide metal must be at least 0.5 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.eol_space</name>
+   <description>MET1_S_5: M1 dense line-end spacing must be at least 0.11 um (line-end edges &lt; 0.11 um, jogs &lt; 0.09 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.eol_space</name>
+   <description>M2_S_5: M2 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.eol_space</name>
+   <description>M3_S_5: M3 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.eol_space</name>
+   <description>M4_S_5: M4 dense line-end spacing must be at least 0.12 um (line-end edges &lt; 0.12 um, jogs &lt; 0.1 um exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m1.void_width</name>
+   <description>MET1_W_3: M1 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m2.void_width</name>
+   <description>M2_W_3: M2 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m3.void_width</name>
+   <description>M3_W_3: M3 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.m4.void_width</name>
+   <description>M4_W_3: M4 width must be at least 0.35 um next to a non-metal region above 2000000.0 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.width</name>
+   <description>T4M2_W_1: T4M2 width must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.max_width</name>
+   <description>T4M2_W_1: T4M2 width must be at most 20.0 um (DEUPAD/PA exempt) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.spacing</name>
+   <description>T4M2_S_1: T4M2 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>metal.tm2.wide_space</name>
+   <description>T4M2_S_2: T4M2 spacing must be at least 0.5 um when width/length &gt;= 2.0 um and run &gt;= 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.width</name>
+   <description>V1_W_1: V1 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.spacing</name>
+   <description>V1_S_1: V1 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.s2_spacing</name>
+   <description>V1_S_2: V1 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.s3_spacing</name>
+   <description>V1_S_3: V1 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.bar.width</name>
+   <description>V1_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.rotated</name>
+   <description>V1_R_5: 45-degree V1 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.hbar</name>
+   <description>V1_R_3: a single V1 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.lower</name>
+   <description>V1_EN_2a_2b_2c: V1 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.cover.upper</name>
+   <description>V1_EN_5a_5b: V1 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v1.enclosure.upper</name>
+   <description>V1_EN_5a_5b: V1 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.width</name>
+   <description>V2_W_1: V2 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.spacing</name>
+   <description>V2_S_1: V2 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.s2_spacing</name>
+   <description>V2_S_2: V2 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.s3_spacing</name>
+   <description>V2_S_3: V2 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.bar.width</name>
+   <description>V2_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.rotated</name>
+   <description>V2_R_5: 45-degree V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.hbar</name>
+   <description>V2_R_3: a single V2 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.lower</name>
+   <description>V2_EN_2a_2b_2c: V2 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.cover.upper</name>
+   <description>V2_EN_5a_5b: V2 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v2.enclosure.upper</name>
+   <description>V2_EN_5a_5b: V2 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.width</name>
+   <description>V3_W_1: V3 source union must be a 0.09x0.09 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.spacing</name>
+   <description>V3_S_1: V3 spacing must be at least 0.11 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.s2_spacing</name>
+   <description>V3_S_2: V3 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.s3_spacing</name>
+   <description>V3_S_3: V3 spacing must be at least 0.13 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.bar.width</name>
+   <description>V3_W_2: datatype-7 bar width must equal 0.09 um inside SRAMALL/EFUSEALL/FUSEALL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.rotated</name>
+   <description>V3_R_5: 45-degree V3 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.hbar</name>
+   <description>V3_R_3: a single V3 in an H-shaped metal bar is not allowed outside NODRC [Calibre source, tightened]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.lower</name>
+   <description>V3_EN_2a_2b_2c: V3 must be covered by its lower metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.cover.upper</name>
+   <description>V3_EN_5a_5b: V3 must be covered by its upper metal outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.v3.enclosure.upper</name>
+   <description>V3_EN_5a_5b: V3 upper-metal enclosure must be at least 0.005 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.spacing</name>
+   <description>T4V2_S_1: T4V2 spacing must be at least 0.34 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.bar.width</name>
+   <description>T4V2_W_2: datatype-7 T4V2bar width must equal 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.rotated</name>
+   <description>T4V2_R_3: 45-degree T4V2 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 must be covered by source-selected M5 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.lower</name>
+   <description>T4V2_EN_2_EN_3: T4V2 lower-metal enclosure must be at least 0.01 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.cover.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 must be covered by T4M2 outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.enclosure.upper</name>
+   <description>T4V2_EN_5_EN_6: T4V2 upper-metal enclosure must be at least 0.02 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.width</name>
+   <description>T4V2_W_1: T4V2 must be a 0.36x0.36 um square outside GRID/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>via.tv2.array.spacing</name>
+   <description>T4V2_S_2: T4V2 spacing within a 3x3-or-larger array must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.width</name>
+   <description>RV_W_1: RV must be a 3x3 um rectangle after source fuse/grid exclusions [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.space</name>
+   <description>RV_S_1: RV spacing must be at least 3.0 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cb.space</name>
+   <description>RV_S_2: RV to CB spacing must be at least 6.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.metal</name>
+   <description>RV_EN_1_2: RV enclosure by T4M2 must be at least 1.5 um outside LOGO/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.cover.rdl</name>
+   <description>RV_EN_3_4: RV must be covered by RDL [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.enc.rdl</name>
+   <description>RV_EN_3_4: RV enclosure by RDL must be at least 1.5 um outside LOGO/SRINGBLK/FUTR/GRID/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rv.single</name>
+   <description>RV_R_1: a T4M2/RDL island should carry more than one RV [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.alpa_full</name>
+   <description>RDL_EN_1: COVER must be fully covered by ALPA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.alpad_full</name>
+   <description>RDL_EN_2: CB must be fully covered by ALPAD [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.width</name>
+   <description>RDL_W_1: RDL width must be at most 35.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.space</name>
+   <description>RDL_S_1: ALPA spacing must be at least 2.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wide.space</name>
+   <description>RDL_S_2: ALPA spacing with one ALPA wider than 10.0 um must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.rdl.wider.space</name>
+   <description>RDL_S_3: ALPA spacing with one ALPA wider than 35.0 um must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.width</name>
+   <description>CB_W_1: CB width must be at least 3.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.space</name>
+   <description>CB_S_1: CB spacing must be at least 5.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cb.enclosure</name>
+   <description>CB_EN_1_EN_2: CB enclosure by T4M2 must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.width</name>
+   <description>COVER_W_1: COVER width must be at least 40.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.length</name>
+   <description>COVER_L_1: COVER must enclose a 40.0x65.0 um rectangle outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.space</name>
+   <description>COVER_S_1: COVER spacing must be at least 5.0 um outside SRBLK/SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.enc.alpa</name>
+   <description>COVER_EN_1: COVER enclosure by ALPA must be at least 1.5 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m1.pad.space</name>
+   <description>COVER_S_2: M1 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m2.pad.space</name>
+   <description>COVER_S_2: M2 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m3.pad.space</name>
+   <description>COVER_S_2: M3 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m4.pad.space</name>
+   <description>COVER_S_2: M4 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.m5.pad.space</name>
+   <description>COVER_S_2: M5 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>pad.cover.t4m2.pad.space</name>
+   <description>COVER_S_2: T4M2 pad-plate spacing must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_W_1</name>
+   <description>T4V1_W_1: T4V1 must be a 0.36x0.36 um square outside GRID (bar geometry separate) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_W_2</name>
+   <description>T4V1_W_2: datatype-7 T4V1bar width must equal 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_S_1</name>
+   <description>T4V1_S_1: T4V1 spacing must be at least 0.34 um outside NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_S_2</name>
+   <description>T4V1_S_2: T4V1 spacing inside a via array must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_EN_2_EN_3</name>
+   <description>T4V1_EN_2_EN_3: T4V1 must be covered by its bottom metal and enclosed by at least 0.01 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_EN_5_EN_6</name>
+   <description>T4V1_EN_5_EN_6: T4V1 must be covered by its top metal and enclosed by at least 0.02 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4V1_R_3</name>
+   <description>T4V1_R_3: 45-degree T4V1 edges are not allowed outside SRINGBLK/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1_W_1</name>
+   <description>T4M1_W_1: T4M1 width must be at most 20.0 um (source exemptions applied) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1_S_1</name>
+   <description>T4M1_S_1: T4M1 spacing must be at least 0.4 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1_A_1</name>
+   <description>T4M1_A_1: T4M1 area must be at least 0.4 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1_A_2</name>
+   <description>T4M1_A_2: T4M1 enclosed area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1_S_2</name>
+   <description>T4M1_S_2: T4M1 spacing must be at least 0.5 um when width &gt;= 2.0 um and run &gt;= 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_W_1</name>
+   <description>T4M1DUM_W_1: T4M1 dummy must use a source-defined size (2.0x2.0, 1.0x1.0, 0.6x1.2 um)</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_1</name>
+   <description>T4M1DUM_S_1: 2.0x2.0 um T4M1 dummy spacing must be at least 0.8 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_2</name>
+   <description>T4M1DUM_S_2: 2.0x2.0 um T4M1 dummy to metal spacing must be at least 10.0 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_3</name>
+   <description>T4M1DUM_S_3: 1.0x1.0 um T4M1 dummy spacing must be at least 0.4 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_4</name>
+   <description>T4M1DUM_S_4: 1.0x1.0 um T4M1 dummy to metal spacing must be at least 0.6 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_5</name>
+   <description>T4M1DUM_S_5: 0.6x1.2 um T4M1 dummy spacing must be at least 0.4 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_6</name>
+   <description>T4M1DUM_S_6: 0.6x1.2 um T4M1 dummy to metal spacing must be at least 0.6 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_7</name>
+   <description>T4M1DUM_S_7: T4M1 dummy/metal spacing must be at least 0.6 um when width &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_8</name>
+   <description>T4M1DUM_S_8: T4M1 dummy to 45-degree metal spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_9</name>
+   <description>T4M1DUM_S_9: T4M1 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_10</name>
+   <description>T4M1DUM_S_10: T4M1 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_11</name>
+   <description>T4M1DUM_S_11: T4M1 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_12</name>
+   <description>T4M1DUM_S_12: T4M1 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_13</name>
+   <description>T4M1DUM_S_13: T4M1 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_14</name>
+   <description>T4M1DUM_S_14: T4M1 dummy to its block marker spacing must be at least 2 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M1DUM_S_15</name>
+   <description>T4M1DUM_S_15: T4M1 dummy to DMYBLK spacing must be at least 2 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_W_1</name>
+   <description>AADUM_W_1: ACTDUM must be a source-defined 3.0x3.0, 1.0x1.0, or 0.467x0.467 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_R_1</name>
+   <description>AADUM_R_1: ACTDUM must not overlap CT</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_1</name>
+   <description>AADUM_S_1: 3x3 um ACTDUM spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_2</name>
+   <description>AADUM_S_2: 1x1 um ACTDUM spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_3</name>
+   <description>AADUM_S_3: 0.467x0.467 um ACTDUM spacing must be at least 0.28 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_4</name>
+   <description>AADUM_S_4: ACTDUM to AA spacing must be at least 1.6 um and must not overlap AA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_5</name>
+   <description>AADUM_S_5: ACTDUM to PO spacing must be at least 1.6 um and must not overlap PO [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_6</name>
+   <description>AADUM_S_6: ACTDUM to NW boundary spacing/enclosure must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_7</name>
+   <description>AADUM_S_7: ACTDUM to FUSEALL spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_8</name>
+   <description>AADUM_S_8: ACTDUM to NW1RES spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_9</name>
+   <description>AADUM_S_9: ACTDUM to LOGO spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_10</name>
+   <description>AADUM_S_10: ACTDUM to INDALL spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_11</name>
+   <description>AADUM_S_11: ACTDUM to chip boundary spacing/enclosure must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_12</name>
+   <description>AADUM_S_12: ACTDUM to ACTDUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>AADUM_S_13</name>
+   <description>AADUM_S_13: ACTDUM to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_W_1</name>
+   <description>PODUM_W_1: POLYDUM must be a source-defined 2.4x2.4, 0.92x0.92, or 0.381x0.381 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_R_1</name>
+   <description>PODUM_R_1: POLYDUM must not overlap CT</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_1</name>
+   <description>PODUM_S_1: 2.4x2.4 um POLYDUM spacing must be at least 2.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_2</name>
+   <description>PODUM_S_2: 0.92x0.92 um POLYDUM spacing must be at least 0.68 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_3</name>
+   <description>PODUM_S_3: 0.381x0.381 um POLYDUM spacing must be at least 0.36 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_4</name>
+   <description>PODUM_S_4: POLYDUM to AA spacing must be at least 0.8 um and must not overlap AA [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_5</name>
+   <description>PODUM_S_5: POLYDUM to PO spacing must be at least 0.8 um and must not overlap PO [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_6</name>
+   <description>PODUM_S_6: POLYDUM to NW boundary spacing/enclosure must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_7</name>
+   <description>PODUM_S_7: POLYDUM to NW1RES spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_8</name>
+   <description>PODUM_S_8: POLYDUM to LOGO spacing must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_9</name>
+   <description>PODUM_S_9: POLYDUM to INDALL spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_10</name>
+   <description>PODUM_S_10: POLYDUM to chip boundary spacing must be at least 0.6 um and enclosure at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_11</name>
+   <description>PODUM_S_11: POLYDUM to POLYDUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PODUM_S_12</name>
+   <description>PODUM_S_12: POLYDUM to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_W_1</name>
+   <description>M1DUM_W_1: M1 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_W_1</name>
+   <description>M2DUM_W_1: M2 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_W_1</name>
+   <description>M3DUM_W_1: M3 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_W_1</name>
+   <description>M4DUM_W_1: M4 dummy must be a source-defined 2x2, 1x1, or 0.22x0.89 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_1</name>
+   <description>M1DUM_S_1: 2x2 um M1 dummy spacing must be at least 0.8 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_2</name>
+   <description>M1DUM_S_2: 2x2 um M1 dummy to M1 spacing must be at least 10.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_3</name>
+   <description>M1DUM_S_3: 1x1 um M1 dummy spacing must be at least 0.3 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_4</name>
+   <description>M1DUM_S_4: 1x1 um M1 dummy to M1 spacing must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_5</name>
+   <description>M1DUM_S_5: 0.22x0.89 um M1 dummy spacing must be at least 0.25 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_6</name>
+   <description>M1DUM_S_6: 0.22x0.89 um M1 dummy to M1 spacing must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_7</name>
+   <description>M1DUM_S_7: M1 dummy spacing must be at least 0.6 um when width/length &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_8</name>
+   <description>M1DUM_S_8: M1 dummy to 45-degree M1 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_9</name>
+   <description>M1DUM_S_9: M1 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_10</name>
+   <description>M1DUM_S_10: M1 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_11</name>
+   <description>M1DUM_S_11: M1 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_12</name>
+   <description>M1DUM_S_12: M1 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_13</name>
+   <description>M1DUM_S_13: M1 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_14</name>
+   <description>M1DUM_S_14: M1 dummy to M1DUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M1DUM_S_15</name>
+   <description>M1DUM_S_15: M1 dummy to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_1</name>
+   <description>M2DUM_S_1: 2x2 um M2 dummy spacing must be at least 0.8 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_2</name>
+   <description>M2DUM_S_2: 2x2 um M2 dummy to M2 spacing must be at least 10.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_3</name>
+   <description>M2DUM_S_3: 1x1 um M2 dummy spacing must be at least 0.3 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_4</name>
+   <description>M2DUM_S_4: 1x1 um M2 dummy to M2 spacing must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_5</name>
+   <description>M2DUM_S_5: 0.22x0.89 um M2 dummy spacing must be at least 0.25 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_6</name>
+   <description>M2DUM_S_6: 0.22x0.89 um M2 dummy to M2 spacing must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_7</name>
+   <description>M2DUM_S_7: M2 dummy spacing must be at least 0.6 um when width/length &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_8</name>
+   <description>M2DUM_S_8: M2 dummy to 45-degree M2 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_9</name>
+   <description>M2DUM_S_9: M2 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_10</name>
+   <description>M2DUM_S_10: M2 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_11</name>
+   <description>M2DUM_S_11: M2 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_12</name>
+   <description>M2DUM_S_12: M2 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_13</name>
+   <description>M2DUM_S_13: M2 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_14</name>
+   <description>M2DUM_S_14: M2 dummy to M2DUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M2DUM_S_15</name>
+   <description>M2DUM_S_15: M2 dummy to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_1</name>
+   <description>M3DUM_S_1: 2x2 um M3 dummy spacing must be at least 0.8 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_2</name>
+   <description>M3DUM_S_2: 2x2 um M3 dummy to M3 spacing must be at least 10.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_3</name>
+   <description>M3DUM_S_3: 1x1 um M3 dummy spacing must be at least 0.3 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_4</name>
+   <description>M3DUM_S_4: 1x1 um M3 dummy to M3 spacing must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_5</name>
+   <description>M3DUM_S_5: 0.22x0.89 um M3 dummy spacing must be at least 0.25 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_6</name>
+   <description>M3DUM_S_6: 0.22x0.89 um M3 dummy to M3 spacing must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_7</name>
+   <description>M3DUM_S_7: M3 dummy spacing must be at least 0.6 um when width/length &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_8</name>
+   <description>M3DUM_S_8: M3 dummy to 45-degree M3 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_9</name>
+   <description>M3DUM_S_9: M3 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_10</name>
+   <description>M3DUM_S_10: M3 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_11</name>
+   <description>M3DUM_S_11: M3 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_12</name>
+   <description>M3DUM_S_12: M3 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_13</name>
+   <description>M3DUM_S_13: M3 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_14</name>
+   <description>M3DUM_S_14: M3 dummy to M3DUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M3DUM_S_15</name>
+   <description>M3DUM_S_15: M3 dummy to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_1</name>
+   <description>M4DUM_S_1: 2x2 um M4 dummy spacing must be at least 0.8 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_2</name>
+   <description>M4DUM_S_2: 2x2 um M4 dummy to M4 spacing must be at least 10.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_3</name>
+   <description>M4DUM_S_3: 1x1 um M4 dummy spacing must be at least 0.3 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_4</name>
+   <description>M4DUM_S_4: 1x1 um M4 dummy to M4 spacing must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_5</name>
+   <description>M4DUM_S_5: 0.22x0.89 um M4 dummy spacing must be at least 0.25 um outside INDALL/NODRC [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_6</name>
+   <description>M4DUM_S_6: 0.22x0.89 um M4 dummy to M4 spacing must be at least 0.3 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_7</name>
+   <description>M4DUM_S_7: M4 dummy spacing must be at least 0.6 um when width/length &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_8</name>
+   <description>M4DUM_S_8: M4 dummy to 45-degree M4 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_9</name>
+   <description>M4DUM_S_9: M4 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_10</name>
+   <description>M4DUM_S_10: M4 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_11</name>
+   <description>M4DUM_S_11: M4 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_12</name>
+   <description>M4DUM_S_12: M4 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_13</name>
+   <description>M4DUM_S_13: M4 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_14</name>
+   <description>M4DUM_S_14: M4 dummy to M4DUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>M4DUM_S_15</name>
+   <description>M4DUM_S_15: M4 dummy to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_W_1</name>
+   <description>T4M2DUM_W_1: T4M2 dummy must be a source-defined 2x2, 1x1, or 0.6x1.2 um rectangle</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_1</name>
+   <description>T4M2DUM_S_1: 2x2 um T4M2 dummy spacing must be at least 0.8 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_2</name>
+   <description>T4M2DUM_S_2: 2x2 um T4M2 dummy to T4M2 spacing must be at least 10.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_3</name>
+   <description>T4M2DUM_S_3: 1x1 um T4M2 dummy spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_4</name>
+   <description>T4M2DUM_S_4: 1x1 um T4M2 dummy to T4M2 spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_5</name>
+   <description>T4M2DUM_S_5: 0.6x1.2 um T4M2 dummy spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_6</name>
+   <description>T4M2DUM_S_6: 0.6x1.2 um T4M2 dummy to T4M2 spacing must be at least 0.6 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_7</name>
+   <description>T4M2DUM_S_7: T4M2 dummy spacing must be at least 0.6 um when width/length &gt;= 1.5 um and run &gt;= 1.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_8</name>
+   <description>T4M2DUM_S_8: T4M2 dummy to 45-degree T4M2 spacing must be at least 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_9</name>
+   <description>T4M2DUM_S_9: T4M2 dummy to FUSEALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_10</name>
+   <description>T4M2DUM_S_10: T4M2 dummy to BMIM spacing/enclosure must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_11</name>
+   <description>T4M2DUM_S_11: T4M2 dummy to LOGO spacing/enclosure must be at least 0.1 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_12</name>
+   <description>T4M2DUM_S_12: T4M2 dummy to INDALL spacing/enclosure must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_13</name>
+   <description>T4M2DUM_S_13: T4M2 dummy to CHIPBLK spacing/enclosure must be at least 2.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_14</name>
+   <description>T4M2DUM_S_14: T4M2 dummy to T4M2DUMB spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>T4M2DUM_S_15</name>
+   <description>T4M2DUM_S_15: T4M2 dummy to DMYBLK spacing must be at least 2.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_R_1</name>
+   <description>SL_R_1: T4M2 slot must not overlap CB</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_S_1</name>
+   <description>SL_S_1: T4M2 slot spacing must be at least 3.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SL_W_1_L_1</name>
+   <description>SL_W_1_L_1: T4M2 slot must be a rectangle of at least 2.0x4.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1b_G</name>
+   <description>EFU_1b_G: FUSEALL (292/12) must interact with EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_1c_G</name>
+   <description>EFU_1c_G: FUSEALL (292/12) must fully cover EFUSEALL (293/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2b_G</name>
+   <description>EFU_2b_G: EFUSEALL (293/12) must interact with POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EFU_2c_G</name>
+   <description>EFU_2c_G: EFUSEALL (293/12) must fully cover POEFUSEBLK (294/12) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_2</name>
+   <description>DEUPAD_R_2: DEUPAD (381/12) must fully enclose the pad metal MD = CB (121/1) or COVER (124/1) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_3</name>
+   <description>DEUPAD_R_3: padarea must be covered by the T4M2 top metal and by M5 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_5</name>
+   <description>DEUPAD_R_5: ALPADres, MOMLVS1, INDALL and M5/T4M2 resistors must be outside the DEUPAD area [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_6</name>
+   <description>DEUPAD_R_6: V4 pattern is not allowed under the DEUPAD opening [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DEUPAD_R_7</name>
+   <description>DEUPAD_R_7: padarea must overlap a T4V2 array (vias spaced &lt;= 0.51 um) [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_1</name>
+   <description>ESD_A_1: ESD1 area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_A_2</name>
+   <description>ESD_A_2: ESD1 enclosed (hole) area must be at least 0.6 um^2 [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_W_1</name>
+   <description>ESD_W_1: ESD1 width must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESD_S_1</name>
+   <description>ESD_S_1: ESD1 spacing must be at least 0.47 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_1_SEDP_1</name>
+   <description>ESDN_1_SEDP_1: source contacts must be enclosed by source active by 0.15 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_2_ESDP_2</name>
+   <description>ESDN_2_ESDP_2: source contacts must be at least 0.15 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_4_ESDP_4</name>
+   <description>ESDN_4_ESDP_4: drain SAB must overlap the gate by at least 0.05 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_5_ESDP_5</name>
+   <description>ESDN_5_ESDP_5: the drain SAB hole must be at least 1.29 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_6_ESDP_6</name>
+   <description>ESDN_6_ESDP_6: drain contacts must be enclosed by the drain SAB hole by 0.21 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_7_ESDP_7</name>
+   <description>ESDN_7_ESDP_7: drain SAB must extend 0.21 um beyond the drain active on non-gate sides [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_8_ESDP_8</name>
+   <description>ESDN_8_ESDP_8: the drain SAB hole must be enclosed by the drain active by 1.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_9</name>
+   <description>ESDN_9: the ESD implant must be at least 0.4 um from the gate [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_10</name>
+   <description>ESDN_10: the ESD implant must be enclosed by the drain active by 0.4 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_11</name>
+   <description>ESDN_11: the ESD implant must not overlap the ESD gate poly [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_12</name>
+   <description>ESDN_12: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_9</name>
+   <description>ESDP_9: ESD finger width must be at most 40.0 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDN_3</name>
+   <description>ESDN_3: 3.3V ESD NMOS channel length must be at least 0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>ESDP_3</name>
+   <description>ESDP_3: 3.3V ESD PMOS channel length must be 0.4..0.5 um [Calibre source]</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>TOP</name>
+   <variant/>
+   <layout-name/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+  <item>
+   <tags/>
+   <category>T4M1_W_1</category>
+   <cell>TOP</cell>
+   <visited>false</visited>
+   <multiplicity>1</multiplicity>
+   <comment/>
+   <image/>
+   <values>
+    <value>edge-pair: (0,0;0,2)|(0.3,2;0.3,0)</value>
+   </values>
+  </item>
+ </items>
+</report-database>

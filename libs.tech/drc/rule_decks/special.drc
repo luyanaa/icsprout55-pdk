@@ -23,12 +23,17 @@
 #   DUP_CHECK=YES        : DEUPAD_R_2, DEUPAD_R_3, DEUPAD_R_5, DEUPAD_R_6,
 #                          DEUPAD_R_7
 #   ESD geometry         : ESD_W_1, ESD_S_1, ESD_A_1, ESD_A_2
+#   ESD device rules     : ESDN_1..ESDN_12, ESDP_3, ESDP_9, plus the
+#                          recommended ESDN_13_R / ESDP_10_R
 #   CHIPEDGE_CHECK=YES   : CHIPEDGE_EN_1, CHIPEDGE_EN_2, CHIPEDGE_EN_3
+#
+# LATCH_UP_CHECK rules are implemented in feol/12_latchup.drc (IO-pad device
+# classes approximated from gate oxide; see that module).
 #
 # Rules are emitted only when the source geometry and exclusions survive the
 # mapping. Calibre ABUT/SINGULAR/ENCLOSE qualifiers are not always represented
 # (see each rule); device, connectivity, and Calibre-only edge/sizing
-# semantics are listed below as omitted.
+# semantics are described next to each rule.
 # No marker here may be presented as a Calibre-equivalent signoff result.
 #=========================================================================================
 
@@ -202,7 +207,7 @@ if SPECIAL
   # interacting EGATE.  The source ABUT<90 / SINGULAR / OPPOSITE qualifiers
   # and the INSIDE EDGE finger-width filter are not represented; each
   # emitted category is the primary threshold of its source RULECHECK.
-  # ESDN_13_R / ESDP_10_R remain omitted, see the note below.
+  # ESDN_13_R / ESDP_10_R use a merged-POLY grouping proxy, see below.
   #-----------------------------------------------------------------------------------------
   esd_ct_act_enc = rval('esd_ct_act_enc')
   esd_ct_gate_space = rval('esd_ct_gate_space')
@@ -322,6 +327,38 @@ if SPECIAL
   esd_p_w.with_length((esd_finger_width_max + grid).um, 1e9.um).not_inside(NODRC).output('ESDP_9',
     "ESDP_9: ESD finger width must be at most #{esd_finger_width_max} um [Calibre source]")
 
+  # ESDN_13_R / ESDP_10_R: total channel width per ESD drain connection. The
+  # source uses NET AREA RATIO over ENGATE_D_EMPTY/EPGATE_D_EMPTY with the
+  # ESD3C channel strips. KLayout DRC has no net extraction, so fingers are
+  # grouped by merged POLY polygon (the gate bus of one device) and the channel
+  # width is taken from the gate edges coincident with PO. Nets joined only by
+  # metal across separate poly buses are checked separately (tighter), and
+  # only SAB-covered fingers are counted (source NOT INTERACT EGATE_NOSAB).
+  esd_total_width_n = rval('esd_total_width_n')
+  esd_total_width_p = rval('esd_total_width_p')
+  esd_width_check = lambda do |gate_feet, limit_value, rule_id, label|
+    feet_region = gate_feet.data
+    poly_region = esd_egate_poly.data
+    markers = RBA::Region.new
+    poly_region.each do |poly|
+      group = feet_region.inside(RBA::Region.new(poly))
+      next if group.is_empty?
+      total_width_um = 0.0
+      group.each do |foot|
+        w_edges = RBA::Region.new(foot).edges.and(POLY.data.edges)
+        total_width_um += w_edges.length / 2.0 * grid
+      end
+      group.each { |foot| markers.insert(foot) } if total_width_um < limit_value - 0.0005
+    end
+    recommended_output.call(rule_id,
+      wrap_region.call(markers).not_inside(NODRC),
+      "recommended total #{label} ESD channel width per drain connection >= #{limit_value} um outside NODRC")
+  end
+  esd_width_check.call(esd_engate.interacting(esd_esab), esd_total_width_n,
+    'ESDN_13_R', 'NMOS')
+  esd_width_check.call(esd_epgate.interacting(esd_esab), esd_total_width_p,
+    'ESDP_10_R', 'PMOS')
+
   # ESDN_3: (EGATEHV AND ENGATE) COIN EDGE EGATE_L, LENGTH < 0.5.
   esd_hv_n = esd_egatehv.and(esd_engate)
   esd_hv_n.edges.and(esd_egate_l).with_length(0, esd_hv_nmos_length_min.um)
@@ -336,29 +373,17 @@ if SPECIAL
     "ESDP_3: 3.3V ESD PMOS channel length must be #{esd_hv_pmos_length_min}..#{esd_hv_pmos_length_max} um [Calibre source]")
 
   #-----------------------------------------------------------------------------------------
-  # Omitted source checks in the assigned sections
+  # Notes on the assigned sections
   #
-  # ESD_CHECK=YES: ESDN_13_R and ESDP_10_R are inside OPEN_RECOMMENDED_ON (NO
-  # in this profile) and additionally need Calibre NET AREA RATIO connectivity
-  # over the ESD drain net (ENGATE_D_EMPTY / EPGATE_D_EMPTY through ESD3C and
-  # the metal stack); not emitted.
+  # ESDN_13_R / ESDP_10_R are evaluated as recommended warnings with a
+  # merged-POLY finger-grouping proxy (no Calibre NET AREA RATIO connectivity).
   #
-  # LATCH_UP_CHECK=YES rules: LU_R_2, LU_W_1, LU_S_1a, LU_S_1b, LU_S_1c,
-  # LU_S_1d (both LU_3_CHECK FAST and ACCURATE forms) and LU_S_2_NTAP /
-  # LU_S_2_PTAP.  LU_R_2, LU_W_1 and LU_S_1a-d are defined on the IO-pad
-  # net classes NACT_IO_PAD / PACT_IO_PAD / NMOS_IO_PAD / PMOS_IO_PAD
-  # (lines 8734-9138).  Those classes come from Calibre net tracing of MD/CB,
-  # the metal stack, ALPA and the VDD/VSS/VCC/GND pad text, with POWER_PAD
-  # subtracted; deriving them from geometry would fabricate I/O net
-  # identification, so no LU geometry rule is emitted on a synthetic pad class.
-  # LU_W_1 additionally needs DONUT/INT with ABUT<90 SINGULAR REGION, and
-  # LU_S_1a-d need SIZE ... BEVEL and ENCLOSE-based device extraction.
-  # LU_S_2_NTAP / LU_S_2_PTAP depend on PMOS1/NMOS1 (PACT/NACT ENCLOSE GATE
-  # device recognition), the PW/PSUB/NW/DNW well topology, and
-  # "SIZE <layer> BY <d> INSIDE OF <other> STEP 0.38 BEVEL 4" growth with
-  # same-well island restriction and an INSIDE EDGE SRINGBLK waiver.  KLayout's
-  # sized()/inside() primitives have neither that corner/step model nor an
-  # equivalent same-well pickup distance measure, so a plain 35um distance check
-  # would be a different rule and is not emitted.
+  # The LATCH_UP_CHECK=YES family (LU_R_2, LU_W_1, LU_S_1a-d and
+  # LU_S_2_NTAP/PTAP) is implemented in feol/12_latchup.drc.  The source
+  # NACT_IO_PAD / PACT_IO_PAD / NMOS_IO_PAD / PMOS_IO_PAD net classes come from
+  # Calibre net tracing, so the port approximates I/O-pad devices as active
+  # under TGOX/DGOX and models the LU_S_2 tap reach with the source
+  # 5 + 30 = 35 um halo.  See that module and README for the documented
+  # approximation.
   #-----------------------------------------------------------------------------------------
 end

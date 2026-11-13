@@ -87,6 +87,25 @@ if FEOL
   SAB.edges.and(ACT.edges).not_inside(NODRC).output('SAB_R_1',
     'SAB_R_1: SAB must not share coincident edges with AA outside NODRC [Calibre source]')
 
+  # SAB_EX_4_R: AA/PO inside a wide SAB (> 10 um) must be enclosed by 0.3 um
+  # unless more than 5 poly fingers interact with that SAB. The source "WITH
+  # WIDTH > 10" is approximated by a 5 um erosion, which requires both
+  # dimensions to exceed 10 um (slightly stricter). KLayout's enclosed() only
+  # measures inner edges lying inside SAB_CHECK, so the removed >5-finger wide
+  # SABs are not reported, matching the source waiver.
+  sab_ex4_width = rval('sab_ex4_width')
+  sab_ex4_ext = rval('sab_ex4_ext')
+  sab_ex4_max_fingers = rval('sab_ex4_max_fingers')
+  wide_sab = SAB.interacting(SAB.sized(-(sab_ex4_width / 2.0).um))
+  po_in_sab = POLY.and(SAB)
+  sab_check = wide_sab.not(
+    wide_sab.interacting(po_in_sab, (sab_ex4_max_fingers + 1).round))
+  sab_ex4_inner = POLY.or(ACT).interacting(SAB)
+  recommended_output.call('SAB_EX_4_R',
+    sab_ex4_inner.drc(enclosed(sab_check) < sab_ex4_ext.um).polygons
+      .not_inside(NODRC),
+    "recommended AA/PO extension outside wide SAB >= #{sab_ex4_ext} um unless more than #{sab_ex4_max_fingers} poly fingers interact, outside NODRC")
+
   # SAB_R_2: SAB must not overlap GATE except ESD MOS.
   SAB.and(GATE).not_inside(ESDIOE).not_inside(NODRC).output('SAB_R_2',
     'SAB_R_2: SAB must not overlap GATE outside ESDIOE/NODRC [Calibre source]')

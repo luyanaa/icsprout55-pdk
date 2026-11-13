@@ -20,17 +20,12 @@
     "act_dummy_0467": 0.467,
     "act_dummy_1": 1.0,
     "act_dummy_3": 3.0,
-    "act_eol_len": 0.1,
-    "act_eol_space": 0.1,
-    "act_eol_width": 0.04,
-    "act_gate_overhang": 0.14,
     "act_hole_area": 0.08,
     "act_io_channel_width": 0.21,
     "act_l1_len": 25.0,
     "act_l1_width": 0.15,
     "act_l2_len": 0.5,
     "act_l2_width": 0.15,
-    "act_min_step": 0.03,
     "act_nw_dnw_space": 0.32,
     "act_nw_nact_pw_space": 0.15,
     "act_nw_nact_tg_space": 0.31,
@@ -125,6 +120,8 @@
     "esd_sab_hole_drain_enc": 1.0,
     "esd_sab_hole_gate_space": 1.29,
     "esd_space": 0.47,
+    "esd_total_width_n": 150.0,
+    "esd_total_width_p": 300.0,
     "esd_width": 0.47,
     "hrp_end_space": 0.3,
     "hrp_po_enc": 0.2,
@@ -145,81 +142,109 @@
     "m1_45_space": 0.19,
     "m1_45_width": 0.19,
     "m1_area": 0.042,
-    "m1_bent_width": 0.09,
     "m1_dense_eol_jog": 0.09,
     "m1_dense_eol_len": 0.11,
     "m1_dense_eol_space": 0.11,
-    "m1_eol_len": 0.1,
-    "m1_eol_space": 0.08,
-    "m1_eol_width": 0.04,
-    "m1_jog_space": 0.09,
     "m1_max_width": 12.0,
     "m1_min_hole": 0.18,
-    "m1_min_step": 0.03,
     "m1_space": 0.09,
+    "m1_space_r": 0.12,
     "m1_width": 0.09,
     "m2_45_space": 0.19,
     "m2_45_width": 0.19,
     "m2_area": 0.052,
-    "m2_bent_width": 0.1,
     "m2_dense_eol_jog": 0.1,
     "m2_dense_eol_len": 0.12,
     "m2_dense_eol_space": 0.12,
-    "m2_eol_len": 0.1,
-    "m2_eol_space": 0.09,
-    "m2_eol_width": 0.04,
-    "m2_jog_space": 0.1,
     "m2_max_width": 12.0,
     "m2_min_hole": 0.18,
-    "m2_min_step": 0.03,
     "m2_space": 0.1,
+    "m2_space_r": 0.13,
     "m2_width": 0.1,
     "m3_45_space": 0.19,
     "m3_45_width": 0.19,
     "m3_area": 0.052,
-    "m3_bent_width": 0.1,
     "m3_dense_eol_jog": 0.1,
     "m3_dense_eol_len": 0.12,
     "m3_dense_eol_space": 0.12,
-    "m3_eol_len": 0.1,
-    "m3_eol_space": 0.09,
-    "m3_eol_width": 0.04,
     "m3_max_width": 12.0,
     "m3_min_hole": 0.18,
-    "m3_min_step": 0.03,
     "m3_space": 0.1,
+    "m3_space_r": 0.13,
     "m3_width": 0.1,
     "m4_45_space": 0.19,
     "m4_45_width": 0.19,
     "m4_area": 0.052,
-    "m4_bent_width": 0.1,
     "m4_dense_eol_jog": 0.1,
     "m4_dense_eol_len": 0.12,
     "m4_dense_eol_space": 0.12,
-    "m4_eol_len": 0.1,
-    "m4_eol_space": 0.09,
-    "m4_eol_width": 0.04,
     "m4_max_width": 12.0,
     "m4_min_hole": 0.18,
-    "m4_min_step": 0.03,
     "m4_space": 0.1,
+    "m4_space_r": 0.13,
     "m4_width": 0.1,
     "m5_45_space": 0.19,
     "m5_45_width": 0.19,
     "m5_area": 0.052,
-    "m5_bent_width": 0.1,
     "m5_dense_eol_jog": 0.1,
     "m5_dense_eol_len": 0.12,
     "m5_dense_eol_space": 0.12,
-    "m5_eol_len": 0.1,
-    "m5_eol_space": 0.09,
-    "m5_eol_width": 0.04,
     "m5_max_width": 12.0,
     "m5_min_hole": 0.18,
-    "m5_min_step": 0.03,
     "m5_space": 0.1,
+    "m5_space_r": 0.13,
     "m5_width": 0.1,
+    "m6_45_space": 0.19,
+    "m6_45_width": 0.19,
+    "m6_area": 0.052,
+    "m6_dense_eol_jog": 0.1,
+    "m6_dense_eol_len": 0.12,
+    "m6_dense_eol_space": 0.12,
+    "m6_max_width": 12.0,
+    "m6_min_hole": 0.18,
+    "m6_space": 0.1,
+    "m6_space_r": 0.13,
+    "m6_width": 0.1,
+    "m7_45_space": 0.19,
+    "m7_45_width": 0.19,
+    "m7_area": 0.052,
+    "m7_dense_eol_jog": 0.1,
+    "m7_dense_eol_len": 0.12,
+    "m7_dense_eol_space": 0.12,
+    "m7_max_width": 12.0,
+    "m7_min_hole": 0.18,
+    "m7_space": 0.1,
+    "m7_space_r": 0.13,
+    "m7_width": 0.1,
+    "m8_45_space": 0.19,
+    "m8_45_width": 0.19,
+    "m8_area": 0.052,
+    "m8_dense_eol_jog": 0.1,
+    "m8_dense_eol_len": 0.12,
+    "m8_dense_eol_space": 0.12,
+    "m8_max_width": 12.0,
+    "m8_min_hole": 0.18,
+    "m8_space": 0.1,
+    "m8_space_r": 0.13,
+    "m8_width": 0.1,
     "manufacturing_grid": 0.001,
+    "metal_dum_angle_space": 0.4,
+    "metal_dum_chipblk_space": 2.5,
+    "metal_dum_dmyblk_space": 2.0,
+    "metal_dum_dumb_space": 2.0,
+    "metal_dum_fuse_space": 3.0,
+    "metal_dum_indall_space": 3.0,
+    "metal_dum_logo_space": 0.1,
+    "metal_dum_metal_space_0p22x0p89": 0.3,
+    "metal_dum_metal_space_1x1": 3.0,
+    "metal_dum_metal_space_2x2": 10.0,
+    "metal_dum_mim_space": 2.0,
+    "metal_dum_space_0p22x0p89": 0.25,
+    "metal_dum_space_1x1": 0.3,
+    "metal_dum_space_2x2": 0.8,
+    "metal_dum_wide_run": 1.5,
+    "metal_dum_wide_space": 0.6,
+    "metal_dum_wide_width": 1.5,
     "metal_dummy_1": 1.0,
     "metal_dummy_2": 2.0,
     "metal_dummy_rect_length": 0.89,
@@ -233,8 +258,6 @@
     "metal_wider_run": 1.5,
     "metal_wider_space": 0.5,
     "metal_wider_width": 1.5,
-    "min_adj": 0.05,
-    "min_corner": 0.03,
     "mom_s1_space": 0.11,
     "np_aa_enc": 0.02,
     "np_act_overlap": 0.12,
@@ -260,8 +283,52 @@
     "padm_area": 0.4,
     "padm_space": 0.4,
     "padm_width": 0.4,
+    "po_a1_r_area": 0.05,
+    "po_en1_r": 1.0,
+    "po_en2_r": 2.0,
+    "po_en3_r": 2.0,
+    "po_ex1_ext": 0.11,
+    "po_ex1_r_ext": 0.18,
+    "po_ex1_r_width": 1.0,
+    "po_ex2_ext": 0.14,
+    "po_ex3_r_ext": 0.16,
+    "po_ex3_r_space": 0.14,
+    "po_ex3_r_width": 0.15,
     "po_l1_len": 25.0,
     "po_l1_width": 0.13,
+    "po_l2_r_len": 0.21,
+    "po_l2_r_space": 0.1,
+    "po_l2_r_width": 0.15,
+    "po_r1_width": 0.01,
+    "po_r2_hrp_end": 0.3,
+    "po_s11_space": 0.05,
+    "po_s12_space": 0.25,
+    "po_s2_space": 0.18,
+    "po_s2_width": 0.13,
+    "po_s3_space": 0.13,
+    "po_s4_r_space": 0.2,
+    "po_s5_space": 0.24,
+    "po_s6_space": 0.18,
+    "po_s8_len": 0.08,
+    "po_s8_space": 1.0,
+    "po_s9_space": 0.14,
+    "po_s9_width": 0.09,
+    "po_s13_space": 0.19,
+    "po_s13_width": 0.06,
+    "po_s14_space": 0.1,
+    "po_s14_width": 0.15,
+    "po_s16_area": 630.0,
+    "po_s16_le": 0.08,
+    "po_s16_space": 1.0,
+    "po_s18_space": 1.0,
+    "po_w2_core_len": 0.06,
+    "po_w2_dg_len": 0.2,
+    "po_w2_tg_len": 0.38,
+    "po_w2c_len": 0.28,
+    "po_w2e_len": 0.22,
+    "po_w2f_n_len": 0.5,
+    "po_w2f_p_len": 0.4,
+    "po_w3_width": 0.18,
     "podum_aa_space": 0.8,
     "podum_chipblk_enc": 0.3,
     "podum_chipblk_space": 0.6,
@@ -277,16 +344,10 @@
     "podum_space_2p4": 2.6,
     "poly_act_sep": 0.05,
     "poly_area": 0.04,
-    "poly_bent_width": 0.06,
     "poly_dummy_0381": 0.381,
     "poly_dummy_092": 0.92,
     "poly_dummy_24": 2.4,
-    "poly_eol_len": 0.1,
-    "poly_eol_space": 0.1,
-    "poly_eol_width": 0.04,
-    "poly_gate_overhang": 0.06,
     "poly_gate_width": 0.06,
-    "poly_min_step": 0.03,
     "poly_space": 0.12,
     "poly_width": 0.06,
     "pp_act_overlap": 0.12,
@@ -334,6 +395,9 @@
     "sab_aa_space": 0.21,
     "sab_area": 0.8,
     "sab_ct_space": 0.21,
+    "sab_ex4_ext": 0.3,
+    "sab_ex4_max_fingers": 5,
+    "sab_ex4_width": 10.0,
     "sab_gate_esd_ovl": 0.06,
     "sab_gate_space": 0.36,
     "sab_hole_area": 0.8,
@@ -455,6 +519,24 @@
     "v4_enc_upper": 0.02,
     "v4_space": 0.11,
     "v4_width": 0.09,
+    "v5_array_space": 0.13,
+    "v5_enc_lower": 0.04,
+    "v5_enc_upper": 0.02,
+    "v5_space": 0.11,
+    "v5_width": 0.09,
+    "v6_array_space": 0.13,
+    "v6_enc_lower": 0.04,
+    "v6_enc_upper": 0.02,
+    "v6_space": 0.11,
+    "v6_width": 0.09,
+    "v7_array_space": 0.13,
+    "v7_enc_lower": 0.04,
+    "v7_enc_upper": 0.02,
+    "v7_space": 0.11,
+    "v7_width": 0.09,
+    "via_drc_enc_lower_r": 0.04,
+    "via_s2_space": 0.13,
+    "via_s3_space": 0.13,
     "via_drc_enc_upper": 0.005,
     "via_lower_all": 0.03,
     "via_lower_side": 0.0,
@@ -484,7 +566,63 @@
     "ant_rdv_core_ratio": 200,
     "ant_rdv_boost": 90,
     "ant_rdl_ratio": 1000,
-    "ant_rdl_thickness": 1.595
+    "ant_rdl_thickness": 1.595,
+    "nw_lv_space": 1.0,
+    "nw_mv_lv_space": 1.2,
+    "nw_hv_space": 0.47,
+    "nw_hv_diff_space": 1.2,
+    "dnw_nw_space": 2.35,
+    "aa_res_width": 0.4,
+    "aa_res_space": 0.18,
+    "aa_res_sab_ct": 0.21,
+    "aa_res_enc": 0.18,
+    "aa_res_ext": 0.2,
+    "nw_res_width": 1.8,
+    "nw_res_space": 0.6,
+    "nw_res_sab_ct": 0.28,
+    "nw_res_nw_space": 1.2,
+    "nw_res_enc": 0.9,
+    "nw_res_sab_enc": 0.2,
+    "nw_res_sab_nw_enc": 0.28,
+    "nw_res_ct_enc": 0.28,
+    "nw_res_ext": 0.2,
+    "nw_res_np_overlap": 0.38,
+    "nw_sti_width": 1.8,
+    "nw_sti_aa_space": 0.5,
+    "nw_sti_nw_space": 1.2,
+    "nw_sti_ct_space": 0.28,
+    "nw_sti_np_enc": 0.38,
+    "nw_sti_ct_enc": 0.28,
+    "nw_sti_ext": 0.2,
+    "nw_sti_aa_ext": 0.28,
+    "poly_res_width": 0.4,
+    "poly_res_space": 0.18,
+    "poly_res_sab_ct": 0.21,
+    "poly_res_enc": 0.18,
+    "poly_res_ext": 0.2,
+    "poly_res_sab_ext": 0.2,
+    "lu_guard_width": 0.12,
+    "lu_npmos_space_lv": 2.0,
+    "lu_npmos_space_mv": 2.3,
+    "lu_npmos_space_hv": 3.2,
+    "lu_npmos_space_3v3": 5.0,
+    "lu_tap_distance": 35.0,
+    "density_gradient_limit": 0.2,
+    "density_t8_min": 0.2,
+    "density_t8_max": 0.55,
+    "density_t8_window": 400,
+    "density_t8_window_max": 0.7,
+    "ct_s2_space": 0.12,
+    "ct_s4_r": 0.06,
+    "ct_en2_r": 0.04,
+    "ct_en3_r": 0.06,
+    "ct_en4_r_all": 0.04,
+    "ct_en4_r_dir": 0.06,
+    "act_channel_width_r": 0.15,
+    "act_space_r": 0.16,
+    "act_huge_area": 2000000.0,
+    "act_huge_space_r": 0.35,
+    "ulld_aa_far_ext": 0.12
   },
   "meta": {
     "aadum_aa_space": {
@@ -587,22 +725,6 @@
       "rule_id": "AADUM_W_1",
       "note": "AADUM permitted rectangle dimensions include 3x3 um"
     },
-    "act_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder 0.1 um line-end length; not foundry data"
-    },
-    "act_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.10 um; not foundry data"
-    },
-    "act_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
-    "act_gate_overhang": {
-      "provenance": "gds",
-      "note": "measured minimum 0.140 um (H7CR)"
-    },
     "act_hole_area": {
       "provenance": "official",
       "rule_id": "ACT_A_2",
@@ -632,10 +754,6 @@
       "provenance": "official",
       "rule_id": "ACT_L_2",
       "note": "Thin source/drain AA width selection < 0.15 um."
-    },
-    "act_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
     },
     "act_nw_dnw_space": {
       "provenance": "official",
@@ -1100,6 +1218,16 @@
       "rule_id": "ESD_S_1",
       "note": "space between two ESD1s >= 0.47um. Corrected from measured placeholder 0.47 (official: ESD_S_1: space between two ESD1s >= 0.47um. Was measured placeholder 0.4 (gds: IO library; at 0.4 search cap (>= 0.4)).)."
     },
+    "esd_total_width_n": {
+      "provenance": "official",
+      "rule_id": "ESDN_13_R",
+      "note": "Recommended total NMOS ESD channel width per drain connection >= 150 um; approximated by grouping SAB-covered ESD fingers per merged POLY polygon."
+    },
+    "esd_total_width_p": {
+      "provenance": "official",
+      "rule_id": "ESDP_10_R",
+      "note": "Recommended total PMOS ESD channel width per drain connection >= 300 um; approximated by grouping SAB-covered ESD fingers per merged POLY polygon."
+    },
     "esd_width": {
       "provenance": "official",
       "rule_id": "ESD_W_1",
@@ -1192,10 +1320,6 @@
       "provenance": "lef",
       "note": "N551P6M.lef AREA 0.042"
     },
-    "m1_bent_width": {
-      "provenance": "derived",
-      "note": "= base width; not foundry data"
-    },
     "m1_dense_eol_jog": {
       "provenance": "official",
       "rule_id": "MET1_S_5",
@@ -1211,22 +1335,6 @@
       "rule_id": "MET1_S_5",
       "note": "Dense line-end space >= 0.11um."
     },
-    "m1_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder; not foundry data"
-    },
-    "m1_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.08 um (base spacing 0.09 - 0.01); not foundry data"
-    },
-    "m1_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
-    "m1_jog_space": {
-      "provenance": "derived",
-      "note": "= base spacing; not foundry data"
-    },
     "m1_max_width": {
       "provenance": "official",
       "rule_id": "MET1_W_1",
@@ -1237,13 +1345,34 @@
       "rule_id": "MET1_A_2",
       "note": "M1 enclosed dielectric area minimum 0.18 um^2"
     },
-    "m1_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
-    },
     "m1_space": {
       "provenance": "lef",
       "note": "N551P6M.lef SPACING 0.09; measured 0.091"
+    },
+    "m1_space_r": {
+      "provenance": "official",
+      "rule_id": "MET1_S_1_R",
+      "note": "Recommended M1 space >= 0.12 um outside SRAMALL/NODRC."
+    },
+    "m2_space_r": {
+      "provenance": "official",
+      "rule_id": "M2_S_1_R",
+      "note": "Recommended M2 space >= 0.13 um outside SRAMALL/NODRC."
+    },
+    "m3_space_r": {
+      "provenance": "official",
+      "rule_id": "M3_S_1_R",
+      "note": "Recommended M3 space >= 0.13 um outside SRAMALL/NODRC."
+    },
+    "m4_space_r": {
+      "provenance": "official",
+      "rule_id": "M4_S_1_R",
+      "note": "Recommended M4 space >= 0.13 um outside NODRC."
+    },
+    "m5_space_r": {
+      "provenance": "official",
+      "rule_id": "M5_S_1_R",
+      "note": "Recommended M5 space >= 0.13 um outside NODRC."
     },
     "m1_width": {
       "provenance": "lef",
@@ -1263,10 +1392,6 @@
       "provenance": "lef",
       "note": "N551P6M.lef AREA 0.052"
     },
-    "m2_bent_width": {
-      "provenance": "derived",
-      "note": "= base width; not foundry data"
-    },
     "m2_dense_eol_jog": {
       "provenance": "official",
       "rule_id": "M2_S_5",
@@ -1282,22 +1407,6 @@
       "rule_id": "M2_S_5",
       "note": "Dense line-end space >= 0.12um."
     },
-    "m2_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder; not foundry data"
-    },
-    "m2_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
-    },
-    "m2_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
-    "m2_jog_space": {
-      "provenance": "derived",
-      "note": "= base spacing; not foundry data"
-    },
     "m2_max_width": {
       "provenance": "official",
       "rule_id": "M2_W_1b",
@@ -1307,10 +1416,6 @@
       "provenance": "official",
       "rule_id": "M2_A_2",
       "note": "M2 enclosed dielectric area minimum 0.18 um^2"
-    },
-    "m2_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
     },
     "m2_space": {
       "provenance": "lef",
@@ -1334,10 +1439,6 @@
       "provenance": "lef",
       "note": "N551P6M.lef AREA 0.052"
     },
-    "m3_bent_width": {
-      "provenance": "derived",
-      "note": "= base width; not foundry data"
-    },
     "m3_dense_eol_jog": {
       "provenance": "official",
       "rule_id": "M3_S_5",
@@ -1353,18 +1454,6 @@
       "rule_id": "M3_S_5",
       "note": "Dense line-end space >= 0.12um."
     },
-    "m3_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder; not foundry data"
-    },
-    "m3_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
-    },
-    "m3_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
     "m3_max_width": {
       "provenance": "official",
       "rule_id": "M3_W_1b",
@@ -1374,10 +1463,6 @@
       "provenance": "official",
       "rule_id": "M3_A_2",
       "note": "M3 enclosed dielectric area minimum 0.18 um^2"
-    },
-    "m3_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
     },
     "m3_space": {
       "provenance": "lef",
@@ -1401,10 +1486,6 @@
       "provenance": "lef",
       "note": "N551P6M.lef AREA 0.052"
     },
-    "m4_bent_width": {
-      "provenance": "derived",
-      "note": "= base width; not foundry data"
-    },
     "m4_dense_eol_jog": {
       "provenance": "official",
       "rule_id": "M4_S_5",
@@ -1420,18 +1501,6 @@
       "rule_id": "M4_S_5",
       "note": "Dense line-end space >= 0.12um."
     },
-    "m4_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder; not foundry data"
-    },
-    "m4_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
-    },
-    "m4_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
     "m4_max_width": {
       "provenance": "official",
       "rule_id": "M4_W_1b",
@@ -1441,10 +1510,6 @@
       "provenance": "official",
       "rule_id": "M4_A_2",
       "note": "M4 enclosed dielectric area minimum 0.18 um^2"
-    },
-    "m4_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
     },
     "m4_space": {
       "provenance": "lef",
@@ -1468,10 +1533,6 @@
       "provenance": "lef",
       "note": "N551P6M.lef AREA 0.052"
     },
-    "m5_bent_width": {
-      "provenance": "derived",
-      "note": "= base width; not foundry data"
-    },
     "m5_dense_eol_jog": {
       "provenance": "official",
       "rule_id": "M5_S_5",
@@ -1487,18 +1548,6 @@
       "rule_id": "M5_S_5",
       "note": "Dense line-end space >= 0.12um."
     },
-    "m5_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder; not foundry data"
-    },
-    "m5_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.09 um (base spacing 0.1 - 0.01); not foundry data"
-    },
-    "m5_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
     "m5_max_width": {
       "provenance": "official",
       "rule_id": "M5_W_1b",
@@ -1509,10 +1558,6 @@
       "rule_id": "M5_A_2",
       "note": "M5 enclosed dielectric area minimum 0.18 um^2"
     },
-    "m5_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
-    },
     "m5_space": {
       "provenance": "lef",
       "note": "N551P6M.lef SPACING 0.1"
@@ -1521,9 +1566,259 @@
       "provenance": "lef",
       "note": "N551P6M.lef WIDTH 0.1"
     },
+    "m6_45_space": {
+      "provenance": "official",
+      "rule_id": "M6_S_4",
+      "note": "Space to 45-degree metal >= 0.19um. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_45_width": {
+      "provenance": "official",
+      "rule_id": "M6_W_2",
+      "note": "45-degree metal width >= 0.19um. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_area": {
+      "provenance": "lef",
+      "note": "N551P6M.lef AREA 0.052 Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6].",
+      "rule_id": "M6_A_1"
+    },
+    "m6_dense_eol_jog": {
+      "provenance": "official",
+      "rule_id": "M6_S_5",
+      "note": "Small-jog exemption edge length < 0.10um. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_dense_eol_len": {
+      "provenance": "official",
+      "rule_id": "M6_S_5",
+      "note": "Dense line-end edge length < 0.12um. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_dense_eol_space": {
+      "provenance": "official",
+      "rule_id": "M6_S_5",
+      "note": "Dense line-end space >= 0.12um. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_max_width": {
+      "provenance": "official",
+      "rule_id": "M6_W_1b",
+      "note": "Maximum metal width 12um. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_min_hole": {
+      "provenance": "official",
+      "rule_id": "M6_A_2",
+      "note": "M5 enclosed dielectric area minimum 0.18 um^2 Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_space": {
+      "provenance": "lef",
+      "note": "N551P6M.lef SPACING 0.1 Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6].",
+      "rule_id": "M6_S_1"
+    },
+    "m6_space_r": {
+      "provenance": "official",
+      "rule_id": "M6_S_1_R",
+      "note": "Recommended M5 space >= 0.13 um outside NODRC. Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6]."
+    },
+    "m6_width": {
+      "provenance": "lef",
+      "note": "N551P6M.lef WIDTH 0.1 Off-stack M6 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[6].",
+      "rule_id": "M6_W_1a"
+    },
+    "m7_45_space": {
+      "provenance": "official",
+      "rule_id": "M7_S_4",
+      "note": "Space to 45-degree metal >= 0.19um. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_45_width": {
+      "provenance": "official",
+      "rule_id": "M7_W_2",
+      "note": "45-degree metal width >= 0.19um. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_area": {
+      "provenance": "lef",
+      "note": "N551P6M.lef AREA 0.052 Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7].",
+      "rule_id": "M7_A_1"
+    },
+    "m7_dense_eol_jog": {
+      "provenance": "official",
+      "rule_id": "M7_S_5",
+      "note": "Small-jog exemption edge length < 0.10um. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_dense_eol_len": {
+      "provenance": "official",
+      "rule_id": "M7_S_5",
+      "note": "Dense line-end edge length < 0.12um. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_dense_eol_space": {
+      "provenance": "official",
+      "rule_id": "M7_S_5",
+      "note": "Dense line-end space >= 0.12um. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_max_width": {
+      "provenance": "official",
+      "rule_id": "M7_W_1b",
+      "note": "Maximum metal width 12um. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_min_hole": {
+      "provenance": "official",
+      "rule_id": "M7_A_2",
+      "note": "M5 enclosed dielectric area minimum 0.18 um^2 Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_space": {
+      "provenance": "lef",
+      "note": "N551P6M.lef SPACING 0.1 Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7].",
+      "rule_id": "M7_S_1"
+    },
+    "m7_space_r": {
+      "provenance": "official",
+      "rule_id": "M7_S_1_R",
+      "note": "Recommended M5 space >= 0.13 um outside NODRC. Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7]."
+    },
+    "m7_width": {
+      "provenance": "lef",
+      "note": "N551P6M.lef WIDTH 0.1 Off-stack M7 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[7].",
+      "rule_id": "M7_W_1a"
+    },
+    "m8_45_space": {
+      "provenance": "official",
+      "rule_id": "M8_S_4",
+      "note": "Space to 45-degree metal >= 0.19um. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_45_width": {
+      "provenance": "official",
+      "rule_id": "M8_W_2",
+      "note": "45-degree metal width >= 0.19um. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_area": {
+      "provenance": "lef",
+      "note": "N551P6M.lef AREA 0.052 Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8].",
+      "rule_id": "M8_A_1"
+    },
+    "m8_dense_eol_jog": {
+      "provenance": "official",
+      "rule_id": "M8_S_5",
+      "note": "Small-jog exemption edge length < 0.10um. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_dense_eol_len": {
+      "provenance": "official",
+      "rule_id": "M8_S_5",
+      "note": "Dense line-end edge length < 0.12um. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_dense_eol_space": {
+      "provenance": "official",
+      "rule_id": "M8_S_5",
+      "note": "Dense line-end space >= 0.12um. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_max_width": {
+      "provenance": "official",
+      "rule_id": "M8_W_1b",
+      "note": "Maximum metal width 12um. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_min_hole": {
+      "provenance": "official",
+      "rule_id": "M8_A_2",
+      "note": "M5 enclosed dielectric area minimum 0.18 um^2 Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_space": {
+      "provenance": "lef",
+      "note": "N551P6M.lef SPACING 0.1 Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8].",
+      "rule_id": "M8_S_1"
+    },
+    "m8_space_r": {
+      "provenance": "official",
+      "rule_id": "M8_S_1_R",
+      "note": "Recommended M5 space >= 0.13 um outside NODRC. Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8]."
+    },
+    "m8_width": {
+      "provenance": "lef",
+      "note": "N551P6M.lef WIDTH 0.1 Off-stack M8 thin-metal loop value (same as the M2-M8 vendor loop); enabled only when CHECK_M[8].",
+      "rule_id": "M8_W_1a"
+    },
     "manufacturing_grid": {
       "provenance": "lef",
       "note": "MANUFACTURINGGRID 0.001 (N551P6M.lef)"
+    },
+    "metal_dum_angle_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_8 through M5DUM_S_8",
+      "note": "MET1-MET5 dummy to 45-degree metal spacing 0.4 um"
+    },
+    "metal_dum_chipblk_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_13 through M5DUM_S_13",
+      "note": "MET1-MET5 dummy to chip boundary spacing and enclosure 2.5 um"
+    },
+    "metal_dum_dmyblk_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_15 through M5DUM_S_15",
+      "note": "MET1-MET5 dummy to DMYBLK spacing 2.0 um"
+    },
+    "metal_dum_dumb_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_14 through M5DUM_S_14",
+      "note": "MET1-MET5 dummy to MnDUMB spacing 2.0 um"
+    },
+    "metal_dum_fuse_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_9 through M5DUM_S_9",
+      "note": "MET1-MET5 dummy to FUSEALL spacing and enclosure 3.0 um"
+    },
+    "metal_dum_indall_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_12 through M5DUM_S_12",
+      "note": "MET1-MET5 dummy to INDALL spacing and enclosure 3.0 um"
+    },
+    "metal_dum_logo_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_11 through M5DUM_S_11",
+      "note": "MET1-MET5 dummy to LOGO spacing and enclosure 0.1 um"
+    },
+    "metal_dum_metal_space_0p22x0p89": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_6 through M5DUM_S_6",
+      "note": "MET1-MET5 0.22x0.89 um dummy to metal spacing 0.3 um"
+    },
+    "metal_dum_metal_space_1x1": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_4 through M5DUM_S_4",
+      "note": "MET1-MET5 1x1 um dummy to metal spacing 3.0 um"
+    },
+    "metal_dum_metal_space_2x2": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_2 through M5DUM_S_2",
+      "note": "MET1-MET5 2x2 um dummy to metal spacing 10.0 um"
+    },
+    "metal_dum_mim_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_10 through M5DUM_S_10",
+      "note": "MET1-MET5 dummy to BMIM spacing and enclosure 2.0 um"
+    },
+    "metal_dum_space_0p22x0p89": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_5 through M5DUM_S_5",
+      "note": "MET1-MET5 0.22x0.89 um dummy spacing 0.25 um outside INDALL/NODRC"
+    },
+    "metal_dum_space_1x1": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_3 through M5DUM_S_3",
+      "note": "MET1-MET5 1x1 um dummy spacing 0.3 um outside INDALL/NODRC"
+    },
+    "metal_dum_space_2x2": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_1 through M5DUM_S_1",
+      "note": "MET1-MET5 2x2 um dummy spacing 0.8 um outside INDALL/NODRC"
+    },
+    "metal_dum_wide_run": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_7 through M5DUM_S_7",
+      "note": "MET1-MET5 wide dummy minimum run 1.5 um"
+    },
+    "metal_dum_wide_space": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_7 through M5DUM_S_7",
+      "note": "MET1-MET5 wide dummy spacing 0.6 um"
+    },
+    "metal_dum_wide_width": {
+      "provenance": "official",
+      "rule_id": "M1DUM_S_7 through M5DUM_S_7",
+      "note": "MET1-MET5 wide dummy minimum width 1.5 um"
     },
     "metal_dummy_1": {
       "provenance": "official",
@@ -1589,14 +1884,6 @@
       "provenance": "official",
       "rule_id": "MET1_S_3",
       "note": "Extra-wide-metal spacing applies when one or both metal widths >= 1.5um."
-    },
-    "min_adj": {
-      "provenance": "derived",
-      "note": "empirical placeholder (user); not foundry data"
-    },
-    "min_corner": {
-      "provenance": "derived",
-      "note": "empirical placeholder (user); not foundry data"
     },
     "mom_s1_space": {
       "provenance": "official",
@@ -1717,6 +2004,61 @@
       "provenance": "gds",
       "note": "IO library; at 0.4 search cap (>= 0.4)"
     },
+    "po_a1_r_area": {
+      "provenance": "official",
+      "rule_id": "PO_A_1_R",
+      "note": "Recommended non-gate POLY area >= 0.05 um^2 outside SRAMALL/NODRC."
+    },
+    "po_en1_r": {
+      "provenance": "official",
+      "rule_id": "PO_EN_1_R",
+      "note": "Recommended core PMOS gate enclosure by NW outside TG >= 1.0 um outside SRAMALL/NODRC."
+    },
+    "po_en2_r": {
+      "provenance": "official",
+      "rule_id": "PO_EN_2_R",
+      "note": "Recommended IO NMOS gate enclosure by TG outside NW >= 2.0 um outside NODRC."
+    },
+    "po_en3_r": {
+      "provenance": "official",
+      "rule_id": "PO_EN_3_R",
+      "note": "Recommended IO PMOS gate enclosure by TG inside NW >= 2.0 um outside NODRC."
+    },
+    "po_ex1_ext": {
+      "provenance": "official",
+      "rule_id": "PO_EX_1",
+      "note": "AA extension outside PO >= 0.11 um outside SRAMALL/INDALL/NODRC."
+    },
+    "po_ex1_r_ext": {
+      "provenance": "official",
+      "rule_id": "PO_EX_1_R",
+      "note": "Recommended AA extension outside wide-gate POLY >= 0.18 um outside SRAMALL/INDALL/NODRC."
+    },
+    "po_ex1_r_width": {
+      "provenance": "official",
+      "rule_id": "PO_EX_1_R",
+      "note": "Wide-gate selection: channel width (GATE edges inside AA) >= 1.0 um."
+    },
+    "po_ex2_ext": {
+      "provenance": "official",
+      "rule_id": "PO_EX_2",
+      "note": "PO end-cap extension outside AA >= 0.14 um outside SRAMALL/LDMOS/NODRC."
+    },
+    "po_ex3_r_ext": {
+      "provenance": "official",
+      "rule_id": "PO_EX_3_R",
+      "note": "Recommended PO end-cap extension of AA >= 0.16 um outside SRAMALL/NODRC."
+    },
+    "po_ex3_r_space": {
+      "provenance": "official",
+      "rule_id": "PO_EX_3_R",
+      "note": "L-shape PO-to-AA space qualifier < 0.14 um for the end-cap rule (the port checks all wide gates, which is tighter)."
+    },
+    "po_ex3_r_width": {
+      "provenance": "official",
+      "rule_id": "PO_EX_3_R",
+      "note": "Gate channel width selection >= 0.15 um."
+    },
     "po_l1_len": {
       "provenance": "official",
       "rule_id": "PO_L_1",
@@ -1726,6 +2068,171 @@
       "provenance": "official",
       "rule_id": "PO_L_1",
       "note": "Thin-PO and thin-channel width selection < 0.13 um."
+    },
+    "po_l2_r_len": {
+      "provenance": "official",
+      "rule_id": "PO_L_2_R",
+      "note": "Recommended maximum L-shape AA leg length near PO >= 0.21 um; approximated by a corner-edge proxy."
+    },
+    "po_l2_r_space": {
+      "provenance": "official",
+      "rule_id": "PO_L_2_R",
+      "note": "AA-to-PO space qualifier < 0.1 um for the L-shape length rule."
+    },
+    "po_l2_r_width": {
+      "provenance": "official",
+      "rule_id": "PO_L_2_R",
+      "note": "Gate channel width selection >= 0.15 um."
+    },
+    "po_r1_width": {
+      "provenance": "official",
+      "rule_id": "PO_R_1",
+      "note": "Bent-PO-on-AA waiver for (AA AND PO) patterns with width <= 0.01 um."
+    },
+    "po_r2_hrp_end": {
+      "provenance": "official",
+      "rule_id": "PO_R_2",
+      "note": "High-res poly resistor end halo 0.3 um; the resistor body (PO_MID) is exempt from the NP/PP enclosure."
+    },
+    "po_s11_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_11",
+      "note": "AA-to-PO space on STI >= 0.05 um outside SRAMALL/INDALL/NODRC."
+    },
+    "po_s12_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_12",
+      "note": "PO-to-PO space inside SAB >= 0.25 um outside NODRC."
+    },
+    "po_s2_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_2",
+      "note": "PO-to-PO space >= 0.18 um when one PO is wider than 0.13 um and the parallel run is longer than 0.18 um."
+    },
+    "po_s2_width": {
+      "provenance": "official",
+      "rule_id": "PO_S_2",
+      "note": "Wide-PO selection > 0.13 um."
+    },
+    "po_s3_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_3",
+      "note": "PO-on-AA space >= 0.13 um outside INDALL/NODRC."
+    },
+    "po_s4_r_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_4_R",
+      "note": "Recommended PO-on-AA space >= 0.2 um where a contact lies between the POs; CONNECTED qualifier not reproduced (all pairs checked, tighter)."
+    },
+    "po_s5_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_5",
+      "note": "PO-on-AA space inside TG >= 0.24 um where a contact lies between the POs, outside INDALL/SRAMALL/NODRC."
+    },
+    "po_s6_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_6",
+      "note": "45-degree field-PO to PO space >= 0.18 um outside EFUSEALL/FUSEALL/NODRC."
+    },
+    "po_s8_len": {
+      "provenance": "official",
+      "rule_id": "PO_S_8_R",
+      "note": "Short-channel gate selection: channel length <= 0.08 um."
+    },
+    "po_s8_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_8_R",
+      "note": "Recommended neighboring poly distance for short-channel gates <= 1.0 um."
+    },
+    "po_s9_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_9",
+      "note": "Dense line-end PO space >= 0.14 um outside SRAMALL/NODRC."
+    },
+    "po_s9_width": {
+      "provenance": "official",
+      "rule_id": "PO_S_9",
+      "note": "Narrow line-end PO selection < 0.09 um."
+    },
+    "po_s13_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_13_R",
+      "note": "Recommended gate-to-poly space for 0.06 um gates >= 0.19 um."
+    },
+    "po_s13_width": {
+      "provenance": "official",
+      "rule_id": "PO_S_13_R",
+      "note": "Sensitive-circuit gate width selection: GATE width equal to 0.06 um."
+    },
+    "po_s14_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_14 / PO_S_15 / PO_S_14a_R",
+      "note": "L-shape AA-to-PO space inside the same MOS <= 0.1 um; used by the mandatory and recommended channel-width split."
+    },
+    "po_s14_width": {
+      "provenance": "official",
+      "rule_id": "PO_S_14 / PO_S_15 / PO_S_14a_R",
+      "note": "Channel-width split: narrow (D15) below 0.15 um, wide (U15) at or above 0.15 um."
+    },
+    "po_s16_area": {
+      "provenance": "official",
+      "rule_id": "PO_S_16",
+      "note": "Large-PO area >= 630 um^2. The source also requires > 70% PO density in 30x30 windows; that qualifier is dropped (stricter)."
+    },
+    "po_s16_le": {
+      "provenance": "official",
+      "rule_id": "PO_S_16",
+      "note": "Narrow-gate selection: channel length <= 0.08 um."
+    },
+    "po_s16_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_16",
+      "note": "Large PO to narrow gate space >= 1.0 um outside NODRC."
+    },
+    "po_s18_space": {
+      "provenance": "official",
+      "rule_id": "PO_S_18_R",
+      "note": "Recommended core NMOS gate space to TG/NW/PSUB >= 1.0 um outside SRAMALL/NODRC."
+    },
+    "po_w2_core_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2a",
+      "note": "Core 0.9/1.2V channel length >= 0.06 um outside NODRC."
+    },
+    "po_w2_dg_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2b",
+      "note": "1.8V DG channel length >= 0.20 um outside SRAMALL/NODRC."
+    },
+    "po_w2_tg_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2d",
+      "note": "3.3V TG NMOS/PMOS channel length >= 0.38 um outside SRAMALL/NODRC."
+    },
+    "po_w2c_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2c",
+      "note": "IO 1825 only: 2.5V channel length (outside UD) >= 0.28 um."
+    },
+    "po_w2e_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2e",
+      "note": "IO 1825 only: under-drive 2.5V channel length >= 0.22 um."
+    },
+    "po_w2f_n_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2f",
+      "note": "IO 1825 only: over-drive 2.5V NMOS channel length >= 0.50 um."
+    },
+    "po_w2f_p_len": {
+      "provenance": "official",
+      "rule_id": "PO_W_2f",
+      "note": "IO 1825 only: over-drive 2.5V PMOS channel length >= 0.40 um."
+    },
+    "po_w3_width": {
+      "provenance": "official",
+      "rule_id": "PO_W_3",
+      "note": "45-degree field-PO width >= 0.18 um outside NODRC."
     },
     "podum_aa_space": {
       "provenance": "official",
@@ -1801,10 +2308,6 @@
       "rule_id": "PO_A_1",
       "note": "Source body: AREA PO < 0.04, then NOT INSIDE SRAMALL and NODRC. The released-GDS measurement remains 0.0388 um^2; KLayout uses the source threshold and full-containment marker waivers. Calibre differential is unverified."
     },
-    "poly_bent_width": {
-      "provenance": "derived",
-      "note": "= base width; not foundry data"
-    },
     "poly_dummy_0381": {
       "provenance": "official",
       "rule_id": "PODUM_W_1",
@@ -1820,29 +2323,9 @@
       "rule_id": "PODUM_W_1",
       "note": "PODUM permitted rectangle dimensions include 2.4x2.4 um"
     },
-    "poly_eol_len": {
-      "provenance": "derived",
-      "note": "placeholder; not foundry data"
-    },
-    "poly_eol_space": {
-      "provenance": "derived",
-      "note": "placeholder 0.1 um (base spacing 0.11 - 0.01); not foundry data"
-    },
-    "poly_eol_width": {
-      "provenance": "derived",
-      "note": "placeholder 0.04 um line-end width; not foundry data"
-    },
-    "poly_gate_overhang": {
-      "provenance": "derived",
-      "note": "placeholder 0.060 um; drawn minimum measured 0.110 um (H7CR), too large as a rule"
-    },
     "poly_gate_width": {
       "provenance": "gds",
       "note": "gate length = CDL L=60n; measured 0.061"
-    },
-    "poly_min_step": {
-      "provenance": "derived",
-      "note": "placeholder 0.03 um; drawn steps >= 5nm, sub-30nm jog artifacts removed by initial smoothing"
     },
     "poly_space": {
       "provenance": "official",
@@ -2074,6 +2557,21 @@
       "provenance": "official",
       "rule_id": "SAB_S_6",
       "note": "Space between SAB and CT >= 0.21 um."
+    },
+    "sab_ex4_ext": {
+      "provenance": "official",
+      "rule_id": "SAB_EX_4_R",
+      "note": "Recommended AA/PO extension outside wide SAB >= 0.3 um outside NODRC."
+    },
+    "sab_ex4_max_fingers": {
+      "provenance": "official",
+      "rule_id": "SAB_EX_4_R",
+      "note": "Waiver when more than 5 poly fingers interact with the SAB."
+    },
+    "sab_ex4_width": {
+      "provenance": "official",
+      "rule_id": "SAB_EX_4_R",
+      "note": "Wide-SAB selection: SAB width > 10 um."
     },
     "sab_gate_esd_ovl": {
       "provenance": "official",
@@ -2662,10 +3160,91 @@
       "provenance": "lef",
       "note": "N551P6M.lef VIA4 WIDTH 0.09"
     },
+    "v5_array_space": {
+      "provenance": "lef",
+      "note": "VIARULE MET5_MET4 SPACING 0.13 BY 0.13 Off-stack V5 via loop value (same as V1-V4); enabled only when CHECK_V[5]."
+    },
+    "v5_enc_lower": {
+      "provenance": "official",
+      "rule_id": "V4_EN_2a_2b_2c",
+      "note": "Directional 0/0.04 opposite pairs OR 0.03 all sides; see V1 metadata. Off-stack V5 via loop value (same as V1-V4); enabled only when CHECK_V[5]."
+    },
+    "v5_enc_upper": {
+      "provenance": "official",
+      "rule_id": "V4_EN_5a_5b",
+      "note": "Directional 0.005/0.02 opposite pairs; see V1 metadata. Off-stack V5 via loop value (same as V1-V4); enabled only when CHECK_V[5]."
+    },
+    "v5_space": {
+      "provenance": "lef",
+      "note": "N551P6M.lef VIA4 SPACING 0.11 Off-stack V5 via loop value (same as V1-V4); enabled only when CHECK_V[5]."
+    },
+    "v5_width": {
+      "provenance": "lef",
+      "note": "N551P6M.lef VIA4 WIDTH 0.09 Off-stack V5 via loop value (same as V1-V4); enabled only when CHECK_V[5]."
+    },
+    "v6_array_space": {
+      "provenance": "lef",
+      "note": "VIARULE MET5_MET4 SPACING 0.13 BY 0.13 Off-stack V6 via loop value (same as V1-V4); enabled only when CHECK_V[6]."
+    },
+    "v6_enc_lower": {
+      "provenance": "official",
+      "rule_id": "V4_EN_2a_2b_2c",
+      "note": "Directional 0/0.04 opposite pairs OR 0.03 all sides; see V1 metadata. Off-stack V6 via loop value (same as V1-V4); enabled only when CHECK_V[6]."
+    },
+    "v6_enc_upper": {
+      "provenance": "official",
+      "rule_id": "V4_EN_5a_5b",
+      "note": "Directional 0.005/0.02 opposite pairs; see V1 metadata. Off-stack V6 via loop value (same as V1-V4); enabled only when CHECK_V[6]."
+    },
+    "v6_space": {
+      "provenance": "lef",
+      "note": "N551P6M.lef VIA4 SPACING 0.11 Off-stack V6 via loop value (same as V1-V4); enabled only when CHECK_V[6]."
+    },
+    "v6_width": {
+      "provenance": "lef",
+      "note": "N551P6M.lef VIA4 WIDTH 0.09 Off-stack V6 via loop value (same as V1-V4); enabled only when CHECK_V[6]."
+    },
+    "v7_array_space": {
+      "provenance": "lef",
+      "note": "VIARULE MET5_MET4 SPACING 0.13 BY 0.13 Off-stack V7 via loop value (same as V1-V4); enabled only when CHECK_V[7]."
+    },
+    "v7_enc_lower": {
+      "provenance": "official",
+      "rule_id": "V4_EN_2a_2b_2c",
+      "note": "Directional 0/0.04 opposite pairs OR 0.03 all sides; see V1 metadata. Off-stack V7 via loop value (same as V1-V4); enabled only when CHECK_V[7]."
+    },
+    "v7_enc_upper": {
+      "provenance": "official",
+      "rule_id": "V4_EN_5a_5b",
+      "note": "Directional 0.005/0.02 opposite pairs; see V1 metadata. Off-stack V7 via loop value (same as V1-V4); enabled only when CHECK_V[7]."
+    },
+    "v7_space": {
+      "provenance": "lef",
+      "note": "N551P6M.lef VIA4 SPACING 0.11 Off-stack V7 via loop value (same as V1-V4); enabled only when CHECK_V[7]."
+    },
+    "v7_width": {
+      "provenance": "lef",
+      "note": "N551P6M.lef VIA4 WIDTH 0.09 Off-stack V7 via loop value (same as V1-V4); enabled only when CHECK_V[7]."
+    },
+    "via_drc_enc_lower_r": {
+      "provenance": "official",
+      "rule_id": "V1_2a_R_2b_R",
+      "note": "V1-V4 recommended lower-metal enclosure >= 0.04 um on all sides (0.07 um on two opposite sides is the source's alternative branch)."
+    },
     "via_drc_enc_upper": {
       "provenance": "official",
       "rule_id": "V1_EN_5a_5b",
       "note": "V1-V4 generic full upper-metal enclosure minimum 0.005 um. The conditional GOOD opposite-edge 0.02 um branch remains unrepresented."
+    },
+    "via_s2_space": {
+      "provenance": "official",
+      "rule_id": "V1_S_2",
+      "note": "V1-V4 spacing between vias inside the same 0.24 um cluster envelope >= 0.13 um"
+    },
+    "via_s3_space": {
+      "provenance": "official",
+      "rule_id": "V1_S_3",
+      "note": "V1-V4 spacing between unconnected vias >= 0.13 um (source NOT CONNECTED approximated by all-pairs)"
     },
     "vt_aa_gate_ext": {
       "provenance": "official",
@@ -2796,6 +3375,286 @@
       "provenance": "official",
       "rule_id": "AR_8_12",
       "note": "RDL_thickness=1.595 um from the frozen antenna profile."
+    },
+    "nw_lv_space": {
+      "provenance": "official",
+      "rule_id": "NW1_S_2",
+      "note": "LV NW to LV NW different-net spacing."
+    },
+    "nw_mv_lv_space": {
+      "provenance": "official",
+      "rule_id": "NW1_S_3",
+      "note": "LV NW to MV/HV NW different-net spacing."
+    },
+    "nw_hv_space": {
+      "provenance": "official",
+      "rule_id": "NW1_S_4",
+      "note": "MV/HV NW same-net spacing."
+    },
+    "nw_hv_diff_space": {
+      "provenance": "official",
+      "rule_id": "NW1_S_5",
+      "note": "MV/HV NW different-net spacing."
+    },
+    "dnw_nw_space": {
+      "provenance": "official",
+      "rule_id": "DNW_S_2a",
+      "note": "DNW to NW different-net spacing."
+    },
+    "aa_res_width": {
+      "provenance": "official",
+      "rule_id": "AAres_W_1",
+      "note": "Non-silicide AA resistor width."
+    },
+    "aa_res_space": {
+      "provenance": "official",
+      "rule_id": "AAres_S_1_NP..HRP",
+      "note": "AA resistor to unrelated implant spacing."
+    },
+    "aa_res_sab_ct": {
+      "provenance": "official",
+      "rule_id": "AAres_S_2",
+      "note": "SAB to CT spacing at an AA resistor."
+    },
+    "aa_res_enc": {
+      "provenance": "official",
+      "rule_id": "AAres_EN_1",
+      "note": "NP/PP enclosure of resistor AA."
+    },
+    "aa_res_ext": {
+      "provenance": "official",
+      "rule_id": "AAres_EX_1",
+      "note": "AARES extension outside the non-silicide resistor."
+    },
+    "nw_res_width": {
+      "provenance": "official",
+      "rule_id": "NWresAA_W_1",
+      "note": "SAB-covered NW resistor width."
+    },
+    "nw_res_space": {
+      "provenance": "official",
+      "rule_id": "NWresAA_S_1",
+      "note": "NW resistor NW to unrelated implant/NW spacing."
+    },
+    "nw_res_sab_ct": {
+      "provenance": "official",
+      "rule_id": "NWresAA_S_2",
+      "note": "SAB to CT spacing at an NW resistor."
+    },
+    "nw_res_nw_space": {
+      "provenance": "official",
+      "rule_id": "NWresAA_S_3",
+      "note": "NW resistor to NW spacing."
+    },
+    "nw_res_enc": {
+      "provenance": "official",
+      "rule_id": "NWresAA_EN_1",
+      "note": "AA enclosure of the NW resistor body."
+    },
+    "nw_res_sab_enc": {
+      "provenance": "official",
+      "rule_id": "NWresAA_EN_2",
+      "note": "SAB enclosure of resistor AA."
+    },
+    "nw_res_sab_nw_enc": {
+      "provenance": "official",
+      "rule_id": "NWresAA_EN_3",
+      "note": "SAB and NW enclosure of SAB holes."
+    },
+    "nw_res_ct_enc": {
+      "provenance": "official",
+      "rule_id": "NWresAA_EN_4",
+      "note": "NW enclosure of NW resistor contacts."
+    },
+    "nw_res_ext": {
+      "provenance": "official",
+      "rule_id": "NWresAA_EX_1",
+      "note": "NW1res extension outside AA."
+    },
+    "nw_res_np_overlap": {
+      "provenance": "official",
+      "rule_id": "NWresAA_O_1",
+      "note": "NP/SAB overlap width inside the resistor NW."
+    },
+    "nw_sti_width": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_W_1",
+      "note": "NW STI resistor width."
+    },
+    "nw_sti_aa_space": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_S_1",
+      "note": "NW STI resistor to adjacent AA spacing."
+    },
+    "nw_sti_nw_space": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_S_3",
+      "note": "NW STI resistor to NW spacing."
+    },
+    "nw_sti_ct_space": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_EN_1",
+      "note": "AA to CT spacing at STI resistor contacts."
+    },
+    "nw_sti_np_enc": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_EN_2",
+      "note": "NP enclosure of NW STI resistor AA."
+    },
+    "nw_sti_ct_enc": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_EN_3",
+      "note": "NW enclosure of STI resistor contacts."
+    },
+    "nw_sti_ext": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_EX_1",
+      "note": "NW1res extension outside NW."
+    },
+    "nw_sti_aa_ext": {
+      "provenance": "official",
+      "rule_id": "NWresSTI_EX_2",
+      "note": "AA extension outside the NW STI resistor."
+    },
+    "poly_res_width": {
+      "provenance": "official",
+      "rule_id": "POLYres_W_1",
+      "note": "Non-silicide poly resistor width."
+    },
+    "poly_res_space": {
+      "provenance": "official",
+      "rule_id": "POLYres_S_1a..NPR",
+      "note": "Poly resistor to unrelated implant spacing."
+    },
+    "poly_res_sab_ct": {
+      "provenance": "official",
+      "rule_id": "POLYres_S_2",
+      "note": "SAB to CT spacing at a poly resistor."
+    },
+    "poly_res_enc": {
+      "provenance": "official",
+      "rule_id": "POLYres_EN_1",
+      "note": "NP/PP enclosure of the poly resistor."
+    },
+    "poly_res_ext": {
+      "provenance": "official",
+      "rule_id": "POLYres_EX_1",
+      "note": "PORES extension outside the poly resistor."
+    },
+    "poly_res_sab_ext": {
+      "provenance": "official",
+      "rule_id": "POLYres_EX_2",
+      "note": "SAB extension outside the poly resistor."
+    },
+    "lu_guard_width": {
+      "provenance": "official",
+      "rule_id": "LU_W_1",
+      "note": "Guard-ring width around an I/O injector."
+    },
+    "lu_npmos_space_lv": {
+      "provenance": "official",
+      "rule_id": "LU_S_1a",
+      "note": "Core-gate I/O NMOS/PMOS spacing."
+    },
+    "lu_npmos_space_mv": {
+      "provenance": "official",
+      "rule_id": "LU_S_1b",
+      "note": "1.8V I/O NMOS/PMOS spacing."
+    },
+    "lu_npmos_space_hv": {
+      "provenance": "official",
+      "rule_id": "LU_S_1c",
+      "note": "2.5V I/O NMOS/PMOS spacing."
+    },
+    "lu_npmos_space_3v3": {
+      "provenance": "official",
+      "rule_id": "LU_S_1d",
+      "note": "3.3V I/O NMOS/PMOS spacing."
+    },
+    "lu_tap_distance": {
+      "provenance": "official",
+      "rule_id": "LU_S_2_NTAP/LU_S_2_PTAP",
+      "note": "Tap reach: 5um inset plus 30um growth."
+    },
+    "density_gradient_limit": {
+      "provenance": "official",
+      "rule_id": "ACT_D_3/PO_D_3/M*_D_3/T*_D_3",
+      "note": "ABSOLUTE window-to-window density gradient limit."
+    },
+    "density_t8_min": {
+      "provenance": "official",
+      "rule_id": "T8M1_D_1_R/T8M2_D_1_R",
+      "note": "Recommended whole-chip T8 density minimum."
+    },
+    "density_t8_max": {
+      "provenance": "official",
+      "rule_id": "T8M1_D_2/T8M2_D_2",
+      "note": "Whole-chip T8 density maximum."
+    },
+    "density_t8_window": {
+      "provenance": "official",
+      "rule_id": "T8M1_D_3/T8M2_D_3",
+      "note": "T8 density window and step."
+    },
+    "density_t8_window_max": {
+      "provenance": "official",
+      "rule_id": "T8M1_D_3/T8M2_D_3",
+      "note": "T8 window density maximum, excluding DEUPAD."
+    },
+    "ct_s2_space": {
+      "provenance": "official",
+      "rule_id": "CT_S_2",
+      "note": "CT different-net space >= 0.12 um. The port applies the threshold to all CT pairs because connectivity is not extracted; this is slightly stricter than the source NOT CONNECTED clause."
+    },
+    "ct_s4_r": {
+      "provenance": "official",
+      "rule_id": "CT_S_4_R",
+      "note": "Recommended core-gate POLY to CT-on-AA space >= 0.06 um (OPEN_RECOMMENDED_ON)."
+    },
+    "ct_en2_r": {
+      "provenance": "official",
+      "rule_id": "CT_EN_2_R",
+      "note": "Recommended CT enclosure by AA >= 0.04 um (OPEN_RECOMMENDED_ON)."
+    },
+    "ct_en3_r": {
+      "provenance": "official",
+      "rule_id": "CT_EN_3_R",
+      "note": "Recommended CT enclosure by POLY >= 0.06 um (OPEN_RECOMMENDED_ON)."
+    },
+    "ct_en4_r_all": {
+      "provenance": "official",
+      "rule_id": "CT_EN_4a_R_4b_R",
+      "note": "Recommended M1 enclosure of CT >= 0.04 um on all sides (OPEN_RECOMMENDED_ON)."
+    },
+    "ct_en4_r_dir": {
+      "provenance": "official",
+      "rule_id": "CT_EN_4a_R_4b_R",
+      "note": "Recommended M1 enclosure of CT >= 0.06 um on one opposite pair (OPEN_RECOMMENDED_ON)."
+    },
+    "act_channel_width_r": {
+      "provenance": "official",
+      "rule_id": "ACT_W_3a_R",
+      "note": "Recommended core-gate channel width >= 0.15 um (OPEN_RECOMMENDED_ON)."
+    },
+    "act_space_r": {
+      "provenance": "official",
+      "rule_id": "ACT_S_1_R",
+      "note": "Recommended AA to AA space >= 0.16 um (OPEN_RECOMMENDED_ON)."
+    },
+    "act_huge_area": {
+      "provenance": "official",
+      "rule_id": "ACT_S_2a_R",
+      "note": "AA polygon area threshold that defines a huge AA, in um^2."
+    },
+    "act_huge_space_r": {
+      "provenance": "official",
+      "rule_id": "ACT_S_2a_R",
+      "note": "Recommended huge-AA to AA space >= 0.35 um (OPEN_RECOMMENDED_ON)."
+    },
+    "ulld_aa_far_ext": {
+      "provenance": "official",
+      "rule_id": "ULLD_EX_3b",
+      "note": "ULLD extension beyond AA along the poly direction >= 0.12 um when the related poly is farther than 0.20 um."
     }
   }
 }

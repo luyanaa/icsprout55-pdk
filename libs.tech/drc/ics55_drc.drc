@@ -18,7 +18,6 @@
 # The deck emits predicates transcribed from the supplied Calibre source when
 # their geometry, active profile, and exclusions are representable in KLayout.
 # Unsupported Calibre-only semantics are omitted, not approximated by default.
-# Optional empirical/LEF diagnostics require explicit opt-in.
 # Provenance is recorded in rule_decks/ics55_rules.json.
 #
 # This is a partial source port, not formal Calibre equivalence. A matched
@@ -32,10 +31,14 @@
 #
 # Switches:
 #   tables: main (default) or selected families: feol beol dummy_slot density
-#           mom special grid advanced
-#   advanced=true / tables=advanced: opt in to empirical checks
-#   check_grid=true / tables=grid: opt in to LEF-derived manufacturing-grid check
+#           mom special
 #   run_mode: deep (default) | flat | tiling
+#   recommended: warn (default) | error | off.  Recommended rules are reported
+#           as KLayout log warnings by default; error adds report categories.
+#   Profile switches mirror the vendor deck: total_metal, top_metal, and the
+#   T2V1_T2M1/T2V2_T2M2/T4V1_T4M1/T4V2_T4M2/T8V1_T8M1/T8V2_T8M2 pairs.  The
+#   released profile is total_metal=6, top_metal=1, T4V2_T4M2=1; all other
+#   top-metal families are implemented but disabled by their switches.
 #=========================================================================================
 
 require 'json'
@@ -71,13 +74,76 @@ TABLES = ($tables || 'main').split
 MAIN_TABLE = TABLES.include?('main')
 FEOL = !bool_check?($no_feol) && (MAIN_TABLE || TABLES.include?('feol'))
 BEOL = !bool_check?($no_beol) && (MAIN_TABLE || TABLES.include?('beol'))
-GRID = bool_check?($check_grid) || TABLES.include?('grid')
-ADVANCED = bool_check?($advanced) || TABLES.include?('advanced')
 DENSITY = !bool_check?($no_density) && (MAIN_TABLE || TABLES.include?('density'))
 MOM = !bool_check?($no_mom) && (MAIN_TABLE || TABLES.include?('mom'))
 DUMMY_SLOT = MAIN_TABLE || TABLES.include?('dummy_slot')
 SPECIAL = MAIN_TABLE || TABLES.include?('special')
 CELL_EXCLUSION = bool_check?($cell_exclusion)
+
+# Recommended rules follow the vendor OPEN_RECOMMENDED_ON switch.  The vendor
+# default is NO (silent); this port defaults to warn so the checks still run
+# and appear in the KLayout log without changing the report categories.
+RECOMMENDED_MODE = ($recommended || 'warn').to_s.downcase
+unless %w[warn error off].include?(RECOMMENDED_MODE)
+  raise "recommended must be warn, error, or off (got #{RECOMMENDED_MODE})"
+end
+RECOMMENDED = RECOMMENDED_MODE != 'off'
+RECOMMENDED_ERROR = RECOMMENDED_MODE == 'error'
+
+# Vendor <Choice 2> process profile.  Accept both the vendor spelling and the
+# lowercase -rd spelling; an unset switch keeps the released profile default.
+def switch_raw(*names)
+  names.each do |name|
+    value = eval("$#{name}") rescue nil
+    return value unless value.nil?
+  end
+  nil
+end
+
+def switch_flag(*args)
+  default = [true, false].include?(args.last) ? args.pop : false
+  raw = switch_raw(*args)
+  raw.nil? ? default : bool_check?(raw)
+end
+
+def switch_int(*args)
+  default = args.last.is_a?(Integer) ? args.pop : 0
+  raw = switch_raw(*args)
+  raw.nil? ? default : raw.to_i
+end
+
+TOTAL_METAL = switch_int('total_metal', 6)
+TOP_METAL = switch_int('top_metal', 1)
+# Vendor IO option: the released libraries use IO 1833; the IO 1825-only
+# channel-length rules (PO_W_2c/2e/2f) are compiled in only when requested
+# (-rd IO=1825, or -rd io_1825=true).
+IO_OPTION = (switch_raw('IO') || '1833').to_s
+IO_1825 = IO_OPTION.strip == '1825' || switch_flag('io_1825', false)
+PROFILE = {
+  'T2V1_T2M1' => switch_flag('T2V1_T2M1', 't2v1_t2m1', false),
+  'T2V2_T2M2' => switch_flag('T2V2_T2M2', 't2v2_t2m2', false),
+  'T4V1_T4M1' => switch_flag('T4V1_T4M1', 't4v1_t4m1', false),
+  'T4V2_T4M2' => switch_flag('T4V2_T4M2', 't4v2_t4m2', true),
+  'T8V1_T8M1' => switch_flag('T8V1_T8M1', 't8v1_t8m1', false),
+  'T8V2_T8M2' => switch_flag('T8V2_T8M2', 't8v2_t8m2', false)
+}
+INNER_METALS = TOTAL_METAL - TOP_METAL
+# The rule decks index these switches by layer number (CHECK_M[1] .. CHECK_M[8]),
+# so index 0 is a placeholder.
+CHECK_M = [false] + (1..8).map { |i| i <= INNER_METALS }
+CHECK_V = [false] + (1..7).map { |i| i <= INNER_METALS - 1 }
+CHECK_T2M1 = TOP_METAL == 2 && PROFILE['T2V1_T2M1']
+CHECK_T2V1 = CHECK_T2M1
+CHECK_T4M1 = TOP_METAL == 2 && PROFILE['T4V1_T4M1']
+CHECK_T4V1 = CHECK_T4M1
+CHECK_T8M1 = TOP_METAL == 2 && PROFILE['T8V1_T8M1']
+CHECK_T8V1 = CHECK_T8M1
+CHECK_T2M2 = PROFILE['T2V2_T2M2']
+CHECK_T2V2 = CHECK_T2M2
+CHECK_T4M2 = PROFILE['T4V2_T4M2']
+CHECK_T4V2 = CHECK_T4M2
+CHECK_T8M2 = PROFILE['T8V2_T8M2']
+CHECK_T8V2 = CHECK_T8M2
 
 case $run_mode
 when 'tiling'
@@ -137,15 +203,15 @@ MODULE_FILES = [
   'rule_decks/feol/08_hrp.drc',
   'rule_decks/feol/09_ulld.drc',
   'rule_decks/feol/10_voltage_implants.drc',
+  'rule_decks/feol/11_resistors.drc',
+  'rule_decks/feol/12_latchup.drc',
   # BEOL: only source predicates supported with their active profile/waivers.
   'rule_decks/beol/06_metal.drc',
   'rule_decks/beol/07_via.drc',
   'rule_decks/beol/08_pad.drc',
   'rule_decks/beol/09_sealring.drc',
+  'rule_decks/beol/11_thick_metal.drc',
   'rule_decks/dummy_slot.drc',
-  # Geometry and optional empirical diagnostics.
-  'rule_decks/geometry/09_grid.drc',
-  'rule_decks/advanced/10_eol_jog.drc',
   # Source-driven Density_rules for the configured 6-metal/T4M2 profile.
   'rule_decks/density.drc',
   # Source-backed MOM rules; unsupported source qualifiers are not approximated.

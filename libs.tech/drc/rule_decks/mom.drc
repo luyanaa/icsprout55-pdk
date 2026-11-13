@@ -41,10 +41,11 @@ if MOM
    # by an unqualified KLayout separation check (the edge-pair reporting
    # qualifiers are not expressible).
    #
-   # MOM_R_2 has active clauses for forbidden per-layer stack assignments and
-   # missing labels on complete, otherwise valid MOM stacks. The source's
-   # complementary "required marker" Y12..Y78 bodies are commented out and are
-   # not emitted.
+   # MOM_R_2 has active clauses for forbidden per-layer stack assignments,
+   # labelled stacks missing a required MxMOM marker (source Y12..Y78) and
+   # complete stacks missing their matching label (source Z12..Z78).
+   # KLayout DRC has no polygon-with-text selection, so a label attached to a
+   # MOMLVS1 polygon is approximated as MOMLVS1 interacting with its text.
    mom_layers = [MET1MOM, MET2MOM, MET3MOM, MET4MOM, MET5MOM, MET6MOM, MET7MOM, MET8MOM]
    mom_layer_names = %w[MET1MOM MET2MOM MET3MOM MET4MOM MET5MOM MET6MOM MET7MOM MET8MOM]
    mom_texts = labels(323, 12)
@@ -72,21 +73,26 @@ if MOM
      end
    end
  
-   # A geometrically correct stack without its matching MOMLVS1 text label is
-   # also a MOM_R_2 error. Extra MOM markers on any non-stack metal invalidate
-   # the candidate, matching the source's Z12..Z78 construction.
+   # A labelled stack must touch every MOM marker in its metal range (Y), and a
+   # geometrically correct stack must carry the matching MOMLVS1 label (Z).
+   # Extra MOM markers on any non-stack metal invalidate the Z candidate.
    mom_caps.each do |cap|
      first_metal = cap[0].to_i
      last_metal = cap[1].to_i
-     candidate = MOMLVS1
-     (first_metal..last_metal).each do |metal_index|
-       candidate = candidate.interacting(mom_layers[metal_index - 1])
-     end
+     required_markers = (first_metal..last_metal).map { |metal_index| mom_layers[metal_index - 1] }
+     cap_text = mom_texts.texts("momcap#{cap}")
+
+     labelled = MOMLVS1.interacting(cap_text)
+     marked = required_markers.reduce(labelled) { |region, marker| region.interacting(marker) }
+     labelled.not(marked).not(SRINGBLK_SRC).output("mom.MOM_R_2.missing_marker.#{cap}",
+       "MOM_R_2: MOMLVS1 labelled momcap#{cap} must touch all required MxMOM markers [ICsprout Calibre]")
+
+     candidate = required_markers.reduce(MOMLVS1) { |region, marker| region.interacting(marker) }
      other_markers = mom_layers.each_with_index.reject { |_, index| (first_metal - 1..last_metal - 1).include?(index) }.map(&:first)
      unless other_markers.empty?
        candidate = candidate.not_interacting(other_markers.reduce(:+))
      end
-     candidate.not_interacting(mom_texts.texts("momcap#{cap}")).not(SRINGBLK_SRC).output("mom.MOM_R_2.label_stack.#{cap}",
+     candidate.not_interacting(cap_text).not(SRINGBLK_SRC).output("mom.MOM_R_2.label_stack.#{cap}",
        "MOM_R_2: MOMLVS1 stack must carry matching momcap#{cap} label [ICsprout Calibre]")
    end
  end

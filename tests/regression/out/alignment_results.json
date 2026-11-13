@@ -5,9 +5,9 @@
       "fixture": "drc_crosswalk_audit",
       "status": "PASS",
       "counts": {
-        "total": 717,
-        "threshold_or_name_mapped": 481,
-        "unmapped": 236,
+        "total": 1045,
+        "threshold_or_name_mapped": 1042,
+        "unmapped": 3,
         "stale_value_rows": 0
       },
       "issues": []
