@@ -89,6 +89,7 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         self.param("fingers", self.TypeInt, "Number of fingers (m)", default=2)
         self.param("guard_ring", self.TypeInt, "Guard ring (0/1)", default=1)
         self.param("ring_metal", self.TypeInt, "M1 strap on guard ring (0/1)", default=1)
+        self.param("lvt", self.TypeInt, "LVT implant for PMOS (0/1)", default=0)
         self.param("gr_spacing", self.TypeDouble, "Guard ring to device spacing (um)", default=1.0)
         self.param("gr_width", self.TypeDouble, "Guard ring width (um)", default=0.5)
 
@@ -116,6 +117,7 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         pp = self.layout.layer(L_PP)
         ct = self.layout.layer(L_CT)
         m1 = self.layout.layer(L_M1)
+        lvtp = self.layout.layer(db.LayerInfo(18, 1))  # LVTP
 
         dev_n = (self.dev_type == "n")
         W, L, m = self.w, self.l, self.fingers
@@ -179,6 +181,8 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         # must enclose it (act+sized(0.65) covers it for every finger count).
         if not dev_n:
             S(nw).insert(db.Region(self.cell.begin_shapes_rec(act)).sized(u(IMPL_M + 0.65)))
+            if self.lvt:
+                S(lvtp).insert(db.Region(self.cell.begin_shapes_rec(act)).sized(u(0.3)))
 
         # M1: one island per source/drain contact and two interdigitated
         # straps - even contacts to a bus below the active, odd contacts to a
