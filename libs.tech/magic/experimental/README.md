@@ -16,12 +16,19 @@ magic -dnull -noconsole -rcfile ics55_pex.magicrc extract_stack.tcl
 
 ## Current result (work copy)
 
-The two minimal stacks now pass:
+All three minimal stacks now pass:
 
 ```
-C0 M1_V SUB 2.162f     # M1 + M2 on one node
-C1 P    SUB 0.899f     # poly + M1 on one node
+C0 M1_V   SUB 2.162f     # M1 + M2 on one node
+C1 P_FULL SUB 2.162f     # poly + CT + M1 + V1 + M2 on one node
+C2 P      SUB 0.899f     # poly + CT + M1 on one node
 ```
+
+**The V1 must be offset from the CT.**  A V1 stacked exactly on a CT makes
+Magic lose the lower contact; the full stack then opens on the poly side
+(`P_FULL` becomes m1+m2 only).  The rule used by the row is a 0.12 um
+y-offset between the cascode-drain CT and its V1.  The M1 island is tall
+enough; the M2 cd route is extended to the V1.
 
 The fix is in the `connect` section: use the contact-area entries that the
 sky130/scmos techs use, and join the fet types to the poly plane:

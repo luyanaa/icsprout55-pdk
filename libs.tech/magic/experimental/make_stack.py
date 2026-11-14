@@ -54,6 +54,17 @@ def main():
     box(L_M2, 3.0, -1.0, 5.0, 1.0)
     text(L_M2, "M2_V", 4.5, 0.0)
 
+    # full stack: poly -- CT -- M1 -- V1 -- M2, all at one point
+    box(L_POLY, 7.0, -1.0, 9.0, 1.0)
+    text(L_POLY, "P_FULL", 7.5, 0.0)
+    box(L_CT, 7.955, -0.045, 8.045, 0.045)
+    box(L_M1, 7.0, -1.0, 9.0, 1.0)
+    # V1 must be offset from the CT: Magic loses the lower contact when a
+    # V1 is stacked exactly on a CT (the full stack then opens the poly side).
+    box(L_V1, 7.955, 0.075, 8.045, 0.165)
+    box(L_M2, 7.0, -1.0, 9.0, 1.0)
+    text(L_M2, "M2_FULL", 8.5, 0.0)
+
     ly.write(OUT)
     print(f"wrote {OUT}")
 
