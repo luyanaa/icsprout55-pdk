@@ -161,16 +161,24 @@ class Ics55MosAnalog(db.PCellDeclarationHelper):
         S(ct).insert(db.Box(u(gm - CT_SIZE / 2.0), u(gy - CT_SIZE / 2.0),
                          u(gm + CT_SIZE / 2.0), u(gy + CT_SIZE / 2.0)))
 
-        # implant
+        # implant.  The poly gate bus and its contact pad are PO-with-CT and
+        # must be covered by the implant too (PO_R_2): the plain active+sized
+        # margin leaves the pad poly above the bus uncovered.  The box covers
+        # the active + margin plus the bus/pad region (top bus_y0+0.36 so the
+        # 0.21 pad gets the 0.15 implant enclosure).
         imp = db.Region(self.cell.begin_shapes_rec(act)).sized(u(IMPL_M))
+        bus_cover = db.Box(u(x0 - IMPL_M), u(bus_y0 - 0.10),
+                           u(x0 + dev_x + IMPL_M), u(bus_y0 + 0.36))
+        imp = imp + db.Region(bus_cover)
         if dev_n:
             S(np).insert(imp)
         else:
             S(pp).insert(imp)
 
-        # well for PMOS
+        # well for PMOS: the implant box now reaches bus_y0+0.36, so the well
+        # must enclose it (act+sized(0.65) covers it for every finger count).
         if not dev_n:
-            S(nw).insert(db.Region(self.cell.begin_shapes_rec(act)).sized(u(IMPL_M + 0.3)))
+            S(nw).insert(db.Region(self.cell.begin_shapes_rec(act)).sized(u(IMPL_M + 0.65)))
 
         # M1: one island per source/drain contact and two interdigitated
         # straps - even contacts to a bus below the active, odd contacts to a
