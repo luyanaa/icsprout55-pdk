@@ -24,6 +24,10 @@ Steps:
                     with CELL_CDLS / EXTRA_CDLS / PAD_CDLS, options from
                     KLAYOUT_LVS_OPTIONS), so this step reuses the same
                     implementation and widens the match patterns for our deck.
+  ICS55.ReportDisconnectedPins
+                    Reports disconnected pins and publishes the critical-pin
+                    metric consumed by ``Checker.DisconnectedPins`` (the
+                    upstream step can leave the metric file empty).
 
 Use it in place of Netgen.LVS, after OpenROAD.WriteCDL:
   meta:
@@ -47,6 +51,7 @@ match.`` — both spellings are accepted here.
 """
 
 import os
+import re
 import subprocess
 import sys
 from os.path import abspath
@@ -56,6 +61,7 @@ from librelane.common import Path, mkdirp
 from librelane.state import DesignFormat
 from librelane.steps import Step
 from librelane.steps.klayout import LVS as KLayoutLVS
+from librelane.steps.odb import ReportDisconnectedPins as OdbReportDisconnectedPins
 
 # cdl_convert.py lives next to this plugin (libs.tech/librelane/scripts/).
 _CDL_CONVERT = os.path.join(
@@ -188,3 +194,39 @@ class ICS55KLayoutLVS(KLayoutLVS):
         }
 
         return views_updates, metrics_updates
+
+
+@Step.factory.register()
+class ICS55ReportDisconnectedPins(OdbReportDisconnectedPins):
+    """Report disconnected pins and populate the critical-pin metric.
+
+    The upstream OpenROAD step prints the disconnected/critical counts but its
+    ``-metrics`` JSON is not always written, so ``Checker.DisconnectedPins``
+    skips with "metric not found".  Parse the step log and publish both
+    metrics explicitly; a design with zero critical disconnected pins (for
+    example an unused Mode-4 input) then passes the checker.
+    """
+
+    id = "ICS55.ReportDisconnectedPins"
+    name = "Report Disconnected Pins (ICS55)"
+
+    def run(self, state_in, **kwargs):
+        views, metrics = super().run(state_in, **kwargs)
+        disconnected = int(metrics.get("design__disconnected_pin__count", 0))
+        critical = int(metrics.get("design__critical_disconnected_pin__count", 0))
+        try:
+            with open(self.get_log_path(), "r", encoding="utf8") as fh:
+                for line in fh:
+                    match = re.search(
+                        r"Found (\d+) disconnected pin\(s\), of which (\d+) are critical",
+                        line,
+                    )
+                    if match:
+                        disconnected = int(match.group(1))
+                        critical = int(match.group(2))
+                        break
+        except OSError:
+            pass
+        metrics["design__disconnected_pin__count"] = disconnected
+        metrics["design__critical_disconnected_pin__count"] = critical
+        return views, metrics
