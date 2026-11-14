@@ -91,6 +91,10 @@ end
 COMBINE_DEVICES = STRICT_TOPOLOGY || bool_check?($combine_devices)
 PURGE = !STRICT_TOPOLOGY && bool_check?($purge)
 SIMPLIFY = !STRICT_TOPOLOGY && !bool_check?($no_simplify)
+# Flow-specific handling for the filled final GDS: remove fill/tap instances
+# in memory (keeping cell definitions so extraction indices are unchanged) and
+# keep only the CDL top boundary labels.  Opt-in via -rd flow_mode=true.
+FLOW_MODE = bool_check?($flow_mode)
 WELL_TIES = !bool_check?($no_well_ties)
 ERC_ENABLED = !bool_check?($no_erc)
 
@@ -110,6 +114,22 @@ end
 threads($threads || Etc.nprocessors)
 
 require 'tmpdir'
+
+FILLER_CELL_PATTERN = /\A(?:FILL|DECAP|DCAP|ENDCAP|ANTENNA)/i
+if FLOW_MODE && src && src.cell_obj
+  layout = src.cell_obj.layout
+  removed = 0
+  layout.each_cell.to_a.each do |cell|
+    instances = cell.each_inst.to_a
+    fillers = instances.select { |inst| inst.cell.name.to_s.match?(FILLER_CELL_PATTERN) }
+    next if fillers.empty?
+    keep = instances.reject { |inst| inst.cell.name.to_s.match?(FILLER_CELL_PATTERN) }.map(&:cell_inst)
+    cell.clear_insts
+    keep.each { |cell_inst| cell.insert(cell_inst) }
+    removed += fillers.size
+  end
+  puts "FILLER INSTANCES removed before extraction: #{removed}"
+end
 
 #-----------------------------------------------------------------------------------------
 # Schematic (reference) netlist
@@ -297,7 +317,7 @@ def source_top_pins(path, top_name)
     header << lines[index]
     index += 1
   end
-  header.join(" ").split(/\s+/).drop(2).take_while do |name|
+  header.join(" ").split(/\s+/).reject { |name| name == "+" }.drop(2).take_while do |name|
     !name.match?(/\A(?:PARAMS:|PARAMS)\z/i)
   end
 end
@@ -481,14 +501,38 @@ def strict_hierarchy_pairs(layout_netlist, reference_netlist)
     layout_pins.keys.sort.each do |pin_name|
       layout_net = layout_circuit.net_for_pin(layout_pins[pin_name].id)
       reference_net = reference_circuit.net_for_pin(reference_pins[pin_name].id)
-      unless layout_net && reference_net
+      if layout_net.nil? && reference_net.nil?
+        # Both sides describe an open pin: nothing to constrain.
+      elsif layout_net && reference_net
+        pin_pairs << [layout_net, reference_net]
+      elsif layout_net.nil? && reference_net &&
+            reference_net.terminal_count.to_i.zero? && reference_net.subcircuit_pin_count.to_i.zero?
+        # Reference pin is open.
+      elsif reference_net.nil? && layout_net &&
+            layout_net.terminal_count.to_i.zero? && layout_net.subcircuit_pin_count.to_i.zero?
+        # Layout pin is open.
+      else
         return [nil, "unconnected boundary pin #{pin_name} in #{name}"]
       end
-      pin_pairs << [layout_net, reference_net]
     end
     pairs << [layout_circuit, reference_circuit, pin_pairs]
   end
   [pairs, nil]
+end
+
+# Drop fill/tap instances from the reference as well (flow mode).
+if FLOW_MODE && !NET_ONLY
+  removed = 0
+  schematic.each_circuit.to_a.each do |circuit|
+    circuit.each_subcircuit.to_a.each do |sub|
+      ref = sub.circuit_ref
+      next unless ref && ref.name.to_s.match?(FILLER_CELL_PATTERN)
+      circuit.remove_subcircuit(sub)
+      removed += 1
+    end
+  end
+  schematic.purge
+  puts "FILLER FILTER reference: removed #{removed} instances"
 end
 
 # Spare-cell outputs in the CDL are tied to dummy _unconnected_* nets.  The
@@ -585,15 +629,32 @@ port_layers.each do |number, conductor|
       position = shape.text_pos
       point = RBA::DPoint.new(position.x * layout.dbu, position.y * layout.dbu)
       physical_net = l2n_data.probe_net(conductor.data, point)
-      unless physical_net && physical_net.circuit == top_circuit
+      if physical_net && physical_net.circuit == top_circuit
+        net = top_circuit.net_by_cluster_id(physical_net.cluster_id)
+        raise "PORT DEPTH 0: physical net for #{shape.text_string.inspect} was removed" unless net
+        ports[shape.text_string][net.cluster_id] = net
+      elsif FLOW_MODE
+        # Top label without a conductor is an unused/open top pin.
+        ports[shape.text_string]
+      else
         raise "PORT DEPTH 0: #{shape.text_string.inspect} on #{number}/#{datatype} at #{point} has no top-level conductor"
       end
-      net = top_circuit.net_by_cluster_id(physical_net.cluster_id)
-      raise "PORT DEPTH 0: physical net for #{shape.text_string.inspect} was removed" unless net
-      ports[shape.text_string][net.cluster_id] = net
     end
   end
 end
+if FLOW_MODE && !top_ports.empty?
+  reference_by_lc = {}
+  top_ports.each { |name| reference_by_lc[name.to_s.downcase] = name.to_s }
+  filtered_ports = {}
+  ports.each do |label, nets|
+    reference_name = reference_by_lc[label.to_s.downcase]
+    next unless reference_name
+    (filtered_ports[reference_name] ||= {}).merge!(nets)
+  end
+  ports = filtered_ports
+  $layout_top_port_names = ports.keys
+end
+
 disconnected = ports.select { |_label, nets| nets.size > 1 }
 unless disconnected.empty?
   detail = disconnected.map { |label, nets| "#{label}=#{nets.keys.sort.join(',')}" }.join('; ')
@@ -603,7 +664,7 @@ old_pins = top_circuit.each_pin.to_a
 old_pins.each { |pin| top_circuit.remove_pin(pin.id) }
 ports.sort_by { |label, _nets| label }.each do |label, nets|
   pin = top_circuit.create_pin(label)
-  top_circuit.connect_pin(pin, nets.values.first)
+  top_circuit.connect_pin(pin, nets.values.first) unless nets.empty?
 end
 puts "PORT DEPTH 0: direct_texts=#{direct_text_count} ports=#{ports.size} previous_pins=#{old_pins.size}"
 
@@ -835,6 +896,22 @@ if STRICT_TOPOLOGY && !NET_ONLY
     puts "STRICT_HIERARCHY=INCONCLUSIVE: reference root circuit #{root_name.inspect} is missing"
     strict_hierarchy_inconclusive = true
     strict_match = false
+  end
+  if FLOW_MODE
+    layout_port_names = $layout_top_port_names || []
+    # A netlist purge removes top pins whose nets are floating.  Restore the
+    # open pins on both sides so an unused input stays an open pin.
+    layout_port_names.each do |name|
+      next if layout_top.each_pin.any? { |pin| pin.name.to_s.casecmp(name.to_s).zero? }
+      layout_top.create_pin(name.to_s)
+    end
+    if reference_top
+      top_ports.each do |name|
+        next unless layout_port_names.any? { |layout_name| layout_name.to_s.casecmp(name.to_s).zero? }
+        next if reference_top.each_pin.any? { |pin| pin.name.to_s.casecmp(name.to_s).zero? }
+        reference_top.create_pin(name.to_s)
+      end
+    end
   end
   layout_pins = layout_top.each_pin.to_a
   reference_pins = reference_top ? reference_top.each_pin.to_a : []
