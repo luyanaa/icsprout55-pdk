@@ -161,8 +161,11 @@ class ICS55KLayoutLVS(KLayoutLVS):
             )
 
             ok = False
+            erc_ok = True
             with open(subprocess_result["log_path"]) as fh:
                 for line in fh:
+                    if "ICS55_ERC=FAIL" in line:
+                        erc_ok = False
                     # Accept both our deck's banner and the upstream IHP one.
                     if (
                         "ICS55_LVS_COMPARE=PASS" in line
@@ -181,7 +184,7 @@ class ICS55KLayoutLVS(KLayoutLVS):
             DesignFormat.SPICE: Path(output_spice),
         }
         metrics_updates = {
-            "design__lvs_error__count": 0 if ok else 1,
+            "design__lvs_error__count": 0 if (ok and erc_ok) else 1,
         }
 
         return views_updates, metrics_updates
