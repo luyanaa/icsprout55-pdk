@@ -62,6 +62,13 @@ def main() -> int:
                     help="skip the electrical rule checks")
     ap.add_argument("--combine-devices", action="store_true")
     ap.add_argument("--purge", action="store_true")
+    ap.add_argument("--strict-topology", action="store_true",
+                    help="exact device topology comparison")
+    ap.add_argument("--strict-hierarchy", action="store_true",
+                    help="compare the cell hierarchy with an exact module/boundary map")
+    ap.add_argument("--blackbox", action="store_true",
+                    help="treat non-top cells as pre-qualified black boxes "
+                         "(full-chip interconnect LVS; cell gate verifies internals)")
     ap.add_argument("--run-mode", default="deep", choices=["deep", "flat"])
     ap.add_argument("--klayout", default=None)
     ap.add_argument("--metal-stack", default="auto",
@@ -108,6 +115,12 @@ def main() -> int:
         cmd += ["-rd", "combine_devices=true"]
     if args.purge:
         cmd += ["-rd", "purge=true"]
+    if args.strict_topology:
+        cmd += ["-rd", "strict_topology=true"]
+    if args.strict_hierarchy:
+        cmd += ["-rd", "strict_hierarchy=true"]
+    if args.blackbox:
+        cmd += ["-rd", "blackbox=true"]
     cmd += ["-z"]
 
     proc = subprocess.run(cmd, capture_output=True, text=True)

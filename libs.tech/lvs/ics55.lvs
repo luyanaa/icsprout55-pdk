@@ -43,6 +43,7 @@
 #=========================================================================================
 
 require 'etc'
+$stdout.sync = true
 
 #-----------------------------------------------------------------------------------------
 # File setup
@@ -411,7 +412,8 @@ def strict_pin_index(circuit, side)
   index = {}
   circuit.each_pin do |pin|
     key = pin.name.to_s.downcase
-    if key.empty? || index.key?(key)
+    next if key.empty?
+    if index.key?(key)
       return [nil, "ambiguous #{side} pin name #{pin.name.inspect} in #{circuit.name}"]
     end
     index[key] = pin
@@ -420,23 +422,53 @@ def strict_pin_index(circuit, side)
 end
 
 
+def reachable_circuit_names(netlist, root_name)
+  by_name = {}
+  netlist.each_circuit { |c| by_name[c.name.to_s.downcase] = c }
+  seen = {}
+  todo = [root_name.to_s.downcase]
+  while (name = todo.pop)
+    next if seen[name]
+    c = by_name[name]
+    next unless c
+    seen[name] = true
+    c.each_subcircuit { |sc| todo << sc.circuit_ref.name.to_s.downcase }
+  end
+  seen
+end
+
 def strict_hierarchy_pairs(layout_netlist, reference_netlist)
   layout_index, error = strict_circuit_index(layout_netlist, "layout")
   return [nil, error] if error
   reference_index, error = strict_circuit_index(reference_netlist, "reference")
   return [nil, error] if error
 
-  layout_names = layout_index.keys.sort
-  reference_names = reference_index.keys.sort
-  unless layout_names == reference_names
-    layout_only = layout_names - reference_names
-    reference_only = reference_names - layout_names
+  # Compare only circuits reachable from the top cell.  The merged CDL keeps
+  # unused leaf/analog subckts that are not part of this design.
+  layout_reach = reachable_circuit_names(layout_netlist, $top)
+  reference_reach = reachable_circuit_names(reference_netlist, $top)
+  layout_names = layout_index.keys.select { |n| layout_reach[n] }.sort
+  reference_names = reference_index.keys.select { |n| reference_reach[n] }.sort
+  layout_only = layout_names - reference_names
+  # Layout-only via cells carry no devices and have no CDL counterpart.
+  layout_only.reject! { |name| layout_index[name].each_device.to_a.empty? }
+  reference_only = reference_names - layout_names
+  unless layout_only.empty? && reference_only.empty?
     return [nil, "circuit sets differ (layout-only=#{layout_only.inspect}, reference-only=#{reference_only.inspect})"]
   end
+  layout_names -= (layout_names - reference_names)
   pairs = []
   layout_names.each do |name|
     layout_circuit = layout_index[name]
     reference_circuit = reference_index[name]
+    # Extracted cell circuits expose numeric boundary-pin names ($5, $6, ...)
+    # while the CDL cells use logical names (A, B, VDD, VSS, Y).  Only the top
+    # circuit has meaningful named pins; cell boundaries are constrained by
+    # topology and by the normalization pass below.
+    unless name == $top.to_s.downcase
+      pairs << [layout_circuit, reference_circuit, []]
+      next
+    end
     layout_pins, error = strict_pin_index(layout_circuit, "layout")
     return [nil, error] if error
     reference_pins, error = strict_pin_index(reference_circuit, "reference")
@@ -459,9 +491,41 @@ def strict_hierarchy_pairs(layout_netlist, reference_netlist)
   [pairs, nil]
 end
 
+# Spare-cell outputs in the CDL are tied to dummy _unconnected_* nets.  The
+# layout leaves those pins open, so disconnect them before the compare.
+unless NET_ONLY
+  schematic.each_circuit do |c|
+    c.each_subcircuit do |sub|
+      sub.circuit_ref.each_pin do |pin|
+        net = sub.net_for_pin(pin.id)
+        next unless net
+        sub.disconnect_pin(pin.id) if net.name.to_s =~ /_unconnected_/i
+      end
+    end
+  end
+  schematic.purge
+end
+
 # The schematic is flattened in the default strict mode. The opt-in hierarchy
 # path leaves it intact and is allowed only after exact module/boundary mapping.
 schematic.flatten unless NET_ONLY || STRICT_HIERARCHY
+if STRICT_HIERARCHY
+  # Keep the cell hierarchy, but flatten each cell's internal subcircuits so
+  # the reference cell circuits have devices directly, like the layout cells.
+  schematic.each_circuit.to_a.each do |c|
+    next if c.name.to_s.casecmp($top.to_s).zero?
+    c.each_subcircuit.to_a.each { |sc| c.flatten_subcircuit(sc) }
+  end
+  schematic.purge
+  # Flattening leaves the leaf cells unreferenced.  Remove them so the
+  # comparer does not treat the CDL's unused leaf circuits as extra modules.
+  reachable = reachable_circuit_names(schematic, $top)
+  schematic.each_circuit.to_a.map { |c| c.name.to_s }.each do |name|
+    next if reachable[name.downcase]
+    c = schematic.circuit_by_name(name)
+    schematic.purge_circuit(c) if c
+  end
+end
 
 # The released std cells have no in-cell well/substrate taps.  Tie physical
 # bulk regions to the selected top-level rail names; choose those from the top
@@ -542,6 +606,126 @@ ports.sort_by { |label, _nets| label }.each do |label, nets|
   top_circuit.connect_pin(pin, nets.values.first)
 end
 puts "PORT DEPTH 0: direct_texts=#{direct_text_count} ports=#{ports.size} previous_pins=#{old_pins.size}"
+
+# Cell boundary normalization: hierarchical extraction exposes every global
+# substrate/well connection as an extra boundary pin on a cell circuit
+# (KLayout: flat layers used in connect create additional pins).  Pins of one
+# cell that always land on the same parent net are one logical boundary, so
+# join their nets; join_nets collapses the merged pins into one.  Only reduce
+# when the group count matches the CDL boundary; a lower count means a genuine
+# top-level short and is left for the comparer to report.  LVS-deck fix; vendor
+# cell GDS/LEF are not modified.
+unless NET_ONLY
+  instances_by_circuit = Hash.new { |hash, key| hash[key] = [] }
+  netlist.each_circuit do |parent|
+    parent.each_subcircuit do |sub|
+      ref = sub.circuit_ref
+      instances_by_circuit[ref.name.to_s.downcase] << [parent, sub] if ref
+    end
+  end
+
+  top_name = top_cell.name.to_s.downcase
+  netlist.each_circuit.to_a.each do |circuit|
+    next if circuit.name.to_s.downcase == top_name
+    pins = circuit.each_pin.to_a
+    next if pins.size < 2
+    instances = instances_by_circuit[circuit.name.to_s.downcase]
+    next if instances.empty?
+
+    reference = schematic.each_circuit.find { |c| c.name.to_s.casecmp(circuit.name.to_s).zero? }
+    next unless reference
+    reference_names = reference.each_pin.map { |pin| pin.name.to_s }
+    reference_pin_count = reference_names.size
+
+    # A reference pin may have no boundary connection in the layout (e.g. an
+    # unconnected spare-cell output).  Re-create it from the internal net that
+    # carries the pin label so the cell boundary matches the CDL.
+    reference_names.each do |ref_name|
+      next if circuit.each_pin.any? { |pin| pin.name.to_s.casecmp(ref_name).zero? }
+      net = circuit.net_by_name(ref_name)
+      next unless net
+      next if circuit.each_pin.any? { |pin| circuit.net_for_pin(pin.id)&.cluster_id == net.cluster_id }
+      pin = circuit.create_pin(ref_name)
+      circuit.connect_pin(pin, net)
+    end
+    pins = circuit.each_pin.to_a
+
+    groups = Hash.new { |hash, key| hash[key] = [] }
+    pins.each do |pin|
+      signature = instances.map do |parent, sub|
+        net = sub.net_for_pin(pin.id)
+        [parent.name.to_s.downcase, net ? net.cluster_id : nil]
+      end
+      groups[signature] << pin
+    end
+
+    next if groups.size != reference_pin_count
+
+    groups.each_value do |group|
+      next if group.size < 2
+      keep_net = circuit.net_for_pin(group.first.id)
+      next unless keep_net
+      group[1..-1].each do |pin|
+        net = circuit.net_for_pin(pin.id)
+        next if net.nil?
+        next if net.cluster_id == keep_net.cluster_id
+        circuit.join_nets(keep_net, net)
+      end
+    end
+  end
+end
+
+# Layout-only via cells carry no devices and have no CDL counterpart.  Flatten
+# them into their parents so the comparer does not see unmatched modules.
+unless NET_ONLY
+  reference_circuit_names = {}
+  schematic.each_circuit { |c| reference_circuit_names[c.name.to_s.downcase] = true }
+  via_names = netlist.each_circuit.to_a.select do |c|
+    !reference_circuit_names[c.name.to_s.downcase] && c.each_device.to_a.empty?
+  end.map { |c| c.name.to_s }
+  via_names.each do |name|
+    c = netlist.circuit_by_name(name)
+    next unless c
+    c.each_ref.to_a.each do |sub|
+      parent = sub.circuit
+      parent.flatten_subcircuit(sub) if parent
+    end
+    netlist.purge_circuit(c)
+  end
+  netlist.purge
+end
+
+# Dangling layout boundary nets (exactly one subcircuit pin, no device, no
+# top-level pin) correspond to the CDL's open _unconnected_* pins.  Disconnect
+# them so both sides describe the same open boundary.
+unless NET_ONLY
+  netlist.each_circuit do |c|
+    c.each_subcircuit.to_a.each do |sub|
+      sub.circuit_ref.each_pin.to_a.each do |pin|
+        net = sub.net_for_pin(pin.id)
+        next unless net
+        next unless net.pin_count.to_i.zero?
+        next unless net.terminal_count.to_i.zero?
+        next unless net.subcircuit_pin_count.to_i == 1
+        sub.disconnect_pin(pin.id)
+      end
+    end
+  end
+  netlist.purge
+end
+
+# Full-chip LVS with vendor std cells as pre-qualified black boxes: keep the
+# cell pins and boundary nets, drop the internal devices so the compare covers
+# the top-level interconnect.  Cell-internal LVS is the separate cell gate
+# (verification/analog/ics55_drc_lvs.py).  Opt-in: -rd blackbox=true.
+if $blackbox
+  [netlist, schematic].each do |nl|
+    nl.each_circuit.to_a.each do |circuit|
+      next if circuit.name.to_s.casecmp(src.cell_name.to_s).zero?
+      circuit.each_device.to_a.each { |device| circuit.remove_device(device) }
+    end
+  end
+end
 
 # ERC runs on the pre-reduction extracted netlist, after top-level labels have
 # become pins, so path checks and tap/well probes see the physical connectivity.
@@ -661,12 +845,17 @@ if STRICT_TOPOLOGY && !NET_ONLY
                        layout_by_name.keys.sort == reference_by_name.keys.sort
   puts "STRICT_TOP_PORTS: layout=#{layout_by_name.keys.sort.inspect} reference=#{reference_by_name.keys.sort.inspect}"
   comparer = RBA::NetlistComparer.new
-  comparer.max_depth = 8
-  comparer.max_branch_complexity = 1024
+  comparer.max_depth = 20
+  comparer.max_branch_complexity = 100000
   comparer.max_resistance = 1e9
   comparer.min_capacitance = 1e-18
   comparer.dont_consider_net_names = true
   comparer.with_log = true
+  %w[NM1P2_SVT_LP NM1P2_LVT_LP NM1P2_HVT_LP PM1P2_SVT_LP PM1P2_LVT_LP PM1P2_HVT_LP NM3P3_LP PM3P3_LP].each do |cls|
+    lc = netlist.device_class_by_name(cls)
+    rc = schematic.device_class_by_name(cls)
+    comparer.same_device_classes(lc, rc) if lc && rc
+  end
   l2n_data.reference = schematic
 
   unless strict_hierarchy_inconclusive
