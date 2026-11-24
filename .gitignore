@@ -233,6 +233,7 @@ __marimo__/
 # by `make`; keep them out of git.
 libs.ref/*/gds/
 libs.ref/ics55_LLSC_H7C*/liberty/
+libs.ref/ICsprout55_SC9T_BASIC_*/liberty/
 
 # Temporary release-asset staging is removed after each run.
 libs.ref/.ecos-macros.*

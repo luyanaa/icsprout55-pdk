@@ -234,4 +234,71 @@ _fetch-memory-macros:
 
 
 
+# =============================================================================
+# SC9T (9-track) standard cells from the v2 Release
+# =============================================================================
+# The small source views (cdl/cell_list/doc/lef/verilog) are tracked under
+# libs.ref. GDS and Liberty binaries are release assets downloaded here;
+# the full NLDM + CCS set needs about 40 GB free when extracted.
+# These targets are explicit so the default `make` keeps fetching only H7C.
+SC9T_RELEASE_TAG ?= v2-2026.10.28
+SC9T_RELEASE_BASE_URL ?= https://github.com/$(ORGS_NAME)/$(REPO_NAME)/releases/download/$(SC9T_RELEASE_TAG)
+SC9T_VARIANTS := HVT LVT SVT
+SC9T_LIB_PARTS := nldm ccs_ff ccs_ss ccs_tt
+SC9T_LIBRARIES := $(addprefix ICsprout55_SC9T_BASIC_,$(SC9T_VARIANTS))
+SC9T_RELEASE_FILE := $(foreach lib,$(SC9T_LIBRARIES),$(foreach part,$(SC9T_LIB_PARTS),$(lib)_liberty_$(part).tar.bz2)) \
+                     $(addsuffix _gds.tar.bz2,$(SC9T_LIBRARIES))
+SC9T_MANAGED_DIRS := $(foreach lib,$(SC9T_LIBRARIES),libs.ref/$(lib)/liberty libs.ref/$(lib)/gds)
+
+.PHONY: sc9t-download sc9t-verify sc9t-unzip sc9t-clean-bz2 sc9t-clean-dir
+
+$(SC9T_RELEASE_FILE):
+	@echo "[sc9t] download $(@)"
+	@set -eu; \
+	url="$(SC9T_RELEASE_BASE_URL)/$(@)"; \
+	if [ "$(PROXY_USE)" = "true" ]; then url="$(PROXY_URL)$$url"; fi; \
+	if [ "$(TOOL)" = "wget" ]; then \
+		wget --no-verbose --tries=3 --timeout=30 -O "$(@).part" "$$url"; \
+	else \
+		curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 -o "$(@).part" "$$url"; \
+	fi || { rm -f "$(@).part"; exit 1; }; \
+	mv "$(@).part" "$(@)"
+
+sc9t-download: $(SC9T_RELEASE_FILE)
+
+sc9t-verify: sc9t-download
+	@sha256sum --check release-sc9t-assets.sha256
+
+# Extract into a staging tree, verify every file, then swap the managed views.
+sc9t-unzip: sc9t-verify
+	@set -eu; \
+	stage=$$(mktemp -d .release-sc9t.XXXXXX); \
+	trap 'rm -rf "$$stage"' 0; \
+	trap 'exit 1' 1 2 15; \
+	for vt in $(SC9T_VARIANTS); do \
+		base="ICsprout55_SC9T_BASIC_$$vt"; \
+		target="$$stage/libs.ref/$$base"; \
+		mkdir -p "$$target"; \
+		for part in $(SC9T_LIB_PARTS); do \
+			echo "[sc9t] unzip $$base $$part"; \
+			tar -xjf "$${base}_liberty_$${part}.tar.bz2" -C "$$target"; \
+		done; \
+		echo "[sc9t] unzip $$base gds"; \
+		tar -xjf "$${base}_gds.tar.bz2" -C "$$target"; \
+	done; \
+	(cd "$$stage" && sha256sum --check "$(CURDIR)/release-sc9t-files.sha256"); \
+	for target in $(SC9T_MANAGED_DIRS); do \
+		mkdir -p "$$(dirname "$$target")"; \
+		rm -rf "$$target"; \
+		mv "$$stage/$$target" "$$target"; \
+	done
+	@$(MAKE) --no-print-directory sc9t-clean-bz2
+	@echo "[sc9t] installed $(SC9T_RELEASE_TAG)"
+
+sc9t-clean-bz2:
+	@rm -f -- $(SC9T_RELEASE_FILE) $(addsuffix .part,$(SC9T_RELEASE_FILE))
+
+sc9t-clean-dir:
+	@rm -rf -- $(SC9T_MANAGED_DIRS)
+
 .DEFAULT_GOAL := all
