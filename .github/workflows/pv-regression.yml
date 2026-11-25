@@ -17,6 +17,16 @@ jobs:
         run: python3 tests/regression/layer_map_check.py
       - name: LEF-Liberty pin consistency
         run: python3 tests/regression/lef_liberty_check.py
+      - name: SPICE include closure
+        run: python3 tests/regression/spice_include_check.py
+      - name: Install ngspice
+        run: sudo apt-get update && sudo apt-get install -y ngspice
+      - name: Install numpy (RF calibration math)
+        run: python3 -m pip install numpy
+      - name: Varactor C(V) smoke (TT/SS/FF)
+        run: python3 tests/regression/spice_varactor_check.py
+      - name: RF passive calibration harness
+        run: python3 tests/regression/rf_calibration_check.py
 
   drc-fixtures:
     name: DRC fixture self-consistency (KLayout)
@@ -26,10 +36,44 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: DeterminateSystems/install-nix-action@v4
+      - uses: cachix/install-nix-action@v27
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Fetch LibreLane dev shell
         run: git clone --depth 1 https://github.com/librelane/librelane /tmp/librelane
       - name: DRC fixtures (BEOL metal/via rules)
         run: python3 tests/regression/drc_fixture_check.py --librelane /tmp/librelane
+
+  lvs-fixtures:
+    name: LVS extraction fixtures (KLayout)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: cachix/install-nix-action@v27
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch LibreLane dev shell
+        run: git clone --depth 1 https://github.com/librelane/librelane /tmp/librelane
+      - name: LVS fixtures (passives, RF devices, ERC)
+        run: python3 tests/regression/lvs_fixture_check.py --librelane /tmp/librelane
+
+  em-deck:
+    name: EM fixture / stackup / de-embedding checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numpy (de-embedding check)
+        run: python3 -m pip install numpy
+      - uses: cachix/install-nix-action@v27
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch LibreLane dev shell
+        run: git clone --depth 1 https://github.com/librelane/librelane /tmp/librelane
+      - name: EM deck checks
+        run: python3 tests/regression/em_deck_check.py --librelane /tmp/librelane --require-klayout

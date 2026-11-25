@@ -18,7 +18,7 @@ differential is available; this is not an LVS signoff result.
 |---|---|---|
 | core NMOS/PMOS 1.2V | `nm1p2_{svt,lvt,hvt}_lp` / `pm1p2_{svt,lvt,hvt}_lp` | POLY × ACT in NP/PP; source-specific SVT/LVT/HVT selectors |
 | IO NMOS/PMOS 3.3V | `nm3p3_lp` / `pm3p3_lp` | POLY × TGOX IO active in NP/PP |
-| PPO/SAB poly resistor | `re_ppo_sab_2t` | POLY/PPO/SAB selector, with CT terminal straps; Calibre `rsh_rppo=10.252 Ω/□` |
+| PPO/SAB poly resistor | `re_ppo_sab_2t` | POLY/PPO/SAB selector, with CT terminal straps; foundry `rsh_rppo=725.7 Ω/□` |
 | Metal resistors | `RE_M1..RE_M5_{2T,3T}` or `RE_TM1/TM2_{2T,3T}` | Stack-selected resistor marker and conductor; source sheet resistances |
 | ALPAD/RDL resistors | `RE_ALPA_{2T,3T}` | RDL/ALPAD resistor markers with AP terminals |
 | 3.3V P+/NW diode | `dio_3p3_pp_nw_lp` | P+ junction with DIODE marker (191/12) and TGOX in NW; ESD marker (55/1) is unrelated |
@@ -26,8 +26,9 @@ differential is available; this is not an LVS signoff result.
 | DNW varactor | `var1p2_npd_nw_dnw_lp` / `var2p5_npd_nw_dnw_lp` | Same core inside DNW; DNW is tied to the NW terminal |
 | RF NMOS 5T/6T | `ics55_rf_nmos_{svt,lvt,hvt}_{5t,6t}` | DNW-qualified NMOS with P-well tap; terminals D G S B DNW (6T adds PSUB) |
 | RF PMOS 5T | `ics55_rf_pmos_{svt,lvt,hvt}_5t` | DNW-qualified PMOS with N-well tap; terminals D G S B SUB |
-| 1TM+ALPA1 inductor | `ics55_ind` | INDALL (302/12) keep-out and RV (120/1) terminal pads; TM2/RDL spiral body cut from the conductor graph |
-| MOM capacitor | — | not extracted |
+| RF MOS 4T | `nm1p2_*_lp` / `pm1p2_*_lp` | Wrapper aliased to the core MOS (D G S B, W = wf*nf, L = l); feed R/C are not drawn |
+| 1TM+ALPA1 inductor | `ics55_ind` | INDALL (302/12) keep-out, INDVIA (303/12) terminal marks, RV (120/1) terminal vias; TM2/RDL spiral body cut from the conductor graph. Topology-only: no L value is extracted |
+| MOM capacitor 2T/3T | `mom_2t` / `mom_3t` | MOMLVS1 (323/12) core plus MET1..5MOM (81..85/10); 3T selected by MOMTER (282/12). 4T/5T need the coupled model and are not extracted |
 
 LVT uses markers 17/18; HVT uses 21/22. Core MOS selectors exclude both TGOX
 and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
@@ -35,9 +36,13 @@ and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
 ## How it works
 
 - Connectivity: source/drain, CT-qualified tap regions and POLY feed the
-  conductor stack. `metal_stack=auto` selects M1-M5 or M4-T4M1-T4M2 from the
-  top hierarchy; `--metal-stack` can force either stack. Raw ACT is not
-  connected because it spans gate, source and drain regions.
+  conductor stack. `metal_stack=auto` selects `m1_m5` (M1-M5, V1-V4, then
+  M5-PAS) or `t4` (M1-M4, T4V1, T4M1, T4V2, T4M2-PAS) from the top hierarchy;
+  `--metal-stack` can force either stack. The `t4` chain matches the thick
+  metal of the inductor PCell and the Palace EM stackup emitted with
+  `config_gen.py --metal-stack t4` (no M5, T4M1=102/T4M2=103), checked by
+  `tests/regression/em_deck_check.py`. Raw ACT is not connected because it
+  spans gate, source and drain regions.
 - Resistor bodies are extracted as resistor path layers with CT/AP terminal
   conductors; they are not shorted into the ordinary connectivity graph.
 - Ports follow Calibre `PORT DEPTH 0`: only direct top-cell text on selected
@@ -54,17 +59,28 @@ and DGOX. TGOX IO selectors retain the source-defined ESDIOE exception.
   the two-terminal inductor compare directly against the layout extractors
   instead of being flattened into unrelated internals. MOS source/drain (and
   inductor PLUS/MINUS) are declared equivalent terminals.
+- The 4T RF MOS wrappers (`ics55_rf_{n,p}mos_{svt,lvt,hvt}_4t`) contain only
+  extrinsic feed resistors and capacitors around a core MOS, none of which are
+  drawn. They are read as that core device with `W = wf*nf` and `L = l`, so a
+  plain core-MOS layout compares cleanly; the wrapper's R/C are not checked.
+  `tests/regression/lvs_fixture_check.py` covers a matching and a
+  width-mismatched 4T wrapper instance, plus `nmos_5t`, `nmos_6t`, and
+  `pmos_5t` wrapper instances compared against their RF extractor classes.
 - Varactors use the official `npoGate AND NW AND VARAM` core split by
   DGOX/TGOX and SAB. DNW variants are separated by `interacting(DNW)`; the
   DNW is connected to NW where the two N regions overlap.
 - RF MOS 5T/6T are DNW-qualified core MOS devices with contacted body taps.
   A P+ tap outside DNW adjacent to the triple well selects the 6T NMOS or the
   5T PMOS substrate terminal; the 5T NMOS stops at the P-well/DNW terminals.
-- The inductor PCell draws INDALL over the whole footprint and RV pads at
-  both terminals. The deck cuts TM2 inside INDALL except in the RV pad
-  halos, so the spiral body is the device rather than a short between the
-  two terminal nets. On the schematic side instantiate it as
-  `X<name> PLUS MINUS ics55_ind`.
+- The inductor PCell draws INDALL over the whole footprint, one INDVIA box
+  over each RV transition-pad group, and the TM2/RDL winding. The deck cuts
+  TM2 inside INDALL except in the RV pad halos, so the spiral body is the
+  device rather than a short between the two terminal nets. Terminal pads
+  are taken from the two INDVIA-marked RV clusters, not from a farthest-pair
+  guess, and the winding must stay continuous through real RV transitions.
+  The extracted primitive is topology-only (`X<name> PLUS MINUS ics55_ind`
+  with no L value); inductance comes from EM/PEX. On the schematic side
+  instantiate it as `X<name> PLUS MINUS ics55_ind`.
 - Comparison normally flattens the schematic. For `strict_topology=true`
   without `strict_hierarchy=true`, physical extraction also defaults to flat,
   unless `run_mode` is explicitly supplied. Generic and `net_only=true`
@@ -188,10 +204,10 @@ strict macro LVS launch; generic standard-cell LVS does not consume it.
   triple well. Multi-finger source/drain regions are assigned alternately by
   x-order; S/D are equivalent terminals, so a swapped assignment is accepted
   but an irregular finger topology may need manual review.
-- The RF wrapper models are compared as primitive devices with topology only;
-  W/L and the wrapper's internal resistors/capacitors are not checked. The
-  varactor extractor covers the two-terminal flavours; RF 3T varactor
-  variants are not extracted.
+- The RF wrapper models are compared as primitive devices. 5T/6T are
+  topology-only; the 4T wrappers are reduced to the core MOS, so W/L are
+  checked but their feed resistors/capacitors are not. The varactor extractor
+  covers the two-terminal flavours; RF 3T varactor variants are not extracted.
 - Inductor extraction requires an RV terminal pad group at both ends of the
   spiral (the PCell now draws them). Terminal nets are paired as the farthest
   RV pads, and the TM2/RDL spiral inside INDALL is the device body. INDALL

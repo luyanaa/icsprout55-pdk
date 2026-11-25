@@ -120,7 +120,6 @@ end
   connect(layer, CTs)
 end
 connect(RV, PAS)
-connect(IND_RV_B, PAS)
 
 if WELL_TIES
   # Standard-cell GDS has no local taps; the deck selects aliases from top CDL pins.

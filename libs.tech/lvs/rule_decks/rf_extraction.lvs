@@ -168,6 +168,10 @@ class Ics55VaractorExtractor < RBA::GenericDeviceExtractor
 end
 
 class Ics55InductorExtractor < RBA::GenericDeviceExtractor
+  # A two-terminal winding is extracted as a topology-only primitive: the
+  # inductance comes from the EM/PEX flow, not from drawn geometry, so a plain
+  # DeviceClass is used.  DeviceClassInductor would emit a numeric L value and
+  # the only value available here would be a misleading 0 H.
   def initialize(model_name)
     super()
     self.name = model_name
@@ -176,10 +180,11 @@ class Ics55InductorExtractor < RBA::GenericDeviceExtractor
 
   def setup
     define_layer('SEED', 'inductor keep-out')
-    define_layer('PLUS', 'plus terminal pad')
-    define_layer('MINUS', 'minus terminal pad')
-    dc = RBA::DeviceClassInductor.new
-    dc.clear_terminals
+    define_layer('MARK', 'INDVIA terminal marker')
+    define_layer('VIA', 'RV terminal/transition via')
+    define_layer('TM2', 'TM2 winding')
+    define_layer('RDL', 'RDL underpass')
+    dc = RBA::DeviceClass.new
     dc.name = @model_name
     %w[PLUS MINUS].each do |terminal|
       definition = RBA::DeviceTerminalDefinition.new
@@ -192,6 +197,11 @@ class Ics55InductorExtractor < RBA::GenericDeviceExtractor
   end
 
   def get_connectivity(_layout, layers)
+    # Terminals are RV transition vias, which the main deck already connects
+    # to PAS.  GenericDeviceExtractor only invokes extract_devices when every
+    # defined layer participates in this connectivity graph, so the annotation
+    # and body layers are joined through the seed even though no terminal
+    # shape lives on them.
     connectivity = RBA::Connectivity.new
     connectivity.connect(layers[0])
     layers.drop(1).each { |layer| connectivity.connect(layers[0], layer) }
@@ -200,27 +210,41 @@ class Ics55InductorExtractor < RBA::GenericDeviceExtractor
 
   def extract_devices(layer_geometry)
     seeds = layer_geometry[0]
-    plus_layer = layer_geometry[1]
-    minus_layer = layer_geometry[2]
+    marks = layer_geometry[1]
+    vias = layer_geometry[2]
+    tm2 = layer_geometry[3]
+    rdl = layer_geometry[4]
 
     seeds.merged.each do |seed|
       seed_region = RBA::Region.new(seed)
-      plus_pads = Ics55RegionUtil.polygons(plus_layer.interacting(seed_region).merged)
-      minus_pads = Ics55RegionUtil.polygons(minus_layer.interacting(seed_region).merged)
-      next if plus_pads.empty? || minus_pads.empty?
+      markers = Ics55RegionUtil.polygons(marks.interacting(seed_region).merged)
+      next unless markers.size == 2
 
-      # The two terminal groups sit at opposite ends of the spiral; use the
-      # farthest plus/minus pair.
-      first, second = plus_pads.product(minus_pads).max_by do |a, b|
-        ca = a.bbox.center
-        cb = b.bbox.center
-        (ca.x - cb.x)**2 + (ca.y - cb.y)**2
+      # Both terminals are equivalent, so the ordering only makes the netlist
+      # deterministic; it cannot change the compare result.
+      markers.sort_by! { |polygon| [polygon.bbox.center.x, polygon.bbox.center.y] }
+      plus = vias.interacting(RBA::Region.new(markers[0])).merged
+      minus = vias.interacting(RBA::Region.new(markers[1])).merged
+      next if plus.is_empty? || minus.is_empty?
+
+      # Winding continuity: propagate through real RV transitions only, so the
+      # 2D crossings of the RDL underpass and the TM2 spiral are not treated as
+      # contacts.  A cut winding leaves no device (open); a strap that joins
+      # the two terminal nets keeps the device but the compare rejects it
+      # because PLUS and MINUS resolve to the same net.
+      reachable = plus
+      loop do
+        via_reach = vias.interacting(reachable)
+        grown = reachable | tm2.interacting(via_reach) | rdl.interacting(via_reach)
+        break if (grown ^ reachable).is_empty?
+
+        reachable = grown
       end
-      next unless first && second
+      next if reachable.interacting(minus).is_empty?
 
       device = create_device
-      define_terminal(device, 'PLUS', 'PLUS', first)
-      define_terminal(device, 'MINUS', 'MINUS', second)
+      plus.each { |polygon| define_terminal(device, 'PLUS', 'VIA', polygon) }
+      minus.each { |polygon| define_terminal(device, 'MINUS', 'VIA', polygon) }
     end
   end
 end
@@ -258,4 +282,5 @@ end
 # --- inductor ------------------------------------------------------------------------
 
 extract_devices(Ics55InductorExtractor.new('ics55_ind'),
-                { 'SEED' => INDALL, 'PLUS' => RV, 'MINUS' => IND_RV_B })
+                { 'SEED' => INDALL, 'MARK' => INDVIA, 'VIA' => RV,
+                  'TM2' => T4M2p, 'RDL' => APs })

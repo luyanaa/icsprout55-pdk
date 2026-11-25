@@ -1,0 +1,3 @@
+.SUBCKT TOP D G S B DNW PSUB
+X1 D G S B DNW PSUB ics55_rf_nmos_svt_6t wf=0.5u nf=1 l=0.1u
+.ENDS TOP

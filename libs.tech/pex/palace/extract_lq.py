@@ -26,9 +26,19 @@ equivalent of the measured two-port:
 
 The pad-to-shield shunt capacitance is reported as C = Im(Y11 + Y12)/(2 pi f).
 
+Port de-embedding: pass the open fixture run (same pads/ports/PGS, no
+winding; make_em_deck.py --open) with --open.  Its Y matrix is subtracted
+from the DUT Y matrix, removing the pad, port-sheet and shield parasitics:
+
+    Y_dev = Y_dut - Y_open
+
+A short fixture may be supplied as well (Z_dev = Z_dut - Z_short, applied
+after the open step).
+
 Usage:
     python extract_lq.py [palace_model/<name>_data/output/<name>/port-S.csv]
-                         [--z0 50]
+                         [--z0 50] [--open <open-port-S.csv>]
+                         [--short <short-port-S.csv>]
 """
 
 import argparse
@@ -71,6 +81,70 @@ def read_port_s(path):
     return freqs, smats
 
 
+def s_to_y(S, z0):
+    ident = np.eye(S.shape[0])
+    return (ident - S) @ np.linalg.inv(ident + S) / z0
+
+
+def y_to_s(Y, z0):
+    ident = np.eye(Y.shape[0])
+    return (ident - z0 * Y) @ np.linalg.inv(ident + z0 * Y)
+
+
+def s_to_z(S, z0):
+    ident = np.eye(S.shape[0])
+    return z0 * (ident + S) @ np.linalg.inv(ident - S)
+
+
+def z_to_s(Z, z0):
+    ident = np.eye(Z.shape[0])
+    return (Z - z0 * ident) @ np.linalg.inv(Z + z0 * ident)
+
+
+def _interp_matrix(freq_ref, freq_src, mats):
+    if len(freq_ref) == len(freq_src) and np.allclose(freq_ref, freq_src):
+        return mats
+    flat = np.array(mats)
+    out = np.empty((len(freq_ref),) + flat.shape[1:], dtype=complex)
+    for idx in np.ndindex(flat.shape[1:]):
+        values = flat[(slice(None),) + idx]
+        out[(slice(None),) + idx] = (np.interp(freq_ref, freq_src, values.real)
+                                     + 1j * np.interp(freq_ref, freq_src,
+                                                      values.imag))
+    return list(out)
+
+
+def deembed(freqs, smats, open_csv=None, short_csv=None, z0=50.0):
+    """Remove fixture parasitics; returns (freqs, [S_device])."""
+    if not (open_csv or short_csv):
+        return freqs, [S for S, _ in smats]
+    if not all(complete for _, complete in smats):
+        raise SystemExit("de-embedding needs a complete 2-port S matrix")
+    mats = [S for S, _ in smats]
+    if open_csv:
+        f_o, s_o = read_port_s(open_csv)
+        if not all(complete for _, complete in s_o):
+            raise SystemExit("open fixture needs a complete 2-port S matrix")
+        opens = _interp_matrix(freqs, f_o, [S for S, _ in s_o])
+        mats = [y_to_s(s_to_y(S, z0) - s_to_y(O, z0), z0)
+                for S, O in zip(mats, opens)]
+    if short_csv:
+        f_s, s_s = read_port_s(short_csv)
+        if not all(complete for _, complete in s_s):
+            raise SystemExit("short fixture needs a complete 2-port S matrix")
+        shorts = _interp_matrix(freqs, f_s, [S for S, _ in s_s])
+        mats = [z_to_s(s_to_z(S, z0) - s_to_z(Z, z0), z0)
+                for S, Z in zip(mats, shorts)]
+    return freqs, mats
+
+
+def series_lq(S, f_ghz, z0=50.0):
+    """(Zs, Csh) from the pi-equivalent series branch at one frequency."""
+    w = 2.0 * np.pi * f_ghz * 1e9
+    Y = s_to_y(S, z0)
+    return -1.0 / Y[1, 0], (Y[0, 0] + Y[0, 1]).imag / w
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     default = os.path.join(here, "palace_model", "ics55_ind_m2_data", "output",
@@ -78,17 +152,27 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("csv", nargs="?", default=default)
     ap.add_argument("--z0", type=float, default=50.0)
+    ap.add_argument("--open", dest="open_csv",
+                    help="open-fixture port-S.csv for Y de-embedding")
+    ap.add_argument("--short", dest="short_csv",
+                    help="short-fixture port-S.csv for Z de-embedding")
     args = ap.parse_args()
 
     freqs, smats = read_port_s(args.csv)
-    ident = np.eye(smats[0][0].shape[0])
+    if args.open_csv or args.short_csv:
+        print("# de-embedded: open=%s short=%s"
+              % (args.open_csv or "-", args.short_csv or "-"))
+        freqs, mats = deembed(freqs, smats, args.open_csv, args.short_csv,
+                              args.z0)
+        complete_flags = [True] * len(freqs)
+    else:
+        mats = [S for S, _ in smats]
+        complete_flags = [complete for _, complete in smats]
     print("%9s %12s %10s %8s %10s" % ("f (GHz)", "Re Zs (ohm)", "L (nH)", "Q", "Csh (fF)"))
-    for f_ghz, (S, complete) in zip(freqs, smats):
+    for f_ghz, S, complete in zip(freqs, mats, complete_flags):
         w = 2.0 * np.pi * f_ghz * 1e9
         if complete:
-            Y = (ident - S) @ np.linalg.inv(ident + S) / args.z0
-            zs = -1.0 / Y[1, 0]
-            csh = (Y[0, 0] + Y[0, 1]).imag / w
+            zs, csh = series_lq(S, f_ghz, args.z0)
         else:
             # only S11/S21 available: series 2-port approximation
             zs = 2.0 * args.z0 * (1.0 - S[1, 0]) / S[1, 0]

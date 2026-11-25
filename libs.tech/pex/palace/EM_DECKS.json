@@ -1,0 +1,42 @@
+{
+  "generator": "libs.tech/pex/palace/make_em_deck.py",
+  "metal_stack": "t4",
+  "corner": "typ",
+  "source": "starrc",
+  "decks": [
+    {
+      "variant": "pgs",
+      "device": "dut",
+      "gds": "ics55_ind_em.gds",
+      "stackup": "ics55_stackup_em.xml",
+      "metal_stack": "t4",
+      "corner": "typ",
+      "pgs": 2,
+      "pgs_return": true,
+      "ideal_ground": false,
+      "ports": [
+        "300/1",
+        "301/1"
+      ],
+      "ground": "81/1",
+      "pgs_return_layer": "302/1"
+    },
+    {
+      "variant": "pgs",
+      "device": "open",
+      "gds": "ics55_ind_em_open.gds",
+      "stackup": "ics55_stackup_em.xml",
+      "metal_stack": "t4",
+      "corner": "typ",
+      "pgs": 2,
+      "pgs_return": true,
+      "ideal_ground": false,
+      "ports": [
+        "300/1",
+        "301/1"
+      ],
+      "ground": "81/1",
+      "pgs_return_layer": "302/1"
+    }
+  ]
+}

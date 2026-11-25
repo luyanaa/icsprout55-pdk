@@ -63,7 +63,7 @@ mode.add_argument('--postprocess', action='store_true',
                   help='reuse existing FDTD data without re-running')
 ap.add_argument('--gds', default=os.path.join(HERE, '..', 'palace', 'ics55_ind_em.gds'),
                 help='GDSII with device and port-source shapes (300/301)')
-ap.add_argument('--stackup', default=os.path.join(HERE, '..', 'palace', 'ics55_stackup.xml'),
+ap.add_argument('--stackup', default=os.path.join(HERE, '..', 'palace', 'ics55_stackup_em.xml'),
                 help='stackup XML (gds2palace schemaVersion 2.0)')
 ap.add_argument('--name', default='ics55_ind_2port', help='model basename')
 ap.add_argument('--fstart', type=float, default=0.1e9, help='sweep start (Hz)')

@@ -18,7 +18,9 @@ lib/
 lib64/
 parts/
 sdist/
-var/
+# Anchored: the Python template's /var/ must not hide the foundry model dirs
+# libs.tech/spice/foundry/*/var/ (varactor.ckt).
+/var/
 wheels/
 share/python-wheels/
 *.egg-info/

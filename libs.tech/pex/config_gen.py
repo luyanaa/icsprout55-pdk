@@ -64,6 +64,27 @@
 #   python config_gen.py --layers-rc --all-corners
 #   python config_gen.py --palace --corner rcworst
 #   python config_gen.py --source lef --layers-rc      # clean-room baseline
+#   python config_gen.py --palace --metal-stack t4 --pgs-return
+#
+# Metal stacks
+# ------------
+#   m1_m5 (default): M1-M5 + TM2, V1-V4 + TV2.  The released 1P6M1TM
+#                    routing profile used by LibreLane/OpenRAM.
+#   t4            : M1-M4 + T4M1 (GDS 102) + T4M2 (GDS 103), V1-V3 +
+#                    T4V1/T4V2.  This is the thick-metal profile the LVS
+#                    deck selects with metal_stack=t4; M5 is absent.
+# The T4M1/T4M2 entries both take the single vendor ITF top-metal ("TM")
+# values (0.9 um, RPSQ 0.0239); T4M1 is the same thick-metal class as T4M2
+# (DRC W/S 0.40 um, T4V1/T4V2 0.36 um squares) and no separate released
+# value exists.
+#
+# EM-fixture options (--palace only)
+# ----------------------------------
+#   --pgs-return    adds a fixture-only PGS_RTN via (GDS 302) from the PGS
+#                   top to the M1 bottom, so the drawn shield can be tied to
+#                   the reference plane instead of floating.
+#   --ideal-ground  writes the M1 reference plane with sigma = 1e18 S/m,
+#                   i.e. a PEC-like ground for the fixture comparison.
 # ============================================================================
 
 import argparse
@@ -89,10 +110,32 @@ LEF_SEEDS = {
     "M4":  (0.0914, 0.0011069, 0.0000409, 0.10),
     "M5":  (0.0914, 0.0006259, 0.0000344, 0.10),
     "TM2": (0.0239, 0.0001299, 0.0000368, 0.40),
+    # T4M1 is the same thick-metal class as T4M2: the released LEF carries
+    # only T4M2 (the 1P6M1TM routing profile), so the T4M2 seed is reused.
+    "T4M1": (0.0239, 0.0001299, 0.0000368, 0.40),
+    "T4M2": (0.0239, 0.0001299, 0.0000368, 0.40),
     "RDL": (0.0151, 0.0000574, 0.0000281, 3.00),
 }
 VIA_R_OHM = 2.5          # LEF VIA RESISTANCE (all via levels)
-VIA_CUT_UM = {"V1": 0.09, "V2": 0.09, "V3": 0.09, "V4": 0.09, "TV2": 0.36}
+VIA_CUT_UM = {"V1": 0.09, "V2": 0.09, "V3": 0.09, "V4": 0.09, "TV2": 0.36,
+              "T4V1": 0.36, "T4V2": 0.36}
+
+# Metal/via sequence per profile.  The t4 profile replaces M5/V4/TV2 with the
+# two thick metals and their 0.36 um vias (LVS metal_stack=t4).
+METAL_STACKS = {
+    "m1_m5": {
+        "metals": ["M1", "M2", "M3", "M4", "M5", "TM2"],
+        "vias": [("V1", "M1", "M2"), ("V2", "M2", "M3"),
+                 ("V3", "M3", "M4"), ("V4", "M4", "M5"),
+                 ("TV2", "M5", "TM2")],
+    },
+    "t4": {
+        "metals": ["M1", "M2", "M3", "M4", "T4M1", "T4M2"],
+        "vias": [("V1", "M1", "M2"), ("V2", "M2", "M3"),
+                 ("V3", "M3", "M4"), ("T4V1", "M4", "T4M1"),
+                 ("T4V2", "T4M1", "T4M2")],
+    },
+}
 VIA_HEIGHT_UM = 0.12     # vertical via height estimate (55nm-node typical)
 
 # ---------------------------------------------------------------------------
@@ -135,9 +178,12 @@ THERMAL = {
 }
 
 # GDS layer numbers (official map, libs.tech/klayout/tech/ics55.map)
-GDS_LAYER = {"M1": 81, "M2": 82, "M3": 83, "M4": 84, "M5": 85, "TM2": 103,
+GDS_LAYER = {"M1": 81, "M2": 82, "M3": 83, "M4": 84, "M5": 85,
+             "T4M1": 102, "TM2": 103, "T4M2": 103,
              "V1": 91, "V2": 92, "V3": 93, "V4": 94, "TV2": 113,
-             "RV": 120, "ALPAD": 122, "RDL": 123}
+             "T4V1": 112, "T4V2": 113,
+             "RV": 120, "ALPAD": 122, "RDL": 123,
+             "PGS_RTN": 302}
 
 # ---------------------------------------------------------------------------
 # 3. StarRC vendor override (libs.tech/pex/starrc/)
@@ -164,11 +210,14 @@ LIBERTY_CORNER_MAP = {
     "nom_ff_n40C_1v32": ("rcbest", "cbest"),
 }
 
-# StarRC ITF conductor name -> the name used in this generator.
-ITF_CONDUCTOR_ALIAS = {"TM": "TM2"}
+# Local layer name -> StarRC ITF name.  The vendor ITF has one top-metal
+# entry (TM); both T4M1 and T4M2 are that stack class (build_stack maps the
+# T4 names to TM2, which maps to TM here).
+ITF_CONDUCTOR_ALIAS = {"TM2": "TM"}
 
-# ITF via name -> the name used in this generator.
-ITF_VIA_ALIAS = {"TV": "TV2"}
+# Local via name -> ITF via name.  T4V1/T4V2 are the same 0.36 um
+# thick-metal via as TV.
+ITF_VIA_ALIAS = {"TV2": "TV", "T4V1": "TV", "T4V2": "TV"}
 
 
 class StarRcData:
@@ -264,17 +313,11 @@ class StarRcData:
     # -- helpers -----------------------------------------------------------
     @staticmethod
     def _itf_name(layer: str) -> str:
-        for itf_name, local in ITF_CONDUCTOR_ALIAS.items():
-            if local == layer:
-                return itf_name
-        return layer
+        return ITF_CONDUCTOR_ALIAS.get(layer, layer)
 
     @staticmethod
     def _itf_via_name(via: str) -> str:
-        for itf_name, local in ITF_VIA_ALIAS.items():
-            if local == via:
-                return itf_name
-        return via
+        return ITF_VIA_ALIAS.get(via, via)
 
 
 def _substrate_block(captab: dict, conductor: str) -> dict | None:
@@ -298,8 +341,14 @@ def sigma_s_m2(rpsq, thickness_um):
 
 
 def build_stack(corner: str = "typ", rc_corner: str | None = None,
-                c_corner: str | None = None, source: str = "starrc"):
+                c_corner: str | None = None, source: str = "starrc",
+                metal_stack: str = "m1_m5"):
     """Return the metal/via z-ranges (um, z=0 at the substrate bottom).
+
+    ``metal_stack`` selects the conductor profile: "m1_m5" (released
+    1P6M1TM routing stack) or "t4" (M1-M4 + the two thick metals, matching
+    the LVS deck's metal_stack=t4).  The two T4 thick metals share the single
+    vendor ITF top-metal entry.
 
     Corner model
     ------------
@@ -329,6 +378,10 @@ def build_stack(corner: str = "typ", rc_corner: str | None = None,
     for name in (rc_corner, c_corner):
         if name not in STARRC_FILES:
             raise SystemExit("unknown corner %r" % (name,))
+    if metal_stack not in METAL_STACKS:
+        raise SystemExit("unknown metal stack %r (choose from %s)"
+                         % (metal_stack, ", ".join(METAL_STACKS)))
+    profile = METAL_STACKS[metal_stack]
 
     rc_data = StarRcData(rc_corner) if source == "starrc" else None
     c_data = StarRcData(c_corner) if source == "starrc" else None
@@ -336,15 +389,17 @@ def build_stack(corner: str = "typ", rc_corner: str | None = None,
 
     metals = []
     z = SUBSTRATE_THICK_UM + SPACING_PMD
-    for name in ["M1", "M2", "M3", "M4", "M5", "TM2"]:
+    for name in profile["metals"]:
         rpsq_base, cap, edge, w = LEF_SEEDS[name]
+        # T4M1/T4M2 both read the vendor's single top-metal ("TM") entry.
+        itf_layer = "TM2" if name in ("T4M1", "T4M2") else name
 
         # --- R axis: sheet resistance and metal thickness ---------------
         rpsq = rpsq_base
         thickness = metal_thickness_um(rpsq_base)
         if rc_data is not None:
-            itf_rpsq = rc_data.rpsq(name)
-            itf_t = rc_data.thickness_um(name)
+            itf_rpsq = rc_data.rpsq(itf_layer)
+            itf_t = rc_data.thickness_um(itf_layer)
             if itf_rpsq is not None:
                 rpsq = itf_rpsq
             if itf_t is not None:
@@ -355,7 +410,7 @@ def build_stack(corner: str = "typ", rc_corner: str | None = None,
         # --- C axis: capacitance corner ratio on top of the BASE value ---
         cap_eff, edge_eff = cap, edge
         if c_data is not None and typ_data is not None:
-            ratio = c_data.capacitance_ratio(name, typ_data)
+            ratio = c_data.capacitance_ratio(itf_layer, typ_data)
             cap_eff, edge_eff = cap * ratio, edge * ratio
 
         zmin = round(z, 4)
@@ -370,9 +425,7 @@ def build_stack(corner: str = "typ", rc_corner: str | None = None,
         z = round(z + thickness + SPACING_IMD, 4)
 
     vias = []
-    order = [("V1", "M1", "M2"), ("V2", "M2", "M3"), ("V3", "M3", "M4"),
-             ("V4", "M4", "M5"), ("TV2", "M5", "TM2")]
-    for via, low, high in order:
+    for via, low, high in profile["vias"]:
         zlo = next(m["zmax"] for m in metals if m["name"] == low)
         zhi = next(m["zmin"] for m in metals if m["name"] == high)
         w = VIA_CUT_UM[via]
@@ -437,25 +490,43 @@ def build_stack(corner: str = "typ", rc_corner: str | None = None,
         "rc_corner": rc_corner,
         "c_corner": c_corner,
         "source": source,
+        "metal_stack": metal_stack,
     }
 
 
 # ---------------------------------------------------------------------------
 # 5. Emitters
 # ---------------------------------------------------------------------------
-def emit_palace_stackup(stack, out):
-    """gds2palace stackup XML (schemaVersion 2.0, legacy; top-first dielectrics)."""
+def _metal_material(name):
+    return {"TM2": "TopMetal", "T4M1": "TopMetal1",
+            "T4M2": "TopMetal2"}.get(name, "Metal" + name[1:])
+
+
+def _via_material(name):
+    return {"TV2": "TopVia", "T4V1": "TopVia1",
+            "T4V2": "TopVia2"}.get(name, "Via" + name[1:])
+
+
+def emit_palace_stackup(stack, out, pgs_return=False, ideal_ground=False):
+    """gds2palace stackup XML (schemaVersion 2.0, legacy; top-first dielectrics).
+
+    ``pgs_return`` adds the fixture-only PGS_RTN via (GDS 302) that ties the
+    shield to the M1 reference plane; ``ideal_ground`` makes that plane
+    PEC-like (sigma 1e18 S/m).  Both are EM-fixture options, not process data.
+    """
     root = ET.Element("Stackup", {"schemaVersion": "2.0"})
     mats = ET.SubElement(root, "Materials")
     for m in stack["metals"]:
+        sigma = ("1e+18" if ideal_ground and m["name"] == "M1"
+                 else "%.1f" % m["sigma"])
         ET.SubElement(mats, "Material", {
-            "Name": "TopMetal" if m["name"] == "TM2" else "Metal" + m["name"][1:],
-            "Type": "Conductor", "Conductivity": "%.1f" % m["sigma"],
+            "Name": _metal_material(m["name"]),
+            "Type": "Conductor", "Conductivity": sigma,
             "ThermalConductivity": "%.1f" % m["thermal"], "Density": "%.1f" % m["density"],
-            "Color": "ff8000" if m["name"] == "TM2" else "ccccd9"})
+            "Color": "ff8000" if m["name"] in ("TM2", "T4M1", "T4M2") else "ccccd9"})
     for v in stack["vias"]:
         ET.SubElement(mats, "Material", {
-            "Name": "TopVia" if v["name"] == "TV2" else "Via" + v["name"][1:],
+            "Name": _via_material(v["name"]),
             "Type": "Conductor", "Conductivity": "%.1f" % v["sigma"],
             "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
             "Density": "%.1f" % THERMAL["metal"][1], "Color": "ffe6bf"})
@@ -479,6 +550,12 @@ def emit_palace_stackup(stack, out):
         "Name": "PGS", "Type": "Conductor", "Conductivity": "%.1f" % PGS_SIGMA,
         "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
         "Density": "%.1f" % THERMAL["metal"][1], "Color": "40c040"})
+    if pgs_return:
+        ET.SubElement(mats, "Material", {
+            "Name": "PGSRTN", "Type": "Conductor",
+            "Conductivity": ("1e+18" if ideal_ground else "%.1f" % PGS_SIGMA),
+            "ThermalConductivity": "%.1f" % THERMAL["metal"][0],
+            "Density": "%.1f" % THERMAL["metal"][1], "Color": "40c040"})
     eps = stack["eps"]
     for nm, epsv, k, rho, typ in [
             ("IMD", eps["imd"], *THERMAL["imd"], "Dielectric"),
@@ -508,38 +585,27 @@ def emit_palace_stackup(stack, out):
     #   IMD_k = zmin(metal k+1) - zmin(metal k); passivation covers the top metal.
     top = stack["rdl"]
     pass_th = top["zmax"] + PASSIVATION_MARGIN - top["zmin"]
-    for name, th, mat in [
-            ("Passivation", pass_th, "Passivation"),
-            ("RDLILD", top["zmin"] - metals[-1]["zmin"], "RDLILD"),
-            ("IMD5", metals[5]["zmin"] - metals[4]["zmin"], "IMD"),
-            ("IMD4", metals[4]["zmin"] - metals[3]["zmin"], "IMD"),
-            ("IMD3", metals[3]["zmin"] - metals[2]["zmin"], "IMD"),
-            ("IMD2", metals[2]["zmin"] - metals[1]["zmin"], "IMD"),
-            ("IMD1", metals[1]["zmin"] - metals[0]["zmin"], "IMD"),
-            ("PMD", SPACING_PMD, "PMD"), ("Substrate", SUBSTRATE_THICK_UM, "Substrate")]:
+    dielectric_layers = [("Passivation", pass_th, "Passivation"),
+                         ("RDLILD", top["zmin"] - metals[-1]["zmin"], "RDLILD")]
+    for i in range(len(metals) - 1, 0, -1):
+        dielectric_layers.append(
+            ("IMD%d" % i, metals[i]["zmin"] - metals[i - 1]["zmin"], "IMD"))
+    dielectric_layers += [("PMD", SPACING_PMD, "PMD"),
+                          ("Substrate", SUBSTRATE_THICK_UM, "Substrate")]
+    for name, th, mat in dielectric_layers:
         ET.SubElement(diels, "Dielectric", {
             "Name": name, "Material": mat, "Thickness": "%.4f" % th})
     layers = ET.SubElement(el, "Layers")
     for m in [top] + list(reversed(metals)):
-        if m["name"] == "RDL":
-            name, mat = "RDL", "RDL"
-        elif m["name"] == "TM2":
-            name, mat = "TM2", "TopMetal"
-        else:
-            name, mat = m["name"], "Metal" + m["name"][1:]
+        mat = "RDL" if m["name"] == "RDL" else _metal_material(m["name"])
         ET.SubElement(layers, "Layer", {
-            "Name": name, "Type": "conductor",
+            "Name": m["name"], "Type": "conductor",
             "Zmin": "%.4f" % m["zmin"], "Zmax": "%.4f" % m["zmax"],
             "Material": mat, "Layer": str(GDS_LAYER[m["name"]])})
     for v in [stack["rdl_via"]] + list(reversed(stack["vias"])):
-        if v["name"] == "RV":
-            name, mat = "RV", "RV"
-        elif v["name"] == "TV2":
-            name, mat = "TV2", "TopVia"
-        else:
-            name, mat = v["name"], "Via" + v["name"][1:]
+        mat = "RV" if v["name"] == "RV" else _via_material(v["name"])
         ET.SubElement(layers, "Layer", {
-            "Name": name, "Type": "via",
+            "Name": v["name"], "Type": "via",
             "Zmin": "%.4f" % v["zmin"], "Zmax": "%.4f" % v["zmax"],
             "Material": mat, "Layer": str(GDS_LAYER[v["name"]])})
     ET.SubElement(layers, "Layer", {
@@ -547,6 +613,12 @@ def emit_palace_stackup(stack, out):
         "Zmin": "%.4f" % SUBSTRATE_THICK_UM,
         "Zmax": "%.4f" % (SUBSTRATE_THICK_UM + PGS_THICK_UM),
         "Material": "PGS", "Layer": "2"})
+    if pgs_return:
+        ET.SubElement(layers, "Layer", {
+            "Name": "PGS_RTN", "Type": "via",
+            "Zmin": "%.4f" % (SUBSTRATE_THICK_UM + PGS_THICK_UM),
+            "Zmax": "%.4f" % metals[0]["zmin"],
+            "Material": "PGSRTN", "Layer": str(GDS_LAYER["PGS_RTN"])})
     _indent(root)
     # The XML declaration must be the first thing in the document, so the
     # licence comment goes after it (a comment before it makes the file
@@ -568,27 +640,37 @@ def emit_palace_stackup(stack, out):
               "limitations under the License.\n"
               "-->\n"
               "<!-- Generated by libs.tech/pex/config_gen.py\n"
-              "     source=%s corner=%s (R=%s C=%s)\n"
+              "     source=%s corner=%s (R=%s C=%s) metal_stack=%s\n"
+              "     fixture=%s\n"
               "     BASE: released LEF seeds + user-approved estimates.\n"
               "     OVERRIDE: StarRC vendor ITF (thickness/RPSQ/eps/via R) and\n"
               "     CAPTAB corner capacitance ratio.  The StarRC inputs are\n"
               "     ICsprout vendor data (see libs.tech/pex/README.md).\n"
               "     Regenerate after any change. -->\n"
               % (stack["source"], stack["corner"], stack["rc_corner"],
-                 stack["c_corner"]))
+                 stack["c_corner"], stack["metal_stack"],
+                 "%s%s" % ("pgs-return" if pgs_return else "no-pgs-return",
+                           " ideal-ground" if ideal_ground else "")))
     out.write_text(header + ET.tostring(root, encoding="unicode") + "\n")
 
 
 def emit_magic_snippet(stack):
-    """Print the magic .tech extract values (resist/areacap/perimc)."""
+    """Print the magic .tech extract values (resist/areacap/perimc).
+
+    Magic's extract section measures area in square lambdas and perimeter in
+    lambdas, with lambda = 0.01 um (10 nm).  Therefore:
+      areacap [aF/lambda^2] = CPERSQDIST [pF/um^2] * 1e6 / 1e4 = value * 100
+      perimc  [aF/lambda]   = EDGECAPACITANCE [pF/um] * 1e6 / 100 = value * 1e4
+    Resistances stay in milliohms per square / milliohms per via.
+    """
     for m in stack["metals"]:
         print("\tresist\t%s\t%d" % (m["name"].lower(), round(m["rpsq"] * 1000)))
     for v in stack["vias"]:
         print("\tresist\t%s\t%d" % (v["name"].lower(), round(v["r"] * 1000)))
     for m in stack["metals"]:
-        print("\tareacap\t%s\t%d" % (m["name"].lower(), round(m["cap"] * 1e6)))
+        print("\tareacap\t%s\t%.6g" % (m["name"].lower(), m["cap"] * 100.0))
     for m in stack["metals"]:
-        print("\tperimc\t%s\tspace\t%d" % (m["name"].lower(), round(m["edge"] * 1e6)))
+        print("\tperimc\t%s\tspace\t%.6g" % (m["name"].lower(), m["edge"] * 1e4))
     if stack["contacts"]:
         print("\t* contact resistance (ohm), from the StarRC ITF:")
         for name, value in sorted(stack["contacts"].items()):
@@ -737,6 +819,7 @@ def emit_corner_manifest(stacks, out):
     """Machine-readable corner manifest for the flow and for review."""
     payload = {
         "generator": "libs.tech/pex/config_gen.py",
+        "metal_stack": next(iter(stacks.values()))["metal_stack"],
         "base_source": "released LEF seeds + user-approved estimates",
         "override_source": (
             "StarRC vendor ITF/CAPTAB under libs.tech/pex/starrc "
@@ -764,6 +847,7 @@ def emit_corner_manifest(stacks, out):
         payload["corners"][name] = {
             "rc_corner": stack["rc_corner"],
             "c_corner": stack["c_corner"],
+            "metal_stack": stack["metal_stack"],
             "eps": stack["eps"],
             "metals": [
                 {"layer": m["name"], "rpsq": m["rpsq"],
@@ -825,6 +909,14 @@ def main(argv=None):
                     help="override the C axis independently")
     ap.add_argument("--all-corners", action="store_true",
                     help="emit one artifact per vendor corner")
+    ap.add_argument("--metal-stack", choices=tuple(METAL_STACKS),
+                    default="m1_m5",
+                    help="m1_m5 = released 1P6M1TM routing stack; t4 = "
+                         "M1-M4 + T4M1 + T4M2 (EM stackup / LVS t4)")
+    ap.add_argument("--pgs-return", action="store_true",
+                    help="palace only: add the fixture PGS_RTN via (GDS 302)")
+    ap.add_argument("--ideal-ground", action="store_true",
+                    help="palace only: make the M1 reference plane PEC-like")
     ap.add_argument("--scl", default="ics55_LLSC_H7CR")
     ap.add_argument("--librelane", default=str(ROOT / "libs.tech/librelane"))
     args = ap.parse_args(argv)
@@ -832,30 +924,42 @@ def main(argv=None):
     scl_dir = Path(args.librelane) / args.scl
     palace_dir = ROOT / "libs.tech/pex/palace"
 
+    if args.metal_stack != "m1_m5" and (
+            args.magic_snippet or args.openrcx or args.layers_rc):
+        ap.error("--metal-stack t4 is emitted for the EM stackup and the "
+                 "manifest only; the released routing flow uses m1_m5")
+    if (args.pgs_return or args.ideal_ground) and not args.palace:
+        ap.error("--pgs-return/--ideal-ground are EM-fixture options for "
+                 "--palace")
+
     # Per-file artifacts (palace XML, OpenRCX rules) are single-corner: emit
     # the selected corner, or every vendor corner with --all-corners.
     corners = list(STARRC_CORNERS) if args.all_corners else [args.corner]
     stacks = {}
     for name in corners:
         if args.all_corners:
-            stacks[name] = build_stack(name, source=args.source)
+            stacks[name] = build_stack(name, source=args.source,
+                                       metal_stack=args.metal_stack)
         else:
             stacks[name] = build_stack(name, rc_corner=args.rc_corner,
                                        c_corner=args.c_corner,
-                                       source=args.source)
+                                       source=args.source,
+                                       metal_stack=args.metal_stack)
 
     # Corner-keyed artifacts (LAYERS_RC/VIAS_R is one dict, the manifest
     # describes the whole corner set) always carry every vendor corner plus an
     # entry per released-Liberty flow corner, so the flow can pick any of them
     # from a single generation run.
     if args.layers_rc or args.manifest or args.all_corners:
-        all_stacks = {name: build_stack(name, source=args.source)
+        all_stacks = {name: build_stack(name, source=args.source,
+                                        metal_stack=args.metal_stack)
                       for name in STARRC_CORNERS}
         for flow_name, (rc, c) in LIBERTY_CORNER_MAP.items():
             # Emit under the flow name even when a vendor corner already has
             # the same pairing, so the flow can look up its own corner name.
             all_stacks[flow_name] = build_stack(
-                rc, rc_corner=rc, c_corner=c, source=args.source)
+                rc, rc_corner=rc, c_corner=c, source=args.source,
+                metal_stack=args.metal_stack)
     else:
         all_stacks = stacks
 
@@ -869,10 +973,12 @@ def main(argv=None):
             # unchanged; every corner also gets an explicit file.
             if name == "typ":
                 out = palace_dir / "ics55_stackup.xml"
-                emit_palace_stackup(stack, out)
+                emit_palace_stackup(stack, out, pgs_return=args.pgs_return,
+                                    ideal_ground=args.ideal_ground)
                 print("palace stackup ->", out)
             out = palace_dir / ("ics55_stackup_%s.xml" % name)
-            emit_palace_stackup(stack, out)
+            emit_palace_stackup(stack, out, pgs_return=args.pgs_return,
+                                ideal_ground=args.ideal_ground)
             print("palace stackup ->", out)
         if args.openrcx:
             # Typ keeps the canonical rcx.rules name for the current

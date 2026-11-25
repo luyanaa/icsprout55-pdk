@@ -54,8 +54,9 @@ ap = argparse.ArgumentParser(description=__doc__,
                              formatter_class=argparse.RawDescriptionHelpFormatter)
 ap.add_argument("--gds", default=os.path.join(HERE, "ics55_ind_em.gds"),
                 help="GDSII layout with the device and the port source shapes")
-ap.add_argument("--stackup", default=os.path.join(HERE, "ics55_stackup.xml"),
-                help="gds2palace stackup XML (default: typ corner)")
+ap.add_argument("--stackup", default=os.path.join(HERE, "ics55_stackup_em.xml"),
+                help="gds2palace stackup XML (default: EM t4 stackup with "
+                     "the PGS_RTN fixture via)")
 ap.add_argument("--name", default="ics55_ind",
                 help="model basename (output goes to palace_model/<name>_data)")
 ap.add_argument("--thermal", action="store_true", help="Elmer thermal model")
@@ -70,6 +71,8 @@ ap.add_argument("--order", type=int, default=2, choices=(1, 2, 3),
                 help="FEM basis order (1 saves memory)")
 ap.add_argument("--margin", type=float, default=50.0,
                 help="GDS boundary to simulation boundary (um)")
+ap.add_argument("--transformer", action="store_true",
+                help="four-port transformer deck: ports 3-4 on 310/1-311/1")
 args = ap.parse_args()
 
 thermal_mode = args.thermal
@@ -116,12 +119,12 @@ settings['no_gui'] = not preview_gui
 # (0.05 um PMD gap); the PGS stays a floating eddy-current shield and the
 # shared return is the low-ohmic M1 plane.
 simulation_ports = simulation_setup.all_simulation_ports()
-simulation_ports.add_port(simulation_setup.simulation_port(
-    portnumber=1, voltage=1, port_Z0=50,
-    source_layernum=300, from_layername='M1', to_layername='TM2', direction='z'))
-simulation_ports.add_port(simulation_setup.simulation_port(
-    portnumber=2, voltage=1, port_Z0=50,
-    source_layernum=301, from_layername='M1', to_layername='TM2', direction='z'))
+for number, layer in ((1, 300), (2, 301)) + (
+        ((3, 310), (4, 311)) if args.transformer else ()):
+    simulation_ports.add_port(simulation_setup.simulation_port(
+        portnumber=number, voltage=1, port_Z0=50,
+        source_layernum=layer, from_layername='M1', to_layername='TM2',
+        direction='z'))
 
 # ======================== thermal objects (--thermal mode) ==================
 # Heat sources and constant-temperature boundaries, one per GDS source layer.

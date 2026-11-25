@@ -1,0 +1,3 @@
+.SUBCKT TOP D G S
+X1 D G S VSS ics55_rf_nmos_svt_4t wf=0.45u nf=2 l=0.1u
+.ENDS TOP

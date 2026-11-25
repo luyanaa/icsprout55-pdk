@@ -22,6 +22,7 @@
 # Marker stack (drawn over the whole footprint):
 #   INDALL   302/12  inductor keep-out: disables metal dummy, M1/M2/T4M2
 #                    spacing and top-metal density checks in the area
+#   INDVIA   303/12  LVS terminal marker over the two RV transition pads
 #   INDDMY   301/12  base-layer 45-degree exemption for the PGS region
 #   NOSHRINK 356/12  keep the RF geometry out of the 0.9 shrink
 #   DMYBLK   359/12  block automatic dummy fill
@@ -48,13 +49,11 @@ L_RDL = db.LayerInfo(123, 1)
 L_PSUB = db.LayerInfo(261, 12)
 L_INDDMY = db.LayerInfo(301, 12)
 L_INDALL = db.LayerInfo(302, 12)
+L_INDVIA = db.LayerInfo(303, 12)
 L_NOSHRINK = db.LayerInfo(356, 12)
 L_DMYBLK = db.LayerInfo(359, 12)
-# EM flow layers (gds2palace port sources + fixture ground; see
-# libs.tech/pex/palace/run_model.py)
-L_EM_P1 = db.LayerInfo(300, 1)
-L_EM_P2 = db.LayerInfo(301, 1)
-L_EM_GND = db.LayerInfo(81, 1)      # M1 fixture ground plane (EM deck only)
+# The EM fixture (M1 reference plane, port sources 300/301, PGS return 302)
+# lives in libs.tech/pex/palace/em_deck.py, never in this manufacturing cell.
 
 RV = 3.0            # RV_W_1 fixed size
 RV_ENC = 1.5        # RV_EN_1_2 / RV_EN_3_4 enclosure
@@ -89,7 +88,6 @@ class Ics55Ind(db.PCellDeclarationHelper):
         self.param("pgs", self.TypeInt, "PGS: 0 off, 1 AA, 2 AA+POLY", default=2)
         self.param("pgs_width", self.TypeDouble, "PGS AA stripe width (um)", default=1.0)
         self.param("pgs_space", self.TypeDouble, "PGS AA stripe space (um)", default=1.0)
-        self.param("em_ports", self.TypeInt, "Emit Palace port shapes 300/301 (0/1)", default=0)
 
     def _estimate_nh(self):
         d_out = self.size
@@ -128,6 +126,7 @@ class Ics55Ind(db.PCellDeclarationHelper):
         psub = self.layout.layer(L_PSUB)
         inddmy = self.layout.layer(L_INDDMY)
         indall = self.layout.layer(L_INDALL)
+        indvia = self.layout.layer(L_INDVIA)
         noshrink = self.layout.layer(L_NOSHRINK)
         dmyblk = self.layout.layer(L_DMYBLK)
 
@@ -234,6 +233,14 @@ class Ics55Ind(db.PCellDeclarationHelper):
             S(rv).insert(db.Box(u(cx - RV / 2.0), u(cy - RV / 2.0),
                                 u(cx + RV / 2.0), u(cy + RV / 2.0)))
 
+        # LVS terminal marks: one INDVIA box over each RV transition-pad
+        # group.  The extractor requires exactly two marked clusters, so the
+        # terminal pads are explicit rather than inferred from geometry.
+        S(indvia).insert(db.Box(u(pad_a[0] - PAD_L / 2.0), u(-PAD_W / 2.0),
+                                u(pad_a[0] + PAD_L / 2.0), u(PAD_W / 2.0)))
+        S(indvia).insert(db.Box(u(pad_b[0] - pbw / 2.0), u(pad_b[1] - pbh / 2.0),
+                                u(pad_b[0] + pbw / 2.0), u(pad_b[1] + pbh / 2.0)))
+
         # RDL underpass: tap pad to terminal-B pad
         if exit_dir[0] != 0:
             x0 = min(tap[0], pad_b[0])
@@ -279,42 +286,6 @@ class Ics55Ind(db.PCellDeclarationHelper):
         ext = half + PAD_GAP + PAD_L + MARK_MARGIN
         for layer in (indall, inddmy, noshrink, dmyblk):
             S(layer).insert(db.Box(u(-ext), u(-ext), u(ext), u(ext)))
-
-        # ---- Palace EM deck: via ports and fixture ground ---------------------
-        # gds2palace/IHP via-port recipe: the source shape is a thin line under
-        # the signal pad and the port becomes a vertical 50 ohm sheet from
-        # M1.zmax up to TM2.zmin (direction z).  A solid AA pad keeps the PGS
-        # under each signal pad; the shared return is the M1 plane below.
-        if self.em_ports:
-            p1 = self.layout.layer(L_EM_P1)
-            p2 = self.layout.layer(L_EM_P2)
-            sg = self.layout.layer(L_EM_GND)
-            em_pad = 8.0
-            for (px, py) in (pad_a, pad_b):
-                S(act).insert(db.Box(u(px - em_pad / 2.0), u(py - em_pad / 2.0),
-                                     u(px + em_pad / 2.0), u(py + em_pad / 2.0)))
-                S(pp).insert(db.Box(u(px - em_pad / 2.0 - 0.2), u(py - em_pad / 2.0 - 0.2),
-                                    u(px + em_pad / 2.0 + 0.2), u(py + em_pad / 2.0 + 0.2)))
-            # fixture ground plane (M1, EM deck only): solid plane under the
-            # whole footprint, as in the IHP gds2palace reference flow.  Using
-            # only a frame around the PGS ring forces the two-port return
-            # current around the outside of the spiral and adds ~1.2 nH and
-            # ~285 ohm; the solid plane puts the return path directly below
-            # the winding.  M1 sits 0.05 um above the PGS, so the two
-            # conductors never touch (gds2palace rejects touching conductors).
-            sh = half + PGS_MARGIN
-            outer = sh + 31.0
-            S(sg).insert(db.Box(u(-outer), u(-outer), u(outer), u(outer)))
-            # port 1: line along x at the centre of pad A
-            S(p1).insert(db.Box(u(pad_a[0] - 5.0), u(-0.005),
-                                u(pad_a[0] + 5.0), u(0.005)))
-            # port 2: line along the pad-B exit axis
-            if exit_dir[0] != 0:
-                S(p2).insert(db.Box(u(pad_b[0] - 5.0), u(pad_b[1] - 0.005),
-                                    u(pad_b[0] + 5.0), u(pad_b[1] + 0.005)))
-            else:
-                S(p2).insert(db.Box(u(pad_b[0] - 0.005), u(pad_b[1] - 5.0),
-                                    u(pad_b[0] + 0.005), u(pad_b[1] + 5.0)))
 
 
 # register library (idempotent: all ICsprout55 PCell modules share one library)

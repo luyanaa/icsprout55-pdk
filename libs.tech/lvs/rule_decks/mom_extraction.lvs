@@ -1,0 +1,150 @@
+#=========================================================================================
+# ICsprout55 MOM extraction
+#
+# One MOMLVS1 seed carries one momcapXY label.  The stack is taken from the
+# METxMOM markers inside the seed, so the PCell and the LVS deck cannot drift
+# apart on bm/tm.  The two interdigitated combs are the PLUS/MINUS terminals.
+# A 3T device additionally uses the M1 plate under MOMTER as the shield (B).
+#
+# Only single-stack 2T/3T devices get a momcap label in the PCell.  4T/5T is
+# two stacked pairs and needs a coupled device class before it can be labeled;
+# those cells intentionally emit no label and are not extracted here.
+#=========================================================================================
+
+class Ics55MomExtractor < RBA::GenericDeviceExtractor
+  def initialize(model_name, three_terminal)
+    super()
+    self.name = model_name
+    @model_name = model_name
+    @three_terminal = three_terminal
+  end
+
+  def setup
+    define_layer('SEED', 'labeled MOM stack')
+    (1..5).each { |i| define_layer("M#{i}", "M#{i} metal") }
+    (1..5).each { |i| define_layer("MOM#{i}", "MET#{i}MOM marker") }
+    (1..4).each { |i| define_layer("V#{i}", "V#{i} via") }
+    define_layer('BULK', 'M1 shield under MOMTER')
+
+    dc = RBA::DeviceClass.new
+    dc.name = @model_name
+    %w[PLUS MINUS].each do |terminal|
+      definition = RBA::DeviceTerminalDefinition.new
+      definition.name = terminal
+      definition.description = terminal
+      dc.add_terminal(definition)
+    end
+    dc.equivalent_terminal_id(dc.terminal_id('PLUS'), dc.terminal_id('MINUS'))
+    if @three_terminal
+      definition = RBA::DeviceTerminalDefinition.new
+      definition.name = 'B'
+      definition.description = 'M1 shield'
+      dc.add_terminal(definition)
+    end
+
+    # Model parameters that must match the schematic X call.
+    [['LF', 1.0], ['NF', 6], ['BM', 1], ['TM', 3], ['MR', 1]].each do |name, default|
+      definition = RBA::DeviceParameterDefinition.new
+      definition.name = name
+      definition.default_value = default
+      dc.add_parameter(definition)
+    end
+    if @three_terminal
+      definition = RBA::DeviceParameterDefinition.new
+      definition.name = 'SHIELDING'
+      definition.default_value = 0
+      dc.add_parameter(definition)
+    end
+    register_device_class(dc)
+  end
+
+  def get_connectivity(_layout, layers)
+    connectivity = RBA::Connectivity.new
+    connectivity.connect(layers[0])
+    layers.drop(1).each { |layer| connectivity.connect(layers[0], layer) }
+    connectivity
+  end
+
+  def extract_devices(layer_geometry)
+    seeds = layer_geometry[0]
+    metals = (1..5).map { |i| layer_geometry[i] }
+    markers = (6..10).map { |i| layer_geometry[i] }
+    vias = (11..14).map { |i| layer_geometry[i] }
+    bulk = layer_geometry[15]
+
+    seeds.merged.each do |seed|
+      seed_region = RBA::Region.new(seed)
+
+      present = (0..4).select { |i| !markers[i].interacting(seed_region).is_empty? }
+      next if present.empty? || present.size < 2
+      bm = present.min + 1
+      tm = present.max + 1
+      next unless (bm..tm).to_a == present.map { |i| i + 1 }
+
+      # The bottom/top metals form two connected combs (PLUS and MINUS).
+      combs = (metals[bm - 1] & metals[tm - 1] & seed_region).merged
+      comb_polygons = Ics55RegionUtil.polygons(combs)
+      via = vias[bm - 1]
+      comb_polygons.select! { |polygon| !via.interacting(RBA::Region.new(polygon)).is_empty? }
+      # More than two combs means a stacked 4T/5T footprint; it has no label.
+      next unless comb_polygons.size == 2
+
+      comb_polygons.sort_by! { |polygon| polygon.bbox.bottom }
+      plus, minus = comb_polygons
+
+      # comb bbox = bus height (0.3) + finger length; fingers stop one
+      # SPACE short of the opposite bus, so this yields lf = length - SPACE.
+      lf = [plus.bbox.height, minus.bbox.height].max * dbu - 0.3
+      next if lf <= 0.0
+
+      nf = via.interacting(RBA::Region.new(plus)).count
+      next if nf <= 0
+
+      shield = nil
+      if @three_terminal
+        shield = Ics55RegionUtil.polygons(bulk.interacting(seed_region).merged)
+                                     .max_by { |polygon| polygon.area }
+        next unless shield
+      end
+
+      device = create_device
+      # Terminal shapes must live on the real metal layers (M1..M5): those are
+      # part of the main conductor connectivity, so the nets resolve.  Shapes
+      # on a merged M1..M5 helper layer would come out with net=nil.
+      plus_region = RBA::Region.new(plus)
+      minus_region = RBA::Region.new(minus)
+      (bm..tm).each do |n|
+        metal = metals[n - 1]
+        metal.interacting(plus_region).merged.each do |polygon|
+          define_terminal(device, 'PLUS', "M#{n}", polygon)
+        end
+        metal.interacting(minus_region).merged.each do |polygon|
+          define_terminal(device, 'MINUS', "M#{n}", polygon)
+        end
+      end
+      define_terminal(device, 'B', 'M1', shield) if shield
+
+      device.set_parameter('LF', lf)
+      device.set_parameter('NF', nf)
+      device.set_parameter('BM', bm)
+      device.set_parameter('TM', tm)
+      device.set_parameter('MR', 1)
+      device.set_parameter('SHIELDING', 1) if @three_terminal
+    end
+  end
+end
+
+mom_bulk = M1s.and(MOMTER)
+mom_common = {
+  'M1' => M1s, 'M2' => M2s, 'M3' => M3s, 'M4' => M4s, 'M5' => M5s,
+  'MOM1' => MET1MOM, 'MOM2' => MET2MOM, 'MOM3' => MET3MOM,
+  'MOM4' => MET4MOM, 'MOM5' => MET5MOM,
+  'V1' => VA1, 'V2' => VA2, 'V3' => VA3, 'V4' => VA4,
+  'BULK' => mom_bulk
+}
+
+# The layer hash order must match setup's define_layer order (SEED first).
+extract_devices(Ics55MomExtractor.new('mom_2t', false),
+                { 'SEED' => MOMLVS1.not_interacting(MOMTER) }.merge(mom_common))
+extract_devices(Ics55MomExtractor.new('mom_3t', true),
+                { 'SEED' => MOMLVS1.interacting(MOMTER) }.merge(mom_common))

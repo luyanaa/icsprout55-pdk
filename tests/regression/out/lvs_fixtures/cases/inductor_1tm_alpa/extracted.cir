@@ -5,5 +5,5 @@
 * pin PLUS
 .SUBCKT TOP MINUS PLUS
 * device instance $1 r0 *1 0,0 ics55_ind
-L$1 PLUS MINUS 0 ics55_ind
+XD_$1 PLUS MINUS ics55_ind PARAMS:
 .ENDS TOP

@@ -1,0 +1,5 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+.SUBCKT TOP MINUS|PLUS MINUS|PLUS
+XD_$1 MINUS|PLUS MINUS|PLUS ics55_ind PARAMS:
+.ENDS TOP

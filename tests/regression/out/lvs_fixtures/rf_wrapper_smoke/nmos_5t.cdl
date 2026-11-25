@@ -1,0 +1,3 @@
+.SUBCKT TOP D G S B DNW
+X1 D G S B DNW ics55_rf_nmos_svt_5t wf=0.5u nf=1 l=0.1u
+.ENDS TOP

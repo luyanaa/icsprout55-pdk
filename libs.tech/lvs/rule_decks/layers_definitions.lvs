@@ -113,8 +113,12 @@ COVER   = input(124, 1)
 DIODE = input(191, 12)
 
 # Inductor keep-out and base-layer exemption markers from the inductor PCell.
+# INDVIA marks the RV transition pads at the two winding terminals; the
+# extractor uses it as the explicit terminal marker instead of guessing the
+# terminal pads from geometry.
 INDALL  = input(302, 12)
 INDDMY  = input(301, 12)
+INDVIA  = input(303, 12)
 
 # --- source-faithful contacts, vias, and conductor regions --------------------------
 
@@ -203,4 +207,14 @@ P_TAP = PSD.not(NW).interacting(CTs)
 P_TAP_SUB = P_TAP.not(DNW)
 NIO_SD = NIOSD.not(NW)
 PIO_SD = PIOSD.and(NW)
+
+# MOM marker layers.  MOMLVS1 carries the momcapXY text; METxMOM marks the
+# finger field only.  MOMTER marks the M1 shield of a 3T device.
+MOMLVS1 = input(323, 12)
+MOMTER = input(282, 12)
+MET1MOM = input(81, 10)
+MET2MOM = input(82, 10)
+MET3MOM = input(83, 10)
+MET4MOM = input(84, 10)
+MET5MOM = input(85, 10)
 

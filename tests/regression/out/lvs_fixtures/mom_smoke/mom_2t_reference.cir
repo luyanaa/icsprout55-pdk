@@ -1,0 +1,9 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+* cell TOP
+* pin MINUS
+* pin PLUS
+.SUBCKT TOP MINUS PLUS
+* device instance $1 r0 *1 -0.9,-1.4 mom_2t
+XD_$1 PLUS MINUS mom_2t PARAMS: LF=1.9 NF=3 BM=2 TM=4 MR=1
+.ENDS TOP

@@ -233,19 +233,56 @@ ICS55_RF_SCHEMATIC_DEVICES = {
   'var1p2_npd_nw_dnw_lp' => %w[POS NEG],
   'var2p5_npd_nw_lp' => %w[POS NEG],
   'var2p5_npd_nw_dnw_lp' => %w[POS NEG],
-  'ics55_ind' => %w[PLUS MINUS]
+  'ics55_ind' => %w[PLUS MINUS],
+  'mom_2t' => %w[PLUS MINUS],
+  'mom_3t' => %w[PLUS MINUS B]
+}.freeze
+
+# The 4T RF MOS wrappers add only extrinsic feed resistors and capacitors,
+# none of which are drawn in layout.  The drawn device is the plain core MOS,
+# so these wrappers are read as core devices (D G S B, W = wf*nf, L = l)
+# instead of being expanded into R/C plus an inner core MOS that has no
+# counterpart on the layout side.
+ICS55_RF_4T_ALIASES = {
+  'ics55_rf_nmos_svt_4t' => 'NM1P2_SVT_LP',
+  'ics55_rf_nmos_lvt_4t' => 'NM1P2_LVT_LP',
+  'ics55_rf_nmos_hvt_4t' => 'NM1P2_HVT_LP',
+  'ics55_rf_pmos_svt_4t' => 'PM1P2_SVT_LP',
+  'ics55_rf_pmos_lvt_4t' => 'PM1P2_LVT_LP',
+  'ics55_rf_pmos_hvt_4t' => 'PM1P2_HVT_LP'
+}.freeze
+
+# Parameters compared for the vendor MOM primitives.  The values come from the
+# X call in the schematic and are matched against the extracted geometry.
+ICS55_RF_DEVICE_PARAMS = {
+  'mom_2t' => { 'LF' => 1.0, 'NF' => 6, 'BM' => 1, 'TM' => 3, 'MR' => 1 },
+  'mom_3t' => { 'LF' => 1.0, 'NF' => 6, 'BM' => 1, 'TM' => 3, 'MR' => 1,
+                'SHIELDING' => 0 }
 }.freeze
 
 class Ics55SpiceReaderDelegate < RBA::NetlistSpiceReaderDelegate
   def wants_subcircuit(name)
-    ICS55_RF_SCHEMATIC_DEVICES.key?(name.to_s.downcase)
+    model_name = name.to_s.downcase
+    ICS55_RF_SCHEMATIC_DEVICES.key?(model_name) || ICS55_RF_4T_ALIASES.key?(model_name)
   end
 
-  def element(circuit, element, name, model, _value, nets, _parameters)
+  def element(circuit, element, name, model, value, nets, parameters)
     model_name = model.to_s.downcase
+    if element == 'X' && (target = ICS55_RF_4T_ALIASES[model_name])
+      # Read a 4T RF MOS wrapper as the core MOS it draws.  Only the intrinsic
+      # device exists in layout; the feed resistors and capacitors do not.
+      width = parameters && (parameters['WF'] || parameters['wf'])
+      fingers = parameters && (parameters['NF'] || parameters['nf'])
+      length = parameters && (parameters['L'] || parameters['l'])
+      return false unless width && fingers && length
+      element = 'M'
+      model = target
+      parameters = { 'W' => width.to_f * fingers.to_f, 'L' => length }
+    end
     terminals = ICS55_RF_SCHEMATIC_DEVICES[model_name]
     return super unless element == 'X' && terminals
 
+    parameter_defaults = ICS55_RF_DEVICE_PARAMS[model_name]
     device_class = circuit.netlist.device_class_by_name(model_name)
     unless device_class
       device_class = RBA::DeviceClass.new
@@ -262,6 +299,12 @@ class Ics55SpiceReaderDelegate < RBA::NetlistSpiceReaderDelegate
       if terminals.include?('PLUS') && terminals.include?('MINUS')
         device_class.equivalent_terminal_id(device_class.terminal_id('PLUS'), device_class.terminal_id('MINUS'))
       end
+      parameter_defaults&.each do |param_name, default|
+        definition = RBA::DeviceParameterDefinition.new
+        definition.name = param_name
+        definition.default_value = default
+        device_class.add_parameter(definition)
+      end
       circuit.netlist.add(device_class)
     end
 
@@ -269,7 +312,25 @@ class Ics55SpiceReaderDelegate < RBA::NetlistSpiceReaderDelegate
     terminals.each_with_index do |terminal, index|
       device.connect_terminal(terminal, nets[index]) if nets[index]
     end
+    parameter_defaults&.each_key do |param_name|
+      value = parameters && (parameters[param_name] || parameters[param_name.downcase])
+      number = spice_number(value)
+      device.set_parameter(param_name, number) if number
+    end
     true
+  end
+
+  private
+
+  def spice_number(value)
+    return value if value.is_a?(Numeric)
+    text = value.to_s.strip.downcase
+    return nil if text.empty? || text.include?('{') || text.include?("'")
+    match = text.match(/\A([-+]?\d*\.?\d+(?:e[-+]?\d+)?)\s*(meg|f|p|n|u|m|k)?\z/)
+    return nil unless match
+    scale = { 'f' => 1e-15, 'p' => 1e-12, 'n' => 1e-9, 'u' => 1e-6,
+              'm' => 1e-3, 'k' => 1e3, 'meg' => 1e6 }[match[2]] || 1.0
+    match[1].to_f * scale
   end
 end
 
@@ -399,6 +460,7 @@ LVS_MODULE_FILES = [
   'rule_decks/mos_extraction.lvs',
   'rule_decks/rf_extraction.lvs',
   'rule_decks/res_diode_extraction.lvs',
+  'rule_decks/mom_extraction.lvs',
   'rule_decks/combine_fingers.lvs',
   'rule_decks/erc.lvs'
 ]
@@ -804,7 +866,11 @@ unless NET_ONLY || !ERC_ENABLED
   })
 end
 
-netlist.simplify if SIMPLIFY
+# Netlist simplification is a comparison-preparation step.  Extraction-only
+# runs (net_only) skip it: KLayout's Netlist#simplify prunes circuits that have
+# no devices at the top level, which turns a passive cell instantiated by an
+# otherwise empty top into a header-only extracted netlist.
+netlist.simplify if SIMPLIFY && !NET_ONLY
 netlist.combine_devices if COMBINE_DEVICES
 netlist.purge if PURGE
 if $target_netlist && (NET_ONLY || STRICT_TOPOLOGY)

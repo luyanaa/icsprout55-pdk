@@ -31,6 +31,12 @@ M2 = db.LayerInfo(82, 1); M3 = db.LayerInfo(83, 1)
 M4 = db.LayerInfo(84, 1); M5 = db.LayerInfo(85, 1)
 V2 = db.LayerInfo(92, 1); V3 = db.LayerInfo(93, 1); V4 = db.LayerInfo(94, 1)
 
+# MOM DRC/LVS markers.  MOMLVS1 carries momcapXY text; METxMOM marks the
+# finger field only (never the bus/via area, which would trip MOM_R_1).
+MOMLVS1 = db.LayerInfo(323, 12)
+MOMTER = db.LayerInfo(282, 12)
+MET_MOM = [db.LayerInfo(81 + i, 10) for i in range(8)]
+
 WIRE = 0.1     # finger width (min width M2-5)
 SPACE = 0.1    # finger space (min space M2-5)
 PITCH = 0.2    # finger pitch
@@ -67,27 +73,38 @@ class Ics55Mom(db.PCellDeclarationHelper):
         self.terminals = max(2, min(5, self.terminals))
 
     def _draw_pair(self, S, group, group_vias, n, x0, y0, length):
+        """Two interdigitated combs.
+
+        PLUS fingers touch the bottom bus; MINUS fingers touch the top bus.
+        Each finger stops one SPACE short of the opposite bus, so closing the
+        old 0.1 um gap without moving vias would short every finger to both
+        buses.
+        """
         u = lambda v: int(round(v / self.layout.dbu))
         tot = 2 * n * PITCH
         for li, m in enumerate(group):
             for f in range(n):
-                for pol in (0, 1):
-                    x = x0 + (2 * f + pol) * PITCH
-                    S(m).insert(db.Box(u(x - WIRE / 2.0), u(y0),
-                                      u(x + WIRE / 2.0), u(y0 + length)))
-            # bus bars at both ends, common to the layers of this comb pair
-            S(m).insert(db.Box(u(x0 - 0.2), u(y0 - 0.3), u(x0 + tot + 0.2), u(y0 - 0.1)))
-            S(m).insert(db.Box(u(x0 - 0.2), u(y0 + length + 0.1),
+                xp = x0 + (2 * f) * PITCH
+                xm = x0 + (2 * f + 1) * PITCH
+                S(m).insert(db.Box(u(xp - WIRE / 2.0), u(y0),
+                                  u(xp + WIRE / 2.0), u(y0 + length - SPACE)))
+                S(m).insert(db.Box(u(xm - WIRE / 2.0), u(y0 + SPACE),
+                                  u(xm + WIRE / 2.0), u(y0 + length)))
+            # one bus per polarity, at opposite ends
+            S(m).insert(db.Box(u(x0 - 0.2), u(y0 - 0.3),
+                               u(x0 + tot + 0.2), u(y0)))
+            S(m).insert(db.Box(u(x0 - 0.2), u(y0 + length),
                                u(x0 + tot + 0.2), u(y0 + length + 0.3)))
             if li > 0:
+                v = group_vias[li - 1]
                 for f in range(n):
-                    for pol in (0, 1):
-                        x = x0 + (2 * f + pol) * PITCH
-                        v = group_vias[li - 1]
-                        S(v).insert(db.Box(u(x - VIA / 2.0), u(y0 - 0.2),
-                                           u(x + VIA / 2.0), u(y0 - 0.2 + VIA)))
-                        S(v).insert(db.Box(u(x - VIA / 2.0), u(y0 + length + 0.2 - VIA),
-                                           u(x + VIA / 2.0), u(y0 + length + 0.2)))
+                    xp = x0 + (2 * f) * PITCH
+                    xm = x0 + (2 * f + 1) * PITCH
+                    # vias only on the bus belonging to that polarity
+                    S(v).insert(db.Box(u(xp - VIA / 2.0), u(y0 - 0.2),
+                                       u(xp + VIA / 2.0), u(y0 - 0.2 + VIA)))
+                    S(v).insert(db.Box(u(xm - VIA / 2.0), u(y0 + length + 0.2 - VIA),
+                                       u(xm + VIA / 2.0), u(y0 + length + 0.2)))
 
     def produce_impl(self):
         u = lambda v: int(round(v / self.layout.dbu))
@@ -111,9 +128,29 @@ class Ics55Mom(db.PCellDeclarationHelper):
             self._draw_pair(S, group, group_vias, n, x0, y0, self.length)
 
         if self.terminals in (3, 5):
-            # M1 shield plate under the whole footprint, terminal P
-            S(self.layout.layer(M1)).insert(
-                db.Box(u(x0 - 0.3), u(y0 - 0.4), u(x0 + tot + 0.3), u(y0 + self.length + 0.4)))
+            # M1 shield plate under the whole footprint, third terminal.
+            shield = db.Box(u(x0 - 0.3), u(y0 - 0.4),
+                            u(x0 + tot + 0.3), u(y0 + self.length + 0.4))
+            S(self.layout.layer(M1)).insert(shield)
+            S(self.layout.layer(MOMTER)).insert(shield)
+
+        if self.terminals in (2, 3):
+            # One cap stack: label it momcap{bm}{tm}.  A 4T/5T device is two
+            # stacked pairs; it deliberately gets no single-stack label until
+            # the coupled model/LVS device exists.
+            bm = 2
+            tm = 1 + self.layers
+            x_lo, x_hi = x0 - 0.3, x0 + tot + 0.3
+            y_lo, y_hi = y0 - 0.4, y0 + self.length + 0.4
+            momlvs = self.layout.layer(MOMLVS1)
+            S(momlvs).insert(db.Box(u(x_lo), u(y_lo), u(x_hi), u(y_hi)))
+            S(momlvs).insert(db.Text("momcap%d%d" % (bm, tm),
+                                     db.Trans(u((x_lo + x_hi) / 2.0),
+                                              u((y_lo + y_hi) / 2.0))))
+            for metal in range(bm, tm + 1):
+                S(self.layout.layer(MET_MOM[metal - 1])).insert(
+                    db.Box(u(x0 - 0.2), u(y0), u(x0 + tot + 0.2),
+                           u(y0 + self.length)))
 
 
 # register library (idempotent: all ICsprout55 PCell modules share one library)

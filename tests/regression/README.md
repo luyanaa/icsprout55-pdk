@@ -120,14 +120,21 @@ Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
   space/enclosure operators do not reproduce every Calibre ABUT/SINGULAR or
   directional GOOD qualifier; this is not a Calibre differential. Missing
   KLayout is `BLOCKED` (exit 2).
-  cases assert exact MOS/resistor/diode class counts, distinct resistor
+- `lvs_fixture_check.py` + `make_lvs_fixtures.rb` — exact-category KLayout
+  LVS source-behavior fixtures.  Cases assert exact MOS/resistor/diode class
+  counts, distinct resistor
   terminals, direct top-level ports, stack selection, and schematic-derived
   bulk aliases. A matching extracted/reference pair and an intentionally wrong
   schematic verify that the LVS wrapper returns 0 and nonzero, respectively.
   A MOS child with a physical wrapper tap additionally checks that strict
   comparison defaults to flat extraction: omitted/explicit-flat modes match,
   explicit-deep rejects the hierarchy mismatch, and a 0.01 um W error fails
-  the unchanged exact strict W/L contract.
+  close.  `rf_nmos_4t` covers the 4T RF MOS wrapper: the layout extracts the
+  core `NM1P2_SVT_LP`, and a wrapper instance must compare only when `wf*nf`
+  and `l` match the drawn geometry.  A five-case wrapper smoke then maps each
+  RF wrapper family onto its extracted device: `nmos_4t` matches and a 1.5x
+  width is rejected, while `nmos_5t`, `nmos_6t`, and `pmos_5t` compare against
+  `ICS55_RF_{N,P}MOS_SVT_{5T,6T}` with their extra DNW/PSUB/SUB terminals.
   An ERC smoke runs seven fixtures: a clean inverter, an NMOS tied between
   VDD and VSS (`erc_mn2pg`), ground-only and power-only chains (diagnostics
   only), an unlabeled device (selected `erc_pathcheck_bad` plus diagnostic),
@@ -136,6 +143,56 @@ Source: `pv/DRC/ICsprout_CalDRC_55LLULP1233_REV1_0_OS.drc` and `.ant`.
   and the `checks=10`/`diagnostics=3` summary split.
   These validate local extraction/comparison only; Calibre equivalence stays
   `BLOCKED`.
+- `em_deck_check.py` — EM-fixture / stackup / de-embedding contract for the
+  RF passives flow.  Asserts the manufacturing `ics55_ind` carries no fixture
+  shapes (M1 plane 81/1, ports 300/1-301/1, PGS return 302/1) while the
+  generated decks do; runs all four shield variants (`no_pgs`, `pgs_float`,
+  `pgs`, `ideal_gnd`) with the dut and pad-only open deck and checks the
+  shape counts, spiral removal and ideal-ground geometry equality; exercises
+  the structure/feed variants — a `transformer` deck (4 ports on
+  300/1-301/1 + 310/1-311/1, two shield rings, 4 PGS_RTN vias per ring, four
+  terminal pads in the open deck) and a `cpw` feed (4 TM2 ground strips with
+  8 ground vias, 12 total with PGS, shield geometry unchanged, fail-closed
+  without the 302/1 `PGS_RTN` stackup layer); verifies
+  the `t4` stackup is M1-M4 + T4M1/T4M2 with T4V1/T4V2 and no M5, aligned to
+  the LVS `t4` connect chain, and that `PGS_RTN` is a 302 via from the PGS
+  top to M1 only when requested; and verifies open-fixture Y de-embedding
+  recovers a known series R/L from synthetic S-parameters (needs numpy;
+  skipped without it).  Missing KLayout is exit 2 with
+  `--require-klayout`.
+- `rf_calibration_check.py` — regression for `libs.tech/pex/rf_calib.py`.
+  Synthesizes a two-port from an analytic `R + jwL` branch shunted by `C`,
+  then asserts the recovered R/L/Q and the interpolated SRF match the closed
+  form, that a golden reference reports `CALIBRATED`, that a 20 % detuned
+  reference reports `MISMATCH` with a nonzero exit, and that the TT/SS/FF
+  varactor sweep returns physical, monotonic C(V,f) while staying
+  `UNCALIBRATED`.  Skips only the varactor case when ngspice is unavailable.
+- `spice_include_check.py` — resolves every `.include`/`.lib` of the shipped
+  foundry SPICE models and reports the resolved file for each, so a clean
+  checkout cannot silently miss a dependency (100 includes).  Plain
+  `python3`.
+- `spice_varactor_check.py` — drives the released varactor subcircuits
+  (`var1p2_npd_nw_lp`, `var2p5_npd_nw_lp`) at TT/SS/FF with a 1 V AC
+  stimulus while stepping the DC bias: `|C| = |Im(I)|/(2πf)` must stay
+  finite and positive, grow with bias, and never jump by more than 1.6x
+  between adjacent 0.1 V/0.2 V points.  Requires ngspice (retries without a
+  caller-supplied `LD_LIBRARY_PATH` if the C++ runtime is shadowed).
+- `magic_lvs_check.py` + `magic_fixtures.rb` + `magic_hier_fixture.rb` +
+  `magic_diode_fixture.rb` + `magic_resistor_fixture.rb` — Magic/netgen regression for the promoted tech
+  (`libs.tech/magic/ics55.tech`) and the LVS runner
+  (`libs.tech/netgen/run_lvs.py`).  Checks exact-centre contact/via stacks at
+  CT/V1 through V4/TV2 (`stackable`), n+/p+ tap connectivity, 10x10 um plate
+  capacitance against the released LEF area + edge seeds (M1/M2/TM2, 0.5%),
+  junction diode extraction (one `dio_1p2_pp_nw_lvt_lp` at 10 um^2/14 um and
+  one `dio_1p2_np_pw_lvt_lp` at 10 um^2/13 um, and zero diodes from a plain
+  contacted tap cell), hierarchical macro LVS (a `MAGIC_HIER` cell instancing
+  `INVX1H7R`, once with the child subckts inline and once as a top-only CDL
+  plus `--library`), and eight standard cells across H7CR/H7CL/H7CH.  Six must
+  match; OAI33 and INVX16 must report property errors (the documented foundry
+  width deviations) with the topology still matching.  The `SNAKE`
+  resistor fixture checks four SAB poly segments and their netgen series
+  fold into one W/L.  26 checks, ~110 s.
+  Missing magic/netgen/klayout is exit 2; a failed check is exit 1.
 - `out/drc_fixtures/` and `out/lvs_fixtures/` — default fixture reports and
   generated inputs. `drc_fixture_check.py` writes its report to
   `out/drc_fixtures/drc_fixture_check.json`.
@@ -152,8 +209,13 @@ intentional changes with `run_alignment.py --update-hashes`.
 python3 tests/regression/run_alignment.py --librelane ../librelane --cells INVX1H7H,INVX3H7H,INVX4H7H
 python3 tests/regression/layer_map_check.py
 python3 tests/regression/lef_liberty_check.py
+python3 tests/regression/spice_include_check.py
+python3 tests/regression/spice_varactor_check.py
 python3 tests/regression/drc_fixture_check.py --librelane ../librelane
 python3 tests/regression/lvs_fixture_check.py --librelane ../librelane
+python3 tests/regression/em_deck_check.py --librelane ../librelane
+python3 tests/regression/rf_calibration_check.py
+python3 tests/regression/magic_lvs_check.py
 ```
 
 See `run_alignment.py --help` for options (`--drc`, `--klayout`, `--manifest`,
@@ -161,7 +223,9 @@ See `run_alignment.py --help` for options (`--drc`, `--klayout`, `--manifest`,
 full KLayout DRC on each selected GDS/top; findings are retained, not compared
 to Calibre.
 
-CI (`.github/workflows/pv-regression.yml`) runs the layer-map and LEF/Liberty
-checks on every push, and the DRC fixtures under KLayout via the public
-LibreLane nix shell (`github.com/librelane/librelane`, pinned by its flake).
+CI (`.github/workflows/pv-regression.yml`) runs the layer-map, LEF/Liberty,
+SPICE-include and varactor checks plus the RF calibration harness on every
+push, and the DRC/LVS fixtures plus the EM deck checks under
+KLayout via the public LibreLane nix shell
+(`github.com/librelane/librelane`, pinned by its flake).
 The LVS matrix is not in CI: it needs the `make`-downloaded std-cell GDS.

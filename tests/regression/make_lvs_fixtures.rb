@@ -33,7 +33,10 @@ LAYERS = {
   'ALPAD' => [122, 1], 'ALPADRES' => [122, 4], 'ALPADLBL' => [122, 6],
   'RDLLBL' => [123, 6], 'CB' => [121, 1], 'RV' => [120, 1], 'RDL' => [123, 1],
   'COVER' => [124, 1], 'DIODE' => [191, 12],
-  'INDALL' => [302, 12], 'INDDMY' => [301, 12]
+  'INDALL' => [302, 12], 'INDDMY' => [301, 12], 'INDVIA' => [303, 12],
+  'MOMLVS1' => [323, 12], 'MOMTER' => [282, 12],
+  'MET1MOM' => [81, 10], 'MET2MOM' => [82, 10], 'MET3MOM' => [83, 10],
+  'MET4MOM' => [84, 10], 'MET5MOM' => [85, 10]
 }
 
 def box(layer, x1, y1, x2, y2, kind = :box)
@@ -153,16 +156,57 @@ rf_pmos_fixture = [
   box('M1', -1.15, 0.22, -0.95, 0.43)
 ]
 
-# The TM2 bar is the inductor body: INDALL plus the RV terminal pads must
-# isolate the two pads even though the bar connects them geometrically.
-inductor_fixture = [
-  box('INDALL', 0, 0, 40, 20),
-  box('T4M2', 2, 7, 8, 13), box('T4M2', 32, 7, 38, 13),
-  box('T4M2', 2, 9, 38, 11),
-  box('RDL', 3, 6.5, 7, 13.5), box('RDL', 33, 6.5, 37, 13.5),
-  box('RV', 4, 8, 7, 11), box('RV', 33, 8, 36, 11),
-  label('T4M2LBL', 'PLUS', 5, 10), label('T4M2LBL', 'MINUS', 35, 10)
+# Four-terminal RF MOS drawn without DNW: the layout is the plain core MOS, so
+# the RF 4T schematic wrapper must compare against NM1P2_SVT_LP.  All four nets
+# are labelled so the wrapper pins are exercised end to end.
+rf_nmos_4t_fixture = [
+  box('ACT', 0, 0, 1.0, 0.6),
+  box('POLY', 0.45, -0.1, 0.55, 0.7),
+  box('NP', 0, 0, 1.0, 0.6),
+  box('CT', 0.10, 0.20, 0.25, 0.40),
+  box('CT', 0.75, 0.20, 0.90, 0.40),
+  box('M1', 0.08, 0.18, 0.27, 0.42),
+  box('M1', 0.73, 0.18, 0.92, 0.42),
+  label('M1LBL', 'S', 0.17, 0.30),
+  label('M1LBL', 'D', 0.82, 0.30),
+  box('CT', 0.46, 0.62, 0.54, 0.70),
+  box('M1', 0.44, 0.60, 0.56, 0.72),
+  label('M1LBL', 'G', 0.50, 0.66),
+  box('ACT', 1.15, 0.2, 1.45, 0.45),
+  box('PP', 1.15, 0.2, 1.45, 0.45),
+  box('CT', 1.24, 0.27, 1.36, 0.38),
+  box('M1', 1.20, 0.22, 1.40, 0.43),
+  label('M1LBL', 'B', 1.30, 0.32)
 ]
+
+# Two-terminal inductor modeled like the ics55_ind PCell: TM2 pad A feeds a
+# spiral lead into a tap pad, an RV-connected RDL underpass crosses to pad B,
+# and one INDVIA marker covers each RV terminal group.  The TM2 bar is cut by
+# INDALL except around the RV pads, so the two terminals are separate nets.
+# `open` cuts the TM2 lead between pad A and the tap; `short` straps the two
+# RDL pad nets together.
+def inductor_fixture(open: false, short: false)
+  lead_end = open ? 10 : 22
+  shapes = [
+    box('INDALL', 0, 0, 40, 20),
+    # pad A (outer terminal) and its RV transition vias
+    box('T4M2', 0, 7, 12, 13), box('RDL', 0, 7, 12, 13),
+    box('RV', 0, 8.5, 3, 11.5), box('RV', 9, 8.5, 12, 11.5),
+    # TM2 lead and tap pad (inner end)
+    box('T4M2', 0, 9, lead_end, 11), box('T4M2', 18, 4, 24, 16),
+    box('RV', 19.5, 7, 22.5, 10), box('RV', 19.5, 13, 22.5, 16),
+    # RDL underpass from the tap to pad B (crosses under the lead in 2D only)
+    box('RDL', 18, 7, 34, 13),
+    # pad B (inner terminal) and its RV transition vias
+    box('T4M2', 28, 7, 40, 13), box('RDL', 28, 7, 40, 13),
+    box('RV', 28, 8.5, 31, 11.5), box('RV', 37, 8.5, 40, 11.5),
+    # explicit LVS terminal markers
+    box('INDVIA', 0, 7, 12, 13), box('INDVIA', 28, 7, 40, 13),
+    label('T4M2LBL', 'PLUS', 6, 10), label('T4M2LBL', 'MINUS', 34, 10)
+  ]
+  shapes << box('RDL', 0, 12, 40, 14) if short
+  shapes
+end
 
 pad_m1_m5 = [
   box('M1DUM', 0, 0, 1, 1), box('M2', 0, 0, 1, 1),
@@ -249,6 +293,61 @@ erc_bad_ntap = [
   box('M1', -1.54, 0.18, 0.27, 0.42)
 ]
 
+# Interdigitated MOM stack built like the ics55_mom PCell: three fingers per
+# polarity on M2/M3/M4, vias on the two buses, MOMLVS1/momcap24 and METxMOM
+# markers.  `open` cuts the PLUS bus (a floating half must not count as a
+# comb); `short` straps a PLUS and a MINUS finger together on M2.
+def mom_fixture(three_terminal: false, open: false, short: false)
+  n = 3
+  length = 2.0
+  pitch = 0.2
+  wire = 0.1
+  space = 0.1
+  x0 = -n * pitch
+  y0 = -length / 2.0
+  tot = 2 * n * pitch
+  bus = [x0 - 0.2, x0 + tot + 0.2]
+  shapes = []
+  %w[M2 M3 M4].each_with_index do |metal, level|
+    n.times do |f|
+      xp = x0 + 2 * f * pitch
+      xm = x0 + (2 * f + 1) * pitch
+      shapes << box(metal, xp - wire / 2, y0, xp + wire / 2, y0 + length - space)
+      shapes << box(metal, xm - wire / 2, y0 + space, xm + wire / 2, y0 + length)
+    end
+    if open
+      shapes << box(metal, bus[0], y0 - 0.3, 0.05, y0)
+      shapes << box(metal, 0.15, y0 - 0.3, bus[1], y0)
+    else
+      shapes << box(metal, bus[0], y0 - 0.3, bus[1], y0)
+    end
+    shapes << box(metal, bus[0], y0 + length, bus[1], y0 + length + 0.3)
+    next if level.zero?
+
+    via = level == 1 ? 'V2' : 'V3'
+    n.times do |f|
+      xp = x0 + 2 * f * pitch
+      xm = x0 + (2 * f + 1) * pitch
+      shapes << box(via, xp - 0.045, y0 - 0.2, xp + 0.045, y0 - 0.11)
+      shapes << box(via, xm - 0.045, y0 + length + 0.11, xm + 0.045, y0 + length + 0.2)
+    end
+  end
+  shapes << box('M2', -0.65, 0.2, -0.35, 0.25) if short
+  if three_terminal
+    shapes << box('M1', x0 - 0.3, y0 - 0.4, x0 + tot + 0.3, y0 + length + 0.4)
+    shapes << box('MOMTER', x0 - 0.3, y0 - 0.4, x0 + tot + 0.3, y0 + length + 0.4)
+    shapes << label('M1LBL', 'B', 0.7, 0.5)
+  end
+  shapes << box('MOMLVS1', x0 - 0.3, y0 - 0.4, x0 + tot + 0.3, y0 + length + 0.4)
+  shapes << label('MOMLVS1', 'momcap24', 0, 0)
+  %w[MET2MOM MET3MOM MET4MOM].each do |marker|
+    shapes << box(marker, bus[0], y0, bus[1], y0 + length)
+  end
+  shapes << label('M2LBL', 'PLUS', 0, y0 - 0.15)
+  shapes << label('M2LBL', 'MINUS', 0, y0 + length + 0.15)
+  shapes
+end
+
 fixtures = {
   'core_svt_n': mos_fixture('NP'),
   'core_lvt_n_ctbar': mos_fixture('NP', ['LVTN'], 'CTBAR'),
@@ -269,7 +368,14 @@ fixtures = {
   'rf_nmos_5t': rf_nmos_fixture,
   'rf_nmos_6t': rf_nmos_fixture(six_t: true),
   'rf_pmos_5t': rf_pmos_fixture,
+  'rf_nmos_4t': rf_nmos_4t_fixture,
   'inductor_1tm_alpa': inductor_fixture,
+  'inductor_1tm_alpa_open': inductor_fixture(open: true),
+  'inductor_1tm_alpa_short': inductor_fixture(short: true),
+  'mom_2t': mom_fixture,
+  'mom_3t': mom_fixture(three_terminal: true),
+  'mom_2t_open': mom_fixture(open: true),
+  'mom_2t_short': mom_fixture(short: true),
   'pad_m1_m5_bar': pad_m1_m5 + mos_fixture('NP'),
   'pad_t4_bar': pad_t4 + mos_fixture('NP'),
   'bulk_alias': mos_fixture('NP'),

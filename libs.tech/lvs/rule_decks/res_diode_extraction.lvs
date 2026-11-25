@@ -15,7 +15,9 @@
 #=========================================================================================
 # ICsprout55 LVS resistor / diode extraction
 #
-# re_ppo_sab_2t uses the released Calibre sheet resistance rsh_rppo=10.252;
+# re_ppo_sab_2t uses the SAB sheet resistance rsh_rpposab=725.7, not the
+# non-SAB rsh_rppo=10.252.  The released Calibre deck wires the SAB device to
+# rsh_rppo/rsh_rnpo at lines 3659/3665; that is a foundry-deck erratum.
 # CT straps form its two terminals.
 #
 # Metal- and ALPAD-marked resistors use stack-selected conductor layers and
@@ -26,7 +28,7 @@
 
 # KLayout's resistor extractor expects the resistor path (R) and the
 # terminal/contact layer (C); its tA/tB terminals are written on CTs.
-extract_devices(resistor('RE_PPO_SAB_2T', 10.252),
+extract_devices(resistor('RE_PPO_SAB_2T', 725.7),
                 { 'R' => RES_PPO_SAB_2T, 'C' => CTs })
 
 # Source metal-resistor markers are excluded from M*s above, then extracted

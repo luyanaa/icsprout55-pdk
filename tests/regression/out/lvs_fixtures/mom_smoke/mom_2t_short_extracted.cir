@@ -1,0 +1,5 @@
+* Extracted by KLayout with the ICsprout55 LVS runset
+
+.SUBCKT TOP MINUS|PLUS MINUS|PLUS
+XD_$1 MINUS|PLUS MINUS|PLUS mom_2t PARAMS: LF=1.9 NF=3 BM=2 TM=4 MR=1
+.ENDS TOP

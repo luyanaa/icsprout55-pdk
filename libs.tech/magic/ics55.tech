@@ -16,9 +16,19 @@
 # ============================================================================
 # ICsprout55 Magic technology file  (magic-vlsi 8.3.x, format 27)
 # ============================================================================
-# Clean-room draft for the ICsprout55 55nm LLULP 1P6M1TM process
-# (1.2V core + 3.3V IO).  Scope: interconnect RC extraction via `extract all`
-# + `ext2spice` (sheet resistance, area/perimeter capacitance, via resistance).
+# Clean-room technology for the ICsprout55 55nm LLULP 1P6M1TM process
+# (1.2V core + 3.3V IO).  Scope: LVS netlist extraction and interconnect RC
+# extraction via `extract all` + `ext2spice` (connectivity, MOS devices,
+# sheet resistance, area/perimeter capacitance, via resistance).
+#
+# The `connect` section qualifies every contact by the layers it touches
+# (`ct/a`, `ct/m1`, `v1/a`, ...) so that a contact only joins the two planes
+# it really sits between.  Without that, Magic merges all contacts at one
+# coordinate and fragments poly/diffusion nets (see the LVS section of the
+# README).  `stackable` in the contact section is required for a contact and
+# a via drawn at exactly the same centre (CT + V1).  The tap rules connect an
+# n+ tap to nwell and make a p+ tap part of the substrate node, so physical
+# taps in a macro are extracted as real body connections.
 #
 # Provenance of the extraction values (all from released PDK data):
 #   sheet resistance  RPERSQ                  - N551P6M.lef
@@ -51,6 +61,9 @@ end
 # ---------------------------------------------------------------------------
 planes
 	well,w
+	# Derived diode junction regions live on their own plane so that contact
+	# cuts on the active plane cannot split the device region.
+	diodeactive,da
 	active,a
 	metal1,m1
 	metal2,m2
@@ -93,6 +106,14 @@ types
 	active	hvtpfet
 	active	ionfet
 	active	iopfet
+	active	diode
+	diodeactive	pdio1p2lvt
+	diodeactive	ndio1p2lvt
+	diodeactive	pdio3p3
+	# Poly resistor body (POLYres 41/4 covers the SAB-defined resistor).
+	active	rppo
+	active	sab
+	active	polyres
 	active	ncontact,ct
 	metal1	metal1,m1
 	metal1	m2contact,v1
@@ -114,12 +135,24 @@ end
 contact
 	ct	ndiff	m1
 	ct	pdiff	m1
+	# Threshold / IO variants of the diffusion are composed types, so each
+	# needs its own contact rule (the CDL model split depends on it).
+	ct	lvtndiff	m1
+	ct	lvtpdiff	m1
+	ct	hvtndiff	m1
+	ct	hvtpdiff	m1
+	ct	iondiff		m1
+	ct	iopdiff		m1
 	ct	poly	m1
 	v1	m1	m2
 	v2	m2	m3
 	v3	m3	m4
 	v4	m4	m5
 	tv2	m5	tm2
+
+	# A contact and a via drawn at exactly the same centre must stack
+	# (a coincident CT + V1 otherwise loses the lower contact).
+	stackable
 end
 # ---------------------------------------------------------------------------
 # Composition: the diff types are the ACT under the implants; the transistors
@@ -153,16 +186,31 @@ end
 # the via connections).  The p-substrate is the space on the well plane.
 # ---------------------------------------------------------------------------
 connect
-	nwell		nwell
-	ndiff,ct	ndiff,ct
-	pdiff,ct	pdiff,ct
-	poly		poly
-	m1,v1		m1,v1
-	m2,v2		m2,v2
-	m3,v3		m3,v3
-	m4,v4		m4,v4
-	m5,tv2		m5,tv2
-	tm2		tm2
+	# An n+ tap is the nwell contact; a p+ tap is a substrate contact
+	# (the `substrate` rule below puts pdiff in the substrate node).
+	nwell,ndiff,lvtndiff,hvtndiff,iondiff	nwell,ndiff,lvtndiff,hvtndiff,iondiff
+	ndiff,ct/a	ndiff,ct/a
+	pdiff,ct/a	pdiff,ct/a
+	lvtndiff,ct/a	lvtndiff,ct/a
+	lvtpdiff,ct/a	lvtpdiff,ct/a
+	hvtndiff,ct/a	hvtndiff,ct/a
+	hvtpdiff,ct/a	hvtpdiff,ct/a
+	iondiff,ct/a	iondiff,ct/a
+	iopdiff,ct/a	iopdiff,ct/a
+	# The junction region sits on the diodeactive plane above the diffusion
+	# it was derived from; these rules make it the same node as that
+	# diffusion and its contact image (metal1 is reached through the
+	# ordinary ct/pdiff rule).
+	pdio1p2lvt,pdiff,ct/a	pdio1p2lvt,pdiff,ct/a
+	ndio1p2lvt,ndiff,ct/a	ndio1p2lvt,ndiff,ct/a
+	pdio3p3,pdiff,ct/a	pdio3p3,pdiff,ct/a
+	poly,nfet,pfet,lvtnfet,lvtpfet,hvtnfet,hvtpfet,ionfet,iopfet,ct/a	poly,nfet,pfet,lvtnfet,lvtpfet,hvtnfet,hvtpfet,ionfet,iopfet,ct/a
+	m1,ct/m1,v1/a,v1/m1	m1,ct/m1,v1/a,v1/m1
+	m2,v1/a,v1/m2,v2/a,v2/m2	m2,v1/a,v1/m2,v2/a,v2/m2
+	m3,v2/a,v2/m3,v3/a,v3/m3	m3,v2/a,v2/m3,v3/a,v3/m3
+	m4,v3/a,v3/m4,v4/a,v4/m4	m4,v3/a,v3/m4,v4/a,v4/m4
+	m5,v4/a,v4/m5,tv2/a,tv2/m5	m5,v4/a,v4/m5,tv2/a,tv2/m5
+	tm2,tv2/a,tv2/tm2	tm2,tv2/a,tv2/tm2
 end
 
 
@@ -184,21 +232,24 @@ extract
 	step	1
 	sidehalo	0.2
 	planeorder	well	0
-	planeorder	active	1
-	planeorder	metal1	2
-	planeorder	metal2	3
-	planeorder	metal3	4
-	planeorder	metal4	5
-	planeorder	metal5	6
-	planeorder	topm2	7
+	planeorder	diodeactive	1
+	planeorder	active	2
+	planeorder	metal1	3
+	planeorder	metal2	4
+	planeorder	metal3	5
+	planeorder	metal4	6
+	planeorder	metal5	7
+	planeorder	topm2	8
 
 	# p-substrate = the pwell regions and the areas of the well plane where
 	# no nwell is drawn
-	substrate	pwell,space/w	w	$SUB
+	substrate	pdiff,lvtpdiff,hvtpdiff,iopdiff,pwell,space/w	w	$SUB
 
 	# --- sheet resistance (mOhm/sq), N551P6M.lef RPERSQ ---
 	# poly: sheet resistance NOT released - ideal conductor placeholder (0)
 	resist	poly	0
+	# Silicide-blocked p+ poly resistor; Calibre rsh_rpposab = 725.7 ohm/sq.
+	resist	rppo	725700
 	resist	m1	112
 	resist	m2	91
 	resist	m3	91
@@ -214,21 +265,27 @@ extract
 	resist	tv2	2500
 
 	# --- area capacitance to substrate/plane below (aF/lambda^2) ---
+	# lambda here is the 10 nm database grid, so 1 um^2 = 10000 lambda^2.
+	# A stored value v is v * 1e4 aF/um^2 = v * 0.01 fF/um^2.  The LEF
+	# CPERSQDIST value (pF/um^2) x 0.1 therefore gives v directly, e.g.
+	# M1: 0.000763 pF/um^2 -> 0.0763 -> 763 aF/um^2.
 	# poly: gate-oxide capacitance NOT released - placeholder (0)
 	areacap	poly	0
-	areacap	m1	0.019075
-	areacap	m2	0.027675
-	areacap	m3	0.027675
-	areacap	m4	0.027675
-	areacap	m5	0.01565
-	areacap	tm2	0.00325
+	areacap	m1	0.0763
+	areacap	m2	0.11069
+	areacap	m3	0.11069
+	areacap	m4	0.11069
+	areacap	m5	0.06259
+	areacap	tm2	0.01299
 	# --- perimeter (fringe) capacitance (aF/lambda) ---
-	perimc	m1	space	0.17
-	perimc	m2	space	0.195
-	perimc	m3	space	0.205
-	perimc	m4	space	0.205
-	perimc	m5	space	0.17
-	perimc	tm2	space	0.185
+	# A stored value v is v * 100 aF/um, i.e. the LEF EDGECAPACITANCE
+	# (pF/um) x 10, e.g. M1: 0.0000339 pF/um -> 0.339 -> 33.9 aF/um.
+	perimc	m1	space	0.339
+	perimc	m2	space	0.391
+	perimc	m3	space	0.409
+	perimc	m4	space	0.409
+	perimc	m5	space	0.344
+	perimc	tm2	space	0.368
 	# --- MOS devices (official CDL model names; Cox/overlap NOT released) ---
 	# The last two fields (gate cap aF/um^2, overlap aF/um) are placeholders 0:
 	# the gate-oxide capacitance is not in the released data.  The extracted
@@ -244,6 +301,19 @@ extract
 	device mosfet	pm1p2_hvt_lp	hvtpfet	hvtpdiff,ct	nwell
 	device mosfet	nm3p3_lp	ionfet	iondiff,ct	pwell,space/w
 	device mosfet	pm3p3_lp	iopfet	iopdiff,ct	nwell
+
+	# --- diodes ---------------------------------------------------------
+	# device pdiode/ndiode <model> <device-types> <negative-types> [params]
+	# The device region is the derived junction on the diodeactive plane,
+	# so contact cuts do not split it.  `a` is the junction area and `pj`
+	# its perimeter, both in um^2 / um.
+	device pdiode	dio_1p2_pp_nw_lvt_lp	pdio1p2lvt	nwell	a=area	p=pj
+	device ndiode	dio_1p2_np_pw_lvt_lp	ndio1p2lvt	pwell,space/w	a=area	p=pj
+	device pdiode	dio_3p3_pp_nw_lp	pdio3p3	nwell	a=area	p=pj
+
+	# Each straight poly segment extracts as one resistor; netgen combines
+	# the folded series segments into the CDL's single W/L (see run_lvs.py).
+	device rsubcircuit	re_ppo_sab_2t	rppo	poly	l=l	w=w
 end
 
 # ---------------------------------------------------------------------------
@@ -326,7 +396,56 @@ end
 cifinput
 	style	lambda=0.001(ics55)
 	scalefactor	1
+	# Unknown-layer labels are junked rather than moved onto an
+	# unrelated plane; administrative markers live on layers above 255
+	# and therefore land here.
+	options	ignore-unknown-layer-labels
 
+	# --- non-electrical input layers -------------------------------------
+	# Markers, dummy fill and unmodelled conductors.  A cifinput
+	# `templayer` is never painted, so it cannot create connectivity.
+	# SAB (71/1) and PPO (41/4) are real `layer`s because a templayer's
+	# plane is not visible to a later `layer` boolean; the resistor body
+	# `rppo` is derived from those planes below.
+	# DIODE is the exception: `templayer` planes are discarded before the
+	# layer list is evaluated and cannot be used as an `and` operand, so
+	# it is painted as the inert `diode` type, first, so that act/np/pp
+	# override the marker tile and transistor composition is unaffected.
+	# GDS layer numbers above 255 (CALMA_LAYER_MAX) cannot be mapped at
+	# all; 261/12, 313/12, 351/12, 354/12, 356/12 and 357/12 therefore
+	# stay unreadable and `gds read` keeps reporting them.
+	layer	diode	DIODE
+		calma	DIODE	191	12
+	ignore	DIODE
+	# PPO (41/4) is the Calibre POLYres marker; SAB (71/1) is silicide block.
+	# Both must be real layers so the `rppo` boolean can see their planes.
+	layer	polyres	PPO
+		calma	PPO	41	4
+	templayer	ESD
+		calma	ESD	55	1
+	ignore	ESD
+	layer	sab	SAB
+		calma	SAB	71	1
+	ignore	SAB
+	templayer	MET1DUM
+		calma	MET1DUM	81	2
+	ignore	MET1DUM
+	templayer	RV
+		calma	RV	120	1
+	ignore	RV
+	templayer	CB
+		calma	CB	121	1
+	ignore	CB
+	templayer	RDL
+		calma	RDL	123	1
+	ignore	RDL
+	templayer	RDLLBL
+		calma	RDLLBL	123	6
+	ignore	RDLLBL
+
+	# --- electrical layers ------------------------------------------------
+	# Metal label datatypes (81/6, 82/6, ...) are read with the conductor
+	# so that a pin label attaches to the metal under it.
 	layer	act		CAA
 		calma	CAA	2	1
 	layer	nwell		CNW
@@ -347,20 +466,75 @@ cifinput
 		calma	CTG	28	1
 	layer	poly		CPG
 		calma	CPG	41	1
+
+	# --- derived diode junction types ------------------------------------
+	# <type> := ACT & PP/NP & DIODE & threshold, minus POLY.  This is the
+	# Calibre deck's pDioJunc/nDioJunc plus the threshold selector
+	# (pdiocore_lvt_diode = ((pJunc - ACTres) & DIODE - PSUB) & PVT1).
+	# A cifinput layer only sees read layers defined above it, so this
+	# must come after act/pp/np/nwell/pvt1/diode/poly; it must also come
+	# *before* `ct`, because painting the derived type replaces the
+	# diffusion tile - a later paint would erase the contact composition.
+	#
+	# Syntax: `layer <type> <spec>` takes at most 3 fields, so every
+	# boolean must be its own continuation line (`and`, `and-not`, `or`).
+	# An inline "layer X A and B ..." is rejected (too many arguments) and
+	# leaves a layer with no geometry.
+	layer	pdio1p2lvt	CAA
+		and	CPP
+		and	CNW
+		and	DIODE
+		and	CPVT1
+		and-not	CTG
+		and-not	CPG
+	layer	ndio1p2lvt	CAA
+		and	CNP
+		and	CNVT1
+		and	DIODE
+		and-not	CNW
+		and-not	CTG
+		and-not	CPG
+	layer	pdio3p3	CAA
+		and	CPP
+		and	CNW
+		and	CTG
+		and	DIODE
+		and-not	CPVT1
+		and-not	CPVT3
+		and-not	CPG
+	# Silicide-blocked p+ poly resistor body: the Calibre deck's
+	# rpposab_2T = ((resPOLY & PP) & SAB) - RES3TPOLY - HRP.
+	layer	rppo	CPG
+		and	CPP
+		and	SAB
+		and	PPO
 	layer	ct		CCT
 		calma	CCT	72	1
-	layer	m1		CM1
+
+	layer	m1		CM1,M1LBL
 		calma	CM1	81	1
-	layer	m2		CM2
+		calma	M1LBL	81	6
+		labels	M1LBL
+	layer	m2		CM2,M2LBL
 		calma	CM2	82	1
-	layer	m3		CM3
+		calma	M2LBL	82	6
+		labels	M2LBL
+	layer	m3		CM3,M3LBL
 		calma	CM3	83	1
-	layer	m4		CM4
+		calma	M3LBL	83	6
+		labels	M3LBL
+	layer	m4		CM4,M4LBL
 		calma	CM4	84	1
-	layer	m5		CM5
+		calma	M4LBL	84	6
+		labels	M4LBL
+	layer	m5		CM5,M5LBL
 		calma	CM5	85	1
-	layer	tm2		CTM
+		calma	M5LBL	85	6
+		labels	M5LBL
+	layer	tm2		CTM,T4M2LBL
 		calma	CTM	103	1
+		calma	T4M2LBL	103	6
+		labels	T4M2LBL
 	layer	v1		CV1
 		calma	CV1	91	1
 	layer	v2		CV2

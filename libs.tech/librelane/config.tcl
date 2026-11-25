@@ -60,8 +60,9 @@ set ::env(IO_PIN_V_LAYER) "MET2"
 # LEF (MET1..MET5, T4M2; extra layers are left unadjusted).
 set ::env(GRT_LAYER_ADJUSTMENTS) [list 0.99 0 0 0 0 0]
 
-# Primary GDSII stream-out tool. This PDK ships no magic tech file, so magic
-# cannot be primary.
+# Primary GDSII stream-out tool.  KLayout stays primary: the Magic tech
+# (libs.tech/magic/ics55.tech) is validated for extraction and LVS, not for
+# DRC or stream-out.
 set ::env(PRIMARY_GDSII_STREAMOUT_TOOL) "klayout"
 
 # ----------------------------------------------------------------------------

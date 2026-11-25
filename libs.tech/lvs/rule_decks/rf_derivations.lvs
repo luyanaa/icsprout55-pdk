@@ -83,10 +83,10 @@ RF_PSUB = PSD.not(NW).not(DNW).interacting(CTs).not_interacting(RF_NGATE).not_in
 RF_PSUB_NEAR = RF_PSUB.interacting(DNW.sized(3.0))
 RF_DNW_WITH_PSUB = DNW.interacting(RF_PSUB_NEAR.sized(3.0))
 
-# Inductor terminal layers are electrically identical (both are RV pads); a
-# distinct layer object keeps the two device terminals from being folded into
-# one annotation layer.
-IND_RV_B = RV.dup
+# Inductor terminals are the RV transition pads marked with INDVIA (303/12).
+# There is no fixed PLUS/MINUS layer in the official stack: the two terminal
+# groups are the two INDVIA-marked RV clusters, and the device class declares
+# PLUS/MINUS equivalent because the winding is symmetric.
 
 RF_NGATE_SVT_5T = RF_NGATE_SVT.not_interacting(RF_DNW_WITH_PSUB)
 RF_NGATE_SVT_6T = RF_NGATE_SVT.interacting(RF_DNW_WITH_PSUB)

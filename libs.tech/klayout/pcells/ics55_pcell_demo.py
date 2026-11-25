@@ -37,19 +37,19 @@ import ics55_ind         # noqa: F401
 # `klayout -rd gds=<path>` lands here as a global; default next to the script.
 out = globals().get("gds") or os.path.join(here, "ics55_pcells.gds")
 
-# `klayout -rd em=1` writes only the inductor with its Palace port shapes
-# (300/1, 301/1) - the EM deck for libs.tech/pex/palace/run_model.py.  The
-# PGS stripes are widened to 2/2 um there: same 50 % duty and sheet
-# resistance, but half the mesh elements of the 1/1 um production shield.
+# `klayout -rd em=1` builds the default Palace EM fixture through
+# libs.tech/pex/palace/em_deck.py (PGS on, PGS tied to the M1 reference
+# plane).  The fixture layers never enter the manufacturing cell.
 if globals().get("em"):
-    ly = db.Layout()
-    ly.dbu = 0.001
-    top = ly.create_cell("TOP_EM")
-    c = ly.create_cell("ics55_ind", "ICsprout55", {
-        "turns": 2.5, "size": 150.0, "width": 4.0, "space": 2.0,
-        "pgs": 2, "pgs_width": 2.0, "pgs_space": 2.0, "em_ports": 1})
-    top.insert(db.CellInstArray(c.cell_index(), db.Trans()))
-    ly.write(out)
+    sys.path.insert(0, os.path.abspath(
+        os.path.join(here, "..", "..", "pex", "palace")))
+    import em_deck
+    em_deck.build({
+        "out": out, "cell": "ics55_ind_em", "device_variant": "dut",
+        "pgs_return": True, "ground_mode": "m1",
+        "device": {"turns": 2.5, "size": 150.0, "width": 4.0, "space": 2.0,
+                   "pgs": 2, "pgs_width": 2.0, "pgs_space": 2.0},
+    })
     print("wrote", out, "EM deck")
     sys.exit(0)
 
@@ -69,7 +69,7 @@ add("ics55_mos_analog", {"dev_type": "n", "w": 1.0, "l": 0.06, "fingers": 3,
 add("ics55_mos_analog", {"dev_type": "p", "w": 1.0, "l": 0.06, "fingers": 3,
                          "guard_ring": 1, "ring_metal": 1}, 12.0, 4.0)
 add("ics55_guard_ring", {"ring_type": "pring", "w": 0.5, "spacing": 1.0}, 4.0, 12.0)
-add("ics55_res_poly", {"w": 2.0, "l": 10.0, "rsq": 850.0}, 12.0, 12.0)
+add("ics55_res_poly", {"w": 2.0, "l": 10.0, "rsq": 725.7}, 12.0, 12.0)
 add("ics55_mom", {"fingers": 8, "length": 10.0, "layers": 3}, 4.0, 20.0)
 add("ics55_ind", {"turns": 2.5, "size": 150.0, "width": 4.0, "space": 2.0,
                   "pgs": 2}, 4.0, 140.0)
